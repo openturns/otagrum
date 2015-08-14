@@ -1,0 +1,489 @@
+% Copyright (c)  2010-2011  EDF-EADS.
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{User Manual}
+
+This section gives an exhaustive presentation of the objects and functions provided by the $otagrum$ module, in the alphabetic order. \\
+In order to facilitate the use of the $otagrum$ module, we added the documentation of some important objects of the $pyagrum$ module. More  documentation of the $pyagrum$ module on the web site $http://agrum.lip6.fr$
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{BayesNet}
+
+A  $BayesNet$ is a $pyagrum$ object. 
+
+\begin{description}
+\item[Usage :]  $BayesNet(name)$
+
+\item[Arguments :] $name$ : a String, the name of the variable
+
+\item[Value :]    a  BayesNet which is the Bayesian network proposed by the $pyagrum$ module.
+
+\item[Some methods :]  \strut
+
+  \begin{description}
+
+ 
+
+  \item $add$
+    \begin{description}
+    \item[Usage :]  $add(var)$
+    \item[Arguments :] $var$ : a DiscreteVar, which is a LabelizedVar, a RangeVar or a DiscretizedVar.
+    \item[Value :]  a NoteId, which is the id of the inserted $var$.
+    \end{description}
+    \bigskip
+
+   \item $changeVariableName$
+    \begin{description}
+    \item[Usage :]  $changeVariableName(i, newName)$
+    \item[Arguments :] \strut
+  \begin{description}
+  \item $i$ : an integer which identifies the $ith + 1$ node declared in the BayesNet object.
+  \item $newName$ : a String, the new name of the node.
+  \end{description}
+    \item[Value :] none. The BayesNet has changed the name of its  $ith + 1$ node.
+    \end{description}
+    \bigskip
+
+   \item $erase$
+    \begin{description}
+    \item[Usage :]  $erase(i)$
+    \item[Arguments :] $i$ : an integer which identifies the $ith + 1$ node declared in the BayesNet object.
+    \item[Value :] none. The BayesNet has erased its  $ith + 1$ node.
+    \end{description}
+    \bigskip
+
+   \item $eraseArc$
+    \begin{description}
+    \item[Usage :]  $eraseArc(nodeIdent1, nodeIdent2)$
+    \item[Arguments :] $nodeIdent1, nodeIdent2$ : two NoteId, the id of the nodes between wich the arc will be erased.
+    \item[Value :] none. The BayesNet has erased the arc between the two specified nodes.
+    \end{description}
+    \bigskip
+
+   \item $insertArc$
+    \begin{description}
+    \item[Usage :]  $(nodeIdent1, nodeIdent2)$
+    \item[Arguments :] $nodeIdent1, nodeIdent2$ : two NoteId, the id of the nodes between wich the arc will be erased.
+    \item[Value :]  none. The BayesNet has added the arc between the two specified nodes.
+    \end{description}
+    \bigskip
+
+
+  \item $cpt$
+    \begin{description}
+    \item[Usage :]  $cpt(nodeIdent).var_names$
+    \item[Arguments :] $nodeIdent$ : a NoteId, the id of the node.
+    \item[Value :]  a list which gives all the antecedents of the node in the order in which they were created.
+    \end{description}
+
+  \end{description}
+
+
+\end{description}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage \subsection{BayesNetAgrum}
+
+A  $BayesNetAgrum$ is a $otagrum$ object.
+
+\begin{description}
+\item[Usage :]  \strut
+  \begin{description}
+  \item $BayesNetAgrum(pyagrumBN)$
+  \item $BayesNetAgrum('myFile.bif')$
+  \end{description}
+
+\item[Arguments :] \strut
+  \begin{description}
+  \item $pyagrumBN$ : a BayesNet, the bayesian network created from the $pyagrum$ commands.
+  \item $myFile.bif$ : a String, the name of the BIF format file containing a $otahrum$ bayesian network .
+  \end{description}
+
+\item[Value :]    a  BayesNetAgrum which is the Bayesian network manipulated by the $otagrum$ module.
+
+\item[Some methods :]  \strut
+
+  \begin{description}
+
+ 
+  \item $AdaptGrid$ (a static method)
+    \begin{description}
+    \item[Usage :]  $AdaptGrid(myDistColl, initialData)$
+    \item[Arguments :]  \strut
+  \begin{description}
+  \item $myDistColl$  : a DistributionCollection, an $openturns$ object, which is the collection of distributions to which the discretization must be adapted.
+  \item $initialData$ : a NumericalPoint, an $openturns$ object, which is the initial proposed grid.
+  \end{description}
+    \item[Value :]  a NumericalPoint, an $openturns$ object which is the final grid adapted to all the specified distributions. The adaptation consists in adding, if necessary, some lower and upper bounds to the initial proposed grid so that all the probabilistic mass of the specified distributions is included in the final proposed grid. These lower and upper bounds are respectively the min and max of all the numerical lower and upper bounds of the specified distributions. Furthermore, the initial grid may be potentially unsorted : the final grid is sorted.
+    \end{description}
+    \bigskip
+
+  \item $Discretize$ (a static method)
+    \begin{description}
+    \item[Usage :]  $Discretize(myDist, myAdaptedData)$
+    \item[Arguments :] \strut
+  \begin{description}
+  \item $myDist$ : a Distribution, an $openturns$ object.
+  \item $myDist$ : a  NumericalPoint, an $openturns$ object.
+  \end{description}
+    \item[Value :]  a Vector\_float, a $pyagrum$ object, which is the discretization of the continuous distribution $myDist$ that fullfills a conditional probability table of a variable.
+    \end{description}
+    \bigskip
+
+  \item $eraseEvidences$
+    \begin{description}
+    \item[Usage :]  $eraseEvidences()$
+    \item[Arguments :] none.
+    \item[Value :]  none. It erases all the previously set evidences of the bayesian network.
+    \end{description}
+    \bigskip
+
+  \item $exportToBIFFile$
+    \begin{description}
+    \item[Usage :]  $exportToBIFFile(myBIFfile.bif)$
+    \item[Arguments :] $myBIFfile.bif$ : a String, the BIF format file in which the network is stored. 
+    \item[Value :]  a BIF format file, named $myBIFfile.bif$. Care~: this BIF format file is not compatible with the BIF format because it contains some forbidden graphic signs.
+    \end{description}
+    \bigskip
+
+  \item $getMarginal$
+    \begin{description}
+    \item[Usage :]  $getMarginal(nameVar)$
+    \item[Arguments :] $nameVar$ : a String, the name of the variable.
+    \item[Value :]  a Distribution, an $openturns$ object, the marginal distribution of the variable 'nameVar'.
+    \end{description}
+    \bigskip
+
+  \item $setEvidence$
+    \begin{description}
+    \item[Usage :]  \strut
+  \begin{description}
+  \item $setEvidence(nameVar, stringModality)$  
+  \item $setEvidence(nameVar, intergerModality)$
+  \item $setEvidence(nameVar, realModality)$
+  \end{description}
+    \item[Arguments :]  \strut
+  \begin{description}
+  \item $nameVar$  : a String, the name of the variable.
+  \item $stringModality$ : a String, one modality of a LabelizedVar variable.
+  \item $intergerModality$ : an integer, one modality of a RangeVar variable.
+  \item $realModality$ : a real wich belongs to the range of a DiscretizedVar variable.
+  \end{description}
+    \item[Value :]  none. The BayesNetAgrum has fixed the variable 'nameVar' to the specified modality. In the case of a DiscretizedVar, the variable is fixed to its intervall containing the specified real.
+    \end{description}
+
+  \end{description}
+
+
+\end{description}
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage \subsection{DiscretizedVar}
+
+A  $DiscretizedVar$ is  a real variable which range is discretized into a finite subset of intervals which bounds are~: $(T_0,T_1, \hdots, T_N)$ for $N \in \mathbb{N}$. 
+
+\begin{description}
+\item[Usage :]  $DiscretizedVar(name, comment)$
+
+\item[Arguments :] \strut
+  \begin{description}
+  \item $name$ : a String, the name of the variable.
+  \item $comment$ : a String, the description of the variable.
+  \end{description}
+
+\item[Value :]    a  DiscretizedVar which range is empty. It is necessary to define the range whith the method $addTick$.
+
+\item[Some methods :]  \strut
+
+  \begin{description}
+
+  \item $len$
+    \begin{description}
+    \item[Usage :]  $len(r)$
+    \item[Arguments :] $r$ : a DiscretizedVar.
+    \item[Value :]  a real, the size of its range. If its range is $[a,b]$ where $(a,b)$ are reals, $len(r) = b-a$.
+    \end{description}
+    \bigskip
+
+  \item $addTick$
+    \begin{description}
+    \item[Usage :]  $addTick(value)$
+    \item[Arguments :] $value$ : a real.
+    \item[Value :]  none. The DiscretizedVar has a new bound $T_i$ which automatically  takes position within the already existant suite $(T_0, \hdots, T_N)$. If $value$ is the first bound declared, it is obligatory to declare one more.
+    \end{description}
+    \bigskip
+
+  \item $eraseTicks$
+    \begin{description}
+    \item[Usage :]  $eraseTicks()$
+    \item[Arguments :] none
+    \item[Value :]  none. The DiscretizedVar has no definite range any more.
+    \end{description}
+    \bigskip
+
+  \item $isTick$
+    \begin{description}
+    \item[Usage :]  $eraseTicks(value)$
+    \item[Arguments :]  $value$ : a real.
+    \item[Value :]  a Boolean which indicates whether $value$ belongs to the suite $(T_0, \hdots, T_N)$ which defines the variable range.
+    \end{description}
+    \bigskip
+
+  \item $label$
+    \begin{description}
+    \item[Usage :]  $label(i)$
+    \item[Arguments :] $i$ : an integer.
+    \item[Value :]  a String, the interval $[T_i, T_{i+1}]$ of the range, considered as a string.
+    \end{description}
+    \bigskip
+
+
+  \item $setDescription$
+    \begin{description}
+    \item[Usage :]  $setDescription(newComment)$
+    \item[Arguments :] $newComment$ : a String, the new comment of the variable.
+    \item[Value :]  none.
+    \end{description}
+    \bigskip
+
+  \item $setName$
+    \begin{description}
+    \item[Usage :]  $setName(newName)$
+    \item[Arguments :] $newName$ :  a String, the new name of the variable.
+    \item[Value :]  none.
+    \end{description}
+
+  \end{description}
+
+
+\end{description}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage \subsection{LabelizedVar}
+
+A $LabelizedVar$ is a categorical variable, which means a discrete variable which modalities are considered as labels. It may be some strings or even some numbers but considered as special strings.
+
+\begin{description}
+\item[Usage :]   \strut
+  \begin{description}
+    \item $LabelizedVar(name, comment, 0)$
+    \item $LabelizedVar(name, comment, modalityNumber)$
+  \end{description}
+
+\item[Arguments :] \strut
+  \begin{description}
+  \item $name$ : a String, the name of the variable.
+  \item $comment$ : a String, the description of the variable.
+  \item $modalityNumber$ : an integer, the number of the modalities of the variable.
+  \end{description}
+
+\item[Value :]    a  LabelizedVar \strut
+  \begin{description}
+  \item  in the first usage, the created variable has no label and it is necessary to add some labels with the method $addLabel$. This usage is recommended when the User needs to specify the strings of the labels.
+  \item in the second usage, the  created variable has the specified number of labels but the User can not change them. The labels are automatically defined as the suite of integers from 0 to $modalityNumber-1$ where these integers are considered as strings. This usage is recommended when the User does not need to explicitate the labels of his variable.
+  \end{description}
+
+\item[Some methods :]  \strut
+
+  \begin{description}
+
+  \item $addLabel$
+    \begin{description}
+    \item[Usage :]  $addLabel(newLabel)$
+    \item[Arguments :] $newLabel$ : a String which is the label of the  new modality.
+    \item[Value :]  none. The new variable has a supplementary modality which label is $newLabel$. This new label is added to the last position.
+    \end{description}
+    \bigskip
+
+  \item $eraseLabels$
+    \begin{description}
+    \item[Usage :]  $eraseLabels()$
+    \item[Arguments :] none.
+    \item[Value :]  none. The new variable has no label any more.
+    \end{description}
+    \bigskip
+
+  \item $isLabel$
+    \begin{description}
+    \item[Usage :]  $isLabel(specificLabel)$
+    \item[Arguments :] $specificLabel$ : a String
+    \item[Value :]  a Boolean which indicates whether  $specificLabel$ is one of the variable labels.
+    \end{description}
+    \bigskip
+
+  \item $label$
+    \begin{description}
+    \item[Usage :]  $label(i)$
+    \item[Arguments :] $i$ : an integer.
+    \item[Value :]  a String, the label of the modality number $i+1$. Care~: numerotation begins at 0.
+    \end{description}
+    \bigskip
+
+  \item $labels$
+    \begin{description}
+    \item[Usage :]  $labels()$
+    \item[Arguments :] none.
+    \item[Value :]  a list of String, the list of the labels in the order they were created.
+    \end{description}
+    \bigskip
+
+  \item $setDescription$
+    \begin{description}
+    \item[Usage :]  $setDescription(newComment)$
+    \item[Arguments :] $newComment$ : a String, the new comment of the variable.
+    \item[Value :]  none.
+    \end{description}
+    \bigskip
+
+  \item $setName$
+    \begin{description}
+    \item[Usage :]  $setName(newName)$
+    \item[Arguments :] $newName$ :  a String, the new name of the variable.
+    \item[Value :]  none.
+    \end{description}
+
+  \end{description}
+
+
+\end{description}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage \subsection{RangeVar}
+
+A  $RangeVar$ is a numerical discrete variable which range is a finite interval of $\mathbb{N}$.
+
+\begin{description}
+\item[Usage :]   \strut
+  \begin{description}
+    \item $RangeVar(name, comment)$
+    \item $RangeVar(name, comment, rangeMin, rangeMax)$
+  \end{description}
+
+\item[Arguments :] \strut
+  \begin{description}
+  \item $name$ : a String, the name of the variable.
+  \item $comment$ : a String, the description of the variable.
+  \item $rangeMin, rangeMax$ : two integers which form the range $[rangeMin, rangeMax] \in \mathbb{N}$ of the variable.
+  \end{description}
+
+\item[Value :]    a  RangeVar \strut
+  \begin{description}
+  \item  in the first usage, the range of the created variable is $[0, 1] \in \mathbb{N}$ .
+  \item in the second usage, the  range of the created variable is  $[rangeMin, rangeMax] \in \mathbb{N}$.
+  \end{description}
+
+\item[Some methods :]  \strut
+
+  \begin{description}
+
+  \item $len$
+    \begin{description}
+    \item[Usage :]  $len(r)$
+    \item[Arguments :] $r$ : a RangeVar.
+    \item[Value :]  an integer, the size of its range. If its range is $[a,b]$ where $(a,b)$ are integers, $len(r) = b-a+1$.
+    \end{description}
+    \bigskip
+
+  \item $belongs$
+    \begin{description}
+    \item[Usage :]  $belongs(i)$
+    \item[Arguments :] $i$ : an integer.
+    \item[Value :]  a Boolean which indicates whether the integer $i$ belongs to the range.
+    \end{description}
+    \bigskip
+
+  \item $label$
+    \begin{description}
+    \item[Usage :]  $label(i)$
+    \item[Arguments :] $i$ : an integer.
+    \item[Value :]  a String, the label of the modality number $i+1$. Care : numerotation begins at 0.
+    \end{description}
+    \bigskip
+
+  \item $max$
+    \begin{description}
+    \item[Usage :]  $max()$
+    \item[Arguments :] none.
+    \item[Value :]  the upper bound of the range.
+    \end{description}
+    \bigskip
+
+  \item $min$
+    \begin{description}
+    \item[Usage :]  $min()$
+    \item[Arguments :] none.
+    \item[Value :]  the lower bound of the range.
+    \end{description}
+    \bigskip
+
+  \item $setMax$
+    \begin{description}
+    \item[Usage :]  $setMax(max)$
+    \item[Arguments :] $max$ : an integer.
+    \item[Value :]  none. The RangeVar has a new range upper bound.
+    \end{description}
+    \bigskip
+
+  \item $setMin$
+    \begin{description}
+    \item[Usage :]  $setMin(max)$
+    \item[Arguments :] $min$ : an integer.
+    \item[Value :]  none. The RangeVar has a new range lower bound.
+    \end{description}
+    \bigskip
+
+
+  \item $setDescription$
+    \begin{description}
+    \item[Usage :]  $setDescription(newComment)$
+    \item[Arguments :] $newComment$ : a String, the new comment of the variable.
+    \item[Value :]  none.
+    \end{description}
+    \bigskip
+
+  \item $setName$
+    \begin{description}
+    \item[Usage :]  $setName(newName)$
+    \item[Arguments :] $newName$ :  a String, the new name of the variable.
+    \item[Value :]  none.
+    \end{description}
+
+  \end{description}
+
+
+\end{description}
+
+
+
+

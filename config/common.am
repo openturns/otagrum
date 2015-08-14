@@ -1,0 +1,72 @@
+#                                               -*- Makefile -*-
+#
+#  common.am
+#
+#  (C) Copyright 2005-2007 EDF-EADS-Phimeca
+#
+#  This library is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU Lesser General Public
+#  License as published by the Free Software Foundation; either
+#  version 2.1 of the License.
+#
+#  This library is distributed in the hope that it will be useful
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with this library; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+#
+#  Author: $LastChangedBy: dutka $
+#  Date:   $LastChangedDate: 2008-10-30 16:57:39 +0100 (Thu, 30 Oct 2008) $
+#  Id:     $Id: common.am 992 2008-10-30 15:57:39Z dutka $
+#
+builddir = @builddir@
+abs_builddir = @abs_builddir@
+abs_top_builddir = @abs_top_builddir@
+abs_srcdir = @abs_srcdir@
+abs_top_srcdir = @abs_top_srcdir@
+
+pkgswigdir      = $(pkgdatadir)/swig
+pkgincludedir   = $(includedir)/@PACKAGE@
+
+AM_CPPFLAGS  = -I$(top_srcdir)/include -I$(top_builddir)/include $(OT_CPPFLAGS)
+AM_CPPFLAGS += -DINSTALL_PATH=\"$(prefix)\"
+AM_CPPFLAGS += -DDATA_PATH=\"$(datadir)\"
+AM_CPPFLAGS += -DSYSCONFIG_PATH=\"$(sysconfdir)\"
+AM_CPPFLAGS += -DLIBINSTALL_PATH=\"$(pkglibdir)\"
+AM_CFLAGS   = $(OT_CFLAGS)
+AM_FFLAGS   = $(OT_FFLAGS)
+AM_CXXFLAGS = $(OT_CXXFLAGS)
+
+CLEANFILES = *.aux *.lg *.4ct *.4tc *.log *.ps *~ *.html *.dvi *.idv *.pdf *.tmp *.xref *.toc *.out *.idx *.ind *.ilg *.4dx *.4ix *.lot *.lof *.bbl *.blg *.png *.css $(doc_DATA)
+
+.tex.pdf:
+	echo "*** INFO: first pdflatex compilation" ; \
+	REMOVE='' ; if !test -f logoOTAgrum.png; then cp $(top_srcdir)/doc/logoOTAgrum.png . ; REMOVE='yes' ; fi ; \
+	TEXINPUTS=:.:$(top_builddir)/doc:$(srcdir): $(PDFLATEX) $< ; \
+	echo "*** INFO: index generation" ; \
+	if test -f $*.idx; then $(MAKEINDEX) $*.idx ; fi ; \
+	echo "*** INFO: bibliography creation" ; \
+	if test -f $(srcdir)/*.bib; then BIBINPUTS=:$(srcdir): $(BIBTEX) $*.aux ; fi ; \
+	echo "*** INFO: table of content insertion" ; \
+	TEXINPUTS_pdflatex=:.:$(top_builddir)/doc:$(srcdir): $(PDFLATEX) $< ; \
+	echo "*** INFO: labels insertion" ; \
+	TEXINPUTS_pdflatex=:.:$(top_builddir)/doc:$(srcdir): $(PDFLATEX) $< -o $(top_builddir)/$*.pdf ; \
+	if test -z REMOVE; then rm -f logoOTAgrum.png ; fi ;
+
+if WITH_HTLATEX
+.tex.html:
+	+echo "*** INFO: htlatex compilation" ; \
+	set -vx; \
+	if test -d "output" ; then rm -rf output ; fi ; \
+	mkdir output ; \
+	cp $(srcdir)/*.png output ; \
+	cp $(top_srcdir)/doc/logoOTAgrum.png output ; \
+	cd output ;\
+	TEXINPUTS=:..:../$(top_builddir)/doc:../$(srcdir): $(HTLATEX) ../$< html,3,sections+ ;\
+	ln -sf $*.html index.html ;\
+	cd .. ;\
+	tar zcf output.tar.gz output
+endif
