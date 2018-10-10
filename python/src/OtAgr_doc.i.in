@@ -1,0 +1,11 @@
+%feature("docstring") OTAGR::OtAgr
+"OtAgr class.
+
+Examples
+--------
+>>> import otagr
+>>> a = otagr.OtAgr()
+
+Notes
+-----
+Template module class."

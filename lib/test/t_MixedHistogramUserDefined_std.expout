@@ -1,0 +1,29 @@
+Distribution class=MixedHistogramUserDefined name=MixedHistogramUserDefined dimension=2 ticksCollection=[class=Point name=Unnamed dimension=4 values=[0,1,3,6],class=Point name=Unnamed dimension=3 values=[1,2,3]] kind=[1,0] probabilityTable=class=Point name=Unnamed dimension=9 values=[0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45]
+Distribution MixedHistogramUserDefined(mixture = Mixture((w = 0.0222222, d = ComposedDistribution(Uniform(a = 0, b = 1), Dirac(point = [1]), IndependentCopula(dimension = 2))), (w = 0.0444444, d = ComposedDistribution(Uniform(a = 1, b = 3), Dirac(point = [1]), IndependentCopula(dimension = 2))), (w = 0.0666667, d = ComposedDistribution(Uniform(a = 3, b = 6), Dirac(point = [1]), IndependentCopula(dimension = 2))), (w = 0.0888889, d = ComposedDistribution(Uniform(a = 0, b = 1), Dirac(point = [2]), IndependentCopula(dimension = 2))), (w = 0.111111, d = ComposedDistribution(Uniform(a = 1, b = 3), Dirac(point = [2]), IndependentCopula(dimension = 2))), (w = 0.133333, d = ComposedDistribution(Uniform(a = 3, b = 6), Dirac(point = [2]), IndependentCopula(dimension = 2))), (w = 0.155556, d = ComposedDistribution(Uniform(a = 0, b = 1), Dirac(point = [3]), IndependentCopula(dimension = 2))), (w = 0.177778, d = ComposedDistribution(Uniform(a = 1, b = 3), Dirac(point = [3]), IndependentCopula(dimension = 2))), (w = 0.2, d = ComposedDistribution(Uniform(a = 3, b = 6), Dirac(point = [3]), IndependentCopula(dimension = 2)))))
+mean=[2.6,2.4]
+covariance=[[  3.17333  -0.106667 ]
+ [ -0.106667  1.50667  ]]
+Elliptical = false
+Continuous = false
+oneRealization=[2.76561,3]
+oneSample first=[0.0325028,2] last=[1.29546,3]
+mean=[2.62169,2.3989]
+covariance=[[  3.17553   -0.0860537 ]
+ [ -0.0860537  0.50963   ]]
+Point= [1,1]
+log pdf=-3.80666
+pdf     =0.0222222
+cdf=0.0222222
+ccdf=0.977778
+quantile=[5.625,3]
+cdf(quantile)=0.95
+standard deviation=[1.78139,0.711805]
+skewness=[0.278086,-0.754198]
+kurtosis=[1.81163,2.29778]
+standard moment n=0, value=[1,1]
+standard moment n=1, value=[2.6,2.4]
+standard moment n=2, value=[9.93333,6.26667]
+standard moment n=3, value=[43.9,17.2]
+standard moment n=4, value=[209,48.6667]
+standard moment n=5, value=[1040.87,140.4]
+Standard representative=MixedHistogramUserDefined(mixture = Mixture((w = 0.0222222, d = ComposedDistribution(Uniform(a = 0, b = 1), Dirac(point = [1]), IndependentCopula(dimension = 2))), (w = 0.0444444, d = ComposedDistribution(Uniform(a = 1, b = 3), Dirac(point = [1]), IndependentCopula(dimension = 2))), (w = 0.0666667, d = ComposedDistribution(Uniform(a = 3, b = 6), Dirac(point = [1]), IndependentCopula(dimension = 2))), (w = 0.0888889, d = ComposedDistribution(Uniform(a = 0, b = 1), Dirac(point = [2]), IndependentCopula(dimension = 2))), (w = 0.111111, d = ComposedDistribution(Uniform(a = 1, b = 3), Dirac(point = [2]), IndependentCopula(dimension = 2))), (w = 0.133333, d = ComposedDistribution(Uniform(a = 3, b = 6), Dirac(point = [2]), IndependentCopula(dimension = 2))), (w = 0.155556, d = ComposedDistribution(Uniform(a = 0, b = 1), Dirac(point = [3]), IndependentCopula(dimension = 2))), (w = 0.177778, d = ComposedDistribution(Uniform(a = 1, b = 3), Dirac(point = [3]), IndependentCopula(dimension = 2))), (w = 0.2, d = ComposedDistribution(Uniform(a = 3, b = 6), Dirac(point = [3]), IndependentCopula(dimension = 2)))))

@@ -1,0 +1,29 @@
+** CLIQUES **
+{1,2,4}  as OT::Indices = [1,2,4]
+{6,4,7,5}  as OT::Indices = [6,4,7,5]
+{1,0}  as OT::Indices = [1,0]
+{3,4,2}  as OT::Indices = [3,4,2]
+
+** SEPARATORS **
+{1}  as OT::Indices = [1]
+{4}  as OT::Indices = [4]
+{4,2}  as OT::Indices = [4,2]
+
+testForSize : OK
+
+testForHole : OK
+
+[a,b,c,d,h,e,f,g]
+0 : [6(f),3(d),4(h),7(g),5(e)]
+3 : [3(d),2(c),5(e)]
+4 : [1(b),2(c),5(e)]
+5 : [1(b),0(a)]
+3--4 : [2(c),5(e)]
+4--5 : [1(b)]
+0--3 : [3(d),5(e)]
+
+getMarginal on h,a,b
+[h,a,b]
+0 : [0(h)]
+5 : [1(a),2(b)]
+

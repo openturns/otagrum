@@ -1,8 +1,0 @@
-\Large{\strut\\[2em]\bf Open TURNS version @OPENTURNS_VERSION@, aGrUM revision @AGRUM_REVISION@}\\
-\small{\strut\\[2em]\bf Documentation built from package @PACKAGE@-@VERSION@}\\
-\vspace*{1cm}
-
-
-{\bf \Large \today }\\[2cm]
-
-\includegraphics[height=10cm]{logoOTAgrum.png}
