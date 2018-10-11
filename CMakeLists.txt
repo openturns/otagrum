@@ -1,9 +1,7 @@
-project ( otagr CXX )
-
-cmake_minimum_required ( VERSION 2.8 )
+cmake_minimum_required (VERSION 2.8.4)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
-option ( USE_SPHINX                   "Use sphinx for documentation"                                          ON)
+option (USE_SPHINX                    "Use sphinx for documentation"                                          ON)
 option ( LINK_PYTHON_LIBRARY          "Link python modules against python library"                            ON )
 option ( BUILD_SHARED_LIBS            "Build shared libraries"                                                ON )
 
@@ -15,29 +13,26 @@ if ( NOT DEFINED CMAKE_BUILD_TYPE )
    set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 endif ()
 
+project ( otagr CXX )
+
 string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 
 # set module dir to find custom scripts
 list ( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
-if( NOT CMAKE_BUILD_TYPE )
-  set( CMAKE_BUILD_TYPE RELEASE)
-endif()
 
-#set(AGRUM_INSTALLATION_DIRECTORY "/home/phw/usr")
-#set(aGrUM_DIR "${AGRUM_INSTALLATION_DIRECTORY}/lib/cmake/aGrUM/")
 find_package(aGrUM)
 if (aGrUM_FOUND)
   include_directories(${AGRUM_INCLUDE_DIR})
   link_directories(${AGRUM_LIB_DIR})
-  message(STATUS "Found aGrUM : ${AGRUM_LIB_DIR}")
+  message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
 else (aGrUM_FOUND)
   message(FATAL_ERROR "Please install aGrUM")
 endif (aGrUM_FOUND)
 
-find_package (OpenTURNS NO_MODULE REQUIRED)
+find_package (OpenTURNS 1.11 NO_MODULE REQUIRED)
 if (OPENTURNS_FOUND)
-  message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR}")
+  message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 endif ()
 include ( ${OPENTURNS_USE_FILE} )
 set ( OTAGR_DEFINITIONS ${OPENTURNS_DEFINITIONS} )
@@ -54,18 +49,22 @@ set ( OTAGR_EXAMPLE_PATH ${OTAGR_DATA_PATH}/${PACKAGE_NAME}/examples )
 set ( OTAGR_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/otagr )
 set ( OTAGR_DOC_PATH share/${PACKAGE_NAME}/doc)
 
-
-if ( BUILD_PYTHON )
+if (BUILD_PYTHON)
   # workaround for cmake bug #0013449
-  if ( NOT DEFINED CMAKE_FIND_ROOT_PATH )
-    find_package ( SWIG )
-  else ()
-    find_program ( SWIG_EXECUTABLE NAMES swig2.0 swig )
-    if ( SWIG_EXECUTABLE )
-      set ( SWIG_USE_FILE ${CMAKE_ROOT}/Modules/UseSWIG.cmake )
-      set ( SWIG_FOUND TRUE )
+  if (CMAKE_VERSION VERSION_LESS 3 AND DEFINED CMAKE_FIND_ROOT_PATH)
+    find_program (SWIG_EXECUTABLE NAMES swig2.0 swig)
+    if (SWIG_EXECUTABLE)
+      set (SWIG_USE_FILE ${CMAKE_ROOT}/Modules/UseSWIG.cmake)
+      set (SWIG_FOUND TRUE)
     endif ()
+  else ()
+    # follow agrum swig version requirement
+    find_package (SWIG 3.0.11)
   endif ()
+  if (SWIG_FOUND)
+    include (${SWIG_USE_FILE})
+  endif ()
+
   find_package ( PythonInterp )
   find_package ( PythonLibs )
   include (FindPythonModule)
@@ -73,25 +72,38 @@ if ( BUILD_PYTHON )
   if (USE_SPHINX)
     find_program (SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
     if (SPHINX_EXECUTABLE)
-      find_python_module (sphinx 1.1)
       find_python_module (numpydoc)
+      if (NUMPYDOC_FOUND)
+        find_python_module (sphinx 1.1)
+      endif ()
+    endif ()
+    if (NOT SPHINX_FOUND)
+      message (STATUS "Disabling documentation")
     endif ()
   endif ()
 
   if ( PYTHONINTERP_FOUND )
-    execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
-                      OUTPUT_VARIABLE _ABS_PYTHON_MODULE_PATH
-                      RESULT_VARIABLE _PYTHON_pythonlib_result
-                      OUTPUT_STRIP_TRAILING_WHITESPACE )
-
-    if (NOT _PYTHON_pythonlib_result)
-      get_filename_component ( _ABS_PYTHON_MODULE_PATH ${_ABS_PYTHON_MODULE_PATH} ABSOLUTE )
-      file ( RELATIVE_PATH _REL_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH} )
-
-      set (OTAGR_PYTHON_MODULE_PATH ${_REL_PYTHON_MODULE_PATH})
+    if (DEFINED PYTHON_SITE_PACKAGES)
+      set (OTAGR_PYTHON_MODULE_PATH ${PYTHON_SITE_PACKAGES})
 
     else ()
-      message ( SEND_ERROR "Could not run ${PYTHON_EXECUTABLE}" )
+      execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
+                        OUTPUT_VARIABLE _ABS_PYTHON_MODULE_PATH
+                        RESULT_VARIABLE _PYTHON_pythonlib_result
+                        OUTPUT_STRIP_TRAILING_WHITESPACE )
+
+      if (_PYTHON_pythonlib_result)
+        message (SEND_ERROR "Could not run ${PYTHON_EXECUTABLE}")
+      endif ()
+
+      get_filename_component (_ABS_PYTHON_MODULE_PATH ${_ABS_PYTHON_MODULE_PATH} ABSOLUTE)
+      file (RELATIVE_PATH OTAGR_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH})
+    endif ()
+
+    if (IS_ABSOLUTE ${OTAGR_PYTHON_MODULE_PATH})
+      set (PYTHON_MODULE_PATH ${OTAGR_PYTHON_MODULE_PATH})
+    else ()
+      set (PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/${OTAGR_PYTHON_MODULE_PATH})
     endif ()
 
     if (CMAKE_VERSION VERSION_LESS "2.8.6")
@@ -104,17 +116,20 @@ if ( BUILD_PYTHON )
 endif ()
 
 
-# WARNING: This is where variables without OTAGR_ prefix are defined !
+# Define variables without OTAGR_ prefix with absolute paths
 foreach (_var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
-  file (TO_NATIVE_PATH "${OTAGR_${_var}}" NATIVE_OTAGR_${_var})
-  if (NOT IS_ABSOLUTE ${NATIVE_OTAGR_${_var}})
-    file (TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX}/${OTAGR_${_var}} NATIVE_OTAGR_${_var})
+  if (IS_ABSOLUTE "${OTAGR_${_var}}")
+    set (${_var} ${OTAGR_${_var}})
+  else ()
+    set (${_var} ${CMAKE_INSTALL_PREFIX}/${OTAGR_${_var}})
   endif ()
-  string (REPLACE "\\" "\\\\" ${_var} ${NATIVE_OTAGR_${_var}})
+  get_filename_component (${_var} "${${_var}}" ABSOLUTE)
+  file (TO_NATIVE_PATH "${${_var}}" NATIVE_${_var})
+  string (REPLACE "\\" "\\\\" NATIVE_${_var} ${NATIVE_${_var}})
 endforeach ()
 
 # RPATH settings
-set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH} ${CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES})
+set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH})
 set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 if(POLICY CMP0042)
   # Set MACOSX_RPATH to ON
