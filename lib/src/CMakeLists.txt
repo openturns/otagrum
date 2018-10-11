@@ -34,14 +34,8 @@ endif ()
 set_target_properties ( otagrum PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otagrum PROPERTIES SOVERSION ${LIB_SOVERSION} )
 
-
-if(CMAKE_BUILD_TYPE MATCHES Debug)
-  target_link_libraries (otagrum ${OPENTURNS_LIBRARY} agrum-dbg)
-  message(STATUS "linking against agrum-dbg")
-else(CMAKE_BUILD_TYPE MATCHES Debug)
-  target_link_libraries (otagrum ${OPENTURNS_LIBRARY} agrum)
-  message(STATUS "linking against agrum")
-endif(CMAKE_BUILD_TYPE MATCHES Debug)
+target_link_libraries (otagrum ${OPENTURNS_LIBRARY})
+target_link_libraries (otagrum agrum)
 
 # Add targets to the build-tree export set
 export (TARGETS otagrum FILE ${PROJECT_BINARY_DIR}/otagrum-Targets.cmake)

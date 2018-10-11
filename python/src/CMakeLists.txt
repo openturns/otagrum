@@ -1,17 +1,16 @@
 
 include ( ${SWIG_USE_FILE} )
 
-set (PYAGRUM_SWIG_WRAPPERS_INCLUDE_DIRS "${AGRUM_INCLUDE_DIR}/agrum/swig")
-set (PYAGRUM_SWIG_INCLUDE_DIRS "${AGRUM_INCLUDE_DIR}/agrum/pyAgrum")
-
 include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
+include_directories ( ${OPENTURNS_INCLUDE_DIRS} )
 add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 include_directories ( ${PYTHON_INCLUDE_DIRS} )
 
-include_directories(${PYAGRUM_SWIG_INCLUDE_DIRS})
-include_directories(${PYAGRUM_SWIG_WRAPPERS_INCLUDE_DIRS})
+include_directories (${AGRUM_INCLUDE_DIRS})
+include_directories (${AGRUM_INCLUDE_DIR}/agrum/swig)
+include_directories (${AGRUM_INCLUDE_DIR}/agrum/pyAgrum)
 
 add_custom_target( generate_docstrings )
 
