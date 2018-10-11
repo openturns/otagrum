@@ -11,9 +11,9 @@
 #include <openturns/Point.hxx>
 #include <openturns/Uniform.hxx>
 
-#include "otagr/otagr.hxx"
+#include "otagrum/Utils.hxx"
 
-using namespace OTAGR;
+using namespace OTAGRUM;
 
 void test_basics() {
   gum::DiscretizedVariable<double> v("v", "v",

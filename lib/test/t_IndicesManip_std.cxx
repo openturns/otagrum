@@ -1,8 +1,10 @@
 #include <iostream>
 #include <openturns/Indices.hxx>
 
-#include "otagr/IndicesManip.hxx"
-namespace OTAGR {
+#include "otagrum/IndicesManip.hxx"
+
+using namespace OTAGRUM;
+
 void iterCombinaison(const OT::Indices &supset, int size) {
   std::cout << std::endl
             << "== " << size << "-Combinations from " << supset.__str__()
@@ -62,7 +64,7 @@ void testIndicesManip() {
 
   std::cout << "\nNothing in indices : ";
   bool fail = false;
-  for (OTAGR::Indice i = 0; i < 15; i++)
+  for (OTAGRUM::Indice i = 0; i < 15; i++)
     if (isIn(indices, i)) {
       std::cout << "fail";
       fail = true;
@@ -94,10 +96,9 @@ void testIndicesManip() {
   iterCombinaison(supset, 4);
   iterCombinaison(supset, 5);*/
 }
-}
 
 int main(int argc, char **argv)
 {
-  OTAGR::testIndicesManip();
+  testIndicesManip();
   return EXIT_SUCCESS;
 }

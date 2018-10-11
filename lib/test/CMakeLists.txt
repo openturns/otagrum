@@ -22,7 +22,7 @@ macro ( ot_check_test TESTNAME )
   set ( TESTNAME_SRCS ${TESTNAME_SRC} )
   add_executable ( ${TESTNAME_TGT} EXCLUDE_FROM_ALL ${TESTNAME_SRCS} )
   add_dependencies ( tests ${TESTNAME_TGT} )
-  target_link_libraries ( ${TESTNAME_TGT} otagr )
+  target_link_libraries ( ${TESTNAME_TGT} otagrum )
   if ( MINGW )
     target_link_libraries ( ${TESTNAME_TGT} CRT_fp8 )
   endif ()
@@ -72,7 +72,7 @@ macro ( ot_check_test TESTNAME )
   set_tests_properties ( cppcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${CHECK_ENVIRONMENT}" )
   list ( APPEND CHECK_TO_BE_RUN ${TESTNAME_TGT} )
   install ( FILES ${TESTNAME_SRC}
-            DESTINATION ${OTAGR_EXAMPLE_PATH}
+            DESTINATION ${OTAGRUM_EXAMPLE_PATH}
           )
 endmacro ()
 

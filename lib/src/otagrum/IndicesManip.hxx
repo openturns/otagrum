@@ -19,18 +19,18 @@
  *
  */
 
-#ifndef OTAGR_INDICESMANIP_HXX
-#define OTAGR_INDICESMANIP_HXX
+#ifndef OTAGRUM_INDICESMANIP_HXX
+#define OTAGRUM_INDICESMANIP_HXX
 
 #include <openturns/Indices.hxx>
 
-namespace OTAGR {
-using Indice = OT::UnsignedInteger;
-Indice pos(const OT::Indices &X, Indice y);
-bool isIn(const OT::Indices &X, Indice y);
+namespace OTAGRUM {
 
-OT::Indices operator+(const OT::Indices &X, Indice y);
-OT::Indices operator-(const OT::Indices &X, Indice y);
+OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger y);
+bool isIn(const OT::Indices &X, OT::UnsignedInteger y);
+
+OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y);
+OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y);
 
 class IndicesCombinationIterator {
 public:
@@ -43,7 +43,7 @@ public:
   std::string __str__(const std::string &delim="");
 
 private:
-  void set_(Indice pos, int val);
+  void set_(OT::UnsignedInteger pos, int val);
   const OT::Indices base_;
   OT::Indices current_;
   std::vector<OT::UnsignedInteger> coord_;
@@ -52,4 +52,4 @@ private:
 };
 } // eo namespace
 
-#endif // OTAGR_INDICESMANIP_HXX
+#endif // OTAGRUM_INDICESMANIP_HXX

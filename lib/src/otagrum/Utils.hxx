@@ -19,8 +19,8 @@
  *
  */
 
-#ifndef OTAGR_UTILS_HXX
-#define OTAGR_UTILS_HXX
+#ifndef OTAGRUM_UTILS_HXX
+#define OTAGRUM_UTILS_HXX
 
 #include <openturns/Distribution.hxx>
 #include <openturns/DistributionImplementation.hxx>
@@ -32,9 +32,9 @@
 #include <agrum/multidim/potential.h>
 #include <agrum/variables/discretizedVariable.h>
 
-#include "otagr/otagrprivate.hxx"
+#include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGR {
+namespace OTAGRUM {
 
 class Utils
 {
@@ -58,6 +58,6 @@ private:
   Utils();
 };
 
-} /* namespace OTAGR */
+} /* namespace OTAGRUM */
 
-#endif /* OTAGR_UTILS_HXX */
+#endif /* OTAGRUM_UTILS_HXX */

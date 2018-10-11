@@ -14,14 +14,14 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 %endif \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
-Name:           otagr
+Name:           otagrum
 Version:        0.2.0
 Release:        0%{?dist}
 Summary:        OpenTURNS module
 Group:          System Environment/Libraries
 License:        GPLv3+
 URL:            http://www.openturns.org/
-Source0:        http://downloads.sourceforge.net/openturns-modules/otagr/otagr-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/openturns-modules/otagrum/otagrum-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gcc-c++, cmake, swig
 %if 0%{?suse_version}
@@ -32,40 +32,40 @@ BuildRequires:  gcc-gfortran
 BuildRequires:  openturns-devel
 BuildRequires:  python-openturns
 BuildRequires:  python-devel
-Requires:       libotagr0
+Requires:       libotagrum0
 
 %description
 Template module for OpenTURNS library.
 
-%package -n libotagr0
-Summary:        otagr development files
+%package -n libotagrum0
+Summary:        otagrum development files
 Group:          Development/Libraries/C and C++
 
-%description -n libotagr0
-Dynamic libraries for otagr.
+%description -n libotagrum0
+Dynamic libraries for otagrum.
 
 %package devel
-Summary:        otagr development files
+Summary:        otagrum development files
 Group:          Development/Libraries/C and C++
-Requires:       libotagr0 = %{version}
+Requires:       libotagrum0 = %{version}
 Requires:       openturns-devel
 
 %description devel
-Development files for otagr library.
+Development files for otagrum library.
 
 %package examples
-Summary:        otagr examples
+Summary:        otagrum examples
 Group:          Productivity/Scientific/Math
 
 %description examples
-Example files for otagr
+Example files for otagrum
 
 %package -n python-%{name}
-Summary:        otagr library
+Summary:        otagrum library
 Group:          Productivity/Scientific/Math
 Requires:       python-openturns
 %description -n python-%{name}
-Python textual interface to otagr uncertainty library
+Python textual interface to otagrum uncertainty library
 
 %prep
 %setup -q
@@ -88,10 +88,10 @@ rm %{buildroot}%{python_sitearch}/%{name}/*.pyc
 %clean
 rm -rf %{buildroot}
 
-%post -n libotagr0 -p /sbin/ldconfig 
-%postun -n libotagr0 -p /sbin/ldconfig 
+%post -n libotagrum0 -p /sbin/ldconfig 
+%postun -n libotagrum0 -p /sbin/ldconfig 
 
-%files -n libotagr0
+%files -n libotagrum0
 %defattr(-,root,root,-)
 %{_libdir}/*.so.*
 

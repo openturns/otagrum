@@ -5,7 +5,9 @@
 #include <openturns/FrankCopulaFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 
-#include "otagr/ContinuousTTest.hxx"
+#include "otagrum/ContinuousTTest.hxx"
+
+using namespace OTAGRUM;
 
 OT::Sample getNormalSample(OT::UnsignedInteger size) {
   OT::UnsignedInteger dim = 10;
@@ -46,7 +48,7 @@ void testNormalSample() {
   OT::Indices X;
 
   OT::Sample sample = getNormalSample(1300);
-  OTAGR::ContinuousTTest test(sample);
+  ContinuousTTest test(sample);
   std::tie(t1, p1, ok1) = test.isIndep(0, 1, X);
   std::cout << test.__str__("");
   std::tie(t2, p2, ok2) = test.isIndep(8, 9, X);
@@ -57,7 +59,6 @@ void testNormalSample() {
             << "    test:" << (ok2 ? " fail " : " OK ") << "\n";
 }
 
-namespace OTAGR {
 void testIndepsSeePythonTest() {
   double t;
   double p;
@@ -65,7 +66,7 @@ void testIndepsSeePythonTest() {
   OT::Indices X;
 
   auto data = getSpecificInstanceSeePythonTest(3000);
-  OTAGR::ContinuousTTest test(data);
+  ContinuousTTest test(data);
   test.setAlpha(0.1);
 
   //  0 et 1 not independent
@@ -88,10 +89,9 @@ void testIndepsSeePythonTest() {
   std::cout << "ttest value: " << t << "     pvalue:" << p
             << "   test:" << (ok ? " OK " : " fail ") << "\n";
 }
-}
 
 int main(int argc, char **argv) {
   testNormalSample();
-  OTAGR::testIndepsSeePythonTest();
+  testIndepsSeePythonTest();
   return EXIT_SUCCESS;
 }

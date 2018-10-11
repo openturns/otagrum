@@ -26,9 +26,9 @@
 
 #include <agrum/core/hashTable.h>
 
-#include "otagr/StratifiedCache.hxx"
+#include "otagrum/StratifiedCache.hxx"
 
-namespace OTAGR {
+namespace OTAGRUM {
 
 StratifiedCache::StratifiedCache() : get_(0u), set_(0u){};
 
@@ -92,4 +92,4 @@ std::string StratifiedCache::__str__(const std::string &offset) const {
   }
   return ss.str();
 }
-} // namespace OTAGR
+} // namespace OTAGRUM

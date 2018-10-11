@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import openturns as ot
-import otagr
+import otagrum
 import pyAgrum as gum
 import sys
 
@@ -18,28 +18,28 @@ def test_basic():
 
     print("\n** From OT::Distribution to gum::Potential:")
     unifDistribution = ot.Uniform(0, 40)
-    pv = gum.Potential(otagr.Utils.Discretize(unifDistribution, v))
-    pw = gum.Potential(otagr.Utils.Discretize(unifDistribution, w))
+    pv = gum.Potential(otagrum.Utils.Discretize(unifDistribution, v))
+    pw = gum.Potential(otagrum.Utils.Discretize(unifDistribution, w))
     print(pv)
     print(pw)
 
     print("\nCatching InvalidArgumentException for bad support")
     try:
-        otagr.Utils.Discretize(ot.Uniform(1, 100), w)
+        otagrum.Utils.Discretize(ot.Uniform(1, 100), w)
         print("Fail")
     except:
         print("OK")
 
     print("\n** Back to OT::Distribution")
-    print(otagr.Utils.FromMarginal(pv))
-    print(otagr.Utils.FromMarginal(pw))
+    print(otagrum.Utils.FromMarginal(pv))
+    print(otagrum.Utils.FromMarginal(pw))
 
 
 def test_fromMarginal():
     print("\n** FromRangeVariable")
     x = gum.RangeVariable("x", "x", 3, 10)
     px = gum.Potential().add(x).fillWith([1, 2, 3, 4, 5, 6, 7, 8])
-    dx = otagr.Utils.FromMarginal(px)
+    dx = otagrum.Utils.FromMarginal(px)
     print(px.normalize())
     print(dx)
 
@@ -47,13 +47,13 @@ def test_fromMarginal():
     y = gum.LabelizedVariable("y", "y", 0).addLabel("True").addLabel("Maybe").addLabel("False")
     py = gum.Potential().add(y).fillWith([2, 8, 4]).normalize()
     print(py)
-    print(otagr.Utils.FromMarginal(py))
+    print(otagrum.Utils.FromMarginal(py))
 
     print("\n** From LabelizedVariable but numerical")
     y = gum.LabelizedVariable("y", "y", 0).addLabel("1").addLabel("1.5").addLabel("3.15")
     py = gum.Potential().add(y).fillWith([2, 8, 4]).normalize()
     print(py)
-    print(otagr.Utils.FromMarginal(py))
+    print(otagrum.Utils.FromMarginal(py))
 
 
 def test_fromPotential():
@@ -69,7 +69,7 @@ def test_fromPotential():
     print(p)
     sys.stdout.flush()
 
-    distrib = otagr.Utils.FromPotential(p)
+    distrib = otagrum.Utils.FromPotential(p)
     print(distrib)
 
     print(p.margSumIn(["y"]))

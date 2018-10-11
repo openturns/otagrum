@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef OTAGR_STRATIFIEDCACHE_HXX
-#define OTAGR_STRATIFIEDCACHE_HXX
+#ifndef OTAGRUM_STRATIFIEDCACHE_HXX
+#define OTAGRUM_STRATIFIEDCACHE_HXX
 
 #include <sstream>
 #include <string>
@@ -28,7 +28,8 @@
 
 #include <openturns/Sample.hxx>
 
-namespace OTAGR {
+namespace OTAGRUM {
+
 class StratifiedCache {
 private:
   gum::HashTable<std::string, OT::Point> cache_;
@@ -60,5 +61,5 @@ public:
 
   std::string __str__(const std::string& offset="") const;
 };
-} // OTAGR
-#endif // OTAGR_STRATIFIEDCACHE_H
+} // OTAGRUM
+#endif // OTAGRUM_STRATIFIEDCACHE_H

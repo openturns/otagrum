@@ -27,8 +27,8 @@
 #include <agrum/graphs/DAG.h>
 #include <agrum/graphs/mixedGraph.h>
 
-#include "otagr/ContinuousPC.hxx"
-#include "otagr/Utils.hxx"
+#include "otagrum/ContinuousPC.hxx"
+#include "otagrum/Utils.hxx"
 
 #define TRACE(x)                                                               \
   {                                                                            \
@@ -69,7 +69,7 @@ std::ostream &operator<<(std::ostream &aStream, const Triplet &i) {
   return aStream;
 }
 
-namespace OTAGR {
+namespace OTAGRUM {
 /**
  * create an learner using PC algorithm with continuous variables
  *
@@ -269,7 +269,7 @@ gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) {
           //  queue.insert(Triplet{x, y, z}, pvalues_[gum::Edge(x, z)]);
           //}
           OT::Indices indX;
-          indX = indX + OTAGR::Indice(x);
+          indX = indX + OT::UnsignedInteger(x);
           std::tie(t, p, ok) = tester_.isIndep(y, z, indX);
           if (!ok) {
             queue.insert(Triplet{y, x, z}, p);
@@ -352,4 +352,4 @@ std::string ContinuousPC::PDAGtoDot(const gum::MixedGraph &pdag) {
          ""
          "}";
 }
-} // namespace OTAGR
+} // namespace OTAGRUM

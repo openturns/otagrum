@@ -28,11 +28,11 @@
 #include <openturns/SpecFunc.hxx>
 #include <openturns/DistFunc.hxx>
 
-#include "otagr/ContinuousTTest.hxx"
+#include "otagrum/ContinuousTTest.hxx"
 
-constexpr double pi() { return std::atan(1) * 4; }
 
-namespace OTAGR {
+
+namespace OTAGRUM {
 double ContinuousTTest::z2p_(const double z) {
   return OT::DistFunc::pNormal(-z);
 }
@@ -89,7 +89,7 @@ OT::Point ContinuousTTest::getPDF_(const OT::Indices & l,
 }
 
 std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
-ContinuousTTest::getPDFs_(const Indice Y, const Indice Z, const OT::Indices & X) const {
+ContinuousTTest::getPDFs_(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const {
   //@todo how to be smart for k ?
   OT::UnsignedInteger k = getK_(data_);
   OT::Point pdf1(getPDF_(X, k));
@@ -105,7 +105,7 @@ double ContinuousTTest::getAlpha() const { return alpha_; }
 
 inline double pPar1MoinsP(const double p) { return p * (1 - p); }
 
-double ContinuousTTest::getTTest(const Indice Y, const Indice Z,
+double ContinuousTTest::getTTest(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z,
                                  const OT::Indices & X) const {
   OT::UnsignedInteger k;
 
@@ -119,14 +119,14 @@ double ContinuousTTest::getTTest(const Indice Y, const Indice Z,
   auto d = double(X.getSize()); // such that d/2 is double as well
   auto N = data_.getSize();
 
-  auto C1 = std::pow(2, -(d + 2)) * std::pow(pi(), (d + 2) / 2);
-  auto sigma = std::sqrt(2) * std::pow(pi() / 4, (d + 2) / 2);
+  auto C1 = std::pow(2, -(d + 2)) * std::pow(M_PI, (d + 2) / 2);
+  auto sigma = std::sqrt(2) * std::pow(M_PI / 4, (d + 2) / 2);
 
   double H = 0;
   double B1 = 0;
   double B2 = 0;
   double B3 = 0;
-  const double facteurpi = std::pow(4 * pi(), -(d + 1) / 2);
+  const double facteurpi = std::pow(4 * M_PI, -(d + 1) / 2);
   double ratioH;
   for (unsigned int i = 0; i < N; ++i) {
     ratioH = fYZX[i];
@@ -155,8 +155,8 @@ double ContinuousTTest::getTTest(const Indice Y, const Indice Z,
   // mean
   H /= N;
 
-  const double term12 = -std::pow(2, -d) * std::pow(pi(), (d + 1) / 2);
-  const double fact3 = std::pow(2, -(d + 1)) * std::pow(pi(), -d / 2);
+  const double term12 = -std::pow(2, -d) * std::pow(M_PI, (d + 1) / 2);
+  const double fact3 = std::pow(2, -(d + 1)) * std::pow(M_PI, -d / 2);
   B1 = term12 + B1 / N;
   B2 = term12 + B2 / N;
   B3 = fact3 * B3 / N;
@@ -167,7 +167,7 @@ double ContinuousTTest::getTTest(const Indice Y, const Indice Z,
   return T;
 }
 
-double ContinuousTTest::getTTestWithoutCorrections(Indice Y, Indice Z,
+double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y, OT::UnsignedInteger Z,
                                                    const OT::Indices &X) const {
   OT::UnsignedInteger k;
 
@@ -181,7 +181,7 @@ double ContinuousTTest::getTTestWithoutCorrections(Indice Y, Indice Z,
   auto d = double(X.getSize()); // such that d/2 is double as well
   auto N = data_.getSize();
 
-  auto sigma = std::sqrt(2) * std::pow(pi() / 4, (d + 2) / 2);
+  auto sigma = std::sqrt(2) * std::pow(M_PI / 4, (d + 2) / 2);
 
   double H = 0;
 
@@ -202,7 +202,7 @@ double ContinuousTTest::getTTestWithoutCorrections(Indice Y, Indice Z,
 }
 
 std::tuple<double, double, bool>
-ContinuousTTest::isIndep(const Indice Y, const Indice Z, const OT::Indices & X) const {
+ContinuousTTest::isIndep(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const {
   return ContinuousTTest::isIndepFromTest(getTTest(Y, Z, X), alpha_);
 }
 
@@ -231,4 +231,4 @@ void ContinuousTTest::clearCacheLevel(const OT::UnsignedInteger level) const {
 OT::UnsignedInteger ContinuousTTest::getDimension() const {
   return data_.getDimension();
 }
-} // namespace OTAGR
+} // namespace OTAGRUM

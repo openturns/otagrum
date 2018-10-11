@@ -8,7 +8,7 @@
 #include <openturns/FrankCopulaFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 
-#include "otagr/ContinuousPC.hxx"
+#include "otagrum/ContinuousPC.hxx"
 
 OT::Sample getSpecificInstance(OT::UnsignedInteger size) {
   OT::Collection<OT::Copula> copulas;
@@ -34,7 +34,7 @@ void learn(std::string filename, int level = 5, double alpha = 0.05,
   std::cout << "sample size : " << sample1.getSize() << std::endl;
   std::cout << "sample dim : " << sample1.getDimension() << std::endl;
 
-  OTAGR::ContinuousPC learner(sample1, 5, 0.1);
+  OTAGRUM::ContinuousPC learner(sample1, 5, 0.1);
   learner.setVerbosity(true);
   learner.setOptimalPolicy(true);
   auto g = learner.getSkeleton();

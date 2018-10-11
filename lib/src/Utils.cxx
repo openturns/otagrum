@@ -19,7 +19,7 @@
  *
  */
 
-#include "otagr/Utils.hxx"
+#include "otagrum/Utils.hxx"
 
 #include <openturns/Description.hxx>
 #include <openturns/Histogram.hxx>
@@ -39,9 +39,9 @@
 #include <agrum/variables/discretizedVariable.h>
 #include <agrum/variables/rangeVariable.h>
 
-#include "otagr/MixedHistogramUserDefined.hxx"
+#include "otagrum/MixedHistogramUserDefined.hxx"
 
-namespace OTAGR {
+namespace OTAGRUM {
 
 gum::Potential<double>
 Utils::Discretize(const OT::DistributionImplementation &distribution,
@@ -232,4 +232,4 @@ OT::Indices Utils::FromNodeSet(const gum::NodeSet &clique) {
 
 Utils::Utils() {}
 
-} /* namespace OTAGR */
+} /* namespace OTAGRUM */

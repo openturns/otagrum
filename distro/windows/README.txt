@@ -1,16 +1,16 @@
-# otagr module
+# otagrum module
 
 Examples
-  Template examples can be found here: C:\Python27\Lib\site-packages\otagr\examples\otagr
+  Template examples can be found here: C:\Python27\Lib\site-packages\otagrum\examples\otagrum
 
 Installation
-  Silent install can be done with the switch /S (e.g. openturns-otagr-0.0-py27.exe /S).
-  To test otagr module installation, in an OpenTURNS python console type:
-    import otagr
-    print otagr.__version__
+  Silent install can be done with the switch /S (e.g. openturns-otagrum-0.0-py27.exe /S).
+  To test otagrum module installation, in an OpenTURNS python console type:
+    import otagrum
+    print otagrum.__version__
 
 Uninstallation
-  otagr module will be automatically uninstalled at OpenTURNS removal.
-  otagr module can be removed from OpenTURNS with uninst-template.exe uninstaller.
+  otagrum module will be automatically uninstalled at OpenTURNS removal.
+  otagrum module can be removed from OpenTURNS with uninst-template.exe uninstaller.
   Silent uninstall can be done with the switch /S.
 

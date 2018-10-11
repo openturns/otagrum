@@ -49,7 +49,7 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
     swig_add_library (${MODULENAME} LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
   endif ()
 
-  swig_link_libraries ( ${MODULENAME} otagr )
+  swig_link_libraries ( ${MODULENAME} otagrum )
   if ( LINK_PYTHON_LIBRARY )
     swig_link_libraries ( ${MODULENAME} ${PYTHON_LIBRARIES} )
   endif ()
@@ -61,30 +61,30 @@ endmacro ( ot_add_python_module )
 
 
 
-ot_add_python_module( ${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagr_agrum.i
+ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
                       MixedHistogramUserDefined.i
                       ContinuousPC.i
-		      ContinuousTTest.i
+                      ContinuousTTest.i
                       JunctionTree.i
-		      Utils.i
+                      Utils.i
                     )
 
 
 foreach ( module ${PYTHON_MODULES} )
   install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${module}.py
-            DESTINATION ${OTAGR_PYTHON_MODULE_PATH}/${PACKAGE_NAME}
+            DESTINATION ${OTAGRUM_PYTHON_MODULE_PATH}/${PACKAGE_NAME}
             )
   install ( TARGETS _${module}
-            LIBRARY DESTINATION ${OTAGR_PYTHON_MODULE_PATH}/${PACKAGE_NAME}
+            LIBRARY DESTINATION ${OTAGRUM_PYTHON_MODULE_PATH}/${PACKAGE_NAME}
           )
 endforeach ( module )
 
 install ( FILES __init__.py
-          DESTINATION ${OTAGR_PYTHON_MODULE_PATH}/${PACKAGE_NAME}
+          DESTINATION ${OTAGRUM_PYTHON_MODULE_PATH}/${PACKAGE_NAME}
         )
 
 install ( FILES ${SWIGFILES}
-          DESTINATION ${OTAGR_SWIG_INCLUDE_PATH}
+          DESTINATION ${OTAGRUM_SWIG_INCLUDE_PATH}
         )
 
 
@@ -93,15 +93,15 @@ install ( FILES ${SWIGFILES}
 if (SPHINX_FOUND AND SPHINX_EXECUTABLE AND NUMPYDOC_FOUND)
 
   # create a build site-package from which sphinx can import
-  set (OTAGR_PYTHON_BUILD_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR}) #/site-packages)
-  execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTAGR_PYTHON_BUILD_MODULE_PATH}/otagr)
+  set (OTAGRUM_PYTHON_BUILD_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR}) #/site-packages)
+  execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr)
   foreach (module ${PYTHON_MODULES})
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTAGR_PYTHON_BUILD_MODULE_PATH}/otagr/${module}.py)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/${module}.py)
     # FIXME: get_target_property (suffix ${SWIG_MODULE_${module}_REAL_NAME} SUFFIX)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTAGR_PYTHON_BUILD_MODULE_PATH}/otagr/_${module}.so)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/_${module}.so)
   endforeach ()
   foreach (file __init__.py)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${OTAGR_PYTHON_BUILD_MODULE_PATH}/otagr/${file})
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/${file})
   endforeach ()
 
   # sphinx configuration
@@ -185,5 +185,5 @@ if (SPHINX_FOUND AND SPHINX_EXECUTABLE AND NUMPYDOC_FOUND)
   add_custom_target (sphinx_pdf DEPENDS ${SPHINX_BINARY_DIR}/latex/OpenTURNS.pdf)
   add_dependencies (sphinx_pdf sphinx_latex)
 
-  install (DIRECTORY ${SPHINX_BINARY_DIR}/html DESTINATION ${OTAGR_DOC_PATH})
+  install (DIRECTORY ${SPHINX_BINARY_DIR}/html DESTINATION ${OTAGRUM_DOC_PATH})
 endif ()

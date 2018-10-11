@@ -19,22 +19,22 @@
  *
  */
 
-#ifndef OTAGR_JUNCTIONTREEDISTRIBUTION_HXX
-#define OTAGR_JUNCTIONTREEDISTRIBUTION_HXX
+#ifndef OTAGRUM_JUNCTIONTREEDISTRIBUTION_HXX
+#define OTAGRUM_JUNCTIONTREEDISTRIBUTION_HXX
 
 #include <openturns/ContinuousDistribution.hxx>
 #include <openturns/Mixture.hxx>
 
-#include "otagr/otagrprivate.hxx"
+#include "otagrum/otagrprivate.hxx"
 
-namespace OTAGR {
+namespace OTAGRUM {
 
 /**
  * @class JunctionTreeDistribution
  *
  * The JunctionTreeDistribution distribution.
  */
-class OTAGR_API JunctionTreeDistribution
+class OTAGRUM_API JunctionTreeDistribution
   : public OT::ContinuousDistribution
 {
   CLASSNAME;
@@ -174,6 +174,6 @@ private:
   
 }; /* class JunctionTreeDistribution */
 
-} /* namespace OTAGR */
+} /* namespace OTAGRUM */
 
-#endif /* OTAGR_JUNCTIONTREEDISTRIBUTION_HXX */
+#endif /* OTAGRUM_JUNCTIONTREEDISTRIBUTION_HXX */

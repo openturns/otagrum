@@ -19,8 +19,8 @@
  *
  */
 
-#ifndef OTAGR_JUNCTIONTREE_HXX
-#define OTAGR_JUNCTIONTREE_HXX
+#ifndef OTAGRUM_JUNCTIONTREE_HXX
+#define OTAGRUM_JUNCTIONTREE_HXX
 
 #include <string>
 #include <vector>
@@ -31,7 +31,7 @@
 #include <openturns/Description.hxx>
 #include <openturns/Indices.hxx>
 
-namespace OTAGR {
+namespace OTAGRUM {
 class JunctionTree {
 private:
   gum::JunctionTree jt_;
@@ -66,4 +66,4 @@ public:
   std::string __str__();
 };
 };
-#endif // OTAGR_JUNCTIONTREE_H
+#endif // OTAGRUM_JUNCTIONTREE_H

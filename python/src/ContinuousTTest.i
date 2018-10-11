@@ -3,13 +3,9 @@
 %{
 #include <tuple>
 
-#include "otagr/IndicesManip.hxx"
-#include "otagr/ContinuousTTest.hxx"
-
-using namespace OTAGR;
+#include "otagrum/IndicesManip.hxx"
+#include "otagrum/ContinuousTTest.hxx"
 %}
-
-%typemap(in) Indice = int;
 
 
 %typemap(out) std::tuple<double, double, bool> {
@@ -18,4 +14,4 @@ using namespace OTAGR;
                                 std::get<2>($1)?Py_True:Py_False);
 }
 //%include ContinuousTTest_doc.i
-%include "otagr/ContinuousTTest.hxx"
+%include "otagrum/ContinuousTTest.hxx"

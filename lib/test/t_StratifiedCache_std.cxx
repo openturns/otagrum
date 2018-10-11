@@ -4,10 +4,12 @@
 #include <openturns/Poisson.hxx>
 #include <openturns/Uniform.hxx>
 
-#include "otagr/StratifiedCache.hxx"
+#include "otagrum/StratifiedCache.hxx"
+
+using namespace OTAGRUM;
 
 int main(int argc, char **argv) {
-  OTAGR::StratifiedCache cache;
+  StratifiedCache cache;
 
   OT::UnsignedInteger size = 5;
   cache.set(1, "normal()", OT::Normal().getSample(size).asPoint());
