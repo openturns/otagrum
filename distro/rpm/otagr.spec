@@ -19,7 +19,7 @@ Version:        0.2.0
 Release:        0%{?dist}
 Summary:        OpenTURNS module
 Group:          System Environment/Libraries
-License:        LGPLv3+
+License:        GPLv3+
 URL:            http://www.openturns.org/
 Source0:        http://downloads.sourceforge.net/openturns-modules/otagr/otagr-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
