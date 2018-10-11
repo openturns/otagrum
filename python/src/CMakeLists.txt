@@ -91,14 +91,14 @@ if (SPHINX_FOUND AND SPHINX_EXECUTABLE AND NUMPYDOC_FOUND)
 
   # create a build site-package from which sphinx can import
   set (OTAGRUM_PYTHON_BUILD_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR}) #/site-packages)
-  execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr)
+  execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagrum)
   foreach (module ${PYTHON_MODULES})
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/${module}.py)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagrum/${module}.py)
     # FIXME: get_target_property (suffix ${SWIG_MODULE_${module}_REAL_NAME} SUFFIX)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/_${module}.so)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagrum/_${module}.so)
   endforeach ()
   foreach (file __init__.py)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/${file})
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagrum/${file})
   endforeach ()
 
   # sphinx configuration
