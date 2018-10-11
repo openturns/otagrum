@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# otagr documentation build configuration file, created by
+# otagrum documentation build configuration file, created by
 # sphinx-quickstart on Fri Jun 19 15:57:39 2015.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -22,6 +22,7 @@ import subprocess
 sys.path.insert(0, os.path.abspath('sphinxext'))
 sys.path.insert(0, '@OTAGRUM_PYTHON_BUILD_MODULE_PATH@')
 sys.path.insert(0, '@OPENTURNS_PYTHON_MODULE_PATH@')
+sys.path.insert(0, '@AGRUM_PYTHON_MODULE_PATH@')
 
 # -- General configuration -----------------------------------------------------
 
@@ -84,7 +85,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'otagr'
+project = u'otagrum'
 copyright = u'2016, Airbus-EDF-IMACS-Phimeca'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -210,7 +211,7 @@ html_last_updated_fmt = '%b %d, %Y'
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'otagrdoc'
+htmlhelp_basename = 'otagrumdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -229,7 +230,7 @@ latex_additional_files = ['math_notations.sty']
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'otagr.tex', u'otagr Documentation',
+  ('index', 'otagrum.tex', u'otagrum Documentation',
    u'Phimeca', 'manual'),
 ]
 
@@ -259,7 +260,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'otagr', u'otagr Documentation',
+    ('index', 'otagrum', u'otagrum Documentation',
      [u'Phimeca'], 1)
 ]
 
@@ -273,8 +274,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'otagr', u'otagr Documentation',
-   u'Phimeca', 'otagr', 'One line description of project.',
+  ('index', 'otagrum', u'otagrum Documentation',
+   u'Phimeca', 'otagrum', 'One line description of project.',
    'Miscellaneous'),
 ]
 

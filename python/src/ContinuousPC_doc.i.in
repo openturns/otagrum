@@ -1,0 +1,7 @@
+%feature("docstring") OTAGRUM::ContinuousPC
+"ContinuousPC learner
+
+Parameters
+----------
+a : int
+    a"

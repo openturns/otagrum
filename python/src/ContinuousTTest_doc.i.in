@@ -1,0 +1,7 @@
+%feature("docstring") OTAGRUM::ContinuousTTest
+"Independence test statistic
+
+Parameters
+----------
+a : int
+    a"

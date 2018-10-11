@@ -111,6 +111,8 @@ if (BUILD_PYTHON)
   endif ( PYTHONINTERP_FOUND )
 endif ()
 
+# Guess agrum python module path
+set (AGRUM_PYTHON_MODULE_PATH ${AGRUM_ROOTDIR}/${OTAGRUM_PYTHON_MODULE_PATH})
 
 # Define variables without OTAGRUM_ prefix with absolute paths
 foreach (_var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)

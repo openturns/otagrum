@@ -4,5 +4,8 @@
 #include "otagrum/Utils.hxx"
 %}
 
-//%include Utils_doc.i
+%include Utils_doc.i
+
+%nodefaultctor Utils;
+
 %include otagrum/Utils.hxx
