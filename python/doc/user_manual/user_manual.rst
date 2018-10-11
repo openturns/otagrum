@@ -9,5 +9,5 @@ Reference
 .. autosummary::
     :toctree: _generated/
     :template: class.rst_t
-  
-    OtAgr
+
+    ContinuousPC
