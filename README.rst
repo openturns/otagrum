@@ -1,5 +1,5 @@
-.. image:: https://travis-ci.org/openturns/otagr.svg?branch=master
-    :target: https://travis-ci.org/openturns/otagr
+.. image:: https://travis-ci.org/openturns/otagrum.svg?branch=master
+    :target: https://travis-ci.org/openturns/otagrum
 
 otagr Module
 =================

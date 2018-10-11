@@ -96,4 +96,8 @@ void testIndicesManip() {
 }
 }
 
-int main(int argc, char **argv) { OTAGR::testIndicesManip(); }
+int main(int argc, char **argv)
+{
+  OTAGR::testIndicesManip();
+  return EXIT_SUCCESS;
+}

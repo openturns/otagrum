@@ -89,7 +89,9 @@ void testIndepsSeePythonTest() {
             << "   test:" << (ok ? " OK " : " fail ") << "\n";
 }
 }
+
 int main(int argc, char **argv) {
   testNormalSample();
   OTAGR::testIndepsSeePythonTest();
+  return EXIT_SUCCESS;
 }

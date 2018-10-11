@@ -71,11 +71,11 @@ std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
 ContinuousTTest::getPDFs_(const Indice Y, const Indice Z, const OT::Indices & X) const {
   //@todo how to be smart for k ?
   OT::UnsignedInteger k = getK_(data_);
-  return std::make_tuple(getPDF_(X, k),         //
-                         getPDF_(X + Y, k),     //
-                         getPDF_(X + Z, k),     //
-                         getPDF_(X + Y + Z, k), //
-                         k);
+  OT::Point pdf1(getPDF_(X, k));
+  OT::Point pdf2(getPDF_(X + Y, k));
+  OT::Point pdf3(getPDF_(X + Z, k));
+  OT::Point pdf4(getPDF_(X + Y + Z, k));
+  return std::make_tuple(pdf1, pdf2, pdf3, pdf4, k);
 }
 
 void ContinuousTTest::setAlpha(const double alpha) { alpha_ = alpha; }
@@ -107,7 +107,7 @@ double ContinuousTTest::getTTest(const Indice Y, const Indice Z,
   double B3 = 0;
   const double facteurpi = std::pow(4 * pi(), -(d + 1) / 2);
   double ratioH;
-  for (int i = 0; i < N; ++i) {
+  for (unsigned int i = 0; i < N; ++i) {
     ratioH = fYZX[i];
     if (X.getSize() >= 1) {
       ratioH *= fX[i];
@@ -164,7 +164,7 @@ double ContinuousTTest::getTTestWithoutCorrections(Indice Y, Indice Z,
 
   double H = 0;
 
-  for (int i = 0; i < N; ++i) {
+  for (unsigned int i = 0; i < N; ++i) {
     double ratioH = fYZX[i];
     if (X.getSize() > 1) {
       ratioH *= fX[i];

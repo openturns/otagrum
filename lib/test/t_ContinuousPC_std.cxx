@@ -69,5 +69,5 @@ int main(void) {
   }
   std::cout << "Finito " << std::endl;
 
-  return 0;
+  return EXIT_SUCCESS;
 }

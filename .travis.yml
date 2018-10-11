@@ -1,0 +1,40 @@
+language: cpp
+sudo: required
+
+install:
+  - curl http://ubuntu.openturns.org/openturns.org-repo.key | sudo apt-key add -
+  - echo deb http://ubuntu.openturns.org trusty main | sudo tee /etc/apt/sources.list.d/openturns.list
+  - sudo apt-get update
+  - sudo apt-get -y install libopenturns-dev python-openturns cmake gfortran swig texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra python-matplotlib
+  - sudo rm -r /opt/python/*
+  - pip install sphinx numpydoc matplotlib --user --upgrade
+  - git clone --depth 1 https://gitlab.com/agrumery/aGrUM.git && cd aGrUM && cmake -DFOR_PYTHON3=OFF -DUSE_NANODBC=OFF . && make -j2 && sudo make install && cd -
+  - git clone --depth 1 https://github.com/swig/swig.git && cd swig && ./autogen.sh && ./configure --without-alllang && make -j2 && sudo make install && cd -
+
+script:
+  - cmake -DCMAKE_INSTALL_PREFIX=~/.local
+    -DSPHINX_EXECUTABLE=~/.local/bin/sphinx-build
+    -DSWIG_EXECUTABLE=/usr/local/bin/swig
+    .
+  - make install -j2 && make tests -j2 && ctest -j2 --output-on-failure --timeout 1000
+
+after_success:
+  - test "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_BRANCH" = "master" || exit 0
+  - git clone https://${GH_TOKEN}@github.com/openturns/openturns.github.io.git
+  - PROJECT_REPONAME=`echo "${TRAVIS_REPO_SLUG}" | cut -d "/" -f 2`
+  - if test -n "${TRAVIS_TAG}"; then
+        TRAVIS_BRANCH=${TRAVIS_TAG:1};
+    fi
+  - mkdir -p openturns.github.io/${PROJECT_REPONAME}/${TRAVIS_BRANCH}
+  - cp -r ~/.local/share/${PROJECT_REPONAME}/doc/html/* openturns.github.io/${PROJECT_REPONAME}/${TRAVIS_BRANCH}
+  - cd openturns.github.io
+  - touch .nojekyll
+  - git config user.email "support@travis-ci.com"
+  - git config user.name "Travis CI"
+  - git add -A .
+  - git commit -a -m "Travis build ${PROJECT_REPONAME} ${TRAVIS_BUILD_NUMBER}"
+  - git push --quiet origin master > /dev/null 2>&1
+
+env:
+  global:
+    secure: "sKXLbNbB5OoqCaiIRIMVrDZOjfnVkvepqZBxctG65wd8TFmzkhQ8gAq1J1zmQGShlBUEoNQM/vULLigbHb9GTUezu8PI+dCSmWOjDP9766V+1i9PMLZAdgMTyIRzO/zEt6nFBjh9BUmgVIVTzNZqgCYKtCifYIUMLuuo030iXTrWSSlLMNzzIGQfJOtTQYDRFUd/ld/UAv+nYpNAMu7RwsYhU/McP7YsCP6dkVtnNKpublbD4t9X5nowvF3G514yMUmI9Wu2HwRoEbMEU1yd1IosYE9+uULa02+sZba3a2OmxY3kb3gpfPd1QivoAaDkR5iHsQ0gx2/s4nPmlQxN3gjFZcT4Q6xd6KSeLJyGb4UZovGw9PBWk+XVLMm9oulZZ4bS7QJj6pmlDrtF2Cx62UsEJx+Qs7amCgIu/rhDnyLtAVSxpeh2Gos8B9ngCHmpOlkid+8fpvT70ArooQPAkoBEtsBppEGdvCQF0tm/roTLEMzw9hIgqNuBKnYXX0Yg65zhHdKnuvF3f95mctUW9B8KsJtl6H2E1DzwmYvZXsUGsNixn+Ot9vqZpvr+/KSWzeGnZjnzRiD7i8wPITXCN6n0nSsxOrFSQHaACr9hysPtBejN0U64BVMaeZEo9HVVT6z8ZAtIRJjVcfZJ6DcbKJ/bHFK+peVFhNUBGuQ+3bc="

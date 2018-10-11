@@ -30,7 +30,7 @@ void learn(std::string filename, int level = 5, double alpha = 0.05,
 
   // std::string filename =
   //    ;
-  auto sample1 = OT::Sample::ImportFromCSVFile("../../../" + filename);
+  auto sample1 = OT::Sample::ImportFromCSVFile(filename);
   std::cout << "sample size : " << sample1.getSize() << std::endl;
   std::cout << "sample dim : " << sample1.getDimension() << std::endl;
 
@@ -42,7 +42,7 @@ void learn(std::string filename, int level = 5, double alpha = 0.05,
 }
 
 int main(int argc, char **argv) {
-  // learn("datasets/Papillon/minipapillon.csv");
-  learn("datasets/BlockCopula/"
-        "BlockCopula_increasing_blocks_dimension_20_size_10000.csv");
+//   learn("minipapillon.csv");
+  learn("BlockCopula_increasing_blocks_dimension_20_size_10000.csv");
+  return EXIT_SUCCESS;
 }
