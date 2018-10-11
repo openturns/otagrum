@@ -16,7 +16,7 @@ if sys.platform.startswith('win'):
 if sys.platform.startswith('win'):
   import pyAgrum
 
-from .otagr import *
+from .otagrum import *
 
 __version__ = '0.2.0'
 

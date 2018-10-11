@@ -40,16 +40,16 @@ Potential = Potential_double
 %}
 
 // forcing the type from otagr.Potential (from above) to pyAgrum.Potential
-%pythonappend OTAGR::discretize %{
+%pythonappend OTAGRUM::Utils::Discretize %{
     #casting into gum namespace
     val=gum.Potential(val)
     val.__var=args[1]
 %}
-%pythonappend OTAGR::ContinuousPC::getSkeleton %{
+%pythonappend OTAGRUM::ContinuousPC::getSkeleton %{
     #casting into gum namespace
     val=gum.UndiGraph(val)
 %}
-%pythonappend OTAGR::ContinuousPC::getPDAG %{
+%pythonappend OTAGRUM::ContinuousPC::getPDAG %{
     #casting into gum namespace
     val=gum.MixedGraph(val)
 %}

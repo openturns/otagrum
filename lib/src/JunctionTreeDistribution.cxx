@@ -20,12 +20,12 @@
  */
 
 #include <cmath>
-#include "otagr/JunctionTreeDistribution.hxx"
+#include "otagrum/JunctionTreeDistribution.hxx"
 
 #include <openturns/OSS.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
-namespace OTAGR
+namespace OTAGRUM
 {
 
 CLASSNAMEINIT(JunctionTreeDistribution);
@@ -390,4 +390,4 @@ void JunctionTreeDistribution::setDescription(const OT::Description & descriptio
   mixture_.setDescription(getDescription());
 }
 
-} /* namespace OTAGR */
+} /* namespace OTAGRUM */

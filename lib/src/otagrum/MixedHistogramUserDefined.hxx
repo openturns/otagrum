@@ -19,22 +19,22 @@
  *
  */
 
-#ifndef OTAGR_MIXEDHISTOGRAMUSERDEFINED_HXX
-#define OTAGR_MIXEDHISTOGRAMUSERDEFINED_HXX
+#ifndef OTAGRUM_MIXEDHISTOGRAMUSERDEFINED_HXX
+#define OTAGRUM_MIXEDHISTOGRAMUSERDEFINED_HXX
 
 #include <openturns/DistributionImplementation.hxx>
 #include <openturns/Mixture.hxx>
 
-#include "otagr/otagrprivate.hxx"
+#include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGR {
+namespace OTAGRUM {
 
 /**
  * @class MixedHistogramUserDefined
  *
  * The MixedHistogramUserDefined distribution.
  */
-class OTAGR_API MixedHistogramUserDefined
+class OTAGRUM_API MixedHistogramUserDefined
   : public OT::DistributionImplementation
 {
   CLASSNAME;
@@ -173,6 +173,6 @@ private:
   OT::Mixture mixture_;
 }; /* class MixedHistogramUserDefined */
 
-} /* namespace OTAGR */
+} /* namespace OTAGRUM */
 
-#endif /* OTAGR_MIXEDHISTOGRAMUSERDEFINED_HXX */
+#endif /* OTAGRUM_MIXEDHISTOGRAMUSERDEFINED_HXX */

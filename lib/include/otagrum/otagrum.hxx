@@ -19,14 +19,14 @@
  *
  */
 
-#ifndef OTAGR_HXX
-#define OTAGR_HXX
+#ifndef OTAGRUM_HXX
+#define OTAGRUM_HXX
 
-#include "otagr/OtAgrUtils.hxx"
-#include "otagr/MixedHistogramUserDefined.hxx"
-#include "otagr/JunctionTree.hxx"
-#include "otagr/ContinuousTTest.hxx"
-#include "otagr/ContinuousPC.hxx"
+#include "otagrum/Utils.hxx"
+#include "otagrum/MixedHistogramUserDefined.hxx"
+#include "otagrum/JunctionTree.hxx"
+#include "otagrum/ContinuousTTest.hxx"
+#include "otagrum/ContinuousPC.hxx"
 
-#endif // OTAGR_HXX
+#endif // OTAGRUM_HXX
 

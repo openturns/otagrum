@@ -1,12 +1,10 @@
-// SWIG file otagr_module.i
+// SWIG file otagrum_module.i
 
-%module(docstring="otagr module") otagr
+%module(docstring="otagr module") otagrum
 
 %{
 #include <openturns/OT.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
-
-#include <otagr/otagr.hxx>
 %}
 
 // Prerequisites needed
@@ -20,13 +18,12 @@
 %import base_module.i
 %import uncertainty_module.i
 
-%include otagr_agrum.i
+%include otagrum_agrum.i
 
 
 // The new classes
-%include otagr/otagrprivate.hxx
-%include OtAgr.i
-%include OtAgrUtils.i
+%include otagrum/otagrumprivate.hxx
+%include Utils.i
 %include MixedHistogramUserDefined.i
 %include JunctionTree.i
 %include ContinuousTTest.i

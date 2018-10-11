@@ -6,8 +6,8 @@
 #include <openturns/Exception.hxx>
 #include <openturns/Indices.hxx>
 
-#include "otagr/JunctionTree.hxx"
-#include "otagr/otagr.hxx"
+#include "otagrum/JunctionTree.hxx"
+#include "otagrum/otagrum.hxx"
 
 void testOK() {
   auto bn =
@@ -29,7 +29,7 @@ void testOK() {
   for (const auto &elt : bn.nodes()) {
     names.push_back(bn.variable(elt).name());
   }
-  auto jt = OTAGR::JunctionTree(*jtagr, names);
+  auto jt = OTAGRUM::JunctionTree(*jtagr, names);
 
   std::cout << "** CLIQUES **" << std::endl;
   for (auto cliq : jt.getNodes()) {
@@ -58,7 +58,7 @@ void testNotOKForSize() {
   }
 
   try {
-    auto jt = OTAGR::JunctionTree(*jtagr, names);
+    auto jt = OTAGRUM::JunctionTree(*jtagr, names);
     std::cout << "testForSize : ERROR\n";
   } catch (OT::InvalidArgumentException) {
     std::cout << "testForSize : OK\n";
@@ -77,7 +77,7 @@ void testNotOKForHole() {
     names.push_back(bn.variable(elt).name());
   }
   try {
-    auto jt = OTAGR::JunctionTree(*jtagr, names);
+    auto jt = OTAGRUM::JunctionTree(*jtagr, names);
     std::cout << " testForHole : ERROR\n";
   } catch (OT::InvalidArgumentException) {
     std::cout << "testForHole : OK\n";
@@ -105,7 +105,7 @@ void testGetMarginal() {
     names.push_back(bn.variable(elt).name());
   }
 
-  auto jt = OTAGR::JunctionTree(*jtagr, names);
+  auto jt = OTAGRUM::JunctionTree(*jtagr, names);
   std::cout << jt.__str__() << std::endl;
 
   std::cout << "getMarginal on h,a,b\n";

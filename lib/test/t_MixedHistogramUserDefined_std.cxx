@@ -20,10 +20,10 @@
  */
 
 #include <openturns/OT.hxx>
-#include <otagr/otagr.hxx>
+#include <otagrum/otagrum.hxx>
 
 using namespace OT;
-using namespace OTAGR;
+using namespace OTAGRUM;
 
 int main(int argc, char *argv[])
 {

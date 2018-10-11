@@ -19,15 +19,15 @@
  *
  */
 
-#ifndef OTAGR_CONTINUOUSPC_HXX
-#define OTAGR_CONTINUOUSPC_HXX
+#ifndef OTAGRUM_CONTINUOUSPC_HXX
+#define OTAGRUM_CONTINUOUSPC_HXX
 
-#include "otagr/ContinuousTTest.hxx"
+#include "otagrum/ContinuousTTest.hxx"
 #include <agrum/graphs/mixedGraph.h>
 #include <agrum/graphs/undiGraph.h>
 #include <openturns/Sample.hxx>
 
-namespace OTAGR {
+namespace OTAGRUM {
 class ContinuousPC {
 public:
   explicit ContinuousPC(const OT::Sample &data,
@@ -97,6 +97,6 @@ private:
   bestSeparator_(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
                  const OT::Indices &neighbours, OT::UnsignedInteger n);
 };
-} // namespace OTAGR
+} // namespace OTAGRUM
 
-#endif // OTAGR_CONTINUOUSPC_HXX
+#endif // OTAGRUM_CONTINUOUSPC_HXX

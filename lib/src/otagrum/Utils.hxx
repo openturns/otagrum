@@ -2,7 +2,7 @@
 /**
  *  @brief Utils
  *
- *  Copyright 2005-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2018 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
  *
  */
 
-#ifndef OTAGR_OTAGR_UTILS_HXX
-#define OTAGR_OTAGR_UTILS_HXX
+#ifndef OTAGRUM_UTILS_HXX
+#define OTAGRUM_UTILS_HXX
 
 #include <openturns/Distribution.hxx>
 #include <openturns/DistributionImplementation.hxx>
@@ -32,24 +32,32 @@
 #include <agrum/multidim/potential.h>
 #include <agrum/variables/discretizedVariable.h>
 
-#include "otagr/otagrprivate.hxx"
+#include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGR {
-gum::Potential<double>
-discretize(const OT::DistributionImplementation &distribution,
-           const gum::DiscretizedVariable<double> &v);
+namespace OTAGRUM {
+
+class Utils
+{
+public:
+
+static gum::Potential<double> Discretize(const OT::DistributionImplementation &distribution,
+                                         const gum::DiscretizedVariable<double> &v);
 
 /* Helper function to discretize a continuous distribution */
-gum::Potential<double> discretize(const OT::Distribution &distribution,
-                                  const gum::DiscretizedVariable<double> &v,
-                                  bool isTruncated = true);
+static gum::Potential<double> Discretize(const OT::Distribution &distribution,
+                                        const gum::DiscretizedVariable<double> &v,
+                                        bool isTruncated = true);
 
-OT::Distribution fromMarginal(const gum::Potential<double> &pot);
+static OT::Distribution FromMarginal(const gum::Potential<double> &pot);
 
-OT::Distribution fromPotential(const gum::Potential<double> &pot);
+static OT::Distribution FromPotential(const gum::Potential<double> &pot);
 
-OT::Indices fromNodeSet(const gum::NodeSet &clique);
+static OT::Indices FromNodeSet(const gum::NodeSet &clique);
 
-} /* namespace OTAGR */
+private:
+  Utils();
+};
 
-#endif /* OTAGR_OTAGR_UTILS_HXX */
+} /* namespace OTAGRUM */
+
+#endif /* OTAGRUM_UTILS_HXX */

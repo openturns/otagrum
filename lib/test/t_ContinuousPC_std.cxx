@@ -5,7 +5,7 @@
 #include <openturns/FrankCopulaFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 
-#include "otagr/ContinuousPC.hxx"
+#include "otagrum/ContinuousPC.hxx"
 
 OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
   OT::Collection<OT::Copula> copulas;
@@ -31,7 +31,7 @@ int main(void) {
     std::cout << "Sample size : " << sample.getSize() << std::endl
               << "Sample dimension :" << sample.getDimension() << std::endl;
     {
-      OTAGR::ContinuousPC learner(sample, 3, 0.9);
+      OTAGRUM::ContinuousPC learner(sample, 3, 0.9);
       learner.setOptimalPolicy(true);
       std::cout << "go" << std::endl;
       auto skel = learner.getSkeleton();
@@ -52,7 +52,7 @@ int main(void) {
       }
     }
     {
-      OTAGR::ContinuousPC learner(sample, 5, 0.8);
+      OTAGRUM::ContinuousPC learner(sample, 5, 0.8);
       learner.setOptimalPolicy(true);
       std::cout << "go" << std::endl;
       auto skel = learner.getSkeleton();

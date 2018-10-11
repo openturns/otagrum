@@ -13,7 +13,7 @@ if ( NOT DEFINED CMAKE_BUILD_TYPE )
    set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 endif ()
 
-project ( otagr CXX )
+project ( otagrum CXX )
 
 string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 
@@ -35,19 +35,19 @@ if (OPENTURNS_FOUND)
   message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 endif ()
 include ( ${OPENTURNS_USE_FILE} )
-set ( OTAGR_DEFINITIONS ${OPENTURNS_DEFINITIONS} )
+set ( OTAGRUM_DEFINITIONS ${OPENTURNS_DEFINITIONS} )
 if (NOT BUILD_SHARED_LIBS)
-  list ( APPEND OTAGR_DEFINITIONS "-DOTAGR_STATIC" )
+  list ( APPEND OTAGRUM_DEFINITIONS "-DOTAGRUM_STATIC" )
 endif ()
-add_definitions ( ${OTAGR_DEFINITIONS} )
+add_definitions ( ${OTAGRUM_DEFINITIONS} )
 
-set ( OTAGR_LIBRARY_PATH lib${LIB_SUFFIX} )
-set ( OTAGR_INCLUDE_PATH include)
-set ( OTAGR_SWIG_INCLUDE_PATH ${OTAGR_INCLUDE_PATH}/${PACKAGE_NAME}/swig )
-set ( OTAGR_DATA_PATH share )
-set ( OTAGR_EXAMPLE_PATH ${OTAGR_DATA_PATH}/${PACKAGE_NAME}/examples )
-set ( OTAGR_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/otagr )
-set ( OTAGR_DOC_PATH share/${PACKAGE_NAME}/doc)
+set ( OTAGRUM_LIBRARY_PATH lib${LIB_SUFFIX} )
+set ( OTAGRUM_INCLUDE_PATH include)
+set ( OTAGRUM_SWIG_INCLUDE_PATH ${OTAGRUM_INCLUDE_PATH}/${PACKAGE_NAME}/swig )
+set ( OTAGRUM_DATA_PATH share )
+set ( OTAGRUM_EXAMPLE_PATH ${OTAGRUM_DATA_PATH}/${PACKAGE_NAME}/examples )
+set ( OTAGRUM_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/otagrum)
+set ( OTAGRUM_DOC_PATH share/${PACKAGE_NAME}/doc)
 
 if (BUILD_PYTHON)
   # workaround for cmake bug #0013449
@@ -84,7 +84,7 @@ if (BUILD_PYTHON)
 
   if ( PYTHONINTERP_FOUND )
     if (DEFINED PYTHON_SITE_PACKAGES)
-      set (OTAGR_PYTHON_MODULE_PATH ${PYTHON_SITE_PACKAGES})
+      set (OTAGRUM_PYTHON_MODULE_PATH ${PYTHON_SITE_PACKAGES})
 
     else ()
       execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
@@ -97,13 +97,13 @@ if (BUILD_PYTHON)
       endif ()
 
       get_filename_component (_ABS_PYTHON_MODULE_PATH ${_ABS_PYTHON_MODULE_PATH} ABSOLUTE)
-      file (RELATIVE_PATH OTAGR_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH})
+      file (RELATIVE_PATH OTAGRUM_PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX} ${_ABS_PYTHON_MODULE_PATH})
     endif ()
 
-    if (IS_ABSOLUTE ${OTAGR_PYTHON_MODULE_PATH})
-      set (PYTHON_MODULE_PATH ${OTAGR_PYTHON_MODULE_PATH})
+    if (IS_ABSOLUTE ${OTAGRUM_PYTHON_MODULE_PATH})
+      set (PYTHON_MODULE_PATH ${OTAGRUM_PYTHON_MODULE_PATH})
     else ()
-      set (PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/${OTAGR_PYTHON_MODULE_PATH})
+      set (PYTHON_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/${OTAGRUM_PYTHON_MODULE_PATH})
     endif ()
 
     if (CMAKE_VERSION VERSION_LESS "2.8.6")
@@ -111,17 +111,17 @@ if (BUILD_PYTHON)
                        OUTPUT_VARIABLE PYTHON_VERSION_MAJOR
                        OUTPUT_STRIP_TRAILING_WHITESPACE)
     endif ()
-    set (OTAGR_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${OTAGR_PYTHON_MODULE_PATH})
+    set (OTAGRUM_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${OTAGRUM_PYTHON_MODULE_PATH})
   endif ( PYTHONINTERP_FOUND )
 endif ()
 
 
-# Define variables without OTAGR_ prefix with absolute paths
+# Define variables without OTAGRUM_ prefix with absolute paths
 foreach (_var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
-  if (IS_ABSOLUTE "${OTAGR_${_var}}")
-    set (${_var} ${OTAGR_${_var}})
+  if (IS_ABSOLUTE "${OTAGRUM_${_var}}")
+    set (${_var} ${OTAGRUM_${_var}})
   else ()
-    set (${_var} ${CMAKE_INSTALL_PREFIX}/${OTAGR_${_var}})
+    set (${_var} ${CMAKE_INSTALL_PREFIX}/${OTAGRUM_${_var}})
   endif ()
   get_filename_component (${_var} "${${_var}}" ABSOLUTE)
   file (TO_NATIVE_PATH "${${_var}}" NATIVE_${_var})
@@ -206,20 +206,20 @@ add_custom_target ( uninstall
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
 )
 
-set ( OTAGR_LIBRARY                 otagr )
-set ( OTAGR_LIBRARIES ${OPENTURNS_LIBRARIES} )
-list ( APPEND OTAGR_LIBRARIES ${OTAGR_LIBRARY} )
-set ( OTAGR_LIBRARY_DIRS ${OPENTURNS_LIBRARY_DIRS} )
-list ( APPEND OTAGR_LIBRARY_DIRS ${LIBRARY_PATH} )
-set ( OTAGR_INCLUDE_DIR ${INCLUDE_PATH} )
-set ( OTAGR_INCLUDE_DIRS ${OTAGR_INCLUDE_DIR} )
-set ( OTAGR_ROOT_DIR       ${CMAKE_INSTALL_PREFIX} )
-list ( APPEND OTAGR_INCLUDE_DIRS ${OPENTURNS_INCLUDE_DIRS} )
-set ( OTAGR_VERSION_STRING ${PACKAGE_VERSION} )
-set ( OTAGR_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
-set ( OTAGR_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
-set ( OTAGR_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
-set ( OTAGR_USE_FILE      ${CONFIG_CMAKE_PATH}/Useotagr.cmake )
+set ( OTAGRUM_LIBRARY                 otagrum )
+set ( OTAGRUM_LIBRARIES ${OPENTURNS_LIBRARIES} )
+list ( APPEND OTAGRUM_LIBRARIES ${OTAGRUM_LIBRARY} )
+set ( OTAGRUM_LIBRARY_DIRS ${OPENTURNS_LIBRARY_DIRS} )
+list ( APPEND OTAGRUM_LIBRARY_DIRS ${LIBRARY_PATH} )
+set ( OTAGRUM_INCLUDE_DIR ${INCLUDE_PATH} )
+set ( OTAGRUM_INCLUDE_DIRS ${OTAGRUM_INCLUDE_DIR} )
+set ( OTAGRUM_ROOT_DIR       ${CMAKE_INSTALL_PREFIX} )
+list ( APPEND OTAGRUM_INCLUDE_DIRS ${OPENTURNS_INCLUDE_DIRS} )
+set ( OTAGRUM_VERSION_STRING ${PACKAGE_VERSION} )
+set ( OTAGRUM_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
+set ( OTAGRUM_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
+set ( OTAGRUM_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
+set ( OTAGRUM_USE_FILE      ${CONFIG_CMAKE_PATH}/Useotagr.cmake )
 
 if (CMAKE_VERSION VERSION_LESS 2.8.8)
   # CMakePackageConfigHelpers is not available
@@ -230,11 +230,11 @@ macro(set_and_check _var _value)
 endmacro(set_and_check _var _value)
 "     )
   foreach (_var
-      OTAGR_USE_FILE
-      OTAGR_ROOT_DIR
-      OTAGR_INCLUDE_DIR
-      OTAGR_INCLUDE_DIRS
-      OTAGR_LIBRARY_DIRS )
+      OTAGRUM_USE_FILE
+      OTAGRUM_ROOT_DIR
+      OTAGRUM_INCLUDE_DIR
+      OTAGRUM_INCLUDE_DIRS
+      OTAGRUM_LIBRARY_DIRS )
     set(PACKAGE_${_var} ${${_var}})
   endforeach ()
 
@@ -245,7 +245,7 @@ configure_file ( ${CMAKE_SOURCE_DIR}/cmake/otagrConfig.cmake.in
 
 install ( FILES cmake/Useotagr.cmake
                 ${CMAKE_BINARY_DIR}/otagrConfig.cmake
-          DESTINATION ${OTAGR_CONFIG_CMAKE_PATH}
+          DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
         )
 
 else ()
@@ -254,21 +254,21 @@ else ()
   configure_package_config_file (
     cmake/otagrConfig.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/otagrConfig.cmake
-    INSTALL_DESTINATION ${OTAGR_CONFIG_CMAKE_PATH}
+    INSTALL_DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
     PATH_VARS
-      OTAGR_USE_FILE
-      OTAGR_ROOT_DIR
-      OTAGR_INCLUDE_DIR
-      OTAGR_INCLUDE_DIRS
-      OTAGR_LIBRARY_DIRS
+      OTAGRUM_USE_FILE
+      OTAGRUM_ROOT_DIR
+      OTAGRUM_INCLUDE_DIR
+      OTAGRUM_INCLUDE_DIRS
+      OTAGRUM_LIBRARY_DIRS
     NO_CHECK_REQUIRED_COMPONENTS_MACRO
                                 )
-  write_basic_package_version_file( otagrConfigVersion.cmake VERSION ${OTAGR_VERSION_STRING} COMPATIBILITY AnyNewerVersion )
+  write_basic_package_version_file( otagrConfigVersion.cmake VERSION ${OTAGRUM_VERSION_STRING} COMPATIBILITY AnyNewerVersion )
 
   install ( FILES cmake/Useotagr.cmake
                   ${CMAKE_CURRENT_BINARY_DIR}/otagrConfig.cmake
                   ${CMAKE_CURRENT_BINARY_DIR}/otagrConfigVersion.cmake
-            DESTINATION ${OTAGR_CONFIG_CMAKE_PATH}
+            DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
           )
 endif ()
 

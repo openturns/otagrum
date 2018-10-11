@@ -5,7 +5,7 @@ from time import time
 import openturns as ot
 import pyAgrum as gum
 
-import otagr
+import otagrum
 
 def generateDataForSpecificInstance(size):
   R = ot.CorrelationMatrix(3)
@@ -22,7 +22,7 @@ seuil=0.85
 data=generateDataForSpecificInstance(size)
 
 t0 = time()
-g=otagr.ContinuousPC(data,alpha=seuil)
+g=otagrum.ContinuousPC(data,alpha=seuil)
 t1=time()-t0
 print("##")
 print("## PC algorithm for size={0}, dimension={1} and seuil={3:4.3f} : {2:6.2f}s".format(size,data.getDimension(),t1,seuil))
@@ -32,4 +32,4 @@ print("##")
 #jtg=gum.JTGenerator()
 #jt=jtg.generate(g)
 ##showGraph(jt)
-#learner=otagr.ContinuousPC()
+#learner=otagrum.ContinuousPC()

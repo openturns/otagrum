@@ -19,20 +19,20 @@
  *
  */
 
-#include "otagr/IndicesManip.hxx"
+#include "otagrum/IndicesManip.hxx"
 
-namespace OTAGR {
-Indice pos(const OT::Indices &X, Indice val) {
-  for (Indice p = 0; p < X.getSize(); ++p) {
+namespace OTAGRUM {
+OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger val) {
+  for (OT::UnsignedInteger p = 0; p < X.getSize(); ++p) {
     if (X[p] == val)
       return p;
   }
   return X.getSize();
 }
 
-bool isIn(const OT::Indices &X, Indice y) { return (pos(X, y) != X.getSize()); }
+bool isIn(const OT::Indices &X, OT::UnsignedInteger y) { return (pos(X, y) != X.getSize()); }
 
-OT::Indices operator+(const OT::Indices &X, Indice y) {
+OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y) {
   OT::Indices res(X);
   if (!isIn(res, y)) {
     res.add(y);
@@ -40,7 +40,7 @@ OT::Indices operator+(const OT::Indices &X, Indice y) {
   return res;
 }
 
-OT::Indices operator-(const OT::Indices &X, Indice y) {
+OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y) {
   OT::Indices res(X);
   auto p = pos(X, y);
   if (p < X.getSize()) {
@@ -89,7 +89,7 @@ const OT::Indices &IndicesCombinationIterator::current() const {
   return current_;
 }
 
-void IndicesCombinationIterator::set_(Indice pos, int val) {
+void IndicesCombinationIterator::set_(OT::UnsignedInteger pos, int val) {
   coord_[pos] = val;
   current_[pos] = base_[coord_[pos]];
 }

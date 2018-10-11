@@ -19,16 +19,16 @@
  *
  */
 
-#ifndef OTAGR_CONITNUOUSTTEST_HXX
-#define OTAGR_CONITNUOUSTTEST_HXX
+#ifndef OTAGRUM_CONITNUOUSTTEST_HXX
+#define OTAGRUM_CONITNUOUSTTEST_HXX
 
 #include <string>
 #include <vector>
 
-#include "otagr/IndicesManip.hxx"
-#include "otagr/StratifiedCache.hxx"
+#include "otagrum/IndicesManip.hxx"
+#include "otagrum/StratifiedCache.hxx"
 
-namespace OTAGR {
+namespace OTAGRUM {
 class ContinuousTTest {
 
 private:
@@ -51,7 +51,7 @@ private:
   /// get the pdfs of Berstein Copulae fX,fYX,fZX,FUZX
   /// allows to call getPDF_ with the same k for all copulae
   std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
-  getPDFs_(const Indice Y, const Indice Z, const OT::Indices & X) const;
+  getPDFs_(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const;
 
   mutable StratifiedCache cache_;
   OT::Sample data_;
@@ -63,14 +63,14 @@ public:
   void setAlpha(const double alpha);
   double getAlpha(void) const;
 
-  double getTTest(const Indice Y, const Indice Z, const OT::Indices & X) const;
-  double getTTestWithoutCorrections(const Indice Y, const Indice Z,
+  double getTTest(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const;
+  double getTTestWithoutCorrections(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z,
                                     const OT::Indices & X) const;
 
   static std::tuple<double, double, bool> isIndepFromTest(const double t,
                                                           const double alpha);
 
-  std::tuple<double, double, bool> isIndep(const Indice Y, const Indice Z,
+  std::tuple<double, double, bool> isIndep(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z,
                                            const OT::Indices & X) const;
 
   std::string __str__(const std::string &offset = "") const;
@@ -79,6 +79,6 @@ public:
   void clearCacheLevel(const OT::UnsignedInteger level) const;
   OT::UnsignedInteger getDimension() const;
 };
-}; // namespace OTAGR
+}; // namespace OTAGRUM
 
-#endif // OTAGR_CONITNUOUSTTEST_HXX
+#endif // OTAGRUM_CONITNUOUSTTEST_HXX

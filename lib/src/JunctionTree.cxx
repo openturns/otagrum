@@ -22,9 +22,9 @@
 #include <algorithm>
 #include <vector>
 
-#include "otagr/JunctionTree.hxx"
+#include "otagrum/JunctionTree.hxx"
 
-namespace OTAGR {
+namespace OTAGRUM {
 
 OT::Indices JunctionTree::fromNodeSet_(const gum::NodeSet &clique) {
   auto indices = OT::Indices();

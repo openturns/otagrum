@@ -20,7 +20,7 @@
  */
 
 #include <cmath>
-#include "otagr/MixedHistogramUserDefined.hxx"
+#include "otagrum/MixedHistogramUserDefined.hxx"
 
 #include <openturns/ComposedDistribution.hxx>
 #include <openturns/Dirac.hxx>
@@ -32,7 +32,7 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ResourceMap.hxx>
 
-namespace OTAGR
+namespace OTAGRUM
 {
 
 CLASSNAMEINIT(MixedHistogramUserDefined);
@@ -418,4 +418,4 @@ void MixedHistogramUserDefined::setDescription(const OT::Description & descripti
   mixture_.setDescription(getDescription());
 }
 
-} /* namespace OTAGR */
+} /* namespace OTAGRUM */
