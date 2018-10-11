@@ -61,11 +61,12 @@ endmacro ( ot_add_python_module )
 
 
 
-ot_add_python_module( ${PACKAGE_NAME} ${PACKAGE_NAME}_module.i
-                      OtAgr.i OtAgr_doc.i.in otagr_agrum.i
+ot_add_python_module( ${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagr_agrum.i
                       MixedHistogramUserDefined.i
-                      ContinuousPC.i  ContinuousTTest.i
-                      JunctionTree.i OtAgrUtils.i
+                      ContinuousPC.i
+		      ContinuousTTest.i
+                      JunctionTree.i
+		      OtAgrUtils.i
                     )
 
 

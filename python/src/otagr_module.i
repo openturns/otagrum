@@ -25,7 +25,6 @@
 
 // The new classes
 %include otagr/otagrprivate.hxx
-%include OtAgr.i
 %include OtAgrUtils.i
 %include MixedHistogramUserDefined.i
 %include JunctionTree.i
