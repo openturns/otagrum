@@ -5,6 +5,7 @@ from __future__ import print_function
 import openturns as ot
 import otagr
 import pyAgrum as gum
+import sys
 
 
 def test_basic():
@@ -59,11 +60,14 @@ def test_fromPotential():
   x = gum.DiscretizedVariable("x", "x", [0, 0.5, 1, 3.5, 10])
   y = gum.LabelizedVariable("y", "y", ["chaud", "tiede", "froid"])
   print(x)
+  sys.stdout.flush()
   print(y)
+  sys.stdout.flush()
 
   p = gum.Potential().add(x).add(y)
   p.fillWith([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]).normalize()
   print(p)
+  sys.stdout.flush()
 
   distrib = otagr.fromPotential(p)
   print(distrib)

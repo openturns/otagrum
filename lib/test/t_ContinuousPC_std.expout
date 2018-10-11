@@ -1,48 +1,53 @@
-Sample size : 1000
-Sample dimension :14
+Sample size : 10000
+Sample dimension :4
+go
+digraph "skeleton" {
+  edge [dir = none];
+  node [shape = ellipse];
+  0; 1; 2; 3; 
+  1->3 [label="-0.0319
+0"]
+  0->2 [label="-0.0912
+0"]
+  0->3 [label="-0.0274
+0"]
+  1->2 [label="-0.0207
+0"]
+}
+1--3 : p-value=0
+0--2 : p-value=0
+0--3 : p-value=0
+1--2 : p-value=0
 go
 digraph "no_name" {
 edge [dir=none]
 node [shape = ellipse];
-  0;  1;  2;  3;  4;  5;  6;  7;  8;  9;  10;  11;  12;  13;
-  0 -> 1;
-  2 -> 3;
-  11 -> 13;
-  12 -> 13;
+  0;  1;  2;  3;
+  0 -> 3;
+  0 -> 2;
+  1 -> 3;
+  1 -> 2;
 
 }
 
-11-13-12
 digraph "no_name" {
 node [shape = ellipse];
-  0;  1;  2;  3;  4;  5;  6;  7;  8;  9;  10;  11;  12;  13;
-  0 -> 1 [dir=none];
-  2 -> 3 [dir=none];
-  11 -> 13;
-  12 -> 13;
+  0;  1;  2;  3;
+  0 -> 3 [dir=none];
+  0 -> 2 [dir=none];
+  1 -> 3 [dir=none];
+  1 -> 2 [dir=none];
 
 }
 
-go
 digraph "no_name" {
 edge [dir=none]
 node [shape = ellipse];
-  0;  1;  2;  3;  4;  5;  6;  7;  8;  9;  10;  11;  12;  13;
-  0 -> 1;
-  2 -> 3;
-  11 -> 13;
-  12 -> 13;
-
-}
-
-11-13-12
-digraph "no_name" {
-node [shape = ellipse];
-  0;  1;  2;  3;  4;  5;  6;  7;  8;  9;  10;  11;  12;  13;
-  0 -> 1 [dir=none];
-  2 -> 3 [dir=none];
-  11 -> 13;
-  12 -> 13;
+  0;  1;  2;  3;
+  0 -> 3;
+  0 -> 2;
+  1 -> 3;
+  1 -> 2;
 
 }
 

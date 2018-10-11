@@ -29,7 +29,7 @@ print("## PC algorithm for size={0}, dimension={1} and seuil={3:4.3f} : {2:6.2f}
 print("##")
 #showGraph(g)
 
-jtg=gum.JTGenerator()
-jt=jtg.generate(g)
-#showGraph(jt)
-learner=otagr.ContinuousPC()
+#jtg=gum.JTGenerator()
+#jt=jtg.generate(g)
+##showGraph(jt)
+#learner=otagr.ContinuousPC()

@@ -1,20 +1,20 @@
 Data dimension : 10
 Data size : 1300
 Cache : 
-      |1 : [1]:36, [0]:36
-      |2 : [0,1]:36
+      |1 : [0]:3, [1]:3
+      |2 : [0,1]:3
 
-alpha :0.9
+alpha :0.1
 Data dimension : 10
 Data size : 1300
 Cache : 
-      |1 : [1]:36, [0]:36, [9]:36, [8]:36
-      |2 : [0,1]:36, [8,9]:36
+      |1 : [0]:3, [1]:3, [8]:3, [9]:3
+      |2 : [0,1]:3, [8,9]:3
 
-alpha :0.9
-ttest value: 0.0427319    pvalue:0.965915    test: OK 
-ttest value: 5.38642    pvalue:7.18742e-08    test: OK 
-ttest value: 35.2179     pvalue:0   test: OK
-ttest value: 0.127288     pvalue:0.898713   test: OK 
-ttest value: -0.122628     pvalue:0.902402   test: OK 
-ttest value: 0.531207     pvalue:0.595275   test: OK 
+alpha :0.1
+ttest value: 0.24823    pvalue:0.196044    test: OK 
+ttest value: 12.764    pvalue:1    test: fail 
+ttest value: 115.958     pvalue:1   test: fail 
+ttest value: 0.488854     pvalue:0.375055   test: OK 
+ttest value: 0.238729     pvalue:0.188685   test: OK 
+ttest value: 3.25249     pvalue:0.998856   test: OK 
