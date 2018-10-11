@@ -72,7 +72,7 @@ macro ( ot_pyinstallcheck_test TESTNAME )
           )
 endmacro ( ot_pyinstallcheck_test )
 
-ot_pyinstallcheck_test (OtAgr_std)
+ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
 ot_pyinstallcheck_test (MixedHistogramUserDefined_std)
 ot_pyinstallcheck_test (ContinuousPC_std)

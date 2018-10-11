@@ -22,7 +22,7 @@
 #ifndef OTAGR_HXX
 #define OTAGR_HXX
 
-#include "otagr/OtAgrUtils.hxx"
+#include "otagr/Utils.hxx"
 #include "otagr/MixedHistogramUserDefined.hxx"
 #include "otagr/JunctionTree.hxx"
 #include "otagr/ContinuousTTest.hxx"

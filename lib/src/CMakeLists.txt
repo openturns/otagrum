@@ -2,7 +2,7 @@
 
 ot_add_current_dir_to_include_dirs ()
 
-ot_add_source_file ( OtAgrUtils.cxx )
+ot_add_source_file ( Utils.cxx )
 ot_add_source_file ( MixedHistogramUserDefined.cxx )
 ot_add_source_file ( JunctionTree.cxx )
 ot_add_source_file ( StratifiedCache.cxx)
@@ -11,7 +11,7 @@ ot_add_source_file ( IndicesManip.cxx)
 ot_add_source_file (ContinuousPC.cxx)
 
 ot_install_header_file ( MixedHistogramUserDefined.hxx )
-ot_install_header_file ( OtAgrUtils.hxx )
+ot_install_header_file ( Utils.hxx )
 ot_install_header_file ( JunctionTree.hxx )
 ot_install_header_file ( StratifiedCache.hxx)
 ot_install_header_file ( ContinuousTTest.hxx)

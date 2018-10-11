@@ -28,7 +28,7 @@
 #include <agrum/graphs/mixedGraph.h>
 
 #include "otagr/ContinuousPC.hxx"
-#include "otagr/OtAgrUtils.hxx"
+#include "otagr/Utils.hxx"
 
 #define TRACE(x)                                                               \
   {                                                                            \
@@ -173,7 +173,7 @@ bool ContinuousPC::testCondSetWithSize_(gum::UndiGraph &g,
         OT::Indices sepYZ;
 
         std::tie(resYZ, tYZ, pYZ, sepYZ) =
-            bestSeparator_(g, y, z, fromNodeSet(nei), n);
+            bestSeparator_(g, y, z, Utils::FromNodeSet(nei), n);
 
         pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
         ttests_.set(edge, std::max(ttests_.getWithDefault(edge, -10000), tYZ));
@@ -258,7 +258,7 @@ gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) {
     cpdag.addNodeWithId(x);
 
     if (g.neighbours(x).size() > 1) {
-      IndicesCombinationIterator couple(OTAGR::fromNodeSet(g.neighbours(x)), 2);
+      IndicesCombinationIterator couple(Utils::FromNodeSet(g.neighbours(x)), 2);
       for (couple.setFirst(); !couple.isLast(); couple.next()) {
         bool ok;
         double t, p;

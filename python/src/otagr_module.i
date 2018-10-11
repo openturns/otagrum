@@ -5,8 +5,6 @@
 %{
 #include <openturns/OT.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
-
-#include <otagr/otagr.hxx>
 %}
 
 // Prerequisites needed
@@ -25,7 +23,7 @@
 
 // The new classes
 %include otagr/otagrprivate.hxx
-%include OtAgrUtils.i
+%include Utils.i
 %include MixedHistogramUserDefined.i
 %include JunctionTree.i
 %include ContinuousTTest.i

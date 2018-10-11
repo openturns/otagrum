@@ -19,7 +19,7 @@
  *
  */
 
-#include "otagr/OtAgrUtils.hxx"
+#include "otagr/Utils.hxx"
 
 #include <openturns/Description.hxx>
 #include <openturns/Histogram.hxx>
@@ -44,13 +44,13 @@
 namespace OTAGR {
 
 gum::Potential<double>
-discretize(const OT::DistributionImplementation &distribution,
+Utils::Discretize(const OT::DistributionImplementation &distribution,
            const gum::DiscretizedVariable<double> &v) {
-  return std::move(discretize(OT::Distribution(distribution), v));
+  return std::move(Discretize(OT::Distribution(distribution), v));
 }
 
 /* Helper function to discretize a continuous distribution */
-gum::Potential<double> discretize(const OT::Distribution &distribution,
+gum::Potential<double> Utils::Discretize(const OT::Distribution &distribution,
                                   const gum::DiscretizedVariable<double> &v,
                                   bool isTruncated) {
   if (distribution.getDimension() != 1)
@@ -98,14 +98,14 @@ gum::Potential<double> discretize(const OT::Distribution &distribution,
   return p;
 }
 
-OT::Distribution fromPotential(const gum::Potential<double> &pot) {
+OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot) {
   if (pot.nbrDim() < 1) {
     throw OT::InvalidArgumentException(HERE)
         << "Error: potential must have at least one dimension"
         << pot.toString();
   }
   if (pot.nbrDim() == 1) {
-    return fromMarginal(pot);
+    return FromMarginal(pot);
   }
   OT::Description description(OT::UnsignedInteger(pot.nbrDim()));
 
@@ -148,7 +148,7 @@ OT::Distribution fromPotential(const gum::Potential<double> &pot) {
   return distribution;
 }
 
-OT::Distribution fromMarginal(const gum::Potential<double> &pot) {
+OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot) {
   if (pot.nbrDim() != 1) {
     throw OT::InvalidArgumentException(HERE)
         << "Error: no marginal with dimension != 1 in " << pot.toString();
@@ -221,7 +221,7 @@ OT::Distribution fromMarginal(const gum::Potential<double> &pot) {
   }
 }
 
-OT::Indices fromNodeSet(const gum::NodeSet &clique) {
+OT::Indices Utils::FromNodeSet(const gum::NodeSet &clique) {
   auto indices = OT::Indices();
 
   for (auto nod : clique)
@@ -229,4 +229,7 @@ OT::Indices fromNodeSet(const gum::NodeSet &clique) {
 
   return indices;
 }
+
+Utils::Utils() {}
+
 } /* namespace OTAGR */

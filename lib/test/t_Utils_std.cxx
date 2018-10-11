@@ -13,6 +13,8 @@
 
 #include "otagr/otagr.hxx"
 
+using namespace OTAGR;
+
 void test_basics() {
   gum::DiscretizedVariable<double> v("v", "v",
                                      std::vector<double>{0, 4, 10, 15, 30, 40});
@@ -22,22 +24,22 @@ void test_basics() {
   std::cout << "\n** From OT::Distribution to gum::Potential:\n";
 
   auto unifDistrib = OT::Uniform(0.0, 40.0);
-  gum::Potential<double> pv = OTAGR::discretize(unifDistrib, v);
-  gum::Potential<double> pw = OTAGR::discretize(unifDistrib, w);
+  gum::Potential<double> pv = Utils::Discretize(unifDistrib, v);
+  gum::Potential<double> pw = Utils::Discretize(unifDistrib, w);
   std::cout << pv << std::endl;
   std::cout << pw << std::endl;
 
   std::cout << "\nCatching InvalidArgumentException for bad support :";
   try {
-    std::cout << OTAGR::discretize(OT::Uniform(1.0, 100.0), w) << std::endl;
+    std::cout << Utils::Discretize(OT::Uniform(1.0, 100.0), w) << std::endl;
     std::cout << "Failed !\n";
   } catch (OT::InvalidArgumentException) {
     std::cout << "OK\n";
   }
 
   std::cout << "\n** Back to OT::Distribution :\n";
-  std::cout << OTAGR::fromMarginal(pv) << std::endl;
-  std::cout << OTAGR::fromMarginal(pw) << std::endl;
+  std::cout << Utils::FromMarginal(pv) << std::endl;
+  std::cout << Utils::FromMarginal(pw) << std::endl;
 
   std::cout << "\n** From RangeVariable\n";
   gum::RangeVariable x("x", "x", 3, 10);
@@ -45,7 +47,7 @@ void test_basics() {
   px.add(x);
   px.fillWith({1, 2, 3, 4, 5, 6, 7, 8}).normalize();
   std::cout << px << std::endl;
-  std::cout << OTAGR::fromMarginal(px) << std::endl;
+  std::cout << Utils::FromMarginal(px) << std::endl;
 }
 
 void test_fromMarginal() {
@@ -57,7 +59,7 @@ void test_fromMarginal() {
     py.add(y);
     py.fillWith({2, 8, 4}).normalize();
     std::cout << py << std::endl;
-    std::cout << OTAGR::fromMarginal(py) << std::endl;
+    std::cout << Utils::FromMarginal(py) << std::endl;
   }
   {
     std::cout << "\n** From LabelizedVariable but numerical\n";
@@ -67,7 +69,7 @@ void test_fromMarginal() {
     py.add(y);
     py.fillWith({2, 8, 4}).normalize();
     std::cout << py << std::endl;
-    std::cout << OTAGR::fromMarginal(py) << std::endl;
+    std::cout << Utils::FromMarginal(py) << std::endl;
   }
   {
     std::cout << "\n** From LabelizedVariable but partially numerical\n";
@@ -77,7 +79,7 @@ void test_fromMarginal() {
     py.add(y);
     py.fillWith({2, 8, 4}).normalize();
     std::cout << py << std::endl;
-    std::cout << OTAGR::fromMarginal(py) << std::endl;
+    std::cout << Utils::FromMarginal(py) << std::endl;
   }
   {
     std::cout << "\n** From Discretized\n";
@@ -86,7 +88,7 @@ void test_fromMarginal() {
     py.add(y);
     py.fillWith({2, 8, 4}).normalize();
     std::cout << py << std::endl;
-    std::cout << OTAGR::fromMarginal(py) << std::endl;
+    std::cout << Utils::FromMarginal(py) << std::endl;
   }
 }
 
@@ -103,7 +105,7 @@ void test_fromPotential() {
 
   std::cout << p << std::endl;
 
-  auto distribution = OTAGR::fromPotential(p);
+  auto distribution = Utils::FromPotential(p);
 
   std::cout << "Marginal 0 " << distribution.getMarginal(0) << std::endl;
   std::cout << "MarginalPotential 0 " << p.margSumIn({&y}) << std::endl;
@@ -127,16 +129,16 @@ void test_fromInference() {
   ie.makeInference();
 
   std::cout << ie.jointPosterior({0, 2})<<std::endl;
-  std::cout << OTAGR::fromPotential(ie.jointPosterior({0, 2}))<<std::endl;
+  std::cout << Utils::FromPotential(ie.jointPosterior({0, 2}))<<std::endl;
 
   std::cout << ie.posterior(0)<<std::endl;
-  std::cout << OTAGR::fromPotential(ie.posterior(0))<<std::endl;
+  std::cout << Utils::FromPotential(ie.posterior(0))<<std::endl;
 
   std::cout << ie.posterior(1)<<std::endl;
-  std::cout << OTAGR::fromPotential(ie.posterior(1))<<std::endl;
+  std::cout << Utils::FromPotential(ie.posterior(1))<<std::endl;
 
   std::cout << ie.posterior(2)<<std::endl;
-  std::cout << OTAGR::fromPotential(ie.posterior(2))<<std::endl;
+  std::cout << Utils::FromPotential(ie.posterior(2))<<std::endl;
 
 }
 

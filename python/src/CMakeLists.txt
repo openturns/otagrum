@@ -66,7 +66,7 @@ ot_add_python_module( ${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagr_agrum.i
                       ContinuousPC.i
 		      ContinuousTTest.i
                       JunctionTree.i
-		      OtAgrUtils.i
+		      Utils.i
                     )
 
 
