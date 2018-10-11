@@ -9,9 +9,6 @@ add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 include_directories ( ${PYTHON_INCLUDE_DIRS} )
-#include_directories ( ${OTAGR_AGRUM_SWIG_PATH}/swig )
-#include_directories ( ${OTAGR_AGRUM_SWIG_PATH}/pyAgrum )
-#include_directories ( ${OTAGR_AGRUM_SWIG_PATH}/pyAgrum/doc} )
 
 include_directories(${PYAGRUM_SWIG_INCLUDE_DIRS})
 include_directories(${PYAGRUM_SWIG_WRAPPERS_INCLUDE_DIRS})
@@ -166,6 +163,7 @@ if (SPHINX_FOUND AND SPHINX_EXECUTABLE AND NUMPYDOC_FOUND)
     add_custom_target ( sphinx_${format}
                         COMMAND ${SPHINX_EXECUTABLE}
                                   -b ${format}
+                                  -d ${SPHINX_BINARY_DIR}/.doctrees
                                   ${SPHINX_FLAGS}
                                   ${SPHINX_BINARY_DIR}
                                   ${SPHINX_BINARY_DIR}/${format}

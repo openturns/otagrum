@@ -11,8 +11,8 @@ if ( MINGW )
   set_target_properties ( CRT_fp8 PROPERTIES LINKER_LANGUAGE CXX )
 endif ()
 
-set ( CHECK_ENVIRONMENT
-      ${ADAPT_CHECK_TESTS_EXPONENT}
+set ( CHECK_ENVIRONMENT 
+      ${ADAPT_CHECK_TESTS_EXPONENT} 
     )
 
 set ( CHECK_TO_BE_RUN )
@@ -28,7 +28,7 @@ macro ( ot_check_test TESTNAME )
   endif ()
   set_target_properties ( ${TESTNAME_TGT} PROPERTIES
                                           INSTALL_RPATH "${CMAKE_BINARY_DIR}/lib/src;${CMAKE_INSTALL_RPATH}" )
-  set ( TESTNAME_LOC ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}${CMAKE_EXECUTABLE_SUFFIX} )
+  set ( TESTNAME_LOC ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}${CMAKE_EXECUTABLE_SUFFIX} ) 
   set ( _CMD )
   set ( _PRE )
   set ( _POST )
@@ -57,18 +57,15 @@ macro ( ot_check_test TESTNAME )
   endforeach ( _ARG )
 
   if (_IGNOREOUT)
-    set ( COMMAND "( ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
-    set ( EXTERNAL_COMMAND "./${TESTNAME_TGT} ${_PARAMS} > $DEBUG_FILE 2>&1" )
+    set ( COMMAND "( ${CMAKE_CROSSCOMPILING_EMULATOR} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
   else (_IGNOREOUT)
     set ( TESTNAME_OUT ${TESTNAME_TGT}.expout )
-    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} )
-    set ( COMMAND "( ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
-    set ( EXTERNAL_COMMAND "( ./${TESTNAME_TGT} ${_PARAMS} 2>$DEBUG_FILE | tr -d '\\\\r' > ${TESTNAME_TGT}.out ) && diff -u ${TESTNAME_OUT} ${TESTNAME_TGT}.out" )
+    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} ) 
+    set ( COMMAND "( ${CMAKE_CROSSCOMPILING_EMULATOR} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
   endif (_IGNOREOUT)
 
   if (_PRE OR _POST)
     set ( COMMAND "${_PRE}${COMMAND}${_POST}" )
-    set ( EXTERNAL_COMMAND "${_PRE}${EXTERNAL_COMMAND}${_POST}" )
   endif (_PRE OR _POST)
 
   add_test ( cppcheck_${TESTNAME} "sh" "-c" "${COMMAND}" )
