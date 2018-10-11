@@ -1,0 +1,7 @@
+%feature("docstring") OTAGRUM::JunctionTree
+"JunctionTree gum interface.
+
+Parameters
+----------
+jt : gum.JunctionTree
+    Agrum Junction tree"

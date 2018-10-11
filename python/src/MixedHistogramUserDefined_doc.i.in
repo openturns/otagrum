@@ -1,0 +1,8 @@
+%feature("docstring") OTAGRUM::MixedHistogramUserDefined
+"MixedHistogramUserDefined distribution
+
+Parameters
+----------
+a : int
+    a"
+

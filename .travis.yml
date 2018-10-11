@@ -15,6 +15,7 @@ script:
   - cmake -DCMAKE_INSTALL_PREFIX=~/.local
     -DSPHINX_EXECUTABLE=~/.local/bin/sphinx-build
     -DSWIG_EXECUTABLE=/usr/local/bin/swig
+    -DSPHINX_FLAGS=""
     .
   - make install -j2 && make tests -j2 && ctest -j2 --output-on-failure --timeout 1000
 

@@ -1,17 +1,16 @@
 
 include ( ${SWIG_USE_FILE} )
 
-set (PYAGRUM_SWIG_WRAPPERS_INCLUDE_DIRS "${AGRUM_INCLUDE_DIR}/agrum/swig")
-set (PYAGRUM_SWIG_INCLUDE_DIRS "${AGRUM_INCLUDE_DIR}/agrum/pyAgrum")
-
 include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
+include_directories ( ${OPENTURNS_INCLUDE_DIRS} )
 add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 include_directories ( ${PYTHON_INCLUDE_DIRS} )
 
-include_directories(${PYAGRUM_SWIG_INCLUDE_DIRS})
-include_directories(${PYAGRUM_SWIG_WRAPPERS_INCLUDE_DIRS})
+include_directories (${AGRUM_INCLUDE_DIRS})
+include_directories (${AGRUM_INCLUDE_DIR}/agrum/swig)
+include_directories (${AGRUM_INCLUDE_DIR}/agrum/pyAgrum)
 
 add_custom_target( generate_docstrings )
 
@@ -62,11 +61,11 @@ endmacro ( ot_add_python_module )
 
 
 ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
-                      MixedHistogramUserDefined.i
-                      ContinuousPC.i
-                      ContinuousTTest.i
-                      JunctionTree.i
-                      Utils.i
+                      MixedHistogramUserDefined.i MixedHistogramUserDefined_doc.i.in
+                      ContinuousPC.i ContinuousPC_doc.i.in
+                      ContinuousTTest.i ContinuousTTest_doc.i.in
+                      JunctionTree.i JunctionTree_doc.i.in
+                      Utils.i Utils_doc.i.in
                     )
 
 
@@ -88,20 +87,18 @@ install ( FILES ${SWIGFILES}
         )
 
 
-
-
 if (SPHINX_FOUND AND SPHINX_EXECUTABLE AND NUMPYDOC_FOUND)
 
   # create a build site-package from which sphinx can import
   set (OTAGRUM_PYTHON_BUILD_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR}) #/site-packages)
-  execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr)
+  execute_process (COMMAND ${CMAKE_COMMAND} -E make_directory ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagrum)
   foreach (module ${PYTHON_MODULES})
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/${module}.py)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagrum/${module}.py)
     # FIXME: get_target_property (suffix ${SWIG_MODULE_${module}_REAL_NAME} SUFFIX)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/_${module}.so)
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagrum/_${module}.so)
   endforeach ()
   foreach (file __init__.py)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagr/${file})
+    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${OTAGRUM_PYTHON_BUILD_MODULE_PATH}/otagrum/${file})
   endforeach ()
 
   # sphinx configuration
@@ -122,7 +119,7 @@ if (SPHINX_FOUND AND SPHINX_EXECUTABLE AND NUMPYDOC_FOUND)
     set(OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH})
   endif ()
   configure_file (${SPHINX_SOURCE_DIR}/conf.py.in ${SPHINX_BINARY_DIR}/conf.py @ONLY)
-
+  
   # get sphinx sources
   file (GLOB_RECURSE sphinx_sources
     ${SPHINX_SOURCE_DIR}/*.rst

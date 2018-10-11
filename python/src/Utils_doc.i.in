@@ -1,0 +1,37 @@
+%feature("docstring") OTAGRUM::Utils
+"Utility functions"
+
+%feature("docstring") OTAGRUM::Utils::Discretize
+"Discretize
+
+Parameters
+----------
+b : int
+    b
+
+Returns
+-------
+a : int
+    a"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::Utils::FromMarginal
+"FromMarginal
+
+Returns
+-------
+distribution: :py:class:`openturns.Distribution`
+    The distribution
+"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::Utils::FromPotential
+"FromPotential"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::Utils::FromNodeSet
+"FromNodeSet"
+

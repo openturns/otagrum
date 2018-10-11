@@ -13,5 +13,6 @@
                                 std::get<1>($1),
                                 std::get<2>($1)?Py_True:Py_False);
 }
-//%include ContinuousTTest_doc.i
+
+%include ContinuousTTest_doc.i
 %include "otagrum/ContinuousTTest.hxx"

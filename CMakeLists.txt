@@ -21,14 +21,10 @@ string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 list ( APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
 
-find_package(aGrUM)
+find_package (aGrUM 0.13.2.9 NO_MODULE REQUIRED)
 if (aGrUM_FOUND)
-  include_directories(${AGRUM_INCLUDE_DIR})
-  link_directories(${AGRUM_LIB_DIR})
   message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
-else (aGrUM_FOUND)
-  message(FATAL_ERROR "Please install aGrUM")
-endif (aGrUM_FOUND)
+endif ()
 
 find_package (OpenTURNS 1.11 NO_MODULE REQUIRED)
 if (OPENTURNS_FOUND)
@@ -115,6 +111,8 @@ if (BUILD_PYTHON)
   endif ( PYTHONINTERP_FOUND )
 endif ()
 
+# Guess agrum python module path
+set (AGRUM_PYTHON_MODULE_PATH ${AGRUM_ROOTDIR}/${OTAGRUM_PYTHON_MODULE_PATH})
 
 # Define variables without OTAGRUM_ prefix with absolute paths
 foreach (_var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
