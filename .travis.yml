@@ -9,13 +9,13 @@ install:
   - sudo rm -r /opt/python/*
   - pip install sphinx numpydoc matplotlib --user --upgrade
   - git clone --depth 1 https://gitlab.com/agrumery/aGrUM.git && cd aGrUM && cmake -DFOR_PYTHON3=OFF -DUSE_NANODBC=OFF . && make -j2 && sudo make install && cd -
-  - git clone --depth 1 https://github.com/swig/swig.git && cd swig && ./autogen.sh && ./configure --without-alllang && make -j2 && sudo make install && cd -
+  #- git clone --depth 1 https://github.com/swig/swig.git && cd swig && ./autogen.sh && ./configure --without-alllang && make -j2 && sudo make install && cd -
+  - curl -L https://github.com/swig/swig/archive/rel-3.0.12.tar.gz | tar xz && cd swig-rel-3.0.12 && ./autogen.sh && ./configure --without-alllang && make -j2 && sudo make install && cd -
 
 script:
   - cmake -DCMAKE_INSTALL_PREFIX=~/.local
     -DSPHINX_EXECUTABLE=~/.local/bin/sphinx-build
     -DSWIG_EXECUTABLE=/usr/local/bin/swig
-    -DSPHINX_FLAGS=""
     .
   - make install -j2 && make tests -j2 && ctest -j2 --output-on-failure --timeout 1000
 
