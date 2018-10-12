@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     point.add(3.0);
     ticksCollection.add(point);
   }
-  Collection<UnsignedInteger> kind(0);
+  Indices kind(0);
   // 0->Discrete, 1->Continuous
   kind.add(1);
   kind.add(0);

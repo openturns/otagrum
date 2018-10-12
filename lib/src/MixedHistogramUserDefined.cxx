@@ -54,7 +54,7 @@ MixedHistogramUserDefined::MixedHistogramUserDefined()
 
 /* Parameters constructor */
 MixedHistogramUserDefined::MixedHistogramUserDefined(const OT::Collection<OT::Point> & ticksCollection,
-    const OT::Collection<OT::UnsignedInteger> & kind,
+    const OT::Indices & kind,
     const OT::Point & probabilityTable)
   : OT::DistributionImplementation()
   , ticksCollection_(ticksCollection)
@@ -362,13 +362,13 @@ OT::Collection<OT::Point> MixedHistogramUserDefined::getTicksCollection() const
 }
 
 /* Kind accessor */
-void MixedHistogramUserDefined::setKind(const OT::Collection<OT::UnsignedInteger> & kind)
+void MixedHistogramUserDefined::setKind(const OT::Indices & kind)
 {
   *this = MixedHistogramUserDefined(ticksCollection_, kind, probabilityTable_);
   computeRange();
 }
 
-OT::Collection<OT::UnsignedInteger> MixedHistogramUserDefined::getKind() const
+OT::Indices MixedHistogramUserDefined::getKind() const
 {
   return kind_;
 }
