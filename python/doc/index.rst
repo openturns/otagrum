@@ -16,7 +16,15 @@ Developer guide
 .. toctree::
    :maxdepth: 1 
 
-   developer_guide/developer_guide   
+   developer_guide/developer_guide
+
+Bibiliography
+-------------
+
+.. toctree::
+   :maxdepth: 1 
+
+   bibliography
 
 Indices and tables
 ==================
