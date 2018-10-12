@@ -47,8 +47,8 @@ public:
 
   /** Parameters constructor */
   MixedHistogramUserDefined(const OT::Collection<OT::Point> & ticksCollection,
-			    const OT::Collection<OT::UnsignedInteger> & kind,
-			    const OT::Point & probabilityTable);
+                            const OT::Indices & kind,
+                            const OT::Point & probabilityTable);
 
   /** Comparison operator */
   using OT::DistributionImplementation::operator ==;
@@ -127,8 +127,8 @@ public:
   OT::Collection<OT::Point> getTicksCollection() const;
 
   /** Kind accessor */
-  void setKind(const OT::Collection<OT::UnsignedInteger> & kind);
-  OT::Collection<OT::UnsignedInteger> getKind() const;
+  void setKind(const OT::Indices & kind);
+  OT::Indices getKind() const;
 
   /** Probability table accessor */
   void setProbabilityTable(const OT::Point & probabilityTable);
@@ -164,7 +164,7 @@ private:
   OT::PersistentCollection<OT::Point> ticksCollection_;
 
   /** Nature of each marginal (continuous/discrete) */
-  OT::PersistentCollection<OT::UnsignedInteger> kind_;
+  OT::Indices kind_;
 
   /** Probability table as a flat vector (no d-dim array available) */
   OT::Point probabilityTable_;

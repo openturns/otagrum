@@ -111,7 +111,7 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot) {
 
   // list of variables
   OT::Collection<OT::Point> ticksCollection(0);
-  OT::Collection<OT::UnsignedInteger> kind(0);
+  OT::Indices kind(0);
   for (OT::UnsignedInteger dim = 0; dim < pot.nbrDim(); dim++) {
     const auto &var = pot.variable(dim);
     description[dim] = var.name();
