@@ -4,34 +4,51 @@
 %feature("docstring") OTAGRUM::Utils::Discretize
 "Discretize
 
+Discretize a variable
+
 Parameters
 ----------
-b : int
-    b
+distribution : :py:class:`openturns.Distribution`
+    The distribution of the variable
+v : :py:class:`pyAgrum.pyAgrum.DiscretizedVariable_double`
+    A discrete variable
 
 Returns
 -------
-a : int
-    a"
+p : :py:class:`pyAgrum.pyAgrum.Potential_double`
+    The potential"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::Utils::FromMarginal
 "FromMarginal
 
+Potential to distribution conversion.
+
+Parameters
+----------
+p : :py:class:`pyAgrum.pyAgrum.Potential_double`
+    The potential
+
 Returns
 -------
 distribution: :py:class:`openturns.Distribution`
-    The distribution
-"
+    The distribution"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::Utils::FromPotential
-"FromPotential"
+"FromPotential
 
-// ---------------------------------------------------------------------
+Potential to distribution conversion.
 
-%feature("docstring") OTAGRUM::Utils::FromNodeSet
-"FromNodeSet"
+Parameters
+----------
+p : :py:class:`pyAgrum.pyAgrum.Potential_double`
+    The potential
+
+Returns
+-------
+distribution : :py:class:`openturns.Distribution`
+    The distribution"
 
