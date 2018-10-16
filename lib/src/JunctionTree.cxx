@@ -28,7 +28,7 @@
 namespace OTAGRUM {
 
 
-JunctionTree::JunctionTree(const gum::JunctionTree &jt,
+JunctionTree::JunctionTree(const gum::CliqueGraph &jt,
                            const std::vector<std::string> &names)
   : OT::Object()
   , jt_(jt)
