@@ -2,7 +2,6 @@ cmake_minimum_required (VERSION 2.8.4)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
 option (USE_SPHINX                    "Use sphinx for documentation"                                          ON)
-option ( LINK_PYTHON_LIBRARY          "Link python modules against python library"                            ON )
 option ( BUILD_SHARED_LIBS            "Build shared libraries"                                                ON )
 
 set (CMAKE_CXX_STANDARD 14)
@@ -13,7 +12,7 @@ if ( NOT DEFINED CMAKE_BUILD_TYPE )
    set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 endif ()
 
-project ( otagrum CXX )
+project (otagrum)
 
 string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 
@@ -59,6 +58,7 @@ if (BUILD_PYTHON)
   endif ()
   if (SWIG_FOUND)
     include (${SWIG_USE_FILE})
+    include (TargetLinkLibrariesWithDynamicLookup)
   endif ()
 
   find_package ( PythonInterp )
@@ -132,6 +132,10 @@ set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 if(POLICY CMP0042)
   # Set MACOSX_RPATH to ON
   cmake_policy(SET CMP0042 NEW)
+endif()
+if(POLICY CMP0078)
+  # Set MACOSX_RPATH to ON
+  cmake_policy(SET CMP0078 NEW)
 endif()
 
 # Some useful macros to ease CMakeLists.txt file writing
