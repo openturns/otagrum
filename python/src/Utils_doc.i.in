@@ -32,7 +32,7 @@ p : :py:class:`pyAgrum.pyAgrum.Potential_double`
 
 Returns
 -------
-distribution: :py:class:`openturns.Distribution`
+distribution : :py:class:`openturns.Distribution`
     The distribution"
 
 // ---------------------------------------------------------------------
