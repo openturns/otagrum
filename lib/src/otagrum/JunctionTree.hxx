@@ -34,7 +34,8 @@
 namespace OTAGRUM {
 class JunctionTree : public OT::Object {
 public:
-  JunctionTree(const gum::JunctionTree &jt,
+
+  JunctionTree(const gum::CliqueGraph &jt,
                const std::vector<std::string> &names);
 
   OT::UnsignedInteger getSize();

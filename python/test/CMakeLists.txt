@@ -76,6 +76,7 @@ ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
 ot_pyinstallcheck_test (MixedHistogramUserDefined_std)
 ot_pyinstallcheck_test (ContinuousPC_std)
+ot_pyinstallcheck_test (JunctionTree_std)
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
                     DEPENDS ${PYINSTALLCHECK_TO_BE_RUN}
