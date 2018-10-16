@@ -41,12 +41,13 @@ class OTAGRUM_API MixedHistogramUserDefined
 public:
 
   typedef OT::Pointer<OT::DistributionImplementation>   Implementation;
+  typedef OT::Collection<OT::Point> PointCollection;
 
   /** Default constructor */
   MixedHistogramUserDefined();
 
   /** Parameters constructor */
-  MixedHistogramUserDefined(const OT::Collection<OT::Point> & ticksCollection,
+  MixedHistogramUserDefined(const PointCollection & ticksCollection,
                             const OT::Indices & kind,
                             const OT::Point & probabilityTable);
 
@@ -123,8 +124,8 @@ public:
   /* Interface specific to MixedHistogramUserDefined */
 
   /** Ticks collection accessor */
-  void setTicksCollection(const OT::Collection<OT::Point> & ticksCollection);
-  OT::Collection<OT::Point> getTicksCollection() const;
+  void setTicksCollection(const PointCollection & ticksCollection);
+  PointCollection getTicksCollection() const;
 
   /** Kind accessor */
   void setKind(const OT::Indices & kind);
