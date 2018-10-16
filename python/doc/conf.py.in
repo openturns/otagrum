@@ -51,8 +51,8 @@ todo_include_todos = True
 extensions.append('sphinx.ext.coverage')
 
 extensions.append('sphinx.ext.intersphinx')
-intersphinx_mapping = {'openturns': ('http://openturns.github.io/openturns/latest', (None, 'openturns-objects.txt')),
-                       'pyagrum': ('https://pyagrum.readthedocs.io/en/latest', (None, 'pyagrum-objects.txt'))}
+intersphinx_mapping = {'openturns': ('http://openturns.github.io/openturns/latest', (None, 'openturns-objects.inv')),
+                       'pyagrum': ('https://pyagrum.readthedocs.io/en/latest', (None, 'pyagrum-objects.inv'))}
 
 try:
     import sphinx.ext.imgmath
