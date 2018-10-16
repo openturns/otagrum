@@ -19,8 +19,8 @@
  *
  */
 
-#ifndef OTAGRUM_CONITNUOUSTTEST_HXX
-#define OTAGRUM_CONITNUOUSTTEST_HXX
+#ifndef OTAGRUM_CONTINUOUSTTEST_HXX
+#define OTAGRUM_CONTINUOUSTTEST_HXX
 
 #include <string>
 #include <vector>
@@ -29,36 +29,12 @@
 #include "otagrum/StratifiedCache.hxx"
 
 namespace OTAGRUM {
-class ContinuousTTest {
 
-private:
-  /// from z-score, return p-value P(Z>z)
-  static double z2p_(const double z);
-
-  /// from z-score, return p-value P(Z \not\in [-z,z])
-  static double z2p_interval_(const double z);
-
-  /// computes K from the sample properties (size, dimension, ...)
-  static OT::UnsignedInteger getK_(const OT::Sample & sample);
-
-  /// computes the key from Indices and k
-  static std::string getKey_(const OT::Indices & l, const OT::UnsignedInteger k);
-
-  /// get the pdf of Bernstein Copula on Indice l in data
-  /// if k=0 : use getK_ to find the right value
-  OT::Point getPDF_(const OT::Indices & l, const OT::UnsignedInteger k = 0) const;
-
-  /// get the pdfs of Berstein Copulae fX,fYX,fZX,FUZX
-  /// allows to call getPDF_ with the same k for all copulae
-  std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
-  getPDFs_(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const;
-
-  mutable StratifiedCache cache_;
-  OT::Sample data_;
-  double alpha_;
-
+class ContinuousTTest : public OT::Object
+{
 public:
-  explicit ContinuousTTest(const OT::Sample & data, const double alpha = 0.1);
+  explicit ContinuousTTest(const OT::Sample & data,
+                           const double alpha = 0.1);
 
   void setAlpha(const double alpha);
   double getAlpha(void) const;
@@ -78,7 +54,35 @@ public:
   void clearCache() const;
   void clearCacheLevel(const OT::UnsignedInteger level) const;
   OT::UnsignedInteger getDimension() const;
-};
-}; // namespace OTAGRUM
 
-#endif // OTAGRUM_CONITNUOUSTTEST_HXX
+private:
+  /// from z-score, return p-value P(Z>z)
+  static double z2p(const double z);
+
+  /// from z-score, return p-value P(Z \not\in [-z,z])
+  static double z2p_interval(const double z);
+
+  /// computes K from the sample properties (size, dimension, ...)
+  static OT::UnsignedInteger getK(const OT::Sample & sample);
+
+  /// computes the key from Indices and k
+  static std::string getKey(const OT::Indices & l, const OT::UnsignedInteger k);
+
+  /// get the pdf of Bernstein Copula on Indice l in data
+  /// if k=0 : use getK_ to find the right value
+  OT::Point getPDF(const OT::Indices & l, const OT::UnsignedInteger k = 0) const;
+
+  /// get the pdfs of Berstein Copulae fX,fYX,fZX,FUZX
+  /// allows to call getPDF_ with the same k for all copulae
+  std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
+  getPDFs(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const;
+
+  mutable StratifiedCache cache_;
+  OT::Sample data_;
+  double alpha_;
+
+};
+
+} // namespace OTAGRUM
+
+#endif // OTAGRUM_CONTINUOUSTTEST_HXX

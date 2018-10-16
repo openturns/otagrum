@@ -25,7 +25,7 @@ t0 = time()
 g=otagrum.ContinuousPC(data,alpha=seuil)
 t1=time()-t0
 print("##")
-print("## PC algorithm for size={0}, dimension={1} and seuil={3:4.3f} : {2:6.2f}s".format(size,data.getDimension(),t1,seuil))
+print("## PC algorithm for size={0}, dimension={1} and seuil={2:4.3f}".format(size,data.getDimension(),seuil))
 print("##")
 #showGraph(g)
 

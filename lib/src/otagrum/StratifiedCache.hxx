@@ -30,7 +30,7 @@
 
 namespace OTAGRUM {
 
-class StratifiedCache {
+class StratifiedCache : public OT::Object {
 private:
   gum::HashTable<std::string, OT::Point> cache_;
   std::vector<std::vector<std::string>> stratified_keys_;
@@ -50,7 +50,7 @@ public:
 
   void set(OT::UnsignedInteger level, const std::string &key, const OT::Point sample);
 
-  void clearLevel(int level);
+  void clearLevel(unsigned long level);
 
   void clear();
 

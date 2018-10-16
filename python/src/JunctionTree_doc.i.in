@@ -1,7 +1,129 @@
 %feature("docstring") OTAGRUM::JunctionTree
-"JunctionTree gum interface.
+"JunctionTree interface.
 
 Parameters
 ----------
-jt : gum.JunctionTree
-    Agrum Junction tree"
+jt : :py:class:`pyAgrum.JunctionTree`
+    Junction tree
+names : sequence of str
+    Node names"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getSize
+"Size accessor
+
+Returns
+-------
+size : int
+    Number of nodes in the tree"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getDescription
+"Size accessor
+
+Returns
+-------
+names : sequence of str
+    Node names"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getClique
+"Clique accessor
+
+Parameters
+----------
+node : int
+    Node associated to the desired clique
+
+Returns
+-------
+clique : :py:class:`openturns.Indices`
+    Clique associated to the desired node"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getSeparator
+"Separator accessor
+
+Parameters
+----------
+edge : :py:class:`pyAgrum.Edge`
+    Arc associated to the desired clique
+
+Returns
+-------
+separator : :py:class:`openturns.Indices`
+    Separator associated to the desired arc"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getNeighbours
+"Neighbours accessor
+
+Parameters
+----------
+node : int
+    Node associated to the desired neighbours
+
+Returns
+-------
+neighbours : :py:class:`pyAgrum.NodeSet`
+    Neighbours associated to the desired node"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getEdges
+"Edges accessor
+
+Returns
+-------
+edges : :py:class:`pyAgrum.EdgeSet`
+    List of edges"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getNodes
+"Nodes accessor
+
+Returns
+-------
+nodes : :py:class:`pyAgrum.NodeSet`
+    List of nodes"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getCliquesCollection
+"Cliques accessor
+
+Returns
+-------
+cliques : sequence of :py:class:`openturns.Indices`
+    List of cliques"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getSeparatorCollection
+"Separators accessor
+
+Returns
+-------
+separators : sequence of :py:class:`openturns.Indices`
+    List of separators"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTree::getMarginal
+"Marginal tree accessor
+
+Parameters
+----------
+nodes : :py:class:`openturns.Indices`
+    Nodes list
+
+Returns
+-------
+marginal : :class:`~otagrum.JunctionTree`
+    Marginal junction tree"

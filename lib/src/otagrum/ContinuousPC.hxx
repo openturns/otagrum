@@ -28,10 +28,12 @@
 #include <openturns/Sample.hxx>
 
 namespace OTAGRUM {
-class ContinuousPC {
+class ContinuousPC : public OT::Object
+{
 public:
   explicit ContinuousPC(const OT::Sample &data,
-                        OT::UnsignedInteger maxParents = 5, double alpha = 0.1);
+                        OT::UnsignedInteger maxParents = 5,
+                        double alpha = 0.1);
 
   gum::UndiGraph getSkeleton();
   gum::MixedGraph getPDAG(const gum::UndiGraph &g);
@@ -43,37 +45,9 @@ public:
   void setVerbosity(bool verbose) { verbose_ = verbose; };
   bool getVerbosity() const { return verbose_; };
 
-  double getPValue(gum::NodeId x, gum::NodeId y) {
-    gum::Edge e(x, y);
-    if (pvalues_.exists(e)) {
-      return pvalues_[e];
-    } else {
-      throw OT::InvalidArgumentException(HERE)
-          << "Error: No p-value for edge (" << e.first() << "," << e.second()
-          << ").";
-    }
-  }
-  double getTTest(gum::NodeId x, gum::NodeId y) {
-    gum::Edge e(x, y);
-    if (ttests_.exists(e)) {
-      return ttests_[e];
-    } else {
-      throw OT::InvalidArgumentException(HERE)
-          << "Error: No ttest value for edge (" << e.first() << ","
-          << e.second() << ").";
-    }
-  }
-
-  const OT::Indices getSepset(gum::NodeId x, gum::NodeId y) {
-    gum::Edge e(x, y);
-    if (pvalues_.exists(e)) {
-      return sepset_[e];
-    } else {
-      throw OT::InvalidArgumentException(HERE)
-          << "Error: No Sepset for edge (" << e.first() << "," << e.second()
-          << ").";
-    }
-  }
+  double getPValue(gum::NodeId x, gum::NodeId y);
+  double getTTest(gum::NodeId x, gum::NodeId y);
+  const OT::Indices getSepset(gum::NodeId x, gum::NodeId y);
 
   const std::vector<gum::Edge> &getRemoved() { return removed_; };
 
@@ -91,12 +65,13 @@ private:
   bool optimalPolicy_;
   ContinuousTTest tester_;
 
-  bool testCondSetWithSize_(gum::UndiGraph &g, OT::UnsignedInteger n);
+  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n);
 
   std::tuple<bool, double, double, OT::Indices>
-  bestSeparator_(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
+  bestSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
                  const OT::Indices &neighbours, OT::UnsignedInteger n);
 };
+
 } // namespace OTAGRUM
 
 #endif // OTAGRUM_CONTINUOUSPC_HXX

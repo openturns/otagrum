@@ -30,9 +30,9 @@
 
 namespace OTAGRUM {
 
-StratifiedCache::StratifiedCache() : get_(0u), set_(0u){};
+StratifiedCache::StratifiedCache() : OT::Object(), get_(0u), set_(0u){}
 
-StratifiedCache::~StratifiedCache() { clear(); };
+StratifiedCache::~StratifiedCache() { clear(); }
 
 bool StratifiedCache::exists(const std::string &key) const {
   return cache_.exists(key);
@@ -56,7 +56,7 @@ void StratifiedCache::set(OT::UnsignedInteger level, const std::string &key,
   stratified_keys_[level].push_back(key);
 };
 
-void StratifiedCache::clearLevel(int level) {
+void StratifiedCache::clearLevel(unsigned long level) {
   if (level < stratified_keys_.size()) {
     for (auto &elt : stratified_keys_[level])
       cache_.erase(elt);
@@ -65,7 +65,7 @@ void StratifiedCache::clearLevel(int level) {
 };
 
 void StratifiedCache::clear() {
-  for (int level = 0; level < stratified_keys_.size(); ++level) {
+  for (unsigned long level = 0; level < stratified_keys_.size(); ++level) {
     clearLevel(level);
   }
 };

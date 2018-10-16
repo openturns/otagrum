@@ -3,5 +3,182 @@
 
 Parameters
 ----------
-a : int
-    a"
+data : 2-d sequence of float
+    The data
+maxParents : int
+    The maximum number of parents a node can have
+alpha : float
+    Hypothesis test threshold"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::PDAGtoDot
+"Convert PDAG graph to dot
+
+Parameters
+----------
+pdag : :py:class:`pyAgrum.MixedGraph`
+    dag
+
+Returns
+-------
+dot : str
+    Dot format representation"
+
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::skeletonToDot
+"Convert skeleton graph to dot
+
+Parameters
+----------
+pdag : :py:class:`pyAgrum.UndiGraph`
+    dag
+
+Returns
+-------
+dot : str
+    Dot format representation"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getMoralGraph
+"Moral graph
+
+Parameters
+----------
+q : :py:class:`pyAgrum.MixedGraph`
+    q
+
+Returns
+-------
+moral_graph : :py:class:`pyAgrum.UndiGraph`
+    moral_graph"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::setOptimalPolicy
+"Optimal policy flag accessor
+
+Parameters
+----------
+optimal_policy : bool
+    Optimal policy flag value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getOptimalPolicy
+"Optimal policy flag accessor
+
+Returns
+-------
+optimal_policy : bool
+    Optimal policy flag value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getPDAG
+"PDAG accessor
+
+Parameters
+----------
+q : :py:class:`pyAgrum.MixedGraph`
+    q
+
+Returns
+-------
+moral_graph : :py:class:`pyAgrum.UndiGraph`
+    moral_graph"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getPValue
+"P-Value accessor
+
+Parameters
+----------
+x : int
+    Node id
+y : int
+    Node id
+
+Returns
+-------
+p_value : float
+    P-Value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getRemoved
+"Removed arcs accessor
+
+Returns
+-------
+removed : sequence of :py:class:`pyAgrum.Edge`
+    Removed arcs"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getSepset
+"Sep indices
+
+Parameters
+----------
+x : int
+    Node id
+y : int
+    Node id
+
+Returns
+-------
+sep_set : :py:class:`openturns.Indices`
+    Indices"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getTTest
+"Test statistics accessor
+
+Parameters
+----------
+x : int
+    Node id
+y : int
+    Node id
+
+Returns
+-------
+ttest : float
+    Test statistics"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getSkeleton
+"Skeleton graph accessor
+
+Returns
+-------
+skeleton : :py:class:`pyAgrum.UndiGraph`
+    Skeleton graph"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::setVerbosity
+"Verbosity flag accessor
+
+Parameters
+----------
+verbose : bool
+    Verbosity flag value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getVerbosity
+"Verbosity flag accessor
+
+Returns
+-------
+verbose : bool
+    Verbosity flag value"
+

@@ -76,11 +76,13 @@ namespace OTAGRUM {
  * @param data : the data
  * @param maxParents : the max parents than a node can have
  * @param alpha : the threshold for the hypothesis test
- * @param verbose : trace or not ?
  */
 ContinuousPC::ContinuousPC(const OT::Sample &data,
                            OT::UnsignedInteger maxParents, double alpha)
-    : maxParents_(maxParents), tester_{data} {
+    : OT::Object()
+    , maxParents_(maxParents)
+    , tester_{data}
+{
   tester_.setAlpha(alpha);
   optimalPolicy_ = true;
   verbose_ = false;
@@ -104,7 +106,7 @@ ContinuousPC::ContinuousPC(const OT::Sample &data,
  * p-value. Otherwise, it is the first one
  */
 std::tuple<bool, double, double, OT::Indices>
-ContinuousPC::bestSeparator_(const gum::UndiGraph &g, gum::NodeId y,
+ContinuousPC::bestSeparator(const gum::UndiGraph &g, gum::NodeId y,
                              gum::NodeId z, const OT::Indices &neighbours,
                              OT::UnsignedInteger n) {
   double t;
@@ -151,7 +153,7 @@ ContinuousPC::bestSeparator_(const gum::UndiGraph &g, gum::NodeId y,
  * @return true if at least one separator has been found (if an edge has been
  * cut)
  */
-bool ContinuousPC::testCondSetWithSize_(gum::UndiGraph &g,
+bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
                                         OT::UnsignedInteger n) {
   if (g.sizeEdges() == 0)
     return false;
@@ -173,7 +175,7 @@ bool ContinuousPC::testCondSetWithSize_(gum::UndiGraph &g,
         OT::Indices sepYZ;
 
         std::tie(resYZ, tYZ, pYZ, sepYZ) =
-            bestSeparator_(g, y, z, Utils::FromNodeSet(nei), n);
+            bestSeparator(g, y, z, Utils::FromNodeSet(nei), n);
 
         pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
         ttests_.set(edge, std::max(ttests_.getWithDefault(edge, -10000), tYZ));
@@ -239,7 +241,7 @@ gum::UndiGraph ContinuousPC::getSkeleton() {
       tester_.clearCacheLevel(n - 1);
 
     // perform all the tests for size n
-    if (!testCondSetWithSize_(g, n))
+    if (!testCondSetWithSize(g, n))
       break;
   }
   TRACE("== end" << std::endl);
@@ -352,4 +354,38 @@ std::string ContinuousPC::PDAGtoDot(const gum::MixedGraph &pdag) {
          ""
          "}";
 }
+
+
+double ContinuousPC::getPValue(gum::NodeId x, gum::NodeId y) {
+  gum::Edge e(x, y);
+  if (pvalues_.exists(e)) {
+    return pvalues_[e];
+  } else {
+    throw OT::InvalidArgumentException(HERE)
+        << "Error: No p-value for edge (" << e.first() << "," << e.second()
+        << ").";
+  }
+}
+double ContinuousPC::getTTest(gum::NodeId x, gum::NodeId y) {
+  gum::Edge e(x, y);
+  if (ttests_.exists(e)) {
+    return ttests_[e];
+  } else {
+    throw OT::InvalidArgumentException(HERE)
+        << "Error: No ttest value for edge (" << e.first() << ","
+        << e.second() << ").";
+  }
+}
+
+const OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) {
+  gum::Edge e(x, y);
+  if (pvalues_.exists(e)) {
+    return sepset_[e];
+  } else {
+    throw OT::InvalidArgumentException(HERE)
+        << "Error: No Sepset for edge (" << e.first() << "," << e.second()
+        << ").";
+  }
+}
+
 } // namespace OTAGRUM
