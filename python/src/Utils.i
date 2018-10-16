@@ -8,4 +8,6 @@
 
 %nodefaultctor Utils;
 
+%ignore OTAGRUM::Utils::FromNodeSet;
+
 %include otagrum/Utils.hxx
