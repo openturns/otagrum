@@ -70,7 +70,15 @@ MixedHistogramUserDefined::MixedHistogramUserDefined(const PointCollection & tic
   // kind[i] == 1 -> the ith marginal is continuous
   OT::UnsignedInteger totalSize = 1;
   for (OT::UnsignedInteger i = 0; i < dimension; ++i)
+  {
+    if (kind[i] > 1)
+      throw OT::InvalidArgumentException(HERE) << "Kind must be in [[0, 1]]";
+    if (!(ticksCollection[i].getSize() >= 1))
+      throw OT::InvalidArgumentException(HERE) << "Empty ticks";
+    if (ticksCollection[i].getSize() == kind[i])
+      throw OT::InvalidArgumentException(HERE) << "Need at least 2 ticks for continuous variable";
     totalSize *= ticksCollection[i].getSize() - kind[i];
+  }
   if (probabilityTable.getSize() != totalSize) throw OT::InvalidArgumentException(HERE) << "Error: expected a probability table of size=" << totalSize << ", got size=" << probabilityTable.getSize();
   // Special case: dimension 1
   if (dimension == 1)
