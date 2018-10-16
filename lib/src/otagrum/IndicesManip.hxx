@@ -32,15 +32,16 @@ bool isIn(const OT::Indices &X, OT::UnsignedInteger y);
 OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y);
 OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y);
 
-class IndicesCombinationIterator {
+class IndicesCombinationIterator : public OT::Object
+{
 public:
-  explicit IndicesCombinationIterator(const OT::Indices &base,
-                                      OT::UnsignedInteger n);
+  IndicesCombinationIterator(const OT::Indices & base,
+                             OT::UnsignedInteger n);
   void setFirst();
   bool isLast() const;
   void next();
   const OT::Indices &current() const;
-  std::string __str__(const std::string &delim="");
+  std::string __str__(const std::string &delim="") const;
 
 private:
   void set_(OT::UnsignedInteger pos, int val);
@@ -50,6 +51,7 @@ private:
   bool carry_;
   int size_;
 };
+
 } // eo namespace
 
 #endif // OTAGRUM_INDICESMANIP_HXX

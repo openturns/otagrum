@@ -33,31 +33,34 @@
 
 
 namespace OTAGRUM {
-double ContinuousTTest::z2p_(const double z) {
+
+ContinuousTTest::ContinuousTTest(const OT::Sample & data,
+                                 const double alpha)
+  : OT::Object()
+{
+  setAlpha(alpha);
+  data_ = (data.rank() + 1.0) / data.getSize();
+}
+
+double ContinuousTTest::z2p(const double z) {
   return OT::DistFunc::pNormal(-z);
 }
 
-double ContinuousTTest::z2p_interval_(const double z) {
+double ContinuousTTest::z2p_interval(const double z) {
   return OT::DistFunc::pNormal(z) - OT::DistFunc::pNormal(-z);
 }
 
-OT::UnsignedInteger ContinuousTTest::getK_(const OT::Sample & sample) {
+OT::UnsignedInteger ContinuousTTest::getK(const OT::Sample & sample) {
   return OT::UnsignedInteger(1.0 + std::pow(sample.getSize(), 2.0 / (4.0 + sample.getDimension())));
 }
 
-std::string ContinuousTTest::getKey_(const OT::Indices & l,
+std::string ContinuousTTest::getKey(const OT::Indices & l,
                                      const OT::UnsignedInteger k) {
   //@todo : sorting l before computing the key ?
   return l.__str__() + ":" + std::to_string(k);
 }
 
-ContinuousTTest::ContinuousTTest(const OT::Sample & data,
-				 const double alpha) {
-  setAlpha(alpha);
-  data_ = (data.rank() + 1.0) / data.getSize();
-}
-
-OT::Point ContinuousTTest::getPDF_(const OT::Indices & l,
+OT::Point ContinuousTTest::getPDF(const OT::Indices & l,
                                    OT::UnsignedInteger k) const {
   if (l.getSize() == 0) {
     //@todo Is this correct ?
@@ -67,10 +70,10 @@ OT::Point ContinuousTTest::getPDF_(const OT::Indices & l,
   if (k == 0) {
     // k =BernsteinCopulaFactory::ComputeLogLikelihoodBinNumber(sample,2);
     // k =BernsteinCopulaFactory::ComputeAMISEBinNumber(sample,2);
-    k = getK_(data_);
+    k = getK(data_);
   }
 
-  const auto key = getKey_(l, k);
+  const auto key = getKey(l, k);
   if (cache_.exists(key)) {
     return cache_.get(key);
   }
@@ -89,19 +92,25 @@ OT::Point ContinuousTTest::getPDF_(const OT::Indices & l,
 }
 
 std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
-ContinuousTTest::getPDFs_(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const {
+ContinuousTTest::getPDFs(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const {
   //@todo how to be smart for k ?
-  OT::UnsignedInteger k = getK_(data_);
-  OT::Point pdf1(getPDF_(X, k));
-  OT::Point pdf2(getPDF_(X + Y, k));
-  OT::Point pdf3(getPDF_(X + Z, k));
-  OT::Point pdf4(getPDF_(X + Y + Z, k));
+  OT::UnsignedInteger k = getK(data_);
+  OT::Point pdf1(getPDF(X, k));
+  OT::Point pdf2(getPDF(X + Y, k));
+  OT::Point pdf3(getPDF(X + Z, k));
+  OT::Point pdf4(getPDF(X + Y + Z, k));
   return std::make_tuple(pdf1, pdf2, pdf3, pdf4, k);
 }
 
-void ContinuousTTest::setAlpha(const double alpha) { alpha_ = alpha; }
+void ContinuousTTest::setAlpha(const double alpha)
+{
+  alpha_ = alpha;
+}
 
-double ContinuousTTest::getAlpha() const { return alpha_; }
+double ContinuousTTest::getAlpha() const
+{
+  return alpha_;
+}
 
 inline double pPar1MoinsP(const double p) { return p * (1 - p); }
 
@@ -114,7 +123,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y, const OT::Unsigned
   auto dX = data_.getMarginal(X);
 
   OT::Point fX, fYX, fZX, fYZX;
-  std::tie(fX, fYX, fZX, fYZX, k) = getPDFs_(Y, Z, X);
+  std::tie(fX, fYX, fZX, fYZX, k) = getPDFs(Y, Z, X);
 
   auto d = double(X.getSize()); // such that d/2 is double as well
   auto N = data_.getSize();
@@ -176,7 +185,7 @@ double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y, OT::Un
   auto dX = data_.getMarginal(X);
 
   OT::Point fX, fYX, fZX, fYZX;
-  std::tie(fX, fYX, fZX, fYZX, k) = getPDFs_(Y, Z, X);
+  std::tie(fX, fYX, fZX, fYZX, k) = getPDFs(Y, Z, X);
 
   auto d = double(X.getSize()); // such that d/2 is double as well
   auto N = data_.getSize();
@@ -208,7 +217,7 @@ ContinuousTTest::isIndep(const OT::UnsignedInteger Y, const OT::UnsignedInteger 
 
 std::tuple<double, double, bool>
 ContinuousTTest::isIndepFromTest(const double t, const double alpha) {
-  double p = z2p_interval_(t);
+  double p = z2p_interval(t);
   return std::make_tuple(t, p, p >= alpha);
 }
 

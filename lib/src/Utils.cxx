@@ -46,7 +46,7 @@ namespace OTAGRUM {
 gum::Potential<double>
 Utils::Discretize(const OT::DistributionImplementation &distribution,
            const gum::DiscretizedVariable<double> &v) {
-  return std::move(Discretize(OT::Distribution(distribution), v));
+  return Discretize(OT::Distribution(distribution), v);
 }
 
 /* Helper function to discretize a continuous distribution */
@@ -129,7 +129,7 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot) {
       }
     } else {
       kind.add(0); // Discrete
-      for (int v = 0; v < var.domainSize(); v++) {
+      for (unsigned long v = 0; v < var.domainSize(); v++) {
         p.add(v);
       }
     }
@@ -197,7 +197,7 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot) {
     OT::Sample val(v.domainSize(), 1);
     bool ok = true;
     OT::Scalar value;
-    for (auto i = 0; i < v.domainSize(); i++) {
+    for (unsigned long i = 0; i < v.domainSize(); i++) {
       std::istringstream iss(v.label(i));
       if (iss >> value)
         val[i][0] = value;
@@ -209,7 +209,7 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot) {
 
     if (!ok) // at least on label has not been correctly parsed as
              // Scalar. Then we just use index
-      for (auto i = 0; i < v.domainSize(); i++)
+      for (unsigned long i = 0; i < v.domainSize(); i++)
         val[i][0] = i;
 
     auto res = OT::UserDefined(val, probas);

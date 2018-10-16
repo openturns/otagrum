@@ -22,6 +22,22 @@
 #include "otagrum/IndicesManip.hxx"
 
 namespace OTAGRUM {
+
+IndicesCombinationIterator::IndicesCombinationIterator(const OT::Indices &base,
+                                                       OT::UnsignedInteger n)
+  : OT::Object()
+  , base_(base)
+  , size_(n)
+{
+  if (n > base.getSize()) {
+    throw OT::InvalidArgumentException(HERE)
+        << "Error: cannot iterate on subsets of size " << n << " in "
+        << base.__str__() << ".";
+  }
+  coord_.reserve(size_);
+  setFirst();
+}
+
 OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger val) {
   for (OT::UnsignedInteger p = 0; p < X.getSize(); ++p) {
     if (X[p] == val)
@@ -49,17 +65,6 @@ OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y) {
   return res;
 }
 
-IndicesCombinationIterator::IndicesCombinationIterator(const OT::Indices &base,
-                                                       OT::UnsignedInteger n)
-    : base_(base), size_(n) {
-  if (n > base.getSize()) {
-    throw OT::InvalidArgumentException(HERE)
-        << "Error: cannot iterate on subsets of size " << n << " in "
-        << base.__str__() << ".";
-  }
-  coord_.reserve(size_);
-  setFirst();
-}
 
 void IndicesCombinationIterator::setFirst() {
   coord_.clear();
@@ -70,7 +75,11 @@ void IndicesCombinationIterator::setFirst() {
   }
   carry_ = false;
 }
-bool IndicesCombinationIterator::isLast() const { return carry_; }
+
+bool IndicesCombinationIterator::isLast() const
+{
+  return carry_;
+}
 
 void IndicesCombinationIterator::next() {
   for (int i = size_ - 1; i >= 0; --i) {
@@ -85,16 +94,20 @@ void IndicesCombinationIterator::next() {
   }
   carry_ = true;
 }
-const OT::Indices &IndicesCombinationIterator::current() const {
+
+const OT::Indices &IndicesCombinationIterator::current() const
+{
   return current_;
 }
 
-void IndicesCombinationIterator::set_(OT::UnsignedInteger pos, int val) {
+void IndicesCombinationIterator::set_(OT::UnsignedInteger pos, int val)
+{
   coord_[pos] = val;
   current_[pos] = base_[coord_[pos]];
 }
 
-std::string IndicesCombinationIterator::__str__(const std::string &delim) {
+std::string IndicesCombinationIterator::__str__(const std::string &delim) const
+{
   std::stringstream ss;
   ss << delim << "CombinationIterator :\n";
   ss << delim << "  | base :" << static_cast<const OT::Indices>(base_).__str__()
@@ -106,4 +119,5 @@ std::string IndicesCombinationIterator::__str__(const std::string &delim) {
   ss << delim << "  | current :" << current_.__str__() << "\n";
   return ss.str();
 }
+
 } // eo namespace

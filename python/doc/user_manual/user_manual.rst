@@ -9,24 +9,6 @@ API
 
     ContinuousPC
     ContinuousTTest
-    JunctionTree
     MixedHistogramUserDefined
+    JunctionTree
     Utils
-
-.. Utility functions
-.. -----------------
-.. 
-.. Special functions graph conversion functions.
-.. 
-.. .. currentmodule:: otagrum
-.. 
-.. .. autosummary::
-..     :toctree: _generated/
-..     :template: function.rst_t
-.. 
-..     Utils_Discretize
-..     Utils_FromMarginal
-..     Utils_FromPotential
-..     Utils_FromNodeSet
-
-

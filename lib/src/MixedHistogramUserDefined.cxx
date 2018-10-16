@@ -53,7 +53,7 @@ MixedHistogramUserDefined::MixedHistogramUserDefined()
 }
 
 /* Parameters constructor */
-MixedHistogramUserDefined::MixedHistogramUserDefined(const OT::Collection<OT::Point> & ticksCollection,
+MixedHistogramUserDefined::MixedHistogramUserDefined(const PointCollection & ticksCollection,
     const OT::Indices & kind,
     const OT::Point & probabilityTable)
   : OT::DistributionImplementation()

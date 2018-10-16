@@ -23,17 +23,23 @@
 #include <vector>
 
 #include "otagrum/JunctionTree.hxx"
+#include "otagrum/Utils.hxx"
 
 namespace OTAGRUM {
 
-OT::Indices JunctionTree::fromNodeSet_(const gum::NodeSet &clique) {
-  auto indices = OT::Indices();
-  for (auto nod : clique)
-    indices.add(nod);
-  return indices;
-};
 
-void JunctionTree::checkConsistency_() {
+JunctionTree::JunctionTree(const gum::JunctionTree &jt,
+                           const std::vector<std::string> &names)
+  : OT::Object()
+  , jt_(jt)
+{
+  for (const auto &name : names) {
+    map_.add(name);
+  }
+  checkConsistency();
+}
+
+void JunctionTree::checkConsistency() {
   // checks if names and jt are consistent (same set of nodeIds)
   gum::NodeSet s;
   for (const auto &nod : jt_.nodes())
@@ -53,27 +59,16 @@ void JunctionTree::checkConsistency_() {
   }
 }
 
-JunctionTree::JunctionTree(const gum::JunctionTree &jt,
-                           const std::vector<std::string> &names)
-    : jt_(jt) {
-  for (const auto &name : names) {
-    map_.add(name);
-  }
-  checkConsistency_();
-}
-
-JunctionTree::~JunctionTree() {}
-
 OT::UnsignedInteger JunctionTree::getSize() { return map_.getSize(); }
 
 OT::Description JunctionTree::getDescription() { return map_; }
 
 OT::Indices JunctionTree::getClique(gum::NodeId nod) {
-  return fromNodeSet_(jt_.clique(nod));
+  return Utils::FromNodeSet(jt_.clique(nod));
 }
 
 OT::Indices JunctionTree::getSeparator(gum::Edge edge) {
-  return fromNodeSet_(jt_.separator(edge));
+  return Utils::FromNodeSet(jt_.separator(edge));
 }
 
 const gum::NodeSet &JunctionTree::getNeighbours(gum::NodeId id) {
@@ -181,7 +176,7 @@ JunctionTree JunctionTree::getMarginal(OT::Indices indices) {
   return JunctionTree(m_jt, m_names);
 }
 
-std::string JunctionTree::__str__() {
+OT::String JunctionTree::__str__(const OT::String &) const {
   std::stringstream ss;
   ss << "[";
   bool first = true;

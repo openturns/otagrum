@@ -32,20 +32,10 @@
 #include <openturns/Indices.hxx>
 
 namespace OTAGRUM {
-class JunctionTree {
-private:
-  gum::JunctionTree jt_;
-  OT::Description map_;
-
-  OT::Indices fromNodeSet_(const gum::NodeSet &clique);
-
-  void checkConsistency_();
-
+class JunctionTree : public OT::Object {
 public:
   JunctionTree(const gum::JunctionTree &jt,
                const std::vector<std::string> &names);
-
-  ~JunctionTree();
 
   OT::UnsignedInteger getSize();
 
@@ -63,7 +53,15 @@ public:
 
   JunctionTree getMarginal(OT::Indices indices);
 
-  std::string __str__();
+  OT::String __str__(const OT::String & offset = "") const;
+
+private:
+  gum::JunctionTree jt_;
+  OT::Description map_;
+
+  void checkConsistency();
+
 };
-};
+
+}
 #endif // OTAGRUM_JUNCTIONTREE_H

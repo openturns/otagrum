@@ -1,7 +1,140 @@
 %feature("docstring") OTAGRUM::ContinuousTTest
-"Independence test statistic
+"ContinuousTTest learner
 
 Parameters
 ----------
-a : int
-    a"
+data : 2-d sequence of float
+    The data
+alpha : float
+    Hypothesis test threshold"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::clearCache
+"Clear cache"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::clearCacheLevel
+"Clear cache at specific level
+
+Parameters
+----------
+level : int
+    Cache level"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::getDimension
+"Dimension accessor
+
+Returns
+-------
+dimension : int
+    Dimension"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::setAlpha
+"Hypothesis test threshold accessor
+
+Parameters
+----------
+alpha : float
+    Hypothesis test threshold"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::getAlpha
+"Hypothesis test threshold accessor
+
+Returns
+-------
+alpha : float
+    Hypothesis test threshold"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::getTTest
+"Test statistics accessor
+
+Parameters
+----------
+Y : int
+    Y
+Z : int
+    Z
+X : sequence of int
+    X
+
+Returns
+-------
+ttest : float
+    Test statistics value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::getTTestWithoutCorrections
+"Raw test statistics accessor
+
+Parameters
+----------
+Y : int
+    Y
+Z : int
+    Z
+X : sequence of int
+    X
+
+Returns
+-------
+ttest : float
+    Raw test statistics value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::isIndepFromTest
+"isIndepFromTest
+
+Test whether TODO
+
+Parameters
+----------
+t : float
+    t
+alpha : float
+    Hypothesis test threshold
+
+Returns
+-------
+Y : float
+    Y
+Z : float
+    Z
+X : bool
+    X"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::isIndep
+"isIndep
+
+Test whether TODO
+
+Parameters
+----------
+Y : int
+    Y
+Z : int
+    Z
+X : sequence of int
+    X
+
+Returns
+-------
+rvalue1 : float
+    rvalue1
+rvalue2 : float
+    rvalue2
+rvalue3 : bool
+    rvalue3"
