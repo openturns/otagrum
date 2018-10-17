@@ -23,7 +23,6 @@ sys.path.insert(0, os.path.abspath('sphinxext'))
 sys.path.insert(0, '@OTAGRUM_PYTHON_BUILD_MODULE_PATH@')
 sys.path.insert(0, '@OPENTURNS_PYTHON_MODULE_PATH@')
 sys.path.insert(0, '@AGRUM_PYTHON_MODULE_PATH@')
-
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

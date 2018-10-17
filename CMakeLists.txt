@@ -2,7 +2,6 @@ cmake_minimum_required (VERSION 2.8.4)
 
 option ( BUILD_PYTHON                 "Build the python module for the library"                               ON )
 option (USE_SPHINX                    "Use sphinx for documentation"                                          ON)
-option ( LINK_PYTHON_LIBRARY          "Link python modules against python library"                            ON )
 option ( BUILD_SHARED_LIBS            "Build shared libraries"                                                ON )
 
 set (CMAKE_CXX_STANDARD 14)
@@ -13,7 +12,7 @@ if ( NOT DEFINED CMAKE_BUILD_TYPE )
    set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 endif ()
 
-project ( otagrum CXX )
+project (otagrum)
 
 string ( TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME )
 
@@ -59,6 +58,7 @@ if (BUILD_PYTHON)
   endif ()
   if (SWIG_FOUND)
     include (${SWIG_USE_FILE})
+    include (TargetLinkLibrariesWithDynamicLookup)
   endif ()
 
   find_package ( PythonInterp )
@@ -133,6 +133,10 @@ if(POLICY CMP0042)
   # Set MACOSX_RPATH to ON
   cmake_policy(SET CMP0042 NEW)
 endif()
+if(POLICY CMP0078)
+  # Set MACOSX_RPATH to ON
+  cmake_policy(SET CMP0078 NEW)
+endif()
 
 # Some useful macros to ease CMakeLists.txt file writing
 set ( SOURCEFILES "" CACHE INTERNAL "List of source files to compile" )
@@ -165,10 +169,10 @@ set ( CPACK_PACKAGE_VERSION_MAJOR 0              )
 set ( CPACK_PACKAGE_VERSION_MINOR 2              )
 set ( CPACK_PACKAGE_VERSION_PATCH 0               )
 set ( CPACK_SOURCE_GENERATOR      "TGZ;TBZ2"     )
-set ( CPACK_BINARY_STGZ           "OFF"          )
-set ( CPACK_BINARY_TBZ2           "ON"           )
-set ( CPACK_BINARY_TGZ            "ON"           )
-set ( CPACK_BINARY_TZ             "OFF"          )
+set (CPACK_BINARY_STGZ    OFF CACHE BOOL "STGZ")
+set (CPACK_BINARY_TBZ2    ON  CACHE BOOL "TBZ2")
+set (CPACK_BINARY_TGZ     ON  CACHE BOOL "TGZ" )
+set (CPACK_BINARY_TZ      OFF CACHE BOOL "TZ"  )
 set ( CPACK_SOURCE_IGNORE_FILES "/.git;/build;.*~;${CPACK_SOURCE_IGNORE_FILES}" )
 set ( PACKAGE_NAME           ${CPACK_PACKAGE_NAME} )
 set ( PACKAGE_VERSION        ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR} )
