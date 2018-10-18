@@ -286,7 +286,6 @@ gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) {
   }
   while (!queue.empty()) {
     Triplet t = queue.pop();
-    std::cout << t.x << "-" << t.y << "-" << t.z << std::endl;
     if (!(cpdag.existsArc(t.y, t.x) || cpdag.existsArc(t.y, t.z))) {
       // we can add the v-structure
       cpdag.eraseEdge(gum::Edge(t.x, t.y));
