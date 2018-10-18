@@ -43,16 +43,20 @@
 
 namespace OTAGRUM {
 
+
 gum::Potential<double>
 Utils::Discretize(const OT::DistributionImplementation &distribution,
-           const gum::DiscretizedVariable<double> &v) {
+                  const gum::DiscretizedVariable<double> &v) {
   return Discretize(OT::Distribution(distribution), v);
 }
 
+
 /* Helper function to discretize a continuous distribution */
-gum::Potential<double> Utils::Discretize(const OT::Distribution &distribution,
-                                  const gum::DiscretizedVariable<double> &v,
-                                  bool isTruncated) {
+gum::Potential<double>
+Utils::Discretize(const OT::Distribution &distribution,
+                  const gum::DiscretizedVariable<double> &v,
+                  bool isTruncated)
+{
   if (distribution.getDimension() != 1)
     throw OT::InvalidArgumentException(HERE)
         << "Error: cannot discretize a distribution with dimension > 1 (in "
@@ -94,11 +98,12 @@ gum::Potential<double> Utils::Discretize(const OT::Distribution &distribution,
   p.add(v);
   p.fillWith(result);
 
-  std::cout<<p<<std::endl;
   return p;
 }
 
-OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot) {
+
+OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
+{
   if (pot.nbrDim() < 1) {
     throw OT::InvalidArgumentException(HERE)
         << "Error: potential must have at least one dimension"
@@ -118,10 +123,7 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot) {
     OT::Point p;
     if (var.varType() == gum::VarType::Discretized) {
       kind.add(1); // Continuous
-      std::cout << var << std::endl;
-      std::cout << dynamic_cast<const gum::IDiscretizedVariable &>(var)
-                       .ticksAsDoubles()
-                << std::endl;
+
       for (const auto tick :
            dynamic_cast<const gum::IDiscretizedVariable &>(var)
                .ticksAsDoubles()) {
@@ -145,17 +147,19 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot) {
 
   MixedHistogramUserDefined distribution(ticksCollection, kind,
                                          probabilityTable);
+  distribution.setDescription(description);
   return distribution;
 }
 
-OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot) {
+
+OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot)
+{
   if (pot.nbrDim() != 1) {
     throw OT::InvalidArgumentException(HERE)
         << "Error: no marginal with dimension != 1 in " << pot.toString();
   }
 
   const auto &v = pot.variable(0);
-  OT::Description description(1, v.name());
 
   gum::Instantiation inst(pot);
   OT::UnsignedInteger collectionSize = v.domainSize();
@@ -165,6 +169,8 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot) {
   for (inst.setFirst(); !inst.end(); ++inst) {
     probas[inst.val(0)] = pot.get(inst);
   }
+
+  OT::Distribution res;
 
   switch (v.varType()) {
   case gum::VarType::Discretized: {
@@ -176,9 +182,8 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot) {
       auto i = inst.val(0);
       ws[i] = (vv.tick(i + 1) - vv.tick(i));
     }
-    auto res = OT::Histogram(vv.tick(0), ws, probas);
-    res.setDescription(description);
-    return res;
+    res = OT::Histogram(vv.tick(0), ws, probas);
+    break;
   }
   case gum::VarType::Range: {
     // we use the range to create a meaningful UserDefined distribution
@@ -187,9 +192,8 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot) {
     OT::Sample val(vv.domainSize(), 1);
     for (auto i = vv.minVal(); i <= vv.maxVal(); i++)
       val[i - vv.minVal()][0] = i;
-    auto res = OT::UserDefined(val, probas);
-    res.setDescription(description);
-    return res;
+    res = OT::UserDefined(val, probas);
+    break;
   }
   case gum::VarType::Labelized: {
     // if at least one label can not be parser as double,
@@ -212,16 +216,21 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot) {
       for (unsigned long i = 0; i < v.domainSize(); i++)
         val[i][0] = i;
 
-    auto res = OT::UserDefined(val, probas);
-    res.setDescription(description);
-    return res;
+    res = OT::UserDefined(val, probas);
+    break;
   }
   default:
     throw OT::InternalException(HERE) << "This case should never happen";
   }
+
+  const OT::Description description(1, v.name());
+  res.setDescription(description);
+  return res;
 }
 
-OT::Indices Utils::FromNodeSet(const gum::NodeSet &clique) {
+
+OT::Indices Utils::FromNodeSet(const gum::NodeSet &clique)
+{
   auto indices = OT::Indices();
 
   for (auto nod : clique)
@@ -229,6 +238,7 @@ OT::Indices Utils::FromNodeSet(const gum::NodeSet &clique) {
 
   return indices;
 }
+
 
 Utils::Utils() {}
 

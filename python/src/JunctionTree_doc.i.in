@@ -3,7 +3,7 @@
 
 Parameters
 ----------
-jt : :py:class:`pyAgrum.JunctionTree`
+jt : :py:class:`pyAgrum.CliqueGraph`
     Junction tree
 names : sequence of str
     Node names"
