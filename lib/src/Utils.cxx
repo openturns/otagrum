@@ -63,8 +63,8 @@ Utils::Discretize(const OT::Distribution &distribution,
         << distribution.__repr__() << ".";
 
   if (!isTruncated) {
-    double lowerBound(distribution.getRange().getLowerBound()[0]);
-    double upperBound(distribution.getRange().getUpperBound()[0]);
+    double lowerBound = distribution.getRange().getLowerBound()[0];
+    double upperBound = distribution.getRange().getUpperBound()[0];
 
     if (lowerBound < v.tick(0) || upperBound > v.tick(v.domainSize()))
       throw OT::InvalidArgumentException(HERE)
@@ -74,7 +74,7 @@ Utils::Discretize(const OT::Distribution &distribution,
   }
 
   std::vector<double> result(v.domainSize());
-  double sum(0.0);
+  double sum = 0.0;
   for (gum::Size i = 0; i < v.domainSize(); ++i) {
     result[i] =
         distribution.computeProbability(OT::Interval(v.tick(i), v.tick(i + 1)));

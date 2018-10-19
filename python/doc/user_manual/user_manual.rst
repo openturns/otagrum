@@ -7,8 +7,8 @@ API
     :toctree: _generated/
     :template: class.rst_t
 
+    Utils
+    MixedHistogramUserDefined
     ContinuousPC
     ContinuousTTest
-    MixedHistogramUserDefined
     JunctionTree
-    Utils

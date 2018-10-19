@@ -2,45 +2,74 @@
 "Utility functions"
 
 %feature("docstring") OTAGRUM::Utils::Discretize
-"Discretize
+"Discretize a continous distribution.
 
-Discretize a variable
+Compute a probability table according to the domains defined
+in a discretized aGrUM variable and a continous OpenTURNS distribution.
+
+.. math::
+
+    p_i = \Prob{t_i < X_i \leq t_i} \forall i \in [\![1, n]\!]
+
+where :math:`$t_i$` are the aGrUM ticks, and :math:`$X$` is distributed according to the OpenTURNS distribution.
 
 Parameters
 ----------
 distribution : :py:class:`openturns.Distribution`
-    The distribution of the variable
+    An continous 1-d distribution
 v : :py:class:`pyAgrum.pyAgrum.DiscretizedVariable_double`
     A discrete variable
 
 Returns
 -------
 p : :py:class:`pyAgrum.pyAgrum.Potential_double`
-    The potential"
+    The resulting potential
+
+Examples
+--------
+>>> import pyAgrum as gum
+>>> import openturns as ot
+>>> import otagrum
+>>> height = gum.DiscretizedVariable('Height', 'plant growth', [0.0, 10.0, 20.0, 30.0])
+>>> height_dist = ot.Normal(18.0, 8.0)
+>>> str(otagrum.Utils.Discretize(height_dist, height))
+'<Height:[0;10[> :: 0.158997 /<Height:[10;20[> :: 0.477813 /<Height:[20;30]> :: 0.36319'"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::Utils::FromMarginal
-"FromMarginal
+"Convert an 1-d probability table to distribution.
 
-Potential to distribution conversion.
+Converts an univariate aGrUM probability table to an OpenTURNS distribution,
+either :py:class:`openturns.Histogram` or :py:class:`openturns.UserDefined`.
 
 Parameters
 ----------
 p : :py:class:`pyAgrum.pyAgrum.Potential_double`
-    The potential
+    A potential with one variable.
 
 Returns
 -------
 distribution : :py:class:`openturns.Distribution`
-    The distribution"
+    A distribution
+
+Examples
+--------
+>>> import pyAgrum as gum
+>>> import otagrum
+>>> light = gum.LabelizedVariable('Light', 'quality of light', 0).addLabel('Dim').addLabel('Bright')
+>>> pot = gum.Potential().add(light)
+>>> pot[:]= [0.25, 0.75]
+>>> str(otagrum.Utils.FromMarginal(pot))
+'UserDefined({x = [0], p = 0.25}, {x = [1], p = 0.75})'"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::Utils::FromPotential
-"FromPotential
+"Convert an n-d probability table to distribution.
 
-Potential to distribution conversion.
+Converts a multivariate aGrUM probability table to an OpenTURNS distribution,
+using :class:`~otagrum.MixedHistogramUserDefined`
 
 Parameters
 ----------
@@ -50,5 +79,18 @@ p : :py:class:`pyAgrum.pyAgrum.Potential_double`
 Returns
 -------
 distribution : :py:class:`openturns.Distribution`
-    The distribution"
+    A distribution
 
+Examples
+--------
+>>> import pyAgrum as gum
+>>> import otagrum
+>>> light = gum.LabelizedVariable('Light', 'light', 0).addLabel('Dim').addLabel('Bright')
+>>> moisture = gum.LabelizedVariable('Moisture', 'moisture', 0).addLabel('Dry').addLabel('Wet')
+>>> pot = gum.Potential().add(light).add(moisture)
+>>> pot[{'Light': 'Dim',    'Moisture': 'Dry'}] = 0.3
+>>> pot[{'Light': 'Dim',    'Moisture': 'Wet'}] = 0.2
+>>> pot[{'Light': 'Bright', 'Moisture': 'Dry'}] = 0.1
+>>> pot[{'Light': 'Bright', 'Moisture': 'Wet'}] = 0.4
+>>> str(otagrum.Utils.FromPotential(pot))
+'MixedHistogramUserDefined(mixture = Mixture((w = 1, d = UserDefined({x = [0,0], p = 0.3}, {x = [0,1], p = 0.2}, {x = [1,1], p = 0.4}, {x = [1,0], p = 0.1}))))'"
