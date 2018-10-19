@@ -22,6 +22,17 @@ The manipulation of a Bayesian network is called *inference*.
 Efficient algorithms exist that perform inference and learning of Bayesian networks.
 
 
+What is otagrum ?
+-----------------
+
+The otagrum module is the link between Bayesian networks built with aGrUM and distributions defined with OpenTURNS.
+
+It offers the ability to:
+
+  - define discretized aGrUM distributions from OpenTURNS distributions
+  - extract marginal distributions of aGrUM Bayesian networks as OpenTURNS distributions
+
+
 User documentation
 ------------------
 
