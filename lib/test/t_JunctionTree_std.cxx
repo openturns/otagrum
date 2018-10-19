@@ -60,7 +60,7 @@ void testNotOKForSize() {
   try {
     auto jt = OTAGRUM::JunctionTree(*jtagr, names);
     std::cout << "testForSize : ERROR\n";
-  } catch (OT::InvalidArgumentException) {
+  } catch (OT::InvalidArgumentException &) {
     std::cout << "testForSize : OK\n";
   }
 }
@@ -79,7 +79,7 @@ void testNotOKForHole() {
   try {
     auto jt = OTAGRUM::JunctionTree(*jtagr, names);
     std::cout << " testForHole : ERROR\n";
-  } catch (OT::InvalidArgumentException) {
+  } catch (OT::InvalidArgumentException &) {
     std::cout << "testForHole : OK\n";
   }
 }

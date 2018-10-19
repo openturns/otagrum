@@ -64,7 +64,7 @@ public:
 };
 } // namespace gum
 
-std::ostream &operator<<(std::ostream &aStream, const Triplet &i) {
+inline std::ostream &operator<<(std::ostream &aStream, const Triplet &i) {
   aStream << i.toString();
   return aStream;
 }

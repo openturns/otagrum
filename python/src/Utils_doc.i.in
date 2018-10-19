@@ -9,7 +9,7 @@ in a discretized aGrUM variable and a continous OpenTURNS distribution.
 
 .. math::
 
-    p_i = \Prob{t_i < X_i \leq t_i} \forall i \in [\![1, n]\!]
+   \big\{ p_i \big\} = \big\{ \Prob{t_i < X \leq t_{i+1}}, i \in \left[ 1, n \right] \big\}
 
 where :math:`$t_i$` are the aGrUM ticks, and :math:`$X$` is distributed according to the OpenTURNS distribution.
 
@@ -38,7 +38,7 @@ Examples
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::Utils::FromMarginal
-"Convert an 1-d probability table to distribution.
+"Convert an 1-d probability table to a distribution.
 
 Converts an univariate aGrUM probability table to an OpenTURNS distribution,
 either :py:class:`openturns.Histogram` or :py:class:`openturns.UserDefined`.
@@ -66,7 +66,7 @@ Examples
 // ---------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::Utils::FromPotential
-"Convert an n-d probability table to distribution.
+"Convert an n-d probability table to a distribution.
 
 Converts a multivariate aGrUM probability table to an OpenTURNS distribution,
 using :class:`~otagrum.MixedHistogramUserDefined`
