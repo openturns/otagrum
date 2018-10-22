@@ -31,8 +31,10 @@
 #include <openturns/Description.hxx>
 #include <openturns/Indices.hxx>
 
+#include "otagrum/otagrumprivate.hxx"
+
 namespace OTAGRUM {
-class JunctionTree : public OT::Object {
+class OTAGRUM_API JunctionTree : public OT::Object {
 public:
 
   JunctionTree(const gum::CliqueGraph &jt,

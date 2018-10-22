@@ -28,9 +28,11 @@
 #include "otagrum/IndicesManip.hxx"
 #include "otagrum/StratifiedCache.hxx"
 
+#include "otagrum/otagrumprivate.hxx"
+
 namespace OTAGRUM {
 
-class ContinuousTTest : public OT::Object
+class OTAGRUM_API ContinuousTTest : public OT::Object
 {
 public:
   explicit ContinuousTTest(const OT::Sample & data,

@@ -36,7 +36,7 @@
 
 namespace OTAGRUM {
 
-class Utils
+class OTAGRUM_API Utils
 {
 public:
 

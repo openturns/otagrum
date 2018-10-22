@@ -25,7 +25,7 @@
 #include <openturns/ContinuousDistribution.hxx>
 #include <openturns/Mixture.hxx>
 
-#include "otagrum/otagrprivate.hxx"
+#include "otagrum/otagrumprivate.hxx"
 
 namespace OTAGRUM {
 

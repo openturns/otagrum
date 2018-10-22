@@ -27,8 +27,10 @@
 #include <agrum/graphs/undiGraph.h>
 #include <openturns/Sample.hxx>
 
+
 namespace OTAGRUM {
-class ContinuousPC : public OT::Object
+
+class OTAGRUM_API ContinuousPC : public OT::Object
 {
 public:
   explicit ContinuousPC(const OT::Sample &data,
