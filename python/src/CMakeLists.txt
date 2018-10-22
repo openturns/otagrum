@@ -58,7 +58,7 @@ macro ( ot_add_python_module MODULENAME SOURCEFILE )
     set (module_target ${MODULENAME}_python)
   endif ()
 
-  swig_link_libraries (${MODULENAME}_python otagrum)
+  target_link_libraries (${module_target} otagrum)
 
   target_link_libraries_with_dynamic_lookup (${module_target} ${PYTHON_LIBRARIES})
 
