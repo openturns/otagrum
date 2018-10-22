@@ -8,7 +8,6 @@ install:
   - sudo apt-get -y install libopenturns-dev python-openturns cmake gfortran swig texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra python-matplotlib pandoc graphviz
   - sudo rm -r /opt/python/*
   - pip install sphinx numpydoc nbsphinx jupyter_client "Tornado<5" "ipython<7" matplotlib pydotplus --user --upgrade
-  #- git clone --depth 1 https://github.com/swig/swig.git && cd swig && ./autogen.sh && ./configure --without-alllang && make -j2 && sudo make install && cd -
   - curl -L https://github.com/swig/swig/archive/rel-3.0.12.tar.gz | tar xz && cd swig-rel-3.0.12 && ./autogen.sh && ./configure --without-alllang && make -j2 && sudo make install && cd -
   - git clone --depth 1 https://gitlab.com/agrumery/aGrUM.git && cd aGrUM && cmake -DFOR_PYTHON3=OFF -DUSE_NANODBC=OFF -DSWIG_EXECUTABLE=/usr/local/bin/swig . && make -j2 && sudo make install && cd -
 
