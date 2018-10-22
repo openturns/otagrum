@@ -18,11 +18,12 @@ ot_install_header_file ( ContinuousTTest.hxx)
 ot_install_header_file ( IndicesManip.hxx)
 ot_install_header_file ( ContinuousPC.hxx)
 
-include_directories ( ${INTERNAL_INCLUDE_DIRS} )
+include_directories (${INTERNAL_INCLUDE_DIRS})
 
-add_library ( otagrum ${SOURCEFILES} )
-if ( BUILD_SHARED_LIBS )
-  set_target_properties ( otagrum PROPERTIES COMPILE_DEFINITIONS "OTAGRUM_DLL_EXPORTS" )
+add_library (otagrum ${SOURCEFILES})
+set_target_properties (otagrum PROPERTIES POSITION_INDEPENDENT_CODE ON)
+if (BUILD_SHARED_LIBS)
+  set_target_properties (otagrum PROPERTIES COMPILE_DEFINITIONS "OTAGRUM_DLL_EXPORTS")
 endif ()
 
 if ( NOT DEFINED LIB_VERSION )
