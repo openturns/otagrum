@@ -62,18 +62,17 @@ macro ( ot_pyinstallcheck_test TESTNAME )
     set ( COMMAND "${_PRE}${COMMAND}${_POST}" )
   endif (_PRE OR _POST)
 
-  add_test ( pyinstallcheck_${TESTNAME} "sh" "-c" "${COMMAND}" )
-
-  set_tests_properties ( pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}" )
+  # pyAgrum might not be available when cross-compiling
+  if (NOT CMAKE_CROSSCOMPILING)
+    add_test (pyinstallcheck_${TESTNAME} "sh" "-c" "${COMMAND}")
+    set_tests_properties ( pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}" )
+  endif ()
   list ( APPEND PYINSTALLCHECK_TO_BE_RUN ${TESTNAME_SRC} )
   install ( FILES ${TESTNAME_SRC}
             DESTINATION ${OTAGRUM_EXAMPLE_PATH} 
             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
           )
 endmacro ( ot_pyinstallcheck_test )
-
-# pyAgrum might not be available when cross-compiling
-if (NOT CMAKE_CROSSCOMPILING)
 
 ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
@@ -82,8 +81,6 @@ ot_pyinstallcheck_test (ContinuousPC_std)
 ot_pyinstallcheck_test (JunctionTree_std)
 if (NBSPHINX_FOUND) # depends on nbconvert, nbformat
   ot_pyinstallcheck_test (notebook IGNOREOUT)
-endif ()
-
 endif ()
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
