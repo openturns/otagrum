@@ -72,6 +72,9 @@ macro ( ot_pyinstallcheck_test TESTNAME )
           )
 endmacro ( ot_pyinstallcheck_test )
 
+# pyAgrum might not be available when cross-compiling
+if (NOT CMAKE_CROSSCOMPILING)
+
 ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
 ot_pyinstallcheck_test (MixedHistogramUserDefined_std)
@@ -79,6 +82,8 @@ ot_pyinstallcheck_test (ContinuousPC_std)
 ot_pyinstallcheck_test (JunctionTree_std)
 if (NBSPHINX_FOUND) # depends on nbconvert, nbformat
   ot_pyinstallcheck_test (notebook IGNOREOUT)
+endif ()
+
 endif ()
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
