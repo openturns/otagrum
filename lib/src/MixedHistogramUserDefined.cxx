@@ -244,7 +244,8 @@ OT::Distribution MixedHistogramUserDefined::getMarginal(const OT::UnsignedIntege
     const OT::UnsignedInteger size = ticksCollection_[i].getSize();
     OT::SampleImplementation support(size, 1);
     support.setData(ticksCollection_[i]);
-    OT::UserDefined marginal(support, mixture_.getMarginal(i).getProbabilities());
+    const OT::Distribution marginalMixture(mixture_.getMarginal(i));
+    OT::UserDefined marginal(marginalMixture.getSupport(), marginalMixture.getProbabilities());
     marginal.setDescription(OT::Description(1, getDescription()[i]));
     return marginal.clone();
   }
