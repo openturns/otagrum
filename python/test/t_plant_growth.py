@@ -111,8 +111,9 @@ l_dist_wet.drawPDF()
 
 ie.addJointTarget(["Height","Moisture"])
 h_m_dist = otagrum.Utils.FromPotential(ie.jointPosterior(["Height","Moisture"]))
+print(h_m_dist)
+print(h_m_dist.getDescription())
 h_m_dist.getMarginal(0)
-
 
 
 
