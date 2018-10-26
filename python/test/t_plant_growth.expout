@@ -1,0 +1,7 @@
+moisture Antecedents=  ['Light', 'Moisture']
+Probability (height > 40cm) = 0.328571
+Probability (height > 40cm)|Light=Dim = 0.114286
+Probability (height > 40cm)|Moisture=Wet = 0.657143
+UserDefined({x = [0], p = 0.4}, {x = [1], p = 0.6})
+[Moisture,Height]
+UserDefined({x = [0], p = 0.5}, {x = [1], p = 0.5})
