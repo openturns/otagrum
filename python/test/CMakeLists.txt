@@ -82,6 +82,7 @@ ot_pyinstallcheck_test (JunctionTree_std)
 if (NBSPHINX_FOUND) # depends on nbconvert, nbformat
   ot_pyinstallcheck_test (notebook IGNOREOUT)
 endif ()
+ot_pyinstallcheck_test (plant_growth)
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
                     DEPENDS ${PYINSTALLCHECK_TO_BE_RUN}

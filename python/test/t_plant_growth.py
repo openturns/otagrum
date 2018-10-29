@@ -78,7 +78,7 @@ bn.cpt(indexHeight)[{'Light': 'Bright', 'Moisture': 'Wet'}] = otagrum.Utils.Disc
 # Variability of the plant growth on my balcony
 ie = gum.LazyPropagation(bn)
 h_dist = otagrum.Utils.FromMarginal(ie.posterior("Height"))
-print("Probability (height > 40cm) = ", 1.0 - h_dist.computeCDF(40.0))
+print("Probability (height > 40cm) = {:.6g}".format(1.0 - h_dist.computeCDF(40.0)))
 h_dist.drawPDF()
 
 
@@ -87,7 +87,7 @@ ie = gum.LazyPropagation(bn)
 ie.setEvidence({'Light':'Dim'})
 h_dist_dim = otagrum.Utils.FromMarginal(ie.posterior("Height"))
 h_dist_dim.setDescription(['Height|Light=Dim'])
-print("Probability (height > 40cm)|Light=Dim = ", 1.0 - h_dist_dim.computeCDF(40.0))
+print("Probability (height > 40cm)|Light=Dim = {:.6g}".format(1.0 - h_dist_dim.computeCDF(40.0)))
 h_dist_dim.drawPDF()
 
 
@@ -96,7 +96,7 @@ ie = gum.LazyPropagation(bn)
 ie.setEvidence({'Moisture':'Wet'})
 h_dist_wet = otagrum.Utils.FromMarginal(ie.posterior("Height"))
 h_dist_wet.setDescription(['Height|Moisture=Wet'])
-print("Probability (height > 40cm)|Moisture=Wet = ", 1.0 - h_dist_wet.computeCDF(40.0))
+print("Probability (height > 40cm)|Moisture=Wet = {:.6g}".format(1.0 - h_dist_wet.computeCDF(40.0)))
 h_dist_wet.drawPDF()
 
 
@@ -107,20 +107,12 @@ l_dist_wet.drawPDF()
 
 
 
-
-
+# Get the joint distribution [H, M]
+ie = gum.LazyPropagation(bn)
 ie.addJointTarget(["Height","Moisture"])
+ie.makeInference()
 h_m_dist = otagrum.Utils.FromPotential(ie.jointPosterior(["Height","Moisture"]))
-print(h_m_dist)
 print(h_m_dist.getDescription())
-h_m_dist.getMarginal(0)
-
-
-
-
-
-
-
-
+print(h_m_dist.getMarginal(0))
 
 
