@@ -34,8 +34,8 @@ class OTAGRUM_API ContinuousPC : public OT::Object
 {
 public:
   explicit ContinuousPC(const OT::Sample &data,
-                        OT::UnsignedInteger maxParents = 5,
-                        double alpha = 0.1);
+                        const OT::UnsignedInteger maxParents = 5,
+                        const double alpha = 0.1);
 
   gum::UndiGraph getSkeleton();
   gum::MixedGraph getPDAG(const gum::UndiGraph &g);
