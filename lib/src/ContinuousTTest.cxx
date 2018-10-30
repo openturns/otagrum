@@ -42,19 +42,12 @@ ContinuousTTest::ContinuousTTest(const OT::Sample & data,
   data_ = (data.rank() + 1.0) / data.getSize();
 }
 
-double ContinuousTTest::z2p(const double z) {
-  return OT::DistFunc::pNormal(-z);
-}
 
-double ContinuousTTest::z2p_interval(const double z) {
-  return OT::DistFunc::pNormal(z) - OT::DistFunc::pNormal(-z);
-}
-
-OT::UnsignedInteger ContinuousTTest::getK(const OT::Sample & sample) {
+OT::UnsignedInteger ContinuousTTest::GetK(const OT::Sample & sample) {
   return OT::UnsignedInteger(1.0 + std::pow(sample.getSize(), 2.0 / (4.0 + sample.getDimension())));
 }
 
-std::string ContinuousTTest::getKey(const OT::Indices & l,
+std::string ContinuousTTest::GetKey(const OT::Indices & l,
                                      const OT::UnsignedInteger k) {
   //@todo : sorting l before computing the key ?
   return l.__str__() + ":" + std::to_string(k);
@@ -70,10 +63,10 @@ OT::Point ContinuousTTest::getPDF(const OT::Indices & l,
   if (k == 0) {
     // k =BernsteinCopulaFactory::ComputeLogLikelihoodBinNumber(sample,2);
     // k =BernsteinCopulaFactory::ComputeAMISEBinNumber(sample,2);
-    k = getK(data_);
+    k = GetK(data_);
   }
 
-  const auto key = getKey(l, k);
+  const auto key = GetKey(l, k);
   if (cache_.exists(key)) {
     return cache_.get(key);
   }
@@ -92,9 +85,12 @@ OT::Point ContinuousTTest::getPDF(const OT::Indices & l,
 }
 
 std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
-ContinuousTTest::getPDFs(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z, const OT::Indices & X) const {
+ContinuousTTest::getPDFs(const OT::UnsignedInteger Y,
+                         const OT::UnsignedInteger Z,
+                         const OT::Indices & X) const
+{
   //@todo how to be smart for k ?
-  OT::UnsignedInteger k = getK(data_);
+  OT::UnsignedInteger k = GetK(data_);
   OT::Point pdf1(getPDF(X, k));
   OT::Point pdf2(getPDF(X + Y, k));
   OT::Point pdf3(getPDF(X + Z, k));
@@ -114,29 +110,31 @@ double ContinuousTTest::getAlpha() const
 
 inline double pPar1MoinsP(const double p) { return p * (1 - p); }
 
-double ContinuousTTest::getTTest(const OT::UnsignedInteger Y, const OT::UnsignedInteger Z,
-                                 const OT::Indices & X) const {
-  OT::UnsignedInteger k;
+double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
+                                 const OT::UnsignedInteger Z,
+                                 const OT::Indices & X) const
+{
+  OT::UnsignedInteger k = 0;
 
-  auto dY = data_.getMarginal(Y);
-  auto dZ = data_.getMarginal(Z);
-  auto dX = data_.getMarginal(X);
+  const auto dY = data_.getMarginal(Y);
+  const auto dZ = data_.getMarginal(Z);
+  const auto dX = data_.getMarginal(X);
 
   OT::Point fX, fYX, fZX, fYZX;
   std::tie(fX, fYX, fZX, fYZX, k) = getPDFs(Y, Z, X);
 
-  auto d = double(X.getSize()); // such that d/2 is double as well
-  auto N = data_.getSize();
+  const auto d = double(X.getSize()); // such that d/2 is double as well
+  const auto N = data_.getSize();
 
-  auto C1 = std::pow(2, -(d + 2)) * std::pow(M_PI, (d + 2) / 2);
-  auto sigma = std::sqrt(2) * std::pow(M_PI / 4, (d + 2) / 2);
+  const auto C1 = std::pow(2, -(d + 2)) * std::pow(M_PI, (d + 2) / 2);
+  const auto sigma = std::sqrt(2) * std::pow(M_PI / 4, (d + 2) / 2);
 
-  double H = 0;
-  double B1 = 0;
-  double B2 = 0;
-  double B3 = 0;
+  double H = 0.0;
+  double B1 = 0.0;
+  double B2 = 0.0;
+  double B3 = 0.0;
   const double facteurpi = std::pow(4 * M_PI, -(d + 1) / 2);
-  double ratioH;
+  double ratioH = 0.0;
   for (unsigned int i = 0; i < N; ++i) {
     ratioH = fYZX[i];
     if (X.getSize() >= 1) {
@@ -145,7 +143,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y, const OT::Unsigned
     //@todo anything else for 1e-10 (or even small value)
     if (ratioH > 1e-20) {
       H += std::pow(1 - std::sqrt(fYX[i] * fZX[i] / ratioH), 2);
-      double vfx;
+      double vfx = 0.0;
       double gX = 1.0;
       if (d != 0) {
         for (int j = 0; j < d; ++j) {
@@ -178,21 +176,21 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y, const OT::Unsigned
 
 double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y, OT::UnsignedInteger Z,
                                                    const OT::Indices &X) const {
-  OT::UnsignedInteger k;
+  OT::UnsignedInteger k = 0;
 
-  auto dY = data_.getMarginal(Y);
-  auto dZ = data_.getMarginal(Z);
-  auto dX = data_.getMarginal(X);
+  const auto dY = data_.getMarginal(Y);
+  const auto dZ = data_.getMarginal(Z);
+  const auto dX = data_.getMarginal(X);
 
   OT::Point fX, fYX, fZX, fYZX;
   std::tie(fX, fYX, fZX, fYZX, k) = getPDFs(Y, Z, X);
 
-  auto d = double(X.getSize()); // such that d/2 is double as well
-  auto N = data_.getSize();
+  const auto d = double(X.getSize()); // such that d/2 is double as well
+  const auto N = data_.getSize();
 
-  auto sigma = std::sqrt(2) * std::pow(M_PI / 4, (d + 2) / 2);
+  const auto sigma = std::sqrt(2) * std::pow(M_PI / 4, (d + 2) / 2);
 
-  double H = 0;
+  double H = 0.0;
 
   for (unsigned int i = 0; i < N; ++i) {
     double ratioH = fYZX[i];
@@ -206,7 +204,7 @@ double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y, OT::Un
     //}
   }
 
-  auto T = 4 * H * N - pow(k, d / 2) * std::pow(k, -(d + 2) / 2) / sigma;
+  const auto T = 4 * H * N - pow(k, d / 2) * std::pow(k, -(d + 2) / 2) / sigma;
   return T;
 }
 
@@ -217,7 +215,7 @@ ContinuousTTest::isIndep(const OT::UnsignedInteger Y, const OT::UnsignedInteger 
 
 std::tuple<double, double, bool>
 ContinuousTTest::isIndepFromTest(const double t, const double alpha) {
-  double p = z2p_interval(t);
+  const double p = OT::DistFunc::pNormal(t) - OT::DistFunc::pNormal(-t);
   return std::make_tuple(t, p, p >= alpha);
 }
 

@@ -78,16 +78,16 @@ namespace OTAGRUM {
  * @param alpha : the threshold for the hypothesis test
  */
 ContinuousPC::ContinuousPC(const OT::Sample &data,
-                           OT::UnsignedInteger maxParents, double alpha)
+                           const OT::UnsignedInteger maxParents,
+                           const double alpha)
     : OT::Object()
     , maxParents_(maxParents)
-    , tester_{data}
+    , verbose_(false)
+    , optimalPolicy_(true)
+    , tester_(data)
 {
   tester_.setAlpha(alpha);
-  optimalPolicy_ = true;
-  verbose_ = false;
-  removed_.reserve(data.getDimension() * data.getDimension() /
-                   3); // a rough estimation ...
+  removed_.reserve(data.getDimension() * data.getDimension() / 3); // a rough estimation ...
 }
 
 /**
@@ -109,10 +109,10 @@ std::tuple<bool, double, double, OT::Indices>
 ContinuousPC::bestSeparator(const gum::UndiGraph &g, gum::NodeId y,
                              gum::NodeId z, const OT::Indices &neighbours,
                              OT::UnsignedInteger n) {
-  double t;
-  double p;
-  double pmax = -1;
-  double tmax;
+  double t = 0.0;
+  double p = 0.0;
+  double pmax = -1.0;
+  double tmax = 0.0;
   bool res = false;
 
   OT::Indices bestsep;
@@ -159,7 +159,7 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
     return false;
 
   gum::PriorityQueue<gum::Edge, double> queue;
-  bool atLeastOneInThisStep;
+  bool atLeastOneInThisStep = false;
 
   do {
     atLeastOneInThisStep = false;
@@ -171,7 +171,7 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
 
       if (nei.size() >= n) {
         bool resYZ = false;
-        double pYZ, tYZ;
+        double pYZ = 0.0, tYZ = 0.0;
         OT::Indices sepYZ;
 
         std::tie(resYZ, tYZ, pYZ, sepYZ) =
@@ -262,8 +262,8 @@ gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) {
     if (g.neighbours(x).size() > 1) {
       IndicesCombinationIterator couple(Utils::FromNodeSet(g.neighbours(x)), 2);
       for (couple.setFirst(); !couple.isLast(); couple.next()) {
-        bool ok;
-        double t, p;
+        bool ok = false;
+        double t = 0.0, p = 0.0;
         const gum::NodeId y = couple.current()[0];
         const gum::NodeId z = couple.current()[1];
         if (!g.existsEdge(y, z)) { // maybe unshielded collider
