@@ -24,6 +24,8 @@ else:
             ipynb = os.path.join(root, filename)
             if 'ipynb_checkpoints' in ipynb:  # exclude automatic backups
                 continue
+            if 'torque' in ipynb:  # timeout
+                continue
             ipynbs.append(ipynb)
 
 n_fail = 0
