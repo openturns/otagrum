@@ -9,6 +9,7 @@ API
 
     Utils
     MixedHistogramUserDefined
+    JunctionTreeBernsteinCopula
     ContinuousPC
     ContinuousTTest
     JunctionTree
