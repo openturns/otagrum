@@ -40,21 +40,21 @@ public:
   JunctionTree(const gum::CliqueGraph &jt,
                const std::vector<std::string> &names);
 
-  OT::UnsignedInteger getSize();
+  OT::UnsignedInteger getSize() const;
 
-  OT::Description getDescription();
+  OT::Description getDescription() const;
 
-  OT::Indices getClique(gum::NodeId nod);
-  OT::Indices getSeparator(gum::Edge edge);
+  OT::Indices getClique(gum::NodeId nod) const;
+  OT::Indices getSeparator(gum::Edge edge) const;
 
-  const gum::NodeSet &getNeighbours(gum::NodeId id);
-  gum::EdgeSet getEdges();
-  gum::NodeSet getNodes();
+  const gum::NodeSet &getNeighbours(gum::NodeId id) const;
+  gum::EdgeSet getEdges() const;
+  gum::NodeSet getNodes() const;
 
-  OT::Collection<OT::Indices> getCliquesCollection();
-  OT::Collection<OT::Indices> getSeparatorCollection();
+  OT::Collection<OT::Indices> getCliquesCollection() const;
+  OT::Collection<OT::Indices> getSeparatorsCollection() const;
 
-  JunctionTree getMarginal(OT::Indices indices);
+  JunctionTree getMarginal(OT::Indices indices) const;
 
   OT::String __str__(const OT::String & offset = "") const;
 
@@ -62,7 +62,7 @@ private:
   gum::JunctionTree jt_;
   OT::Description map_;
 
-  void checkConsistency();
+  void checkConsistency() const;
 
 };
 
