@@ -84,6 +84,7 @@ ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
                       ContinuousTTest.i ContinuousTTest_doc.i.in
                       JunctionTree.i JunctionTree_doc.i.in
                       Utils.i Utils_doc.i.in
+                      JunctionTreeBernsteinCopula.i JunctionTreeBernsteinCopula_doc.i.in
                     )
 
 

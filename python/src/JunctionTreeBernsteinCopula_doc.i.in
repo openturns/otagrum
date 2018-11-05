@@ -1,0 +1,73 @@
+%feature("docstring") OTAGRUM::JunctionTreeBernsteinCopula
+"JunctionTreeBernsteinCopula distribution
+
+Parameters
+----------
+junctionTree : a :class:`~otagrum.JunctionTree`
+    The junction tree describing the dependence structure of the copula.
+cliquesCollection : sequence of sequences of int
+    For each clique of the junction tree, the collection of global indices of its
+    associated variables.
+separatorsCollection : sequence of sequences of int
+    For each separator of the junction tree, the collection of global indices of
+    its associated variables.
+copulaSample : a 2-d sequence of float
+    The sample defining the copula
+binNumber : int
+    The common number of bins for all the Bernstein copulas involved in modelling
+    cliques and separators copulas.
+isCopulaSample : bool
+    Flag to tell if the given sample is already in the normalized rank space.
+
+Notes
+-----    
+This class allows to build a nonparametric copula from a given sample, a bin count
+and a junction tree descibing the conditional independencies in the data. It is
+based on a Bernstein estimation of each sub-copulas of the model.
+
+Examples
+--------
+>>> import openturns as ot
+>>> import otagrum
+>>> cliquesCollection = [[1,2],[3,4],[0,1],[2,3]]
+>>> separatorsCollection = [[1],[2],[3]]
+>>> sample = ot.Normal(5).getSample(1000)
+>>> binNumber = 5
+>>> copula = otagrum.JunctionTreeBernsteinCopula(cliquesCollection, separatorsCollection, sample, binNumber, False)
+>>> realization = copula.getRealization()
+>>> pdf = copula.computePDF(realization)
+"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTreeBernsteinCopula::getCopulaSample
+"Accessor to the sample defining the copula.
+
+Returns
+-------
+copulaSample : :py:class:`openturns.Sample`
+    Sample in the normalized rank space."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTreeBernsteinCopula::setCopulaSample
+"Accessor to the sample defining the copula.
+
+Parameters
+----------
+copulaSample : 2-d sequence of float
+    The sample defining the copula
+isCopulaSample : bool
+    Flag to tell if the given sample is already in the normalized rank space.
+"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::JunctionTreeBernsteinCopula::getBinNumber
+"Bin number accessor
+
+Returns
+-------
+binNumber : int
+    The number of bins common to all the Bernstein copulas in the copula.
+"

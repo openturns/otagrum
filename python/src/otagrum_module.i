@@ -26,5 +26,6 @@
 %include Utils.i
 %include MixedHistogramUserDefined.i
 %include JunctionTree.i
+%include JunctionTreeBernsteinCopula.i
 %include ContinuousTTest.i
 %include ContinuousPC.i

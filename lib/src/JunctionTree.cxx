@@ -39,7 +39,7 @@ JunctionTree::JunctionTree(const gum::CliqueGraph &jt,
   checkConsistency();
 }
 
-void JunctionTree::checkConsistency() {
+void JunctionTree::checkConsistency() const {
   // checks if names and jt are consistent (same set of nodeIds)
   gum::NodeSet s;
   for (const auto &nod : jt_.nodes())
@@ -59,41 +59,41 @@ void JunctionTree::checkConsistency() {
   }
 }
 
-OT::UnsignedInteger JunctionTree::getSize() { return map_.getSize(); }
+OT::UnsignedInteger JunctionTree::getSize() const { return map_.getSize(); }
 
-OT::Description JunctionTree::getDescription() { return map_; }
+OT::Description JunctionTree::getDescription() const { return map_; }
 
-OT::Indices JunctionTree::getClique(gum::NodeId nod) {
+OT::Indices JunctionTree::getClique(gum::NodeId nod) const {
   return Utils::FromNodeSet(jt_.clique(nod));
 }
 
-OT::Indices JunctionTree::getSeparator(gum::Edge edge) {
+OT::Indices JunctionTree::getSeparator(gum::Edge edge) const {
   return Utils::FromNodeSet(jt_.separator(edge));
 }
 
-const gum::NodeSet &JunctionTree::getNeighbours(gum::NodeId id) {
+const gum::NodeSet &JunctionTree::getNeighbours(gum::NodeId id) const {
   return jt_.neighbours(id);
 }
 
-gum::EdgeSet JunctionTree::getEdges() { return jt_.edges(); }
+gum::EdgeSet JunctionTree::getEdges() const { return jt_.edges(); }
 
-gum::NodeSet JunctionTree::getNodes() { return jt_.asNodeSet(); }
+gum::NodeSet JunctionTree::getNodes() const { return jt_.asNodeSet(); }
 
-OT::Collection<OT::Indices> JunctionTree::getCliquesCollection() {
+OT::Collection<OT::Indices> JunctionTree::getCliquesCollection() const {
   OT::Collection<OT::Indices> res;
   for (const auto &cliq : jt_.nodes())
     res.add(getClique(cliq));
   return res;
 }
 
-OT::Collection<OT::Indices> JunctionTree::getSeparatorCollection() {
+OT::Collection<OT::Indices> JunctionTree::getSeparatorsCollection() const {
   OT::Collection<OT::Indices> res;
   for (const auto &edg : jt_.edges())
     res.add(getSeparator(edg));
   return res;
 }
 
-JunctionTree JunctionTree::getMarginal(OT::Indices indices) {
+JunctionTree JunctionTree::getMarginal(OT::Indices indices) const {
   // create the names and the mapping between indices and new nodeIds
   std::vector<std::string> m_names;
   std::vector<int> m_ids(getSize());

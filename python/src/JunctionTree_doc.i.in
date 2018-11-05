@@ -105,7 +105,7 @@ cliques : sequence of :py:class:`openturns.Indices`
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::JunctionTree::getSeparatorCollection
+%feature("docstring") OTAGRUM::JunctionTree::getSeparatorsCollection
 "Separators accessor
 
 Returns
