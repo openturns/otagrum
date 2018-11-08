@@ -62,7 +62,7 @@ public:
   using OT::ContinuousDistribution::operator ==;
   OT::Bool operator ==(const JunctionTreeBernsteinCopula & other) const;
 protected:
-  OT::Bool equals(const OT::ContinuousDistribution & other) const;
+  OT::Bool equals(const OT::DistributionImplementation & other) const;
 public:
 
   /** String converter */
