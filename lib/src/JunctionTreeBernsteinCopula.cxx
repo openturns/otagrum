@@ -169,7 +169,7 @@ OT::Bool JunctionTreeBernsteinCopula::operator ==(const JunctionTreeBernsteinCop
   return (cliquesCollection_ == other.cliquesCollection_) && (separatorsCollection_ == other.separatorsCollection_) && (copulaSample_ == other.copulaSample_) && (binNumber_ == other.binNumber_);
 }
 
-OT::Bool JunctionTreeBernsteinCopula::equals(const ContinuousDistribution & other) const
+OT::Bool JunctionTreeBernsteinCopula::equals(const DistributionImplementation & other) const
 {
   const JunctionTreeBernsteinCopula* p_other = dynamic_cast<const JunctionTreeBernsteinCopula*>(&other);
   return p_other && (*this == *p_other);
