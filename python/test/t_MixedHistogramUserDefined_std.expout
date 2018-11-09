@@ -3,10 +3,10 @@ Distribution  MixedHistogramUserDefined(mixture = Mixture((w = 0.0222222, d = Co
 Mean=  class=Point name=Unnamed dimension=2 values=[2.6,2.4]
 Covariance=  class=CovarianceMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[3.17333,-0.106667,-0.106667,1.50667]
 Elliptical =  False
-oneRealization= class=Point name=Unnamed dimension=2 values=[2.76561,3]
-oneSample first= class=Point name=Unnamed dimension=2 values=[0.0325028,2]  last= class=Point name=Unnamed dimension=2 values=[1.29546,3]
-mean= class=Point name=Unnamed dimension=2 values=[2.62169,2.3989]
-covariance= class=CovarianceMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[3.17553,-0.0860537,-0.0860537,0.50963]
+oneRealization= class=Point name=Unnamed dimension=2 values=[2.84136,3]
+oneSample first= class=Point name=Unnamed dimension=2 values=[3.87827,1]  last= class=Point name=Unnamed dimension=2 values=[0.931788,3]
+mean= class=Point name=Unnamed dimension=2 values=[2.61085,2.4053]
+covariance= class=CovarianceMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[3.15556,-0.103769,-0.103769,0.503882]
 Point=  class=Point name=Unnamed dimension=2 values=[1,1]
 log pdf=-3.806662
 pdf     =0.022222
