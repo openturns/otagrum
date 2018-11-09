@@ -22,7 +22,6 @@
 #include <cmath>
 #include <tuple>
 
-#include <openturns/BernsteinCopulaFactory.hxx>
 #include <openturns/EmpiricalBernsteinCopula.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/SpecFunc.hxx>
