@@ -25,7 +25,7 @@ if (aGrUM_FOUND)
   message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
 endif ()
 
-find_package (OpenTURNS 1.11 NO_MODULE REQUIRED)
+find_package (OpenTURNS 1.12 NO_MODULE REQUIRED)
 if (OPENTURNS_FOUND)
   message (STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 endif ()
