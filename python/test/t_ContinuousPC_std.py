@@ -16,20 +16,14 @@ def generateDataForSpecificInstance(size):
   return copula.getSample(size)
 
 
-size=1000
-seuil=0.85
+size = 1000
+data = generateDataForSpecificInstance(size)
 
-data=generateDataForSpecificInstance(size)
+alpha = 0.9
+binNumber = 3
 
 t0 = time()
-g=otagrum.ContinuousPC(data,alpha=seuil)
-t1=time()-t0
-print("##")
-print("## PC algorithm for size={0}, dimension={1} and seuil={2:4.3f}".format(size,data.getDimension(),seuil))
-print("##")
-#showGraph(g)
+learner = otagrum.ContinuousPC(data, binNumber, alpha)
+t1 = time() - t0
 
-#jtg=gum.JTGenerator()
-#jt=jtg.generate(g)
-##showGraph(jt)
-#learner=otagrum.ContinuousPC()
+#skel = learner.getSkeleton()

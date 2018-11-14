@@ -1,6 +1,11 @@
 %feature("docstring") OTAGRUM::JunctionTreeBernsteinCopula
 "JunctionTreeBernsteinCopula distribution
 
+Available constructors:
+    JunctionTreeBernsteinCopula(*junctionTree, copulaSample, binNumber, isCopulaSample*)
+
+    JunctionTreeBernsteinCopula(*cliquesCollection, separatorsCollection, binNumber, isCopulaSample*)
+
 Parameters
 ----------
 junctionTree : a :class:`~otagrum.JunctionTree`
@@ -36,7 +41,15 @@ Examples
 >>> copula = otagrum.JunctionTreeBernsteinCopula(cliquesCollection, separatorsCollection, sample, binNumber, False)
 >>> realization = copula.getRealization()
 >>> pdf = copula.computePDF(realization)
-"
+
+Or, using the JunctionTree constructor:
+>>> import pyAgrum as gum
+>>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
+>>> ie = gum.LazyPropagation(bn)
+>>> jtagr = ie.junctionTree()
+>>> jt = otagrum.JunctionTree(jtagr, bn.names())
+>>> copula = otagrum.JunctionTreeBernsteinCopula(jt, sample, binNumber, False)"
+
 
 // ----------------------------------------------------------------------------
 

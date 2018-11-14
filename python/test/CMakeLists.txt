@@ -49,7 +49,7 @@ macro ( ot_pyinstallcheck_test TESTNAME )
       set ( _CMD )
     endif ( ${ARG} MATCHES PRE )
   endforeach ( _ARG )
-  
+
   if (_IGNOREOUT)
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
   else (_IGNOREOUT)
@@ -72,13 +72,14 @@ macro ( ot_pyinstallcheck_test TESTNAME )
             DESTINATION ${OTAGRUM_EXAMPLE_PATH} 
             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
           )
-endmacro ( ot_pyinstallcheck_test )
+endmacro ()
 
 ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
 ot_pyinstallcheck_test (MixedHistogramUserDefined_std)
 ot_pyinstallcheck_test (ContinuousPC_std)
 ot_pyinstallcheck_test (JunctionTree_std)
+ot_pyinstallcheck_test (JunctionTreeBernsteinCopula_std)
 if (NBSPHINX_FOUND) # depends on nbconvert, nbformat
   ot_pyinstallcheck_test (notebook IGNOREOUT)
 endif ()
