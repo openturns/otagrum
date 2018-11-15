@@ -167,7 +167,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
 	    {
 	      H += std::pow(-std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator)), 2.0);
 	      double gX = 1.0;
-	      for (int j = 0; j < d; ++j)
+	      for (unsigned int j = 0; j < d; ++j)
 		gX /= pPar1MoinsP(dX(i, j));
 	      gX = std::sqrt(gX);
 	      B1 += facteurpi * gX / (std::sqrt(pPar1MoinsP(dY(i, 0))) * std::exp(logFYX[i]));
@@ -228,7 +228,7 @@ ContinuousTTest::isIndep(const OT::UnsignedInteger Y, const OT::UnsignedInteger 
 std::tuple<double, double, bool>
 ContinuousTTest::isIndepFromTest(const double t, const double alpha)
 {
-  const double p = 2.0 * OT::DistFunc::pNormal(t) - 1.0;
+  const double p = 2.0 * OT::DistFunc::pNormal(-t);
   return std::make_tuple(t, p, p >= alpha);
 }
 
