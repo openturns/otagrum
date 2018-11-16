@@ -88,10 +88,6 @@ ot_check_test ( IndicesManip_std )
 ot_check_test ( StratifiedCache_std )
 ot_check_test ( ContinuousTTest_std )
 ot_check_test ( ContinuousPC_std )
-if (NOT CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR)
-  execute_process (COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/BlockCopula_increasing_blocks_dimension_20_size_10000.csv ${CMAKE_CURRENT_BINARY_DIR})
-endif ()
-ot_check_test ( papillon_std )
 
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"
