@@ -38,7 +38,7 @@ public:
                         const double alpha = 0.1);
 
   gum::UndiGraph getSkeleton();
-  gum::MixedGraph getPDAG(const gum::UndiGraph &g);
+  gum::MixedGraph getPDAG(const gum::UndiGraph &g) const;
   gum::UndiGraph getMoralGraph(const gum::MixedGraph &g) const;
 
   void setOptimalPolicy(bool policy) { optimalPolicy_ = policy; };

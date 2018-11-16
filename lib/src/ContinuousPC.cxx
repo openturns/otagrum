@@ -252,7 +252,7 @@ gum::UndiGraph ContinuousPC::getSkeleton() {
 // for all triplet x-y-z (no edge between x and z), if y is in sepset[x,z]
 // then x->y<-z.
 // the ordering process uses the size of the p-value as a priority.
-gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) {
+gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) const {
   gum::MixedGraph cpdag;
 
   gum::PriorityQueue<Triplet, double> queue;
