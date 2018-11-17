@@ -12,9 +12,9 @@ Cache :
       |2 : [0,1]:3, [8,9]:3
 
 alpha :0.1
-ttest value: 0.24823    pvalue:0.196044    test: OK 
-ttest value: 12.764    pvalue:1    test: fail 
-ttest value: 115.958     pvalue:1   test: fail 
-ttest value: 0.488854     pvalue:0.375055   test: OK 
-ttest value: 0.238729     pvalue:0.188685   test: OK 
-ttest value: 3.25249     pvalue:0.998856   test: OK 
+ttest value: 0.248115    pvalue:0.804045    test: OK 
+ttest value: 12.7639    pvalue:2.60933e-37    test: OK 
+ttest value: 115.958     pvalue:0   test: OK
+ttest value: 0.488824     pvalue:0.624966   test: OK 
+ttest value: 0.238729     pvalue:0.811315   test: OK 
+ttest value: 3.25249     pvalue:0.00114397   test: fail 

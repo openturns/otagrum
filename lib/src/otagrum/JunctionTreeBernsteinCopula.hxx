@@ -110,9 +110,6 @@ private:
   /** Compute the range */
   void computeRange();
 
-  /** Sample a general finite integral random variable */
-  OT::UnsignedInteger generateDiscrete(OT::Point & weights) const;
-  
   /** The main parameter set of the distribution */
 
   /** Cliques and Separators as collections of Indices */

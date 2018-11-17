@@ -208,57 +208,6 @@ void JunctionTreeBernsteinCopula::computeRange()
   setRange(OT::Interval(copulaSample_.getDimension()));
 }
 
-/* Sample a general finite integral random variable */
-OT::UnsignedInteger JunctionTreeBernsteinCopula::generateDiscrete(OT::Point & weights) const
-{
-  // Setup part
-  // Weights are normalized such that they sum to n
-  const OT::UnsignedInteger n = weights.getSize();
-  OT::Indices alias(n);
-  OT::Point prob(n);
-  OT::Indices small(0);
-  OT::Indices large(0);
-  for (OT::UnsignedInteger i = 0; i < n; ++i)
-  {
-    if (weights[i] < 1.0) small.add(i);
-    else large.add(i);
-  } // i
-  OT::UnsignedInteger smallSize = small.getSize();
-  OT::UnsignedInteger largeSize = large.getSize();
-  OT::UnsignedInteger indexSmall = 0;
-  OT::UnsignedInteger indexLarge = 0;
-  while ((indexSmall < smallSize) && (indexLarge < largeSize))
-  {
-    const OT::UnsignedInteger s = small[indexSmall];
-    const OT::Scalar pS = weights[s];
-    ++indexSmall;
-    const OT::UnsignedInteger l = large[indexLarge];
-    ++indexLarge;
-    prob[s] = pS;
-    alias[s] = l;
-    weights[l] = (weights[l] + pS) - 1.0;
-    if (weights[l] < 1.0)
-      {
-	small.add(l);
-	++smallSize;
-      }
-    else
-      {
-	large.add(l);
-	++largeSize;
-      }
-  } // small and large not empty
-  for (;indexLarge < largeSize; ++indexLarge)
-    prob[large[indexLarge]] = 1.0;
-  // The next loop accurs only due to numerical instability
-  for (;indexSmall < smallSize; ++indexSmall)
-    prob[small[indexSmall]] = 1.0;
-  // Generation part
-  const OT::UnsignedInteger i = OT::RandomGenerator::IntegerGenerate(n);
-  if (OT::RandomGenerator::Generate() < prob[i]) return i;
-  return alias[i];
-}
-
 /* Get one realization of the distribution */
 OT::Point JunctionTreeBernsteinCopula::getRealization() const
 {
@@ -313,7 +262,7 @@ OT::Point JunctionTreeBernsteinCopula::getRealization() const
         totalWeight += weights[i];
       } // i
       weights *= (size / totalWeight);
-      atomIndex = generateDiscrete(weights);
+      atomIndex = OT::DistFunc::rDiscrete(weights);
     } // knownPositions.getSize() > 0
     // Simulate the conditional Bernstein copula
     for (OT::UnsignedInteger unknownComponent = 0; unknownComponent < unknownPositions.getSize(); ++unknownComponent)

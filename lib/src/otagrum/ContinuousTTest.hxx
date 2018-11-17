@@ -70,15 +70,15 @@ private:
   static std::string GetKey(const OT::Indices & l,
                             const OT::UnsignedInteger k);
 
-  /// get the pdf of Bernstein Copula on Indice l in data
+  /// get the log-pdf of Bernstein Copula on Indice l in data
   /// if k=0 : use getK_ to find the right value
-  OT::Point getPDF(const OT::Indices & l,
-                   const OT::UnsignedInteger k = 0) const;
+  OT::Point getLogPDF(const OT::Indices & l,
+		      const OT::UnsignedInteger k = 0) const;
 
-  /// get the pdfs of Berstein Copulae fX,fYX,fZX,FUZX
-  /// allows to call getPDF_ with the same k for all copulae
+  /// get the log-pdfs of Berstein Copulae fX,fYX,fZX,FUZX
+  /// allows to call getLogPDF_ with the same k for all copulae
   std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
-  getPDFs(const OT::UnsignedInteger Y,
+  getLogPDFs(const OT::UnsignedInteger Y,
           const OT::UnsignedInteger Z,
           const OT::Indices & X) const;
 
