@@ -75,7 +75,7 @@ if (BUILD_PYTHON)
       find_python_module (sphinx 1.3)
     endif ()
     if (NOT SPHINX_FOUND)
-      message (STATUS "Disabling documentation")
+      message (STATUS "Disabling documentation (need sphinx/pandoc/numpydoc/nbsphinx/ipython)")
     endif ()
   endif ()
 
