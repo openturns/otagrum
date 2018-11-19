@@ -6,7 +6,6 @@ import openturns as ot
 import otagrum
 import pyAgrum as gum
 import sys
-from openturns.viewer import View
 
 # Create variables
 light = gum.LabelizedVariable("Light", "quality of light", 0)
