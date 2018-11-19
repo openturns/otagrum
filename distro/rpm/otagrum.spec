@@ -15,7 +15,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           otagrum
-Version:        0.2.0
+Version:        0.2
 Release:        0%{?dist}
 Summary:        OpenTURNS module
 Group:          System Environment/Libraries
@@ -32,6 +32,8 @@ BuildRequires:  gcc-gfortran
 BuildRequires:  openturns-devel
 BuildRequires:  python-openturns
 BuildRequires:  python-devel
+BuildRequires:  agrum-devel
+BuildRequires:  python-agrum
 Requires:       libotagrum0
 
 %description
@@ -40,6 +42,7 @@ Template module for OpenTURNS library.
 %package -n libotagrum0
 Summary:        otagrum development files
 Group:          Development/Libraries/C and C++
+Requires:       libagrum0
 
 %description -n libotagrum0
 Dynamic libraries for otagrum.
