@@ -33,7 +33,7 @@ void test_basics() {
   try {
     std::cout << Utils::Discretize(OT::Uniform(1.0, 100.0), w) << std::endl;
     std::cout << "Failed !\n";
-  } catch (OT::InvalidArgumentException) {
+  } catch (OT::InvalidArgumentException &) {
     std::cout << "OK\n";
   }
 
