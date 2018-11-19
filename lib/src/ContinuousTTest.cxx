@@ -228,7 +228,7 @@ ContinuousTTest::isIndep(const OT::UnsignedInteger Y, const OT::UnsignedInteger 
 std::tuple<double, double, bool>
 ContinuousTTest::isIndepFromTest(const double t, const double alpha)
 {
-  const double p = 2.0 * OT::DistFunc::pNormal(-t);
+  const double p = 2.0 * OT::DistFunc::pNormal(-std::abs(t));
   return std::make_tuple(t, p, p >= alpha);
 }
 
