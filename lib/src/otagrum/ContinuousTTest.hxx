@@ -64,7 +64,7 @@ public:
 
 private:
   /// computes K from the sample properties (size, dimension, ...)
-  static OT::UnsignedInteger GetK(const OT::Sample & sample);
+  static OT::UnsignedInteger GetK(const OT::UnsignedInteger size, const OT::UnsignedInteger dimension);
 
   /// computes the key from Indices and k
   static std::string GetKey(const OT::Indices & l,
@@ -73,7 +73,7 @@ private:
   /// get the log-pdf of Bernstein Copula on Indice l in data
   /// if k=0 : use getK_ to find the right value
   OT::Point getLogPDF(const OT::Indices & l,
-		      const OT::UnsignedInteger k = 0) const;
+		      const OT::UnsignedInteger k) const;
 
   /// get the log-pdfs of Berstein Copulae fX,fYX,fZX,FUZX
   /// allows to call getLogPDF_ with the same k for all copulae

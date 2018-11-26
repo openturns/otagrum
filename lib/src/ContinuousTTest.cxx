@@ -44,9 +44,9 @@ ContinuousTTest::ContinuousTTest(const OT::Sample & data,
 }
 
 
-OT::UnsignedInteger ContinuousTTest::GetK(const OT::Sample & sample)
+  OT::UnsignedInteger ContinuousTTest::GetK(const OT::UnsignedInteger size, const OT::UnsignedInteger dimension)
 {
-  return OT::UnsignedInteger(1.0 + std::pow(sample.getSize(), 2.0 / (4.0 + sample.getDimension())));
+  return OT::UnsignedInteger(1.0 + std::pow(size, 2.0 / (4.0 + dimension)));
 }
 
 std::string ContinuousTTest::GetKey(const OT::Indices & l,
@@ -57,21 +57,16 @@ std::string ContinuousTTest::GetKey(const OT::Indices & l,
 }
 
 OT::Point ContinuousTTest::getLogPDF(const OT::Indices & l,
-				     OT::UnsignedInteger k) const
+				     const OT::UnsignedInteger k) const
 {
   if (l.getSize() == 0)
   {
     //@todo Is this correct ?
     return OT::Point(1, -std::log(data_.getSize()));
   }
-  // default value for k only depends on the size of the sample
-  if (k == 0)
-  {
-    // k =BernsteinCopulaFactory::ComputeLogLikelihoodBinNumber(sample,2);
-    // k =BernsteinCopulaFactory::ComputeAMISEBinNumber(sample,2);
-    k = GetK(data_);
-  }
-
+  if (l.getSize() == 1)
+    return OT::Point(1, 0.0);
+  
   const auto key = GetKey(l, k);
   if (cache_.exists(key)) return cache_.get(key);
   auto dL = data_.getMarginal(l);
@@ -83,7 +78,7 @@ OT::Point ContinuousTTest::getLogPDF(const OT::Indices & l,
   // auto logPDF = factory.build(dL).computeLogPDF(dL).asPoint();
 
   LOGINFO(OT::OSS() << "Compute log-PDF for k=" << k << ", l=" << l);
-  auto logPDF = OT::EmpiricalBernsteinCopula(dL, k, true).computeLogPDF(dL).asPoint();
+  auto logPDF = OT::EmpiricalBernsteinCopula(dL, k, false).computeLogPDF(dL).asPoint();
 
   cache_.set(l.getSize(), key, logPDF);
   return logPDF;
@@ -95,7 +90,9 @@ ContinuousTTest::getLogPDFs(const OT::UnsignedInteger Y,
 			    const OT::Indices & X) const
 {
   //@todo how to be smart for k ?
-  OT::UnsignedInteger k = GetK(data_);
+  // k =BernsteinCopulaFactory::ComputeLogLikelihoodBinNumber(sample,2);
+  // k =BernsteinCopulaFactory::ComputeAMISEBinNumber(sample,2);
+  OT::UnsignedInteger k = GetK(data_.getSize(), X.getSize() + 2);
   OT::Point logPDF1(getLogPDF(X, k));
   OT::Point logPDF2(getLogPDF(X + Y, k));
   OT::Point logPDF3(getLogPDF(X + Z, k));
@@ -124,10 +121,6 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
 {
   OT::UnsignedInteger k = 0;
 
-  const auto dY = data_.getMarginal(Y);
-  const auto dZ = data_.getMarginal(Z);
-  const auto dX = data_.getMarginal(X);
-
   OT::Point logFX, logFYX, logFZX, logFYZX;
   std::tie(logFX, logFYX, logFZX, logFYZX, k) = getLogPDFs(Y, Z, X);
   const auto d = X.getSize();
@@ -137,6 +130,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
   const auto sigma = M_SQRT2 * std::pow(M_PI / 4.0, 0.5 * d + 1.0);
 
   double H = 0.0;
+  double dH = 0.0;
   double B1 = 0.0;
   double B2 = 0.0;
   double B3 = 0.0;
@@ -145,19 +139,51 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
   double logDenominator = 0.0;
   if (d == 0)
     {
-      const double fX0 = std::exp(logFX[0]);
+      const double fX0 = 1.0;
       for (unsigned int i = 0; i < N; ++i)
 	{
 	  logDenominator = logFYZX[i];
 	  if (logDenominator > smallLog)
 	    {
-	      H += std::pow(-std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator)), 2.0);
-	      B1 += facteurpi / (std::sqrt(pPar1MoinsP(dY(i, 0))) * std::exp(logFYX[i]));
-	      B2 += facteurpi / (std::sqrt(pPar1MoinsP(dZ(i, 0))) * std::exp(logFZX[i]));
+	      // dH^2 = (1-sqrt(1 * 1 / (fYZX * 1)))^2
+	      //      = (1-exp(0.5*log(1 / fYZX))^2
+	      //      = (-expm1(-0.5*log(fYZX)))^2
+	      //      = (expm1(-0.5*log(fYZX)))^2
+	      dH = std::expm1(-0.5 * logDenominator);
+	      H += dH * dH;
+	      B1 += facteurpi / std::sqrt(pPar1MoinsP(data_(i, Y)));
+	      B2 += facteurpi / std::sqrt(pPar1MoinsP(data_(i, Z)));
 	      B3 += fX0;
-	    } // logDenominator > smallLog	  
+	    } // logDenominator > smallLog
+	  else
+	    LOGINFO(OT::OSS() << "Skiped contribution i=" << i << ", logDenominator=" << logDenominator);
 	} // i
     } // d == 0
+  else if (d == 1)
+    {
+      for (unsigned int i = 0; i < N; ++i)
+	{
+	  logDenominator = logFYZX[i];
+	  if (logDenominator > smallLog)
+	    {
+	      // dH^2 = (1-sqrt(fYX * fZX / (fYZX * 1)))^2
+	      //      = (1-exp(0.5*log(fYX * fZX / fYZX))^2
+	      //      = (-expm1(0.5*(log(fYX) + log(fZX) - log(fYZX))))^2
+	      //      = (expm1(0.5*(log(fYX) + log(fZX) - log(fYZX))))^2
+	      dH = std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator));
+	      H += dH * dH;
+	      double gX = 1.0;
+	      for (unsigned int j = 0; j < d; ++j)
+		gX /= pPar1MoinsP(data_(i, X[j]));
+	      gX = std::sqrt(gX);
+	      B1 += facteurpi * gX / (std::sqrt(pPar1MoinsP(data_(i, Y))) * std::exp(logFYX[i]));
+	      B2 += facteurpi * gX / (std::sqrt(pPar1MoinsP(data_(i, Z))) * std::exp(logFZX[i]));
+	      B3 += gX;
+	    } // logDenominator > smallLog
+	  else
+	    LOGDEBUG(OT::OSS() << "Skip contribution i=" << i << ", logDenominator=" << logDenominator);
+	} // i
+    } // d == 1
   else
     {
       for (unsigned int i = 0; i < N; ++i)
@@ -165,15 +191,22 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
 	  logDenominator = logFYZX[i] + logFX[i];
 	  if (logDenominator > smallLog)
 	    {
-	      H += std::pow(-std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator)), 2.0);
+	      // dH^2 = (1-sqrt(fYX * fZX / (fYZX * fX)))^2
+	      //      = (1-exp(0.5*log(fYX * fZX / (fYZX * fX)))^2
+	      //      = (-expm1(0.5*(log(fYX) + log(fZX) - log(fYZX) - log(fX))))^2
+	      //      = (expm1(0.5*(log(fYX) + log(fZX) - log(fYZX) - log(fX))))^2
+	      dH = std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator));
+	      H += dH * dH;
 	      double gX = 1.0;
 	      for (unsigned int j = 0; j < d; ++j)
-		gX /= pPar1MoinsP(dX(i, j));
+		gX /= pPar1MoinsP(data_(i, X[j]));
 	      gX = std::sqrt(gX);
-	      B1 += facteurpi * gX / (std::sqrt(pPar1MoinsP(dY(i, 0))) * std::exp(logFYX[i]));
-	      B2 += facteurpi * gX / (std::sqrt(pPar1MoinsP(dZ(i, 0))) * std::exp(logFZX[i]));
+	      B1 += facteurpi * gX / (std::sqrt(pPar1MoinsP(data_(i, Y))) * std::exp(logFYX[i]));
+	      B2 += facteurpi * gX / (std::sqrt(pPar1MoinsP(data_(i, Z))) * std::exp(logFZX[i]));
 	      B3 += std::exp(logFX[i]) * gX;
 	    } // logDenominator > smallLog
+	  else
+	    LOGDEBUG(OT::OSS() << "Skip contribution i=" << i << ", logDenominator=" << logDenominator);
 	} // i
     } // d > 0
   // mean
@@ -187,6 +220,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
 
   auto T = std::pow(1.0 / k, 0.5 * d + 1.0) / sigma;
   T *= 4 * H * N - pow(k, 0.5 * d) * (C1 * k + (B1 + B2) * std::sqrt(k) + B3);
+  LOGINFO(OT::OSS() << "Y=" << Y << ", Z=" << Z << ", X=" << X << ", T=" << T << ", H=" << H << ", B1=" << B1 << ", B2=" << B2 << ", B3=" << B3);
   return T;
 }
 
@@ -194,10 +228,6 @@ double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y, OT::Un
     const OT::Indices &X) const
 {
   OT::UnsignedInteger k = 0;
-
-  const auto dY = data_.getMarginal(Y);
-  const auto dZ = data_.getMarginal(Z);
-  const auto dX = data_.getMarginal(X);
 
   OT::Point logFX, logFYX, logFZX, logFYZX;
   std::tie(logFX, logFYX, logFZX, logFYZX, k) = getLogPDFs(Y, Z, X);
@@ -211,11 +241,15 @@ double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y, OT::Un
 
   if (d == 0)
     for (unsigned int i = 0; i < N; ++i)
-      H += std::pow(-std::expm1(0.5 * logFYX[i] + logFZX[i] - logFYZX[i]), 2.0);
+      H += std::pow(std::expm1(-0.5 * logFYZX[i]), 2.0);
+  else if (d == 1)
+    for (unsigned int i = 0; i < N; ++i)
+      H += std::pow(std::expm1(0.5 * logFYX[i] + logFZX[i] - logFYZX[i]), 2.0);
   else
     for (unsigned int i = 0; i < N; ++i)
-      H += std::pow(-std::expm1(0.5 * logFYX[i] + logFZX[i] - logFYZX[i] - logFX[i]), 2.0);
+      H += std::pow(std::expm1(0.5 * logFYX[i] + logFZX[i] - logFYZX[i] - logFX[i]), 2.0);
   const auto T = 4 * H * N - pow(k, 0.5 * d) / std::pow(k, 0.5 * d + 1.0) / sigma;
+  LOGINFO(OT::OSS() << "Y=" << Y << ", Z=" << Z << ", X=" << X << ", T=" << T << ", H=" << H);
   return T;
 }
 
