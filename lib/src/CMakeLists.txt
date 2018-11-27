@@ -4,7 +4,7 @@ ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( Utils.cxx )
 ot_add_source_file ( MixedHistogramUserDefined.cxx )
-ot_add_source_file ( JunctionTree.cxx )
+ot_add_source_file (NamedJunctionTree.cxx)
 ot_add_source_file ( StratifiedCache.cxx )
 ot_add_source_file ( ContinuousTTest.cxx )
 ot_add_source_file ( IndicesManip.cxx )

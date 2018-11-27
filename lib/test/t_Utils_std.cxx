@@ -15,11 +15,12 @@
 
 using namespace OTAGRUM;
 
-void test_basics() {
+void test_basics()
+{
   gum::DiscretizedVariable<double> v("v", "v",
-                                     std::vector<double>{0, 4, 10, 15, 30, 40});
+                                     std::vector<double> {0, 4, 10, 15, 30, 40});
   gum::DiscretizedVariable<double> w("w", "w",
-                                     std::vector<double>{-1, 4, 10, 30, 40});
+                                     std::vector<double> {-1, 4, 10, 30, 40});
 
   std::cout << "\n** From OT::Distribution to gum::Potential:\n";
 
@@ -30,10 +31,13 @@ void test_basics() {
   std::cout << pw << std::endl;
 
   std::cout << "\nCatching InvalidArgumentException for bad support :";
-  try {
+  try
+  {
     std::cout << Utils::Discretize(OT::Uniform(1.0, 100.0), w) << std::endl;
     std::cout << "Failed !\n";
-  } catch (OT::InvalidArgumentException &) {
+  }
+  catch (OT::InvalidArgumentException &)
+  {
     std::cout << "OK\n";
   }
 
@@ -50,7 +54,8 @@ void test_basics() {
   std::cout << Utils::FromMarginal(px) << std::endl;
 }
 
-void test_fromMarginal() {
+void test_fromMarginal()
+{
   {
     std::cout << "\n** From LabelizedVariable\n";
     gum::LabelizedVariable y("y", "y", 0);
@@ -92,7 +97,8 @@ void test_fromMarginal() {
   }
 }
 
-void test_fromPotential() {
+void test_fromPotential()
+{
   gum::LabelizedVariable y("y", "y", 0);
   y.addLabel("True").addLabel("Maybe").addLabel("False");
 
@@ -114,7 +120,8 @@ void test_fromPotential() {
   std::cout << "MarginalPotential 1 " << p.margSumIn({&z}) << std::endl;
 }
 
-void test_fromInference() {
+void test_fromInference()
+{
   gum::BayesNet<double> bn;
   bn.add(gum::DiscretizedVariable<double>("A", "A", {1, 1.5, 2, 2.5, 3, 4}));
   bn.add(gum::LabelizedVariable("B", "B", {"chaud", "tiede", "froid"}));
@@ -128,21 +135,22 @@ void test_fromInference() {
   ie.addTarget(1);
   ie.makeInference();
 
-  std::cout << ie.jointPosterior({0, 2})<<std::endl;
-  std::cout << Utils::FromPotential(ie.jointPosterior({0, 2}))<<std::endl;
+  std::cout << ie.jointPosterior({0, 2}) << std::endl;
+  std::cout << Utils::FromPotential(ie.jointPosterior({0, 2})) << std::endl;
 
-  std::cout << ie.posterior(0)<<std::endl;
-  std::cout << Utils::FromPotential(ie.posterior(0))<<std::endl;
+  std::cout << ie.posterior(0) << std::endl;
+  std::cout << Utils::FromPotential(ie.posterior(0)) << std::endl;
 
-  std::cout << ie.posterior(1)<<std::endl;
-  std::cout << Utils::FromPotential(ie.posterior(1))<<std::endl;
+  std::cout << ie.posterior(1) << std::endl;
+  std::cout << Utils::FromPotential(ie.posterior(1)) << std::endl;
 
-  std::cout << ie.posterior(2)<<std::endl;
-  std::cout << Utils::FromPotential(ie.posterior(2))<<std::endl;
+  std::cout << ie.posterior(2) << std::endl;
+  std::cout << Utils::FromPotential(ie.posterior(2)) << std::endl;
 
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   // test_basics();
   // test_fromMarginal();
   // test_fromPotential();

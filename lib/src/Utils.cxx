@@ -41,12 +41,14 @@
 
 #include "otagrum/MixedHistogramUserDefined.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 
 gum::Potential<double>
 Utils::Discretize(const OT::DistributionImplementation &distribution,
-                  const gum::DiscretizedVariable<double> &v) {
+                  const gum::DiscretizedVariable<double> &v)
+{
   return Discretize(OT::Distribution(distribution), v);
 }
 
@@ -62,7 +64,8 @@ Utils::Discretize(const OT::Distribution &distribution,
         << "Error: cannot discretize a distribution with dimension > 1 (in "
         << distribution.__repr__() << ".";
 
-  if (!isTruncated) {
+  if (!isTruncated)
+  {
     double lowerBound = distribution.getRange().getLowerBound()[0];
     double upperBound = distribution.getRange().getUpperBound()[0];
 
@@ -75,18 +78,20 @@ Utils::Discretize(const OT::Distribution &distribution,
 
   std::vector<double> result(v.domainSize());
   double sum = 0.0;
-  for (gum::Size i = 0; i < v.domainSize(); ++i) {
+  for (gum::Size i = 0; i < v.domainSize(); ++i)
+  {
     result[i] =
-        distribution.computeProbability(OT::Interval(v.tick(i), v.tick(i + 1)));
+      distribution.computeProbability(OT::Interval(v.tick(i), v.tick(i + 1)));
     sum += result[i];
   }
 
-  if (!isTruncated) {
+  if (!isTruncated)
+  {
     if (sum < 1.0 - sqrt(sqrt(OT::ResourceMap::GetAsScalar(
-                        "Distribution-DefaultCDFEpsilon"))))
+                                "Distribution-DefaultCDFEpsilon"))))
       throw OT::InternalException(HERE)
           << "Error: the discretization is not adapted to the distribution. "
-             "There is a mass leakage of "
+          "There is a mass leakage of "
           << 1.0 - sum;
   }
 
@@ -104,12 +109,14 @@ Utils::Discretize(const OT::Distribution &distribution,
 
 OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
 {
-  if (pot.nbrDim() < 1) {
+  if (pot.nbrDim() < 1)
+  {
     throw OT::InvalidArgumentException(HERE)
         << "Error: potential must have at least one dimension"
         << pot.toString();
   }
-  if (pot.nbrDim() == 1) {
+  if (pot.nbrDim() == 1)
+  {
     return FromMarginal(pot);
   }
   OT::Description description(OT::UnsignedInteger(pot.nbrDim()));
@@ -117,21 +124,27 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
   // list of variables
   OT::Collection<OT::Point> ticksCollection(0);
   OT::Indices kind(0);
-  for (OT::UnsignedInteger dim = 0; dim < pot.nbrDim(); dim++) {
+  for (OT::UnsignedInteger dim = 0; dim < pot.nbrDim(); dim++)
+  {
     const auto &var = pot.variable(dim);
     description[dim] = var.name();
     OT::Point p;
-    if (var.varType() == gum::VarType::Discretized) {
+    if (var.varType() == gum::VarType::Discretized)
+    {
       kind.add(1); // Continuous
 
       for (const auto tick :
            dynamic_cast<const gum::IDiscretizedVariable &>(var)
-               .ticksAsDoubles()) {
+           .ticksAsDoubles())
+      {
         p.add(tick);
       }
-    } else {
+    }
+    else
+    {
       kind.add(0); // Discrete
-      for (unsigned long v = 0; v < var.domainSize(); v++) {
+      for (unsigned long v = 0; v < var.domainSize(); v++)
+      {
         p.add(v);
       }
     }
@@ -141,7 +154,8 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
   // values
   OT::Point probabilityTable(0);
   gum::Instantiation I(pot);
-  for (I.setFirst(); !I.end(); I.inc()) {
+  for (I.setFirst(); !I.end(); I.inc())
+  {
     probabilityTable.add(pot.get(I));
   }
 
@@ -154,7 +168,8 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
 
 OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot)
 {
-  if (pot.nbrDim() != 1) {
+  if (pot.nbrDim() != 1)
+  {
     throw OT::InvalidArgumentException(HERE)
         << "Error: no marginal with dimension != 1 in " << pot.toString();
   }
@@ -166,61 +181,69 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot)
 
   // the probas of the Potential in a Point collection
   OT::Point probas(collectionSize);
-  for (inst.setFirst(); !inst.end(); ++inst) {
+  for (inst.setFirst(); !inst.end(); ++inst)
+  {
     probas[inst.val(0)] = pot.get(inst);
   }
 
   OT::Distribution res;
 
-  switch (v.varType()) {
-  case gum::VarType::Discretized: {
-    // we use the ticks to create a Histogram distribution
-    auto vv = static_cast<const gum::DiscretizedVariable<double> &>(v);
+  switch (v.varType())
+  {
+    case gum::VarType::Discretized:
+    {
+      // we use the ticks to create a Histogram distribution
+      auto vv = static_cast<const gum::DiscretizedVariable<double> &>(v);
 
-    OT::Point ws(collectionSize);
-    for (inst.setFirst(); !inst.end(); ++inst) {
-      auto i = inst.val(0);
-      ws[i] = (vv.tick(i + 1) - vv.tick(i));
-    }
-    res = OT::Histogram(vv.tick(0), ws, probas);
-    break;
-  }
-  case gum::VarType::Range: {
-    // we use the range to create a meaningful UserDefined distribution
-    auto vv = static_cast<const gum::RangeVariable &>(v);
-
-    OT::Sample val(vv.domainSize(), 1);
-    for (auto i = vv.minVal(); i <= vv.maxVal(); i++)
-      val[i - vv.minVal()][0] = i;
-    res = OT::UserDefined(val, probas);
-    break;
-  }
-  case gum::VarType::Labelized: {
-    // if at least one label can not be parser as double,
-    // we can just use the index to create a UserDefined distribution
-    OT::Sample val(v.domainSize(), 1);
-    bool ok = true;
-    OT::Scalar value;
-    for (unsigned long i = 0; i < v.domainSize(); i++) {
-      std::istringstream iss(v.label(i));
-      if (iss >> value)
-        val[i][0] = value;
-      else {
-        ok = false;
-        break;
+      OT::Point ws(collectionSize);
+      for (inst.setFirst(); !inst.end(); ++inst)
+      {
+        auto i = inst.val(0);
+        ws[i] = (vv.tick(i + 1) - vv.tick(i));
       }
+      res = OT::Histogram(vv.tick(0), ws, probas);
+      break;
     }
+    case gum::VarType::Range:
+    {
+      // we use the range to create a meaningful UserDefined distribution
+      auto vv = static_cast<const gum::RangeVariable &>(v);
 
-    if (!ok) // at least on label has not been correctly parsed as
-             // Scalar. Then we just use index
+      OT::Sample val(vv.domainSize(), 1);
+      for (auto i = vv.minVal(); i <= vv.maxVal(); i++)
+        val[i - vv.minVal()][0] = i;
+      res = OT::UserDefined(val, probas);
+      break;
+    }
+    case gum::VarType::Labelized:
+    {
+      // if at least one label can not be parser as double,
+      // we can just use the index to create a UserDefined distribution
+      OT::Sample val(v.domainSize(), 1);
+      bool ok = true;
+      OT::Scalar value;
       for (unsigned long i = 0; i < v.domainSize(); i++)
-        val[i][0] = i;
+      {
+        std::istringstream iss(v.label(i));
+        if (iss >> value)
+          val[i][0] = value;
+        else
+        {
+          ok = false;
+          break;
+        }
+      }
 
-    res = OT::UserDefined(val, probas);
-    break;
-  }
-  default:
-    throw OT::InternalException(HERE) << "This case should never happen";
+      if (!ok) // at least on label has not been correctly parsed as
+        // Scalar. Then we just use index
+        for (unsigned long i = 0; i < v.domainSize(); i++)
+          val[i][0] = i;
+
+      res = OT::UserDefined(val, probas);
+      break;
+    }
+    default:
+      throw OT::InternalException(HERE) << "This case should never happen";
   }
 
   const OT::Description description(1, v.name());

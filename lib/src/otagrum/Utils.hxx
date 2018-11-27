@@ -34,25 +34,26 @@
 
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 class OTAGRUM_API Utils
 {
 public:
 
-static gum::Potential<double> Discretize(const OT::DistributionImplementation &distribution,
-                                         const gum::DiscretizedVariable<double> &v);
+  static gum::Potential<double> Discretize(const OT::DistributionImplementation &distribution,
+      const gum::DiscretizedVariable<double> &v);
 
-/* Helper function to discretize a continuous distribution */
-static gum::Potential<double> Discretize(const OT::Distribution &distribution,
-                                        const gum::DiscretizedVariable<double> &v,
-                                        bool isTruncated = true);
+  /* Helper function to discretize a continuous distribution */
+  static gum::Potential<double> Discretize(const OT::Distribution &distribution,
+      const gum::DiscretizedVariable<double> &v,
+      bool isTruncated = true);
 
-static OT::Distribution FromMarginal(const gum::Potential<double> &pot);
+  static OT::Distribution FromMarginal(const gum::Potential<double> &pot);
 
-static OT::Distribution FromPotential(const gum::Potential<double> &pot);
+  static OT::Distribution FromPotential(const gum::Potential<double> &pot);
 
-static OT::Indices FromNodeSet(const gum::NodeSet &clique);
+  static OT::Indices FromNodeSet(const gum::NodeSet &clique);
 
 private:
   Utils();

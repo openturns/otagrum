@@ -8,13 +8,14 @@
 #include <openturns/Normal.hxx>
 #include <openturns/Graph.hxx>
 
-#include "otagrum/JunctionTree.hxx"
+#include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/JunctionTreeBernsteinCopula.hxx"
 #include "otagrum/otagrum.hxx"
 
-void testOK() {
+void testOK()
+{
   auto bn =
-      gum::BayesNet<double>::fastPrototype("0->1->2->3;1->4->3;4->5;6->5;7->5");
+    gum::BayesNet<double>::fastPrototype("0->1->2->3;1->4->3;4->5;6->5;7->5");
   /*
    *   0
    *    \
@@ -29,10 +30,11 @@ void testOK() {
 
   auto jtagr = ie.junctionTree();
   std::vector<std::string> names;
-  for (const auto &elt : bn.nodes()) {
+  for (const auto &elt : bn.nodes())
+  {
     names.push_back(bn.variable(elt).name());
   }
-  auto jt = OTAGRUM::JunctionTree(*jtagr, names);
+  auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
   OT::Sample copulaSample = OT::Normal(jt.getSize()).getSample(1000);
   OTAGRUM::JunctionTreeBernsteinCopula copula(jt, copulaSample, 5, false);
   std::cout << "copula=" << copula << std::endl;
@@ -44,6 +46,7 @@ void testOK() {
   //graph.draw("test_marginal_pdf.png");
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   testOK();
 }

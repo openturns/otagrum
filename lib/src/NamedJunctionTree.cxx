@@ -22,24 +22,21 @@
 #include <algorithm>
 #include <vector>
 
-#include "otagrum/JunctionTree.hxx"
+#include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/Utils.hxx"
 
 namespace OTAGRUM {
 
-
-JunctionTree::JunctionTree(const gum::CliqueGraph &jt,
-                           const std::vector<std::string> &names)
-  : OT::Object()
-  , jt_(jt)
-{
+NamedJunctionTree::NamedJunctionTree(const gum::CliqueGraph &jt,
+                                     const std::vector<std::string> &names)
+    : OT::Object(), jt_(jt) {
   for (const auto &name : names) {
     map_.add(name);
   }
   checkConsistency();
 }
 
-void JunctionTree::checkConsistency() const {
+void NamedJunctionTree::checkConsistency() const {
   // checks if names and jt are consistent (same set of nodeIds)
   gum::NodeSet s;
   for (const auto &nod : jt_.nodes())
@@ -49,7 +46,7 @@ void JunctionTree::checkConsistency() const {
     throw OT::InvalidArgumentException(HERE)
         << "Error: inconsistency between nodes (size is " << s.size()
         << ") and names (size is " << map_.getSize()
-        << ") in OT::JunctionTree object";
+        << ") in OT::NamedJunctionTree object";
 
   for (gum::NodeId nod = 0; nod < map_.getSize(); ++nod) {
     if (!s.exists(nod))
@@ -59,41 +56,43 @@ void JunctionTree::checkConsistency() const {
   }
 }
 
-OT::UnsignedInteger JunctionTree::getSize() const { return map_.getSize(); }
+OT::UnsignedInteger NamedJunctionTree::getSize() const {
+  return map_.getSize();
+}
 
-OT::Description JunctionTree::getDescription() const { return map_; }
+OT::Description NamedJunctionTree::getDescription() const { return map_; }
 
-OT::Indices JunctionTree::getClique(gum::NodeId nod) const {
+OT::Indices NamedJunctionTree::getClique(gum::NodeId nod) const {
   return Utils::FromNodeSet(jt_.clique(nod));
 }
 
-OT::Indices JunctionTree::getSeparator(gum::Edge edge) const {
+OT::Indices NamedJunctionTree::getSeparator(gum::Edge edge) const {
   return Utils::FromNodeSet(jt_.separator(edge));
 }
 
-const gum::NodeSet &JunctionTree::getNeighbours(gum::NodeId id) const {
+const gum::NodeSet &NamedJunctionTree::getNeighbours(gum::NodeId id) const {
   return jt_.neighbours(id);
 }
 
-gum::EdgeSet JunctionTree::getEdges() const { return jt_.edges(); }
+gum::EdgeSet NamedJunctionTree::getEdges() const { return jt_.edges(); }
 
-gum::NodeSet JunctionTree::getNodes() const { return jt_.asNodeSet(); }
+gum::NodeSet NamedJunctionTree::getNodes() const { return jt_.asNodeSet(); }
 
-OT::Collection<OT::Indices> JunctionTree::getCliquesCollection() const {
+OT::Collection<OT::Indices> NamedJunctionTree::getCliquesCollection() const {
   OT::Collection<OT::Indices> res;
   for (const auto &cliq : jt_.nodes())
     res.add(getClique(cliq));
   return res;
 }
 
-OT::Collection<OT::Indices> JunctionTree::getSeparatorsCollection() const {
+OT::Collection<OT::Indices> NamedJunctionTree::getSeparatorsCollection() const {
   OT::Collection<OT::Indices> res;
   for (const auto &edg : jt_.edges())
     res.add(getSeparator(edg));
   return res;
 }
 
-JunctionTree JunctionTree::getMarginal(OT::Indices indices) const {
+NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const {
   // create the names and the mapping between indices and new nodeIds
   std::vector<std::string> m_names;
   std::vector<int> m_ids(getSize());
@@ -173,10 +172,10 @@ JunctionTree JunctionTree::getMarginal(OT::Indices indices) const {
       sortedEdges[pos].erase(edge);
     }
   }
-  return JunctionTree(m_jt, m_names);
+  return NamedJunctionTree(m_jt, m_names);
 }
 
-OT::String JunctionTree::__str__(const OT::String &) const {
+OT::String NamedJunctionTree::__str__(const OT::String &) const {
   std::stringstream ss;
   ss << "[";
   bool first = true;
@@ -212,4 +211,4 @@ OT::String JunctionTree::__str__(const OT::String &) const {
   }
   return ss.str();
 }
-} // namespace
+} // namespace OTAGRUM

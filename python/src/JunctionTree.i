@@ -1,4 +1,4 @@
-// SWIG file JunctionTree.i
+// SWIG file NamedJunctionTree.i
 
 %{
 #include "otagrum/JunctionTree.hxx"

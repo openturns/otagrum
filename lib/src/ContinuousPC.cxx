@@ -80,14 +80,11 @@ namespace OTAGRUM {
 ContinuousPC::ContinuousPC(const OT::Sample &data,
                            const OT::UnsignedInteger maxParents,
                            const double alpha)
-    : OT::Object()
-    , maxParents_(maxParents)
-    , verbose_(false)
-    , optimalPolicy_(true)
-    , tester_(data)
-{
+    : OT::Object(), maxParents_(maxParents), verbose_(false),
+      optimalPolicy_(true), tester_(data) {
   tester_.setAlpha(alpha);
-  removed_.reserve(data.getDimension() * data.getDimension() / 3); // a rough estimation ...
+  removed_.reserve(data.getDimension() * data.getDimension() /
+                   3); // a rough estimation ...
 }
 
 /**
@@ -107,8 +104,8 @@ ContinuousPC::ContinuousPC(const OT::Sample &data,
  */
 std::tuple<bool, double, double, OT::Indices>
 ContinuousPC::bestSeparator(const gum::UndiGraph &g, gum::NodeId y,
-                             gum::NodeId z, const OT::Indices &neighbours,
-                             OT::UnsignedInteger n) {
+                            gum::NodeId z, const OT::Indices &neighbours,
+                            OT::UnsignedInteger n) {
   double t = 0.0;
   double p = 0.0;
   double pmax = -1.0;
@@ -125,7 +122,8 @@ ContinuousPC::bestSeparator(const gum::UndiGraph &g, gum::NodeId y,
             << ", " << ok << "\n")
 
     if (ok) {
-      if (!getOptimalPolicy()) { // the first separator found is correct
+      if (!getOptimalPolicy()) // the first separator found is correct
+      {
         return std::make_tuple(true, t, p, separator.current());
       }
 
@@ -154,7 +152,7 @@ ContinuousPC::bestSeparator(const gum::UndiGraph &g, gum::NodeId y,
  * cut)
  */
 bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
-                                        OT::UnsignedInteger n) {
+                                       OT::UnsignedInteger n) {
   if (g.sizeEdges() == 0)
     return false;
 
@@ -180,7 +178,8 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
         pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
         ttests_.set(edge, std::max(ttests_.getWithDefault(edge, -10000), tYZ));
 
-        if (resYZ) { // we found at least one separator
+        if (resYZ) // we found at least one separator
+        {
           queue.insert(edge, -pYZ);
           sepset_.set(edge, sepYZ);
         }
@@ -266,7 +265,8 @@ gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) const {
         double t = 0.0, p = 0.0;
         const gum::NodeId y = couple.current()[0];
         const gum::NodeId z = couple.current()[1];
-        if (!g.existsEdge(y, z)) { // maybe unshielded collider
+        if (!g.existsEdge(y, z)) // maybe unshielded collider
+        {
           // if (OTAGR::isIn(sepset_[gum::Edge(x, z)], y)) {
           //  queue.insert(Triplet{x, y, z}, pvalues_[gum::Edge(x, z)]);
           //}
@@ -322,6 +322,21 @@ gum::UndiGraph ContinuousPC::getMoralGraph(const gum::MixedGraph &g) const {
   return moral;
 }
 
+NamedJunctionTree ContinuousPC::getJunctionTree(const gum::UndiGraph &g) const {
+  gum::DefaultTriangulation triangulation;
+  gum::HashTable<std::string,int> mods;
+  std::vector<std::string> names;
+
+  for (int i = 0; i < map_.len(); i++) {
+    mods.insert(map_[i],2);
+    names.push_back(); // triangulation needs modalities. We just say that mods
+                       // are all the same
+  }
+  triangulation.setGraph(&g, &mods);
+
+  return NamedJunctionTree(triangulation.junctionTree(), names);
+}
+
 std::string ContinuousPC::skeletonToDot(const gum::UndiGraph &skeleton) {
   std::stringstream ss;
   ss << "digraph \"skeleton\" {" << std::endl
@@ -333,27 +348,43 @@ std::string ContinuousPC::skeletonToDot(const gum::UndiGraph &skeleton) {
   }
   ss << std::endl;
   for (const auto edge : skeleton.edges()) {
-    ss << "  " << edge.first() << "->" << edge.second() << " [label=\""
-       << std::setprecision(3) << getTTest(edge.first(), edge.second()) << "\n"
-       << std::setprecision(3) << getPValue(edge.first(), edge.second())
-       << "\"]" << std::endl;
+    ss << "  " << edge.first() << "->" << edge.second()
+       << " [label=\"t=" << std::setprecision(3)
+       << getTTest(edge.first(), edge.second())
+       << "\np=" << std::setprecision(3)
+       << getPValue(edge.first(), edge.second()) << "\"]" << std::endl;
   }
   ss << "}";
   return ss.str();
 }
 
 std::string ContinuousPC::PDAGtoDot(const gum::MixedGraph &pdag) {
-  return "digraph \"no_name\" {"
-         "  node [shape = ellipse];"
-         "  0;  1;  2;  3;  4;  5;  6;  7;  8;  9;  10;  11;  12;  13;"
-         "  0 -> 1 [dir=none];"
-         "  2 -> 3 [dir=none];"
-         "  11 -> 13; "
-         "  12 -> 13;"
-         ""
-         "}";
+  std::stringstream ss;
+  ss << "digraph \"PDAG\" {" << std::endl
+     << "  edge [];" << std::endl
+     << "  node [shape = ellipse];" << std::endl;
+  ss << "  ";
+  for (const auto node : pdag.nodes()) {
+    ss << node << "; ";
+  }
+  ss << std::endl;
+  for (const auto edge : pdag.edges()) {
+    ss << "  " << edge.first() << "->" << edge.second()
+       << " [dir=none,label=\"t=" << std::setprecision(3)
+       << getTTest(edge.first(), edge.second())
+       << "\np=" << std::setprecision(3)
+       << getPValue(edge.first(), edge.second()) << "\"]" << std::endl;
+  }
+  ss << std::endl;
+  for (const auto arc : pdag.arcs()) {
+    ss << "  " << arc.first() << "->" << arc.second()
+       << " [dir=none,label=\"t=" << std::setprecision(3)
+       << getTTest(arc.first(), arc.second()) << "\np=" << std::setprecision(3)
+       << getPValue(arc.first(), arc.second()) << "\"]" << std::endl;
+  }
+  ss << "}";
+  return ss.str();
 }
-
 
 double ContinuousPC::getPValue(gum::NodeId x, gum::NodeId y) {
   gum::Edge e(x, y);
@@ -371,8 +402,8 @@ double ContinuousPC::getTTest(gum::NodeId x, gum::NodeId y) {
     return ttests_[e];
   } else {
     throw OT::InvalidArgumentException(HERE)
-        << "Error: No ttest value for edge (" << e.first() << ","
-        << e.second() << ").";
+        << "Error: No ttest value for edge (" << e.first() << "," << e.second()
+        << ").";
   }
 }
 

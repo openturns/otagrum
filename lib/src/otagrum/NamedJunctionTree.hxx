@@ -34,10 +34,9 @@
 #include "otagrum/otagrumprivate.hxx"
 
 namespace OTAGRUM {
-class OTAGRUM_API JunctionTree : public OT::Object {
+class OTAGRUM_API NamedJunctionTree : public OT::Object {
 public:
-
-  JunctionTree(const gum::CliqueGraph &jt,
+  NamedJunctionTree(const gum::CliqueGraph &jt,
                const std::vector<std::string> &names);
 
   OT::UnsignedInteger getSize() const;
@@ -54,17 +53,16 @@ public:
   OT::Collection<OT::Indices> getCliquesCollection() const;
   OT::Collection<OT::Indices> getSeparatorsCollection() const;
 
-  JunctionTree getMarginal(OT::Indices indices) const;
+  NamedJunctionTree getMarginal(OT::Indices indices) const;
 
-  OT::String __str__(const OT::String & offset = "") const;
+  OT::String __str__(const OT::String &offset = "") const;
 
 private:
   gum::JunctionTree jt_;
   OT::Description map_;
 
   void checkConsistency() const;
-
 };
 
-}
+} // namespace OTAGRUM
 #endif // OTAGRUM_JUNCTIONTREE_H

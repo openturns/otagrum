@@ -24,10 +24,11 @@
 #include <openturns/ContinuousDistribution.hxx>
 #include <openturns/Sample.hxx>
 
-#include "JunctionTree.hxx"
+#include "NamedJunctionTree.hxx"
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 /**
  * @class JunctionTreeBernsteinCopula
@@ -42,21 +43,21 @@ public:
 
   typedef OT::Collection< OT::Indices > IndicesCollection;
   typedef OT::PersistentCollection< OT::Indices > IndicesPersistentCollection;
-  
+
   /** Default constructor */
   JunctionTreeBernsteinCopula();
 
   /** Parameters constructor */
-  JunctionTreeBernsteinCopula(const JunctionTree & junctionTree,
-			      const OT::Sample & copulaSample,
-			      const OT::UnsignedInteger binNumber,
-			      const OT::Bool isCopulaSample);
+  JunctionTreeBernsteinCopula(const NamedJunctionTree & junctionTree,
+                              const OT::Sample & copulaSample,
+                              const OT::UnsignedInteger binNumber,
+                              const OT::Bool isCopulaSample);
 
   JunctionTreeBernsteinCopula(const IndicesCollection & cliquesCollection,
-			      const IndicesCollection & separatorsCollection,
-			      const OT::Sample & copulaSample,
-			      const OT::UnsignedInteger binNumber,
-			      const OT::Bool isCopulaSample);
+                              const IndicesCollection & separatorsCollection,
+                              const OT::Sample & copulaSample,
+                              const OT::UnsignedInteger binNumber,
+                              const OT::Bool isCopulaSample);
 
   /** Comparison operator */
   using OT::ContinuousDistribution::operator ==;
@@ -85,16 +86,16 @@ public:
 
   /** Copula sample accessor */
   void setCopulaSample(const OT::Sample & copulaSample,
-		       const OT::Bool isEmpiricalCopulaSample = false);
+                       const OT::Bool isEmpiricalCopulaSample = false);
   OT::Sample getCopulaSample() const;
 
   /** Bin number accessor */
- private:
+private:
   void setBinNumber(const OT::UnsignedInteger binNumber);
 
- public:
+public:
   OT::UnsignedInteger getBinNumber() const;
-  
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -115,7 +116,7 @@ private:
   /** Cliques and Separators as collections of Indices */
   IndicesPersistentCollection cliquesCollection_;
   IndicesPersistentCollection separatorsCollection_;
-  
+
   /** The underlying sample */
   OT::Sample copulaSample_;
 
@@ -125,7 +126,7 @@ private:
   /** Normalization factors */
   OT::SampleImplementation logBetaMarginalFactors_;
   OT::SampleImplementation logFactors_;
-  
+
 }; /* class JunctionTreeBernsteinCopula */
 
 } /* namespace OTAGRUM */
