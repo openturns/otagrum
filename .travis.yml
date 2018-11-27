@@ -13,6 +13,7 @@ install:
 
 script:
   - cmake -DCMAKE_INSTALL_PREFIX=~/.local
+    -DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS"
     -DSPHINX_EXECUTABLE=~/.local/bin/sphinx-build
     -DSWIG_EXECUTABLE=/usr/local/bin/swig
     .

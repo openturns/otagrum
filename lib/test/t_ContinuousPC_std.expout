@@ -5,9 +5,9 @@ digraph "skeleton" {
   edge [dir = none];
   node [shape = ellipse];
   0; 1; 2; 3; 
-  0->1 [label="174
+  0->1 [label="116
 0"]
-  2->3 [label="275
+  2->3 [label="213
 0"]
 }
 0--1 : p-value=0
