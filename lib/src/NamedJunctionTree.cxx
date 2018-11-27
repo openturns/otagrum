@@ -25,22 +25,18 @@
 #include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/Utils.hxx"
 
-namespace OTAGRUM
-{
+namespace OTAGRUM {
 
 NamedJunctionTree::NamedJunctionTree(const gum::CliqueGraph &jt,
                                      const std::vector<std::string> &names)
-  : OT::Object(), jt_(jt)
-{
-  for (const auto &name : names)
-  {
+    : OT::Object(), jt_(jt) {
+  for (const auto &name : names) {
     map_.add(name);
   }
   checkConsistency();
 }
 
-void NamedJunctionTree::checkConsistency() const
-{
+void NamedJunctionTree::checkConsistency() const {
   // checks if names and jt are consistent (same set of nodeIds)
   gum::NodeSet s;
   for (const auto &nod : jt_.nodes())
@@ -52,8 +48,7 @@ void NamedJunctionTree::checkConsistency() const
         << ") and names (size is " << map_.getSize()
         << ") in OT::NamedJunctionTree object";
 
-  for (gum::NodeId nod = 0; nod < map_.getSize(); ++nod)
-  {
+  for (gum::NodeId nod = 0; nod < map_.getSize(); ++nod) {
     if (!s.exists(nod))
       throw OT::InvalidArgumentException(HERE)
           << "Error: please use range(0,max) as NodeSet (now : " << s.toString()
@@ -61,66 +56,49 @@ void NamedJunctionTree::checkConsistency() const
   }
 }
 
-OT::UnsignedInteger NamedJunctionTree::getSize() const
-{
+OT::UnsignedInteger NamedJunctionTree::getSize() const {
   return map_.getSize();
 }
 
-OT::Description NamedJunctionTree::getDescription() const
-{
-  return map_;
-}
+OT::Description NamedJunctionTree::getDescription() const { return map_; }
 
-OT::Indices NamedJunctionTree::getClique(gum::NodeId nod) const
-{
+OT::Indices NamedJunctionTree::getClique(gum::NodeId nod) const {
   return Utils::FromNodeSet(jt_.clique(nod));
 }
 
-OT::Indices NamedJunctionTree::getSeparator(gum::Edge edge) const
-{
+OT::Indices NamedJunctionTree::getSeparator(gum::Edge edge) const {
   return Utils::FromNodeSet(jt_.separator(edge));
 }
 
-const gum::NodeSet &NamedJunctionTree::getNeighbours(gum::NodeId id) const
-{
+const gum::NodeSet &NamedJunctionTree::getNeighbours(gum::NodeId id) const {
   return jt_.neighbours(id);
 }
 
-gum::EdgeSet NamedJunctionTree::getEdges() const
-{
-  return jt_.edges();
-}
+gum::EdgeSet NamedJunctionTree::getEdges() const { return jt_.edges(); }
 
-gum::NodeSet NamedJunctionTree::getNodes() const
-{
-  return jt_.asNodeSet();
-}
+gum::NodeSet NamedJunctionTree::getNodes() const { return jt_.asNodeSet(); }
 
-OT::Collection<OT::Indices> NamedJunctionTree::getCliquesCollection() const
-{
+OT::Collection<OT::Indices> NamedJunctionTree::getCliquesCollection() const {
   OT::Collection<OT::Indices> res;
   for (const auto &cliq : jt_.nodes())
     res.add(getClique(cliq));
   return res;
 }
 
-OT::Collection<OT::Indices> NamedJunctionTree::getSeparatorsCollection() const
-{
+OT::Collection<OT::Indices> NamedJunctionTree::getSeparatorsCollection() const {
   OT::Collection<OT::Indices> res;
   for (const auto &edg : jt_.edges())
     res.add(getSeparator(edg));
   return res;
 }
 
-NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
-{
+NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const {
   // create the names and the mapping between indices and new nodeIds
   std::vector<std::string> m_names;
   std::vector<int> m_ids(getSize());
   std::fill(m_ids.begin(), m_ids.end(), -1);
   int j = 0;
-  for (const auto i : indices)
-  {
+  for (const auto i : indices) {
     m_names.push_back(map_[i]);
     m_ids[i] = j++;
   }
@@ -128,36 +106,28 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
   // create the cliques that intersect indices, using the mapping to transpose
   // the NodeIds
   gum::JunctionTree m_jt;
-  for (auto cli : jt_.nodes())
-  {
+  for (auto cli : jt_.nodes()) {
     gum::NodeSet transpose;
-    for (auto nod : jt_.clique(cli))
-    {
+    for (auto nod : jt_.clique(cli)) {
       if (m_ids[nod] != -1)
         transpose.insert(gum::NodeId(m_ids[nod]));
     }
-    if (transpose.size() != 0)
-    {
+    if (transpose.size() != 0) {
       bool to_be_added = true;
       // is there any clique that already contains transpose ?
       for (auto it = m_jt.nodes().beginSafe(); it != m_jt.nodes().endSafe();
-           ++it)
-      {
-        if (transpose.isSubsetOf(m_jt.clique(*it)))
-        {
+           ++it) {
+        if (transpose.isSubsetOf(m_jt.clique(*it))) {
           to_be_added = false;
           break;
         }
       }
-      if (to_be_added)
-      {
+      if (to_be_added) {
         // is there any clique that is contained by transpose (and that should
         // be removed)
         for (auto it = m_jt.nodes().beginSafe(); it != m_jt.nodes().endSafe();
-             ++it)
-        {
-          if (transpose.isSupersetOf(m_jt.clique(*it)))
-          {
+             ++it) {
+          if (transpose.isSupersetOf(m_jt.clique(*it))) {
             m_jt.eraseNode(*it);
           }
         }
@@ -167,8 +137,7 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
   }
 
   auto siznod = m_jt.nodes().size();
-  if (siznod > 1)
-  {
+  if (siznod > 1) {
     // creates the edges from the definition of cliques instead
     // we sort the potential edges by the size of the separator k + the
     // existence
@@ -176,22 +145,18 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
     std::vector<gum::EdgeSet> sortedEdges((m_jt.size() + 1) * 2);
     for (auto it1 = m_jt.nodes().beginSafe(); it1 != m_jt.nodes().endSafe();
          ++it1)
-      for (auto it2 = it1; it2 != m_jt.nodes().endSafe(); ++it2)
-      {
+      for (auto it2 = it1; it2 != m_jt.nodes().endSafe(); ++it2) {
         if (it1 == it2)
           continue;
         gum::Size bonus = (jt_.existsEdge(*it1, *it2)) ? 1 : 0;
         gum::Size siz = (m_jt.clique(*it1) * m_jt.clique(*it2)).size();
-        if (siz > 0)
-        {
+        if (siz > 0) {
           sortedEdges[siz * 2 + bonus].insert(gum::Edge(*it1, *it2));
         }
       }
     gum::Idx pos = sortedEdges.size() - 1;
-    while (m_jt.edges().size() < siznod - 1)
-    {
-      while (sortedEdges[pos].empty())
-      {
+    while (m_jt.edges().size() < siznod - 1) {
+      while (sortedEdges[pos].empty()) {
         if (pos == 0)
           break;
         pos = pos - 1;
@@ -199,12 +164,9 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
       if (sortedEdges[pos].empty())
         break;
       auto edge = *(sortedEdges[pos].begin());
-      try
-      {
+      try {
         auto v = m_jt.undirectedPath(edge.first(), edge.second());
-      }
-      catch (gum::NotFound)
-      {
+      } catch (gum::NotFound) {
         m_jt.addEdge(edge.first(), edge.second());
       }
       sortedEdges[pos].erase(edge);
@@ -213,13 +175,11 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
   return NamedJunctionTree(m_jt, m_names);
 }
 
-OT::String NamedJunctionTree::__str__(const OT::String &) const
-{
+OT::String NamedJunctionTree::__str__(const OT::String &) const {
   std::stringstream ss;
   ss << "[";
   bool first = true;
-  for (const auto &item : map_)
-  {
+  for (const auto &item : map_) {
     if (!first)
       ss << ",";
     first = false;
@@ -227,12 +187,10 @@ OT::String NamedJunctionTree::__str__(const OT::String &) const
   }
   ss << "]\n";
 
-  for (auto cliq : jt_.nodes())
-  {
+  for (auto cliq : jt_.nodes()) {
     ss << cliq << " : [";
     first = true;
-    for (auto nod : jt_.clique(cliq))
-    {
+    for (auto nod : jt_.clique(cliq)) {
       if (!first)
         ss << ",";
       first = false;
@@ -240,12 +198,10 @@ OT::String NamedJunctionTree::__str__(const OT::String &) const
     }
     ss << "]\n";
   }
-  for (auto edg : jt_.edges())
-  {
+  for (auto edg : jt_.edges()) {
     ss << edg << " : [";
     first = true;
-    for (auto nod : jt_.separator(edg))
-    {
+    for (auto nod : jt_.separator(edg)) {
       if (!first)
         ss << ",";
       first = false;
@@ -254,5 +210,33 @@ OT::String NamedJunctionTree::__str__(const OT::String &) const
     ss << "]\n";
   }
   return ss.str();
+}
+
+OT::Indices NamedJunctionTree::getOrderMaxFirst() const {
+  OT::Indices res;
+  gum::NodeId root;
+  gum::NodeSet marked;
+  int max;
+
+  while (marked.size() < jt_.size()) {
+    max = -1;
+    root=jt_.size()+1;
+    for (auto nod : jt_.nodes()) {
+      if (!marked.exists(nod)) {
+        if (jt_.neighbours(nod) <= gum::Size(1)) {
+          if (jt_.clique(nod).size()>max) {
+            root=nod;
+            max=jt_.clique(nod).size();
+          }
+        }
+      }
+    }
+
+    //root is OK
+    assert(root!=jt.size()+1);
+
+    
+  }
+  return res;
 }
 } // namespace OTAGRUM

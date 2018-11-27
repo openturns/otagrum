@@ -33,28 +33,8 @@ OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
 
 
   auto copula1 = OT::NormalCopula(R);
-  OT::Description descr1;
-  for (const auto &name :
-       {"A1", "A2", "A3"
-       })
-    descr1.add(name);
-  copula1.setDescription(descr1);
-
   auto copula2 = OT::FrankCopula(3.0);
-  OT::Description descr2;
-  for (const auto &name :
-       {"B1", "B2"
-       })
-    descr2.add(name);
-  copula2.setDescription(descr2);
-
   auto copula3 = OT::ClaytonCopula(2.0);
-  OT::Description descr3;
-  for (const auto &name :
-       {"C1", "C2"
-       })
-    descr3.add(name);
-  copula3.setDescription(descr3);
 
   OT::Collection<OT::Copula> copulas;
   copulas.add(copula1);
@@ -62,7 +42,9 @@ OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
   copulas.add(copula3);
 
   auto copula = OT::ComposedCopula(copulas);
-  return copula.getSample(size);
+
+  auto sample=copula.getSample(size);
+  return sample;
 }
 
 void testNormalSample()

@@ -59,6 +59,8 @@ public:
 
   OT::String __str__(const OT::String &offset = "") const;
 
+  OT::Indices getOrderMaxFirst() const;
+
 private:
   gum::JunctionTree jt_;
   OT::Description map_;

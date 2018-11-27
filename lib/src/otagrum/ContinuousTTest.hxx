@@ -65,10 +65,10 @@ public:
 
   OT::Description getDataDescription() const;
 
-private:
   /// computes K from the sample properties (size, dimension, ...)
   static OT::UnsignedInteger GetK(const OT::UnsignedInteger size, const OT::UnsignedInteger dimension);
 
+private:
   /// computes the key from Indices and k
   static std::string GetKey(const OT::Indices & l,
                             const OT::UnsignedInteger k);
