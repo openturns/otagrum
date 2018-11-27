@@ -82,7 +82,7 @@ include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
 ot_check_test ( Utils_std )
 ot_check_test ( MixedHistogramUserDefined_std )
-ot_check_test ( JunctionTree_std )
+ot_check_test ( NamedJunctionTree_std )
 ot_check_test ( JunctionTreeBernsteinCopula_std )
 ot_check_test ( IndicesManip_std )
 ot_check_test ( StratifiedCache_std )

@@ -9,9 +9,10 @@
 #include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/otagrum.hxx"
 
-void testOK() {
+void testOK()
+{
   auto bn =
-      gum::BayesNet<double>::fastPrototype("0->1->2->3;1->4->3;4->5;6->5;7->5");
+    gum::BayesNet<double>::fastPrototype("0->1->2->3;1->4->3;4->5;6->5;7->5");
   /*
    *   0
    *    \
@@ -27,67 +28,82 @@ void testOK() {
   const auto &jtagr = ie.junctionTree();
   std::vector<std::string> names;
 
-  for (const auto &elt : bn.nodes()) {
+  for (const auto &elt : bn.nodes())
+  {
     names.push_back(bn.variable(elt).name());
   }
   auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
 
   std::cout << "** CLIQUES **" << std::endl;
-  for (auto cliq : jt.getNodes()) {
+  for (auto cliq : jt.getNodes())
+  {
     std::cout << jtagr->clique(cliq)
               << "  as OT::Indices = " << jt.getClique(cliq) << std::endl;
   }
 
   std::cout << std::endl << "** SEPARATORS **" << std::endl;
-  for (auto edge : jt.getEdges()) {
+  for (auto edge : jt.getEdges())
+  {
     std::cout << jtagr->separator(edge)
               << "  as OT::Indices = " << jt.getSeparator(edge) << std::endl;
   }
 }
 
-void testNotOKForSize() {
+void testNotOKForSize()
+{
   auto bn =
-      gum::BayesNet<double>::fastPrototype("0->1->2->3;1->4->3->5;6->5;7->5");
+    gum::BayesNet<double>::fastPrototype("0->1->2->3;1->4->3->5;6->5;7->5");
   gum::LazyPropagation<double> ie(&bn);
   auto jtagr = ie.junctionTree();
 
   std::vector<std::string> names;
-  for (const auto &elt : bn.nodes()) {
-    if (elt != 3) {
+  for (const auto &elt : bn.nodes())
+  {
+    if (elt != 3)
+    {
       names.push_back(bn.variable(elt).name());
     }
   }
 
-  try {
+  try
+  {
     auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
     std::cout << "testForSize : ERROR\n";
-  } catch (OT::InvalidArgumentException &) {
+  }
+  catch (OT::InvalidArgumentException &)
+  {
     std::cout << "testForSize : OK\n";
   }
 }
 
-void testNotOKForHole() {
+void testNotOKForHole()
+{
   auto bn =
-      gum::BayesNet<double>::fastPrototype("0->1->2->3;1->4->3->5;6->5;7->5");
+    gum::BayesNet<double>::fastPrototype("0->1->2->3;1->4->3->5;6->5;7->5");
   bn.erase("3"); // creating a hole
   gum::LazyPropagation<double> ie(&bn);
   auto jtagr = ie.junctionTree();
 
   std::vector<std::string> names;
-  for (const auto &elt : bn.nodes()) {
+  for (const auto &elt : bn.nodes())
+  {
     names.push_back(bn.variable(elt).name());
   }
-  try {
+  try
+  {
     auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
     std::cout << " testForHole : ERROR\n";
-  } catch (OT::InvalidArgumentException &) {
+  }
+  catch (OT::InvalidArgumentException &)
+  {
     std::cout << "testForHole : OK\n";
   }
 }
 
-void testGetMarginal() {
+void testGetMarginal()
+{
   auto bn = gum::BayesNet<double>::fastPrototype(
-      "a->b->c->d->h;b->e->d;e->f->h;e->g->h;e->h");
+              "a->b->c->d->h;b->e->d;e->f->h;e->g->h;e->h");
   /*
    *   a
    *    \
@@ -102,7 +118,8 @@ void testGetMarginal() {
   gum::LazyPropagation<double> ie(&bn);
   auto jtagr = ie.junctionTree();
   std::vector<std::string> names;
-  for (const auto &elt : bn.nodes()) {
+  for (const auto &elt : bn.nodes())
+  {
     names.push_back(bn.variable(elt).name());
   }
 
@@ -119,7 +136,8 @@ void testGetMarginal() {
   std::cout << jt2.__str__() << std::endl;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   testOK();
   std::cout << "\n";
 
