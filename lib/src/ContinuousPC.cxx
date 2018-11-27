@@ -365,14 +365,14 @@ NamedJunctionTree ContinuousPC::getJunctionTree(const gum::UndiGraph &g) const
   gum::NodeProperty <gum::Size> mods;
   std::vector<std::string> names;
 
-  const auto& description=tester_.getDataDescription();
-  for (int i = 0; i < description.getSize();i++)
+  const auto& description = tester_.getDataDescription();
+  for (int i = 0; i < description.getSize(); i++)
   {
     mods.insert(i, 2);
     names.push_back(description.at(i)); // triangulation needs modalities. We just say that mods
     // are all the same
   }
-  triangulation.setGraph(&g,&mods);
+  triangulation.setGraph(&g, &mods);
 
   return NamedJunctionTree(triangulation.junctionTree(), names);
 }
