@@ -33,11 +33,13 @@
 
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM {
-class OTAGRUM_API NamedJunctionTree : public OT::Object {
+namespace OTAGRUM
+{
+class OTAGRUM_API NamedJunctionTree : public OT::Object
+{
 public:
   NamedJunctionTree(const gum::CliqueGraph &jt,
-               const std::vector<std::string> &names);
+                    const std::vector<std::string> &names);
 
   OT::UnsignedInteger getSize() const;
 

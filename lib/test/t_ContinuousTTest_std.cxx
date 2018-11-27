@@ -9,8 +9,7 @@
 
 using namespace OTAGRUM;
 
-OT::Sample getNormalSample(OT::UnsignedInteger size)
-{
+OT::Sample getNormalSample(OT::UnsignedInteger size) {
   OT::UnsignedInteger dim = 10;
 
   OT::CorrelationMatrix R(dim);
@@ -25,23 +24,40 @@ OT::Sample getNormalSample(OT::UnsignedInteger size)
   return distribution.getSample(size);
 }
 
-OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
-{
+OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size) {
   auto R = OT::CorrelationMatrix(3);
   R(0, 1) = 0.9;
   R(0, 2) = 0.25;
 
+
+  auto copula1=OT::NormalCopula(R);
+  OT::Description descr1;
+  for (const auto &name : {"A1", "A2", "A3"})
+    descr1.add(name);
+  copula1.setDescription(descr1);
+
+  auto copula2=OT::FrankCopula(3.0);
+  OT::Description descr2;
+  for (const auto &name : {"B1", "B2"})
+    descr2.add(name);
+  copula2.setDescription(descr2);
+
+  auto copula3=OT::ClaytonCopula(2.0);
+  OT::Description descr3;
+  for (const auto &name : {"C1", "C2"})
+    descr3.add(name);
+  copula3.setDescription(descr3);
+
   OT::Collection<OT::Copula> copulas;
-  copulas.add(OT::NormalCopula(R));
-  copulas.add(OT::FrankCopula(3.0));
-  copulas.add(OT::ClaytonCopula(2.0));
+  copulas.add(copula1);
+  copulas.add(copula2);
+  copulas.add(copula3);
 
   auto copula = OT::ComposedCopula(copulas);
   return copula.getSample(size);
 }
 
-void testNormalSample()
-{
+void testNormalSample() {
   double t1;
   double p1;
   bool ok1;
@@ -62,14 +78,14 @@ void testNormalSample()
             << "    test:" << (ok2 ? " fail " : " OK ") << "\n";
 }
 
-void testIndepsSeePythonTest()
-{
+void testIndepsSeePythonTest() {
   double t;
   double p;
   bool ok;
   OT::Indices X;
 
   auto data = getSpecificInstanceSeePythonTest(3000);
+
   ContinuousTTest test(data);
   test.setAlpha(0.1);
 
@@ -94,8 +110,7 @@ void testIndepsSeePythonTest()
             << "   test:" << (ok ? " OK " : " fail ") << "\n";
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
   testNormalSample();
   testIndepsSeePythonTest();
   return EXIT_SUCCESS;
