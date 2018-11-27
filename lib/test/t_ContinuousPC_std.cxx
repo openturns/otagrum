@@ -7,7 +7,8 @@
 
 #include "otagrum/ContinuousPC.hxx"
 
-OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
+OT::Sample getTrucBizarre(OT::UnsignedInteger size)
+{
   OT::Collection<OT::Copula> copulas;
 
   OT::UnsignedInteger dim = 3;
@@ -25,8 +26,10 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
   return copula.getSample(size);
 }
 
-int main(void) {
-  try {
+int main(void)
+{
+  try
+  {
     OT::Sample sample = getTrucBizarre(10000);
     std::cout << "Sample size : " << sample.getSize() << std::endl
               << "Sample dimension :" << sample.getDimension() << std::endl;
@@ -45,7 +48,8 @@ int main(void) {
                   << " sepset=" << learner.getSepset(e.first(), e.second())
                   << std::endl;
       } */
-      for (const auto &e : skel.edges()) {
+      for (const auto &e : skel.edges())
+      {
         std::cout << e
                   << " : p-value=" << learner.getPValue(e.first(), e.second())
                   << std::endl;
@@ -62,9 +66,13 @@ int main(void) {
       auto moral = learner.getMoralGraph(cpdag);
       std::cout << moral.toDot() << std::endl;
     }
-  } catch (OT::Exception &e) {
+  }
+  catch (OT::Exception &e)
+  {
     std::cout << e.__repr__() << std::endl;
-  } catch (gum::Exception &e) {
+  }
+  catch (gum::Exception &e)
+  {
     GUM_SHOWERROR(e);
   }
   std::cout << "Finito " << std::endl;

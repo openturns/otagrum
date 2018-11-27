@@ -55,7 +55,7 @@ JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula()
 }
 
 /* Parameters constructor */
-JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const JunctionTree & junctionTree,
+JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const NamedJunctionTree & junctionTree,
     const OT::Sample & copulaSample,
     const OT::UnsignedInteger binNumber,
     const OT::Bool isCopulaSample)

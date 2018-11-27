@@ -21,15 +21,17 @@
 
 #include "otagrum/IndicesManip.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 IndicesCombinationIterator::IndicesCombinationIterator(const OT::Indices &base,
-                                                       OT::UnsignedInteger n)
+    OT::UnsignedInteger n)
   : OT::Object()
   , base_(base)
   , size_(n)
 {
-  if (n > base.getSize()) {
+  if (n > base.getSize())
+  {
     throw OT::InvalidArgumentException(HERE)
         << "Error: cannot iterate on subsets of size " << n << " in "
         << base.__str__() << ".";
@@ -38,38 +40,49 @@ IndicesCombinationIterator::IndicesCombinationIterator(const OT::Indices &base,
   setFirst();
 }
 
-OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger val) {
-  for (OT::UnsignedInteger p = 0; p < X.getSize(); ++p) {
+OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger val)
+{
+  for (OT::UnsignedInteger p = 0; p < X.getSize(); ++p)
+  {
     if (X[p] == val)
       return p;
   }
   return X.getSize();
 }
 
-bool isIn(const OT::Indices &X, OT::UnsignedInteger y) { return (pos(X, y) != X.getSize()); }
+bool isIn(const OT::Indices &X, OT::UnsignedInteger y)
+{
+  return (pos(X, y) != X.getSize());
+}
 
-OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y) {
+OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y)
+{
   OT::Indices res(X);
-  if (!isIn(res, y)) {
+  if (!isIn(res, y))
+  {
     res.add(y);
   }
   return res;
 }
 
-OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y) {
+OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y)
+{
   OT::Indices res(X);
   auto p = pos(X, y);
-  if (p < X.getSize()) {
+  if (p < X.getSize())
+  {
     res.__delitem__(p);
   }
   return res;
 }
 
 
-void IndicesCombinationIterator::setFirst() {
+void IndicesCombinationIterator::setFirst()
+{
   coord_.clear();
   current_.clear();
-  for (int i = 0; i < size_; ++i) {
+  for (int i = 0; i < size_; ++i)
+  {
     coord_.push_back(i);
     current_ = current_ + base_[i];
   }
@@ -81,12 +94,16 @@ bool IndicesCombinationIterator::isLast() const
   return carry_;
 }
 
-void IndicesCombinationIterator::next() {
-  for (int i = size_ - 1; i >= 0; --i) {
-    if (coord_[i] < base_.getSize() + i - size_) {
+void IndicesCombinationIterator::next()
+{
+  for (int i = size_ - 1; i >= 0; --i)
+  {
+    if (coord_[i] < base_.getSize() + i - size_)
+    {
       set_(i, coord_[i] + 1);
 
-      for (int j = i + 1; j < size_; ++j) {
+      for (int j = i + 1; j < size_; ++j)
+      {
         set_(j, coord_[j - 1] + 1);
       }
       return;

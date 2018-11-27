@@ -8,7 +8,8 @@
 
 using namespace OTAGRUM;
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   StratifiedCache cache;
 
   OT::UnsignedInteger size = 5;
@@ -21,7 +22,8 @@ int main(int argc, char **argv) {
   std::cout << "max level : " << cache.maxLevel() << std::endl;
   std::cout << std::endl;
 
-  for (int i = 0; i <= cache.maxLevel(); i++) {
+  for (int i = 0; i <= cache.maxLevel(); i++)
+  {
     std::cout << "size level[" << i << "] :" << cache.size(i) << std::endl;
   }
   std::cout << std::endl;

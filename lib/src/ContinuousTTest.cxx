@@ -57,7 +57,7 @@ std::string ContinuousTTest::GetKey(const OT::Indices & l,
 }
 
 OT::Point ContinuousTTest::getLogPDF(const OT::Indices & l,
-				     OT::UnsignedInteger k) const
+                                     OT::UnsignedInteger k) const
 {
   if (l.getSize() == 0)
   {
@@ -91,8 +91,8 @@ OT::Point ContinuousTTest::getLogPDF(const OT::Indices & l,
 
 std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
 ContinuousTTest::getLogPDFs(const OT::UnsignedInteger Y,
-			    const OT::UnsignedInteger Z,
-			    const OT::Indices & X) const
+                            const OT::UnsignedInteger Z,
+                            const OT::Indices & X) const
 {
   //@todo how to be smart for k ?
   OT::UnsignedInteger k = GetK(data_);
@@ -144,38 +144,38 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
   const double smallLog = std::log(OT::SpecFunc::ScalarEpsilon);
   double logDenominator = 0.0;
   if (d == 0)
+  {
+    const double fX0 = std::exp(logFX[0]);
+    for (unsigned int i = 0; i < N; ++i)
     {
-      const double fX0 = std::exp(logFX[0]);
-      for (unsigned int i = 0; i < N; ++i)
-	{
-	  logDenominator = logFYZX[i];
-	  if (logDenominator > smallLog)
-	    {
-	      H += std::pow(-std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator)), 2.0);
-	      B1 += facteurpi / (std::sqrt(pPar1MoinsP(dY(i, 0))) * std::exp(logFYX[i]));
-	      B2 += facteurpi / (std::sqrt(pPar1MoinsP(dZ(i, 0))) * std::exp(logFZX[i]));
-	      B3 += fX0;
-	    } // logDenominator > smallLog	  
-	} // i
-    } // d == 0
+      logDenominator = logFYZX[i];
+      if (logDenominator > smallLog)
+      {
+        H += std::pow(-std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator)), 2.0);
+        B1 += facteurpi / (std::sqrt(pPar1MoinsP(dY(i, 0))) * std::exp(logFYX[i]));
+        B2 += facteurpi / (std::sqrt(pPar1MoinsP(dZ(i, 0))) * std::exp(logFZX[i]));
+        B3 += fX0;
+      } // logDenominator > smallLog
+    } // i
+  } // d == 0
   else
+  {
+    for (unsigned int i = 0; i < N; ++i)
     {
-      for (unsigned int i = 0; i < N; ++i)
-	{
-	  logDenominator = logFYZX[i] + logFX[i];
-	  if (logDenominator > smallLog)
-	    {
-	      H += std::pow(-std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator)), 2.0);
-	      double gX = 1.0;
-	      for (unsigned int j = 0; j < d; ++j)
-		gX /= pPar1MoinsP(dX(i, j));
-	      gX = std::sqrt(gX);
-	      B1 += facteurpi * gX / (std::sqrt(pPar1MoinsP(dY(i, 0))) * std::exp(logFYX[i]));
-	      B2 += facteurpi * gX / (std::sqrt(pPar1MoinsP(dZ(i, 0))) * std::exp(logFZX[i]));
-	      B3 += std::exp(logFX[i]) * gX;
-	    } // logDenominator > smallLog
-	} // i
-    } // d > 0
+      logDenominator = logFYZX[i] + logFX[i];
+      if (logDenominator > smallLog)
+      {
+        H += std::pow(-std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator)), 2.0);
+        double gX = 1.0;
+        for (unsigned int j = 0; j < d; ++j)
+          gX /= pPar1MoinsP(dX(i, j));
+        gX = std::sqrt(gX);
+        B1 += facteurpi * gX / (std::sqrt(pPar1MoinsP(dY(i, 0))) * std::exp(logFYX[i]));
+        B2 += facteurpi * gX / (std::sqrt(pPar1MoinsP(dZ(i, 0))) * std::exp(logFZX[i]));
+        B3 += std::exp(logFX[i]) * gX;
+      } // logDenominator > smallLog
+    } // i
+  } // d > 0
   // mean
   H /= N;
 

@@ -8,7 +8,7 @@ Available constructors:
 
 Parameters
 ----------
-junctionTree : a :class:`~otagrum.JunctionTree`
+junctionTree : a :class:`~otagrum.NamedJunctionTree`
     The junction tree describing the dependence structure of the copula.
 cliquesCollection : sequence of sequences of int
     For each clique of the junction tree, the collection of global indices of its
@@ -42,12 +42,12 @@ Examples
 >>> realization = copula.getRealization()
 >>> pdf = copula.computePDF(realization)
 
-Or, using the JunctionTree constructor:
+Or, using the NamedJunctionTree constructor:
 >>> import pyAgrum as gum
 >>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
 >>> ie = gum.LazyPropagation(bn)
 >>> jtagr = ie.junctionTree()
->>> jt = otagrum.JunctionTree(jtagr, bn.names())
+>>> jt = otagrum.NamedJunctionTree(jtagr, bn.names())
 >>> copula = otagrum.JunctionTreeBernsteinCopula(jt, sample, binNumber, False)"
 
 

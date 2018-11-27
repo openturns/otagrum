@@ -9,7 +9,8 @@
 
 using namespace OTAGRUM;
 
-OT::Sample getNormalSample(OT::UnsignedInteger size) {
+OT::Sample getNormalSample(OT::UnsignedInteger size)
+{
   OT::UnsignedInteger dim = 10;
 
   OT::CorrelationMatrix R(dim);
@@ -24,7 +25,8 @@ OT::Sample getNormalSample(OT::UnsignedInteger size) {
   return distribution.getSample(size);
 }
 
-OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size) {
+OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
+{
   auto R = OT::CorrelationMatrix(3);
   R(0, 1) = 0.9;
   R(0, 2) = 0.25;
@@ -38,7 +40,8 @@ OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size) {
   return copula.getSample(size);
 }
 
-void testNormalSample() {
+void testNormalSample()
+{
   double t1;
   double p1;
   bool ok1;
@@ -59,7 +62,8 @@ void testNormalSample() {
             << "    test:" << (ok2 ? " fail " : " OK ") << "\n";
 }
 
-void testIndepsSeePythonTest() {
+void testIndepsSeePythonTest()
+{
   double t;
   double p;
   bool ok;
@@ -90,7 +94,8 @@ void testIndepsSeePythonTest() {
             << "   test:" << (ok ? " OK " : " fail ") << "\n";
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   testNormalSample();
   testIndepsSeePythonTest();
   return EXIT_SUCCESS;

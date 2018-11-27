@@ -12,4 +12,4 @@ API
     JunctionTreeBernsteinCopula
     ContinuousPC
     ContinuousTTest
-    JunctionTree
+    NamedJunctionTree

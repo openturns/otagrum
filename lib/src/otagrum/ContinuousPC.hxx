@@ -22,13 +22,19 @@
 #ifndef OTAGRUM_CONTINUOUSPC_HXX
 #define OTAGRUM_CONTINUOUSPC_HXX
 
-#include "otagrum/ContinuousTTest.hxx"
 #include <agrum/graphs/mixedGraph.h>
 #include <agrum/graphs/undiGraph.h>
+#include <agrum/graphs/cliqueGraph.h>
+#include <agrum/graphs/algorithms/triangulations/defaultTriangulation.h>
+#include <agrum/graphs/algorithms/triangulations/junctionTreeStrategies/defaultJunctionTreeStrategy.h>
+
 #include <openturns/Sample.hxx>
 
+#include "otagrum/ContinuousTTest.hxx"
+#include "otagrum/NamedJunctionTree.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 class OTAGRUM_API ContinuousPC : public OT::Object
 {
@@ -40,18 +46,34 @@ public:
   gum::UndiGraph getSkeleton();
   gum::MixedGraph getPDAG(const gum::UndiGraph &g) const;
   gum::UndiGraph getMoralGraph(const gum::MixedGraph &g) const;
+  NamedJunctionTree getJunctionTree(const gum::UndiGraph &g) const;
 
-  void setOptimalPolicy(bool policy) { optimalPolicy_ = policy; };
-  bool getOptimalPolicy() const { return optimalPolicy_; };
+  void setOptimalPolicy(bool policy)
+  {
+    optimalPolicy_ = policy;
+  };
+  bool getOptimalPolicy() const
+  {
+    return optimalPolicy_;
+  };
 
-  void setVerbosity(bool verbose) { verbose_ = verbose; };
-  bool getVerbosity() const { return verbose_; };
+  void setVerbosity(bool verbose)
+  {
+    verbose_ = verbose;
+  };
+  bool getVerbosity() const
+  {
+    return verbose_;
+  };
 
   double getPValue(gum::NodeId x, gum::NodeId y);
   double getTTest(gum::NodeId x, gum::NodeId y);
   const OT::Indices getSepset(gum::NodeId x, gum::NodeId y);
 
-  const std::vector<gum::Edge> &getRemoved() { return removed_; };
+  const std::vector<gum::Edge> &getRemoved()
+  {
+    return removed_;
+  };
 
   std::string skeletonToDot(const gum::UndiGraph &skeleton);
   std::string PDAGtoDot(const gum::MixedGraph &pdag);
@@ -71,7 +93,7 @@ private:
 
   std::tuple<bool, double, double, OT::Indices>
   bestSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
-                 const OT::Indices &neighbours, OT::UnsignedInteger n);
+                const OT::Indices &neighbours, OT::UnsignedInteger n);
 };
 
 } // namespace OTAGRUM
