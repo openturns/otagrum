@@ -25,7 +25,7 @@
 %include otagrum/otagrumprivate.hxx
 %include Utils.i
 %include MixedHistogramUserDefined.i
-%include JunctionTree.i
+%include NamedJunctionTree.i
 %include JunctionTreeBernsteinCopula.i
 %include ContinuousTTest.i
 %include ContinuousPC.i

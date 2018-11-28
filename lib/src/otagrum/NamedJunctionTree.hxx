@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief JunctionTree
+ *  @brief NamedJunctionTree
  *
  *  Copyright 2010-2018 Airbus-LIP6-Phimeca
  *
@@ -25,8 +25,8 @@
 #include <string>
 #include <vector>
 
-#include <agrum/core/hashTable.h>
 #include <agrum/graphs/cliqueGraph.h>
+#include <agrum/BN/BayesNet.h>
 
 #include <openturns/Description.hxx>
 #include <openturns/Indices.hxx>
@@ -38,6 +38,7 @@ namespace OTAGRUM
 class OTAGRUM_API NamedJunctionTree : public OT::Object
 {
 public:
+  NamedJunctionTree(const gum::CliqueGraph &jt, const gum::BayesNet<double> &bn);
   NamedJunctionTree(const gum::CliqueGraph &jt,
                     const std::vector<std::string> &names);
 

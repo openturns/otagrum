@@ -5,10 +5,10 @@ digraph "skeleton" {
   edge [dir = none];
   node [shape = ellipse];
   0; 1; 2; 3; 
-  0->1 [label="116
-0"]
-  2->3 [label="213
-0"]
+  0->1 [label="t=116
+p=0"]
+  2->3 [label="t=213
+p=0"]
 }
 0--1 : p-value=0
 2--3 : p-value=0
@@ -39,4 +39,3 @@ node [shape = ellipse];
 
 }
 
-Finito 
