@@ -7,6 +7,16 @@
 
 #include "otagrum/ContinuousPC.hxx"
 
+OT::Description DescrFromStringVect(const std::vector<std::string> &v)
+{
+  OT::Description res;
+  for (auto s : v)
+  {
+    res.add(s);
+  }
+  return res;
+}
+
 OT::Sample getTrucBizarre(OT::UnsignedInteger size)
 {
   OT::Collection<OT::Copula> copulas;
@@ -18,9 +28,14 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size)
     for (OT::UnsignedInteger j = 0; j < i; j++)
       R(i, j) = (i + j + 1) / (2.0 * dim);
 
-  copulas.add(OT::FrankCopula(4.0));
-  copulas.add(OT::ClaytonCopula(3.0));
-  //copulas.add(OT::NormalCopula(R));
+  auto copula1 = OT::FrankCopula(4.0);
+  copula1.setDescription(DescrFromStringVect({"A1", "A2"}));
+  auto copula2 = OT::ClaytonCopula(3.0);
+  copula2.setDescription(DescrFromStringVect({"B1", "B2"}));
+
+  copulas.add(copula1);
+  copulas.add(copula2);
+  // copulas.add(OT::NormalCopula(R));
 
   auto copula = OT::ComposedCopula(copulas);
   return copula.getSample(size);
@@ -75,7 +90,6 @@ int main(void)
   {
     GUM_SHOWERROR(e);
   }
-  std::cout << "Finito " << std::endl;
 
   return EXIT_SUCCESS;
 }

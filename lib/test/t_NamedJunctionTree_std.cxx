@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 
 #include <agrum/BN/BayesNet.h>
@@ -26,13 +27,7 @@ void testOK()
   gum::LazyPropagation<double> ie(&bn);
 
   const auto &jtagr = ie.junctionTree();
-  std::vector<std::string> names;
-
-  for (const auto &elt : bn.nodes())
-  {
-    names.push_back(bn.variable(elt).name());
-  }
-  auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
+  auto jt = OTAGRUM::NamedJunctionTree(*jtagr, bn);
 
   std::cout << "** CLIQUES **" << std::endl;
   for (auto cliq : jt.getNodes())
@@ -117,13 +112,7 @@ void testGetMarginal()
    */
   gum::LazyPropagation<double> ie(&bn);
   auto jtagr = ie.junctionTree();
-  std::vector<std::string> names;
-  for (const auto &elt : bn.nodes())
-  {
-    names.push_back(bn.variable(elt).name());
-  }
-
-  auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
+  auto jt = OTAGRUM::NamedJunctionTree(*jtagr, bn);
   std::cout << jt.__str__() << std::endl;
 
   std::cout << "getMarginal on h,a,b\n";
@@ -134,6 +123,22 @@ void testGetMarginal()
 
   auto jt2 = jt.getMarginal(indices);
   std::cout << jt2.__str__() << std::endl;
+}
+
+void testDFSMaxFirst()
+{
+  auto bn = gum::BayesNet<double>::fastPrototype(
+              "0->1->2<-0->3->4<-5->6;4->7;8->9->10<-11");
+  gum::LazyPropagation<double> ie(&bn);
+  auto jtagr = ie.junctionTree();
+  auto jt = OTAGRUM::NamedJunctionTree(*jtagr, bn);
+
+  std::cout << "DFS max clique size first on "
+            "0->1->2<-0->3->4<-5->6;4->7;8->9->10<-11\n";
+  for (auto node : jt.getOrderMaxFirst())
+  {
+    std::cout << jt.getClique(node) << std::endl;
+  }
 }
 
 int main(int argc, char **argv)
@@ -148,5 +153,10 @@ int main(int argc, char **argv)
   std::cout << "\n";
 
   testGetMarginal();
+  std::cout << "\n";
+
+  testDFSMaxFirst();
+  std::cout << "\n";
+
   return 0;
 }

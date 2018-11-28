@@ -25,16 +25,29 @@ OT::Sample getNormalSample(OT::UnsignedInteger size)
   return distribution.getSample(size);
 }
 
+OT::Description DescrFromStringVect(const std::vector<std::string>& v)
+{
+  OT::Description res;
+  for(auto s : v)
+  {
+    res.add(s);
+  }
+  return res;
+}
+
 OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
 {
   auto R = OT::CorrelationMatrix(3);
   R(0, 1) = 0.9;
   R(0, 2) = 0.25;
-
-
   auto copula1 = OT::NormalCopula(R);
+  copula1.setDescription(DescrFromStringVect({"A1", "A2", "A3"}));
+
   auto copula2 = OT::FrankCopula(3.0);
+  copula2.setDescription(DescrFromStringVect({"B1", "B2"}));
+
   auto copula3 = OT::ClaytonCopula(2.0);
+  copula2.setDescription(DescrFromStringVect({"C1", "C2"}));
 
   OT::Collection<OT::Copula> copulas;
   copulas.add(copula1);
@@ -43,7 +56,7 @@ OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
 
   auto copula = OT::ComposedCopula(copulas);
 
-  auto sample=copula.getSample(size);
+  auto sample = copula.getSample(size);
   return sample;
 }
 
