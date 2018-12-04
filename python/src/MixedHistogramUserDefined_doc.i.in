@@ -19,7 +19,7 @@ Examples
 >>> distribution = otagrum.MixedHistogramUserDefined(ticksCollection, kind, probabilityTable)
 >>> distribution.setDescription(['A', 'B'])
 >>> distribution.getRealization()
-class=Point name=Unnamed dimension=2 values=[2.97791,3]"
+class=Point name=Unnamed dimension=2 values=[0.44495,2]"
 
 // ----------------------------------------------------------------------------
 
