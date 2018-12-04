@@ -10,12 +10,6 @@ Parameters
 ----------
 junctionTree : a :class:`~otagrum.NamedJunctionTree`
     The junction tree describing the dependence structure of the copula.
-cliquesCollection : sequence of sequences of int
-    For each clique of the junction tree, the collection of global indices of its
-    associated variables.
-separatorsCollection : sequence of sequences of int
-    For each separator of the junction tree, the collection of global indices of
-    its associated variables.
 copulaSample : a 2-d sequence of float
     The sample defining the copula
 binNumber : int
@@ -32,22 +26,15 @@ It is based on a Bernstein estimation of each sub-copulas of the model.
 
 Examples
 --------
->>> import openturns as ot
 >>> import otagrum
->>> cliquesCollection = [[1,2],[3,4],[0,1],[2,3]]
->>> separatorsCollection = [[1],[2],[3]]
->>> sample = ot.Normal(5).getSample(1000)
->>> binNumber = 5
->>> copula = otagrum.JunctionTreeBernsteinCopula(cliquesCollection, separatorsCollection, sample, binNumber, False)
->>> realization = copula.getRealization()
->>> pdf = copula.computePDF(realization)
-
-Or, using the NamedJunctionTree constructor:
+>>> import openturns as ot
 >>> import pyAgrum as gum
 >>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
 >>> ie = gum.LazyPropagation(bn)
 >>> jtagr = ie.junctionTree()
 >>> jt = otagrum.NamedJunctionTree(jtagr, bn.names())
+>>> sample = ot.Normal(5).getSample(1000)
+>>> binNumber = 5
 >>> copula = otagrum.JunctionTreeBernsteinCopula(jt, sample, binNumber, False)"
 
 

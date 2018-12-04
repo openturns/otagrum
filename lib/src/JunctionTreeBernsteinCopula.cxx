@@ -28,8 +28,7 @@
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/SpecFunc.hxx>
 #include <openturns/DistFunc.hxx>
-#include <openturns/RegularGrid.hxx>
-#include <openturns/UserDefined.hxx>
+#include <openturns/Uniform.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
 
@@ -43,6 +42,7 @@ static const OT::Factory<JunctionTreeBernsteinCopula> Factory_JunctionTreeBernst
 /* Default constructor */
 JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula()
   : OT::ContinuousDistribution()
+  , junctionTree_()
   , cliquesCollection_(0)
   , separatorsCollection_(0)
   , copulaSample_(1, 1)
@@ -51,7 +51,7 @@ JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula()
   , logFactors_(0, 1)
 {
   setName( "JunctionTreeBernsteinCopula" );
-  setCopulaSample(copulaSample_, true);
+  setCopulaSample(copulaSample_, false);
 }
 
 /* Parameters constructor */
@@ -60,7 +60,8 @@ JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const NamedJunctionTree
     const OT::UnsignedInteger binNumber,
     const OT::Bool isCopulaSample)
   : OT::ContinuousDistribution()
-  , cliquesCollection_(junctionTree.getCliquesCollection())
+  , junctionTree_(junctionTree)
+  , cliquesCollection_(0)
   , separatorsCollection_(junctionTree.getSeparatorsCollection())
   , copulaSample_(copulaSample)
   , binNumber_(binNumber)
@@ -69,16 +70,19 @@ JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const NamedJunctionTree
 {
   setName( "JunctionTreeBernsteinCopula" );
   setCopulaSample(copulaSample, isCopulaSample);
+  setCliquesOrder(junctionTree.getOrderMaxFirst());
 }
 
-JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const IndicesCollection & cliquesCollection,
-    const IndicesCollection & separatorsCollection,
+/* Parameters constructor */
+JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const NamedJunctionTree & junctionTree,
+    const OT::Indices & cliquesOrder,
     const OT::Sample & copulaSample,
     const OT::UnsignedInteger binNumber,
     const OT::Bool isCopulaSample)
   : OT::ContinuousDistribution()
-  , cliquesCollection_(cliquesCollection)
-  , separatorsCollection_(separatorsCollection)
+  , junctionTree_(junctionTree)
+  , cliquesCollection_(0)
+  , separatorsCollection_(junctionTree.getSeparatorsCollection())
   , copulaSample_(copulaSample)
   , binNumber_(binNumber)
   , logBetaMarginalFactors_(0, 1)
@@ -86,6 +90,17 @@ JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const IndicesCollection
 {
   setName( "JunctionTreeBernsteinCopula" );
   setCopulaSample(copulaSample, isCopulaSample);
+  setCliquesOrder(cliquesOrder);
+}
+
+/* Set the order according to which the cliques are traversed */
+  void JunctionTreeBernsteinCopula::setCliquesOrder(const OT::Indices & cliquesOrder)
+{
+  const unsigned int size = cliquesOrder.getSize();
+  if (size != junctionTree_.getCliquesCollection().getSize()) throw OT::InvalidArgumentException(HERE) << "Error: expected a cliques order of size=" << junctionTree_.getCliquesCollection().getSize() << ", got size=" << size;
+  cliquesCollection_ = IndicesPersistentCollection(size);
+  for (unsigned int i = 0; i < size; ++i)
+    cliquesCollection_[i] = junctionTree_.getClique(cliquesOrder[i]);
 }
 
 /* Copula sample accessor */
@@ -182,6 +197,7 @@ OT::String JunctionTreeBernsteinCopula::__repr__() const
   oss << "class=" << JunctionTreeBernsteinCopula::GetClassName()
       << " name=" << getName()
       << " dimension=" << getDimension()
+      << " junctionTree=" << junctionTree_
       << " cliquesCollection=" << cliquesCollection_
       << " separatorsCollection=" << separatorsCollection_
       << " sample=" << copulaSample_
@@ -192,7 +208,7 @@ OT::String JunctionTreeBernsteinCopula::__repr__() const
 OT::String JunctionTreeBernsteinCopula::__str__(const OT::String & offset) const
 {
   OT::OSS oss(false);
-  oss << offset << getClassName() << "(cliques=" << cliquesCollection_ << ", separators=" << separatorsCollection_ << ", sample=\n" << copulaSample_ << ", k=" << binNumber_ << ")";
+  oss << offset << getClassName() << "(junction tree=" << junctionTree_ << ", sample=\n" << copulaSample_ << ", k=" << binNumber_ << ")";
   return oss;
 }
 
@@ -211,8 +227,9 @@ void JunctionTreeBernsteinCopula::computeRange()
 /* Get one realization of the distribution */
 OT::Point JunctionTreeBernsteinCopula::getRealization() const
 {
-  const OT::UnsignedInteger size = copulaSample_.getSize();
   const OT::UnsignedInteger dimension = getDimension();
+  if ((dimension == 1) && isCopula_) return OT::Point(1, OT::RandomGenerator::Generate());
+  const OT::UnsignedInteger size = copulaSample_.getSize();
   OT::Collection<OT::UnsignedInteger> generatedFlags(dimension, 0);
   OT::Point realization(dimension);
   for (OT::UnsignedInteger cliqueIndex = 0; cliqueIndex < cliquesCollection_.getSize(); ++cliqueIndex)
@@ -280,7 +297,9 @@ OT::Scalar JunctionTreeBernsteinCopula::computePDF(const OT::Point & point) cons
 {
   const OT::UnsignedInteger dimension = getDimension();
   if (point.getDimension() != dimension) throw OT::InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+  if ((dimension == 1) && isCopula_) return (point[0] <= 0.0 ? 0.0 : (point[0] > 1.0 ? 0.0 : 1.0));
   for (OT::UnsignedInteger i = 0; i < dimension; ++i)
+    // Here we have to exclude both bounds in order to avoid NaNs
     if ((point[i] <= 0.0) || (point[i] >= 1.0)) return 0.0;
   OT::Scalar pdfValue = 1.0;
   OT::Point logX(dimension);
@@ -333,6 +352,22 @@ OT::Scalar JunctionTreeBernsteinCopula::computePDF(const OT::Point & point) cons
     pdfValue /= separatorPDFValue;
   } // n
   return pdfValue;
+}
+
+
+/* Get the i-th marginal distribution */
+OT::Distribution JunctionTreeBernsteinCopula::getMarginal(const OT::UnsignedInteger i) const
+{
+  if (i >= getDimension()) throw OT::InvalidArgumentException(HERE) << "The index of a marginal distribution must be in the range [0, dim-1]";
+  if (isCopula_) return OT::Uniform(0.0, 1.0);
+  return getMarginal(OT::Indices(1, i));
+}
+
+/* Get the distribution of the marginal distribution corresponding to indices dimensions */
+OT::Distribution JunctionTreeBernsteinCopula::getMarginal(const OT::Indices & indices) const
+{
+  if (isCopula_ && (indices.getSize() == 1)) return OT::Uniform(0.0, 1.0);
+  return JunctionTreeBernsteinCopula(junctionTree_.getMarginal(indices), copulaSample_.getMarginal(indices), binNumber_, true);
 }
 
 

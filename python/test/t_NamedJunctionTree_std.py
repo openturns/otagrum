@@ -25,4 +25,6 @@ ie=gum.LazyPropagation(bn)
 jt=ie.junctionTree()
 njt=otagrum.NamedJunctionTree(jt,bn)
 for cliq in njt.getOrderMaxFirst():
-    print(f"{cliq} : {njt.getClique(cliq)}")
+    # Only for happy Python 3.6+ users
+    # print(f"{cliq} : {njt.getClique(cliq)}")
+    print("{} : {}".format(cliq, njt.getClique(cliq)))

@@ -22,6 +22,7 @@
 #define OTAGRUM_JUNCTIONTREEBERNSTEINCOPULA_HXX
 
 #include <openturns/ContinuousDistribution.hxx>
+#include <openturns/Distribution.hxx>
 #include <openturns/Sample.hxx>
 
 #include "NamedJunctionTree.hxx"
@@ -51,14 +52,15 @@ public:
   JunctionTreeBernsteinCopula(const NamedJunctionTree & junctionTree,
                               const OT::Sample & copulaSample,
                               const OT::UnsignedInteger binNumber,
-                              const OT::Bool isCopulaSample);
+                              const OT::Bool isCopulaSample = false);
 
-  JunctionTreeBernsteinCopula(const IndicesCollection & cliquesCollection,
-                              const IndicesCollection & separatorsCollection,
+  JunctionTreeBernsteinCopula(const NamedJunctionTree & junctionTree,
+			      const OT::Indices & cliquesOrder,
                               const OT::Sample & copulaSample,
                               const OT::UnsignedInteger binNumber,
-                              const OT::Bool isCopulaSample);
+                              const OT::Bool isCopulaSample = false);
 
+public:
   /** Comparison operator */
   using OT::ContinuousDistribution::operator ==;
   OT::Bool operator ==(const JunctionTreeBernsteinCopula & other) const;
@@ -89,12 +91,21 @@ public:
                        const OT::Bool isEmpiricalCopulaSample = false);
   OT::Sample getCopulaSample() const;
 
+  /** Set the order according to which the cliques are traversed */
+  void setCliquesOrder(const OT::Indices & cliquesOrder);
+  
   /** Bin number accessor */
 private:
   void setBinNumber(const OT::UnsignedInteger binNumber);
 
 public:
   OT::UnsignedInteger getBinNumber() const;
+
+  /** Get the i-th marginal distribution */
+  OT::Distribution getMarginal(const OT::UnsignedInteger i) const;
+
+  /** Get the distribution of the marginal distribution corresponding to indices dimensions */
+  OT::Distribution getMarginal(const OT::Indices & indices) const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
@@ -113,8 +124,13 @@ private:
 
   /** The main parameter set of the distribution */
 
-  /** Cliques and Separators as collections of Indices */
+  /** Underlying junction tree */
+  NamedJunctionTree junctionTree_;
+  
+  /** Cliques as collections of Indices */
   IndicesPersistentCollection cliquesCollection_;
+
+  /** Separators as collections of Indices */
   IndicesPersistentCollection separatorsCollection_;
 
   /** The underlying sample */
