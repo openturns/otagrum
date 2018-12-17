@@ -7,6 +7,7 @@
 #include <openturns/Indices.hxx>
 #include <openturns/Normal.hxx>
 #include <openturns/Graph.hxx>
+#include <openturns/RandomGenerator.hxx>
 
 #include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/JunctionTreeBernsteinCopula.hxx"
@@ -35,15 +36,51 @@ void testOK()
     names.push_back(bn.variable(elt).name());
   }
   auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
-  OT::Sample copulaSample = OT::Normal(jt.getSize()).getSample(1000);
-  OTAGRUM::JunctionTreeBernsteinCopula copula(jt, copulaSample, 5, false);
-  std::cout << "copula=" << copula << std::endl;
-  OT::Sample sample = copula.getSample(10);
-  std::cout << "sample=" << sample << std::endl;
-  OT::Sample pdf = copula.computePDF(sample);
-  std::cout << "pdf=" << pdf << std::endl;
-  //OT::Graph graph = copula.drawMarginal2DPDF(0, 1, OT::Point(2, 0.0), OT::Point(2, 1.0), OT::Indices(2, 31));
-  //graph.draw("test_marginal_pdf.png");
+  unsigned int dim = jt.getSize();
+  OT::CovarianceMatrix C(dim);
+  for (unsigned int i = 0; i < dim; ++i)
+  {
+    for (unsigned int j = 0; j < i; ++j)
+      C(i, j) = 1.0;
+    C(i, i) = 2.0;
+  }
+  OT::Sample copulaSample = OT::Normal(OT::Point(dim), C).getSample(1000);
+  {
+    OT::RandomGenerator::SetSeed(0);
+    OTAGRUM::JunctionTreeBernsteinCopula copula(jt, copulaSample, 5, false);
+    std::cout << "copula=" << copula << std::endl;
+    OT::Sample sample = copula.getSample(10);
+    std::cout << "sample=" << sample << std::endl;
+    OT::Sample pdf = copula.computePDF(sample);
+    std::cout << "pdf=" << pdf << std::endl;
+    double entropyMC = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
+    std::cout << "entropy (MC)=" << entropyMC << std::endl;
+  }
+  {
+    OT::RandomGenerator::SetSeed(0);
+    OTAGRUM::JunctionTreeBernsteinCopula copula(jt, jt.getOrderMaxFirst(), copulaSample, 5, false);
+    std::cout << "copula=" << copula << std::endl;
+    OT::Sample sample = copula.getSample(10);
+    std::cout << "sample=" << sample << std::endl;
+    OT::Sample pdf = copula.computePDF(sample);
+    std::cout << "pdf=" << pdf << std::endl;
+    double entropyMC = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
+    std::cout << "entropy (MC)=" << entropyMC << std::endl;
+    if (false)
+    {
+      OT::Indices indices(2);
+      for (unsigned int i = 0; i < dim; ++i)
+      {
+        indices[0] = i;
+        for (unsigned int j = 0; j < i; ++j)
+        {
+          indices[1] = j;
+          OT::Graph graph = copula.getMarginal(indices).drawPDF();
+          graph.draw(OT::String(OT::OSS() << "marginal_" << i << "_" << j << "_pdf.png"), 600, 620, 1);
+        } // j
+      } // i
+    }
+  }
 }
 
 int main(int argc, char **argv)
