@@ -78,7 +78,7 @@ optimal_policy : bool
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::getPDAG
+%feature("docstring") OTAGRUM::ContinuousPC::learnPDAG
 "PDAG accessor
 
 Parameters
@@ -154,7 +154,7 @@ ttest : float
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::getSkeleton
+%feature("docstring") OTAGRUM::ContinuousPC::learnSkeleton
 "Skeleton graph accessor
 
 Returns

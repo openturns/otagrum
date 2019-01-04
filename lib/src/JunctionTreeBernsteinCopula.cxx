@@ -3,7 +3,7 @@
  *  @brief The JunctionTreeBernsteinCopula distribution
  *
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -94,7 +94,7 @@ JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const NamedJunctionTree
 }
 
 /* Set the order according to which the cliques are traversed */
-  void JunctionTreeBernsteinCopula::setCliquesOrder(const OT::Indices & cliquesOrder)
+void JunctionTreeBernsteinCopula::setCliquesOrder(const OT::Indices & cliquesOrder)
 {
   const unsigned int size = cliquesOrder.getSize();
   if (size != junctionTree_.getCliquesCollection().getSize()) throw OT::InvalidArgumentException(HERE) << "Error: expected a cliques order of size=" << junctionTree_.getCliquesCollection().getSize() << ", got size=" << size;
