@@ -2,7 +2,7 @@
 /**
  *  @brief NamedJunctionTree
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +27,8 @@
 
 namespace OTAGRUM
 {
-NamedJunctionTree::NamedJunctionTree() { /* Nothing to do */ };
+NamedJunctionTree::NamedJunctionTree() {};
+
 NamedJunctionTree::NamedJunctionTree(const gum::CliqueGraph &jt,
                                      const gum::BayesNet<double> &bn)
   : OT::Object(), jt_(jt), map_(bn.size())

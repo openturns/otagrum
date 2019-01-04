@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief NamedJunctionTree
+ *  @brief ContinuousBayesianNetworks
  *
  *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
@@ -19,14 +19,13 @@
  *
  */
 
-#ifndef OTAGRUM_JUNCTIONTREE_HXX
-#define OTAGRUM_JUNCTIONTREE_HXX
-
+#ifndef OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX
+#define OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX
 #include <string>
 #include <vector>
 
-#include <agrum/graphs/cliqueGraph.h>
 #include <agrum/BN/BayesNet.h>
+#include <agrum/graphs/DAG.h>
 
 #include <openturns/Description.hxx>
 #include <openturns/Indices.hxx>
@@ -35,40 +34,25 @@
 
 namespace OTAGRUM
 {
-class OTAGRUM_API NamedJunctionTree : public OT::Object
+class OTAGRUM_API ContinuousBayesianNetwork : public OT::Object
 {
 public:
-  NamedJunctionTree();
-  NamedJunctionTree(const gum::CliqueGraph &jt, const gum::BayesNet<double> &bn);
-  NamedJunctionTree(const gum::CliqueGraph &jt,
-                    const std::vector<std::string> &names);
+  ContinuousBayesianNetwork() = delete;
+  ContinuousBayesianNetwork(const gum::BayesNet<double> &bn);
+  ContinuousBayesianNetwork(const gum::DAG &dag,
+                            const std::vector<std::string> &names);
 
   OT::UnsignedInteger getSize() const;
-
   OT::Description getDescription() const;
 
-  OT::Indices getClique(gum::NodeId nod) const;
-  OT::Indices getSeparator(gum::Edge edge) const;
-
-  const gum::NodeSet &getNeighbours(gum::NodeId id) const;
-  gum::EdgeSet getEdges() const;
-  gum::NodeSet getNodes() const;
-
-  OT::Collection<OT::Indices> getCliquesCollection() const;
-  OT::Collection<OT::Indices> getSeparatorsCollection() const;
-
-  NamedJunctionTree getMarginal(OT::Indices indices) const;
-
-  OT::String __str__(const OT::String &offset = "") const;
-
-  OT::Indices getOrderMaxFirst() const;
+  OT::Indices getParents(const gum::NodeId nod) const;
+  OT::Indices getChildren(const gum::NodeId nod) const;
+  OT::Indices getNodes() const;
 
 private:
-  gum::JunctionTree jt_;
+  gum::DAG dag_;
   OT::Description map_;
-
-  void checkConsistency() const;
 };
 
 } // namespace OTAGRUM
-#endif // OTAGRUM_JUNCTIONTREE_H
+#endif // OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX

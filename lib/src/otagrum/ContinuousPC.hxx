@@ -2,7 +2,7 @@
 /**
  *  @brief ContinuousPC
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,11 +22,11 @@
 #ifndef OTAGRUM_CONTINUOUSPC_HXX
 #define OTAGRUM_CONTINUOUSPC_HXX
 
-#include <agrum/graphs/mixedGraph.h>
-#include <agrum/graphs/undiGraph.h>
-#include <agrum/graphs/cliqueGraph.h>
 #include <agrum/graphs/algorithms/triangulations/defaultTriangulation.h>
 #include <agrum/graphs/algorithms/triangulations/junctionTreeStrategies/defaultJunctionTreeStrategy.h>
+#include <agrum/graphs/cliqueGraph.h>
+#include <agrum/graphs/mixedGraph.h>
+#include <agrum/graphs/undiGraph.h>
 
 #include <openturns/Sample.hxx>
 
@@ -43,8 +43,10 @@ public:
                         const OT::UnsignedInteger maxParents = 5,
                         const double alpha = 0.1);
 
-  gum::UndiGraph getSkeleton();
-  gum::MixedGraph getPDAG(const gum::UndiGraph &g) const;
+  gum::UndiGraph learnSkeleton();
+  NamedJunctionTree learnJunctionTree();
+
+  gum::MixedGraph learnPDAG(const gum::UndiGraph &g) const;
   gum::UndiGraph getMoralGraph(const gum::MixedGraph &g) const;
   NamedJunctionTree getJunctionTree(const gum::UndiGraph &g) const;
 

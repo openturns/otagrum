@@ -2,7 +2,7 @@
 /**
  *  @brief ContinuousPC
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -239,7 +239,7 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
 // From complete graph g, remove as much as possible edge (y,z) in g
 // if (y,z) is removed, it means that sepset_[Edge(y,z)] contains X, set of
 // nodes, such that y and z are tested as independent given X.
-gum::UndiGraph ContinuousPC::getSkeleton()
+gum::UndiGraph ContinuousPC::learnSkeleton()
 {
   gum::UndiGraph g;
   tester_.clearCache();
@@ -274,10 +274,15 @@ gum::UndiGraph ContinuousPC::getSkeleton()
   return g;
 }
 
+NamedJunctionTree ContinuousPC::learnJunctionTree()
+{
+  return getJunctionTree(getMoralGraph(learnPDAG(learnSkeleton())));
+}
+
 // for all triplet x-y-z (no edge between x and z), if y is in sepset[x,z]
 // then x->y<-z.
 // the ordering process uses the size of the p-value as a priority.
-gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) const
+gum::MixedGraph ContinuousPC::learnPDAG(const gum::UndiGraph &g) const
 {
   gum::MixedGraph cpdag;
 
@@ -291,15 +296,12 @@ gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) const
       IndicesCombinationIterator couple(Utils::FromNodeSet(g.neighbours(x)), 2);
       for (couple.setFirst(); !couple.isLast(); couple.next())
       {
-        bool ok = false;
-        double t = 0.0, p = 0.0;
         const gum::NodeId y = couple.current()[0];
         const gum::NodeId z = couple.current()[1];
         if (!g.existsEdge(y, z)) // maybe unshielded collider
         {
-          // if (OTAGR::isIn(sepset_[gum::Edge(x, z)], y)) {
-          //  queue.insert(Triplet{x, y, z}, pvalues_[gum::Edge(x, z)]);
-          //}
+          bool ok = false;
+          double t = 0.0, p = 0.0;
           OT::Indices indX;
           indX = indX + OT::UnsignedInteger(x);
           std::tie(t, p, ok) = tester_.isIndep(y, z, indX);
@@ -362,15 +364,16 @@ gum::UndiGraph ContinuousPC::getMoralGraph(const gum::MixedGraph &g) const
 NamedJunctionTree ContinuousPC::getJunctionTree(const gum::UndiGraph &g) const
 {
   gum::DefaultTriangulation triangulation;
-  gum::NodeProperty <gum::Size> mods;
+  gum::NodeProperty<gum::Size> mods;
   std::vector<std::string> names;
 
-  const auto& description = tester_.getDataDescription();
+  const auto &description = tester_.getDataDescription();
   for (int i = 0; i < description.getSize(); i++)
   {
-    mods.insert(i, 2);
-    names.push_back(description.at(i)); // triangulation needs modalities. We just say that mods
+    // triangulation needs modalities. We just say that mods
     // are all the same
+    mods.insert(i, 2);
+    names.push_back(description.at(i));
   }
   triangulation.setGraph(&g, &mods);
 

@@ -2,7 +2,7 @@
 /**
  *  @brief The JunctionTreeBernsteinCopula distribution
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ public:
                               const OT::Bool isCopulaSample = false);
 
   JunctionTreeBernsteinCopula(const NamedJunctionTree & junctionTree,
-			      const OT::Indices & cliquesOrder,
+                              const OT::Indices & cliquesOrder,
                               const OT::Sample & copulaSample,
                               const OT::UnsignedInteger binNumber,
                               const OT::Bool isCopulaSample = false);
@@ -93,7 +93,7 @@ public:
 
   /** Set the order according to which the cliques are traversed */
   void setCliquesOrder(const OT::Indices & cliquesOrder);
-  
+
   /** Bin number accessor */
 private:
   void setBinNumber(const OT::UnsignedInteger binNumber);
@@ -126,7 +126,7 @@ private:
 
   /** Underlying junction tree */
   NamedJunctionTree junctionTree_;
-  
+
   /** Cliques as collections of Indices */
   IndicesPersistentCollection cliquesCollection_;
 

@@ -52,10 +52,10 @@ int main(void)
       OTAGRUM::ContinuousPC learner(sample, 3, 0.9);
       learner.setOptimalPolicy(true);
       std::cout << "go" << std::endl;
-      auto skel = learner.getSkeleton();
+      auto skel = learner.learnSkeleton();
       std::cout << learner.skeletonToDot(skel) << std::endl;
 
-      /*auto cpdag = learner.getPDAG(skel);
+      /*auto cpdag = learner.learnPDAG(skel);
       std::cout << cpdag.toDot() << std::endl;
       for (const auto &e : learner.getRemoved()) {
         std::cout << e << " : p-value=" << learner.getPValue(e.first(),
@@ -74,11 +74,13 @@ int main(void)
       OTAGRUM::ContinuousPC learner(sample, 5, 0.8);
       learner.setOptimalPolicy(true);
       std::cout << "go" << std::endl;
-      auto skel = learner.getSkeleton();
+      auto skel = learner.learnSkeleton();
       std::cout << skel.toDot() << std::endl;
-      auto cpdag = learner.getPDAG(skel);
+      auto cpdag = learner.learnPDAG(skel);
       std::cout << cpdag.toDot() << std::endl;
       auto moral = learner.getMoralGraph(cpdag);
+      std::cout << moral.toDot() << std::endl;
+      auto jt = learner.getJunctionTree(cpdag);
       std::cout << moral.toDot() << std::endl;
     }
   }
