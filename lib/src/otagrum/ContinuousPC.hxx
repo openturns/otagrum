@@ -45,10 +45,11 @@ public:
 
   gum::UndiGraph learnSkeleton();
   NamedJunctionTree learnJunctionTree();
-
   gum::MixedGraph learnPDAG(const gum::UndiGraph &g) const;
+
   gum::UndiGraph getMoralGraph(const gum::MixedGraph &g) const;
   NamedJunctionTree getJunctionTree(const gum::UndiGraph &g) const;
+  gum::DAG getDAG(const gum::MixedGraph & p) const;
 
   void setOptimalPolicy(bool policy)
   {
