@@ -405,7 +405,7 @@ gum::DAG ContinuousPC::getDAG(const gum::MixedGraph &p) const {
     dag.addNodeWithId(nod);
   }
   for (const auto &arc : p.arcs()) {
-    dag.addArc(arc.head(), arc.tail());
+    dag.addArc(arc.tail(), arc.head());
   }
   for (const auto &edge : p.edges()) {
     remainings.insert(edge);
@@ -445,11 +445,53 @@ gum::DAG ContinuousPC::getDAG(const gum::MixedGraph &p) const {
     // Rule 4: Orient i-j into i->j whenever there are two chains
     // i-k->l and k->l->j such that k and j are nonadjacent.
     // (not used for dag from cpdag)
-    if (!found) {
-      throw OT::InvalidArgumentException(HERE)
-          << "Error: no way to create a dag from " << p.toDot()
-          << "... last try : " << dag.toDot();
-    }
+
+    if (!found) { // No edge has been oriented in the last step : we try to find
+                  // a good candidate among the remaining
+      gum::Arc candidate(0, 0);
+      bool found = false;
+      auto minPar = dag.size();
+      auto minBadPar = dag.size();
+      for (const auto &edge : remainings) {
+        auto npf = dag.parents(edge.first()).size();
+        auto nps = dag.parents(edge.second()).size();
+        if (npf == 0 &&
+            nps == 0) { // there cannot be better candidate, so we quit
+          candidate = gum::Arc(edge.first(), edge.second());
+          found = true;
+          break;
+        }
+        if (npf == 0) {
+          if (minPar > nps) { // it could be a good candidate
+            minPar = nps;
+            candidate = gum::Arc(edge.second(), edge.first());
+            found = true;
+          }
+        }
+        if (nps == 0) {
+          if (minPar > npf) { // it could be a good candidate
+            minPar = npf;
+            candidate = gum::Arc(edge.first(), edge.second());
+            found = true;
+          }
+        }
+        if (!found) {
+          // while not found we keep the best bad candidate
+          auto np = std::min(npf, nps);
+          if (minBadPar > np) {
+            minBadPar = np;
+            if (np == npf) { // then we add a parent to first
+              candidate = gum::Arc(edge.second(), edge.first());
+            } else { // we add a parent to second
+              candidate = gum::Arc(edge.first(), edge.second());
+            }
+          }
+        }
+      } // for
+      dag.addArc(candidate.tail(), candidate.head());
+      remainings.erase(gum::Edge(candidate.tail(), candidate.head()));
+      //@todo : A warning if !found (if we add a bad condidate)
+    } // if (! found)
   }
 
   return dag;
