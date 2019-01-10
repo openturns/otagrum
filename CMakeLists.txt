@@ -138,6 +138,9 @@ if(POLICY CMP0078)
   # Set MACOSX_RPATH to ON
   cmake_policy(SET CMP0078 NEW)
 endif()
+if (POLICY CMP0086)
+  cmake_policy (SET CMP0086 NEW)
+endif()
 
 # Some useful macros to ease CMakeLists.txt file writing
 set ( SOURCEFILES "" CACHE INTERNAL "List of source files to compile" )
