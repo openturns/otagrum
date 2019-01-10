@@ -5,9 +5,9 @@
 {3,4,2}  as OT::Indices = [3,4,2]
 
 ** SEPARATORS **
-[4,2]
-[4]
-[1]
+{4,2}  as OT::Indices = [4,2]
+{4}  as OT::Indices = [4]
+{1}  as OT::Indices = [1]
 
 testForSize : OK
 
@@ -26,14 +26,4 @@ getMarginal on h,a,b
 [h,a,b]
 0 : [0(h)]
 5 : [1(a),2(b)]
-
-
-DFS max clique size first on 0->1->2<-0->3->4<-5->6;4->7;8->9->10<-11
-[11,9,10]
-[8,9]
-[1,0,2]
-[3,0]
-[3,4,5]
-[7,4]
-[6,5]
 
