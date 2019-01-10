@@ -39,3 +39,12 @@ node [shape = ellipse];
 
 }
 
+digraph "no_name" {
+edge [dir=none]
+node [shape = ellipse];
+  0;  1;  2;  3;
+  0 -> 1;
+  2 -> 3;
+
+}
+
