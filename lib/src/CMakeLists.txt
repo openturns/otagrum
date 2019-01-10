@@ -19,7 +19,7 @@ ot_install_header_file ( StratifiedCache.hxx )
 ot_install_header_file ( ContinuousTTest.hxx )
 ot_install_header_file ( IndicesManip.hxx )
 ot_install_header_file ( ContinuousPC.hxx )
-ot_install_header_file ( ContinuousBayesianNetwwork.hxx )
+ot_install_header_file ( ContinuousBayesianNetwork.hxx )
 ot_install_header_file ( JunctionTreeBernsteinCopula.hxx )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
