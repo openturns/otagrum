@@ -1,4 +1,4 @@
-copula= JunctionTreeBernsteinCopula(cliques=[[3,4,2],[6,4,7,5],[1,2,4],[1,0]], separators=[[1],[4],[4,2]], sample=
+copula= JunctionTreeBernsteinCopula(cliques=[[3,4,2],[6,4,7,5],[1,2,4],[1,0]], separators=[[4,2],[4],[1]], sample=
       [ X0    X1    X2    ... X5    X6    X7    ]
   0 : [ 0.723 0.095 0.341 ... 0.648 0.358 0.934 ]
   1 : [ 0.788 0.795 0.33  ... 0.115 0.102 0.462 ]
