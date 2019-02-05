@@ -88,24 +88,19 @@ OT::Indices NamedJunctionTree::getClique(gum::NodeId nod) const
   return Utils::FromNodeSet(jt_.clique(nod));
 }
 
-OT::Indices NamedJunctionTree::getSeparator(gum::Edge edge) const
+OT::Indices NamedJunctionTree::getSeparator(gum::NodeId nod1,gum::NodeId nod2) const
 {
-  return Utils::FromNodeSet(jt_.separator(edge));
+  return Utils::FromNodeSet(jt_.separator(gum::Edge(nod1,nod2)));
 }
 
-const gum::NodeSet &NamedJunctionTree::getNeighbours(gum::NodeId id) const
+OT::Indices NamedJunctionTree::getNeighbours(gum::NodeId id) const
 {
-  return jt_.neighbours(id);
+  return Utils::FromNodeSet(jt_.neighbours(id));
 }
 
-gum::EdgeSet NamedJunctionTree::getEdges() const
+OT::Indices NamedJunctionTree::getNodes() const
 {
-  return jt_.edges();
-}
-
-gum::NodeSet NamedJunctionTree::getNodes() const
-{
-  return jt_.asNodeSet();
+  return Utils::FromNodeSet(jt_.asNodeSet());
 }
 
 OT::Collection<OT::Indices> NamedJunctionTree::getCliquesCollection() const
@@ -120,7 +115,7 @@ OT::Collection<OT::Indices> NamedJunctionTree::getSeparatorsCollection() const
 {
   OT::Collection<OT::Indices> res;
   for (const auto &edg : jt_.edges())
-    res.add(getSeparator(edg));
+    res.add(getSeparator(edg.first(),edg.second()));
   return res;
 }
 

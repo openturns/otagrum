@@ -70,18 +70,8 @@ node : int
 
 Returns
 -------
-neighbours : :py:class:`pyAgrum.NodeSet`
+neighbours : :py:class:`openturns.Indices`
     Neighbours associated to the desired node"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::NamedJunctionTree::getEdges
-"Edges accessor
-
-Returns
--------
-edges : :py:class:`pyAgrum.EdgeSet`
-    List of edges"
 
 // ----------------------------------------------------------------------------
 
@@ -90,7 +80,7 @@ edges : :py:class:`pyAgrum.EdgeSet`
 
 Returns
 -------
-nodes : :py:class:`pyAgrum.NodeSet`
+nodes : :py:class:`openturns.Indices`
     List of nodes"
 
 // ----------------------------------------------------------------------------
