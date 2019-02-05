@@ -37,10 +37,9 @@ void testOK()
   }
 
   std::cout << std::endl << "** SEPARATORS **" << std::endl;
-  for (auto edge : jt.getEdges())
+  for (auto sep : jt.getSeparatorsCollection())
   {
-    std::cout << jtagr->separator(edge)
-              << "  as OT::Indices = " << jt.getSeparator(edge) << std::endl;
+    std::cout << sep << std::endl;
   }
 }
 

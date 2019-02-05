@@ -48,11 +48,10 @@ public:
   OT::Description getDescription() const;
 
   OT::Indices getClique(gum::NodeId nod) const;
-  OT::Indices getSeparator(gum::Edge edge) const;
+  OT::Indices getSeparator(gum::NodeId nod1,gum::NodeId nod2) const;
 
-  const gum::NodeSet &getNeighbours(gum::NodeId id) const;
-  gum::EdgeSet getEdges() const;
-  gum::NodeSet getNodes() const;
+  OT::Indices getNeighbours(gum::NodeId id) const;
+  OT::Indices getNodes() const;
 
   OT::Collection<OT::Indices> getCliquesCollection() const;
   OT::Collection<OT::Indices> getSeparatorsCollection() const;

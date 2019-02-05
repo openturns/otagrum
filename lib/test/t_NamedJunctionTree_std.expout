@@ -5,9 +5,9 @@
 {3,4,2}  as OT::Indices = [3,4,2]
 
 ** SEPARATORS **
-{4,2}  as OT::Indices = [4,2]
-{4}  as OT::Indices = [4]
-{1}  as OT::Indices = [1]
+[4,2]
+[4]
+[1]
 
 testForSize : OK
 
