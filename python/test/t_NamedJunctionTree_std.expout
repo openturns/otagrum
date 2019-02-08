@@ -1,21 +1,24 @@
-[0,1,2,3,4,5,6,7]
-0 : [3(3),4(4),2(2)]
-1 : [6(6),4(4),7(7),5(5)]
-3 : [1(1),2(2),4(4)]
-4 : [1(1),0(0)]
-3--4 : [1(1)]
-1--3 : [4(4)]
-0--3 : [4(4),2(2)]
+Clique 0 => OK
+Clique 1 => OK
+Clique 3 => OK
+Clique 4 => OK
 
-clique 0 = [2, 3, 4]
-clique 1 = [4, 5, 6, 7]
-clique 3 = [1, 2, 4]
-clique 4 = [0, 1]
+separator 0,3 => OK
+separator 3,0 => OK
+separator 1,3 => OK
+separator 3,1 => OK
+separator 3,4 => OK
+separator 4,3 => OK
 
-1 : [11,9,10]
-0 : [8,9]
-3 : [1,0,2]
-10 : [3,0]
-6 : [3,4,5]
-5 : [7,4]
-2 : [6,5]
+otagrum separator 3,4 => OK
+otagrum separator 1,3 => OK
+otagrum separator 0,3 => OK
+
+Clique 1 => OK
+Clique 0 => OK
+Clique 3 => OK
+Clique 10 => OK
+Clique 6 => OK
+Clique 5 => OK
+Clique 2 => OK
+
