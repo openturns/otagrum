@@ -50,8 +50,10 @@ clique : :py:class:`openturns.Indices`
 
 Parameters
 ----------
-edge : :py:class:`pyAgrum.Edge`
-    Arc associated to the desired clique
+nod1 : :in
+    one of the nodeId for the cliques associated to the desired edge
+nod2 : :in
+    the other for the cliques associated to the desired edge
 
 Returns
 -------
