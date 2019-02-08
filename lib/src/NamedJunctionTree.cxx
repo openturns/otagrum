@@ -83,19 +83,19 @@ OT::Description NamedJunctionTree::getDescription() const
   return map_;
 }
 
-OT::Indices NamedJunctionTree::getClique(gum::NodeId nod) const
+OT::Indices NamedJunctionTree::getClique(OT::UnsignedInteger nod) const
 {
-  return Utils::FromNodeSet(jt_.clique(nod));
+  return Utils::FromNodeSet(jt_.clique(gum::NodeId(nod)));
 }
 
-OT::Indices NamedJunctionTree::getSeparator(gum::NodeId nod1,gum::NodeId nod2) const
+OT::Indices NamedJunctionTree::getSeparator(OT::UnsignedInteger nod1, OT::UnsignedInteger nod2) const
 {
-  return Utils::FromNodeSet(jt_.separator(gum::Edge(nod1,nod2)));
+  return Utils::FromNodeSet(jt_.separator(gum::Edge(gum::NodeId(nod1), gum::NodeId(nod2))));
 }
 
-OT::Indices NamedJunctionTree::getNeighbours(gum::NodeId id) const
+OT::Indices NamedJunctionTree::getNeighbours(OT::UnsignedInteger id) const
 {
-  return Utils::FromNodeSet(jt_.neighbours(id));
+  return Utils::FromNodeSet(jt_.neighbours(gum::NodeId(id)));
 }
 
 OT::Indices NamedJunctionTree::getNodes() const
@@ -115,7 +115,7 @@ OT::Collection<OT::Indices> NamedJunctionTree::getSeparatorsCollection() const
 {
   OT::Collection<OT::Indices> res;
   for (const auto &edg : jt_.edges())
-    res.add(getSeparator(edg.first(),edg.second()));
+    res.add(getSeparator(edg.first(), edg.second()));
   return res;
 }
 

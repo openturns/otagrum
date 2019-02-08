@@ -8,24 +8,36 @@ ie = gum.LazyPropagation(bn)
 jtagr = ie.junctionTree()
 jt = otagrum.NamedJunctionTree(jtagr, bn)
 
-print("agrum WORLD")
 for node in jtagr.nodes():
-  print('clique', node, '=', jtagr.clique(node))
-
-for edge in jtagr.edges():
-  u, v = edge
-  print('separator', edge, '=', jtagr.separator(u, v))
+    print('Clique {} =>'.format(node), end=" ")
+    if set(jt.getClique(node)) == jtagr.clique(node):
+        print("OK")
+    else:
+        print("FAILED")
 print()
 
-
-print("otagurm WORLD")
-for node in jt.getNodes():
-  print('clique', node, '=', jt.getClique(node))
+for u, v in jtagr.edges():
+    print('separator {},{} =>'.format(u, v), end=" ")
+    if set(jt.getSeparator(u, v)) == jtagr.separator(u, v):
+        print("OK")
+    else:
+        print("FAILED")
+    u, v = v, u
+    print('separator {},{} =>'.format(u, v), end=" ")
+    if set(jt.getSeparator(u, v)) == jtagr.separator(u, v):
+        print("OK")
+    else:
+        print("FAILED")
+print()
 
 for u in jt.getNodes():
-  for v in jt.neighbours(u):
-    if u<v:
-      print('separator', u,','v, '=', jt.getSeparator(u, v))
+    for v in jt.getNeighbours(u):
+        if u < v:
+            print('otagrum separator {},{} =>'.format(u, v), end=" ")
+            if set(jt.getSeparator(u, v)) == jtagr.separator(u, v):
+                print("OK")
+            else:
+                print("FAILED")
 print()
 
 bn = gum.fastBN("0->1->2<-0->3->4<-5->6;4->7;8->9->10<-11")
@@ -34,8 +46,9 @@ jt = ie.junctionTree()
 njt = otagrum.NamedJunctionTree(jt, bn)
 
 for cliq in njt.getOrderMaxFirst():
-  # Only for happy Python 3.6+ users
-  # print(f"{cliq} : {njt.getClique(cliq)}")
-  print("clique : {}".format(type(cliq)))
-  print("{} : {}".format(cliq, jt.clique(cliq)))
-  print("{} : {}".format(cliq, njt.getClique(int(cliq))))
+    print('Clique {} =>'.format(cliq), end=" ")
+    if set(njt.getClique(cliq)) == jt.clique(cliq):
+        print("OK")
+    else:
+        print("FAILED")
+print()
