@@ -122,6 +122,7 @@ void test_fromPotential()
 
 void test_fromInference()
 {
+  gum::initRandom(10);
   gum::BayesNet<double> bn;
   bn.add(gum::DiscretizedVariable<double>("A", "A", {1, 1.5, 2, 2.5, 3, 4}));
   bn.add(gum::LabelizedVariable("B", "B", {"chaud", "tiede", "froid"}));
@@ -151,9 +152,9 @@ void test_fromInference()
 
 int main(int argc, char **argv)
 {
-  // test_basics();
-  // test_fromMarginal();
-  // test_fromPotential();
+  //test_basics();
+  //test_fromMarginal();
+  //test_fromPotential();
   test_fromInference();
   return 0;
 }
