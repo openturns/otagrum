@@ -22,12 +22,12 @@
 #include <algorithm>
 #include <vector>
 
-#include "otagrum/ContinuousBayesianNetwork.hxx"
+#include "otagrum/NamedDAG.hxx"
 #include "otagrum/Utils.hxx"
 
 namespace OTAGRUM
 {
-ContinuousBayesianNetwork::ContinuousBayesianNetwork(
+NamedDAG::NamedDAG(
   const gum::BayesNet<double> &bn)
   : dag_(bn.dag()), map_(bn.size())
 {
@@ -38,7 +38,7 @@ ContinuousBayesianNetwork::ContinuousBayesianNetwork(
   });
 }
 
-ContinuousBayesianNetwork::ContinuousBayesianNetwork(
+NamedDAG::NamedDAG(
   const gum::DAG &dag, const std::vector<std::string> &names)
   : dag_(dag), map_(dag.size())
 {
@@ -48,28 +48,28 @@ ContinuousBayesianNetwork::ContinuousBayesianNetwork(
   }
 }
 
-OT::UnsignedInteger ContinuousBayesianNetwork::getSize() const
+OT::UnsignedInteger NamedDAG::getSize() const
 {
   return map_.getSize();
 }
 
-OT::Description ContinuousBayesianNetwork::getDescription() const
+OT::Description NamedDAG::getDescription() const
 {
   return map_;
 }
 
-OT::Indices ContinuousBayesianNetwork::getParents(const gum::NodeId nod) const
+OT::Indices NamedDAG::getParents(const OT::UnsignedInteger nod) const
 {
   return Utils::FromNodeSet(dag_.parents(nod));
 }
 
 OT::Indices
-ContinuousBayesianNetwork::getChildren(const gum::NodeId nod) const
+NamedDAG::getChildren(const OT::UnsignedInteger nod) const
 {
   return Utils::FromNodeSet(dag_.children(nod));
 }
 
-OT::Indices ContinuousBayesianNetwork::getNodes() const
+OT::Indices NamedDAG::getNodes() const
 {
   return Utils::FromNodeSet(dag_.nodes().asNodeSet());
 }
