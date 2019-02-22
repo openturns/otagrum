@@ -122,14 +122,15 @@ void test_fromPotential()
 
 void test_fromInference()
 {
-  gum::initRandom(10);
   gum::BayesNet<double> bn;
   bn.add(gum::DiscretizedVariable<double>("A", "A", {1, 1.5, 2, 2.5, 3, 4}));
   bn.add(gum::LabelizedVariable("B", "B", {"chaud", "tiede", "froid"}));
   bn.add(gum::RangeVariable("C", "C", 1, 4));
   bn.addArc("A", "C");
   bn.addArc("C", "B");
-  bn.generateCPTs();
+  bn.cpt("A").fillWith({1,2,3,4,5}).normalize();
+  bn.cpt("C").fillWith({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}).normalizeAsCPT();
+  bn.cpt("B").fillWith({1,2,3,4,5,6,7,8,9,10,11,12}).normalizeAsCPT();
 
   gum::LazyPropagation<double> ie(&bn);
   ie.addJointTarget({0, 2});
