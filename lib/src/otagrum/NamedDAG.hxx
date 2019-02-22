@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief ContinuousBayesianNetworks
+ *  @brief NamedDAG
  *
  *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
@@ -19,8 +19,8 @@
  *
  */
 
-#ifndef OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX
-#define OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX
+#ifndef OTAGRUM_NAMED_DAG_HXX
+#define OTAGRUM_NAMED_DAG_HXX
 #include <string>
 #include <vector>
 
@@ -34,19 +34,19 @@
 
 namespace OTAGRUM
 {
-class OTAGRUM_API ContinuousBayesianNetwork : public OT::Object
+class OTAGRUM_API NamedDAG : public OT::Object
 {
 public:
-  ContinuousBayesianNetwork() = delete;
-  ContinuousBayesianNetwork(const gum::BayesNet<double> &bn);
-  ContinuousBayesianNetwork(const gum::DAG &dag,
+  NamedDAG() = delete;
+  NamedDAG(const gum::BayesNet<double> &bn);
+  NamedDAG(const gum::DAG &dag,
                             const std::vector<std::string> &names);
 
   OT::UnsignedInteger getSize() const;
   OT::Description getDescription() const;
 
-  OT::Indices getParents(const gum::NodeId nod) const;
-  OT::Indices getChildren(const gum::NodeId nod) const;
+  OT::Indices getParents(const OT::UnsignedInteger nod) const;
+  OT::Indices getChildren(const OT::UnsignedInteger nod) const;
   OT::Indices getNodes() const;
 
 private:
@@ -55,4 +55,4 @@ private:
 };
 
 } // namespace OTAGRUM
-#endif // OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX
+#endif // OTAGRUM_NAMED_DAG_HXX
