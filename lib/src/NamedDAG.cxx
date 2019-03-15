@@ -27,8 +27,8 @@
 
 namespace OTAGRUM
 {
-NamedDAG::NamedDAG(
-  const gum::BayesNet<double> &bn)
+NamedDAG::NamedDAG() {};
+NamedDAG::NamedDAG(const gum::BayesNet<double> &bn)
   : dag_(bn.dag()), map_(bn.size())
 {
   std::transform(bn.nodes().begin(), bn.nodes().end(), map_.begin(),
@@ -38,14 +38,10 @@ NamedDAG::NamedDAG(
   });
 }
 
-NamedDAG::NamedDAG(
-  const gum::DAG &dag, const std::vector<std::string> &names)
+NamedDAG::NamedDAG(const gum::DAG &dag, const std::vector<std::string> &names)
   : dag_(dag), map_(dag.size())
 {
-  for (const auto &name : names)
-  {
-    map_.add(name);
-  }
+  std::copy(names.begin(), names.end(), map_.begin());
 }
 
 OT::UnsignedInteger NamedDAG::getSize() const
@@ -63,8 +59,7 @@ OT::Indices NamedDAG::getParents(const OT::UnsignedInteger nod) const
   return Utils::FromNodeSet(dag_.parents(nod));
 }
 
-OT::Indices
-NamedDAG::getChildren(const OT::UnsignedInteger nod) const
+OT::Indices NamedDAG::getChildren(const OT::UnsignedInteger nod) const
 {
   return Utils::FromNodeSet(dag_.children(nod));
 }
@@ -72,5 +67,52 @@ NamedDAG::getChildren(const OT::UnsignedInteger nod) const
 OT::Indices NamedDAG::getNodes() const
 {
   return Utils::FromNodeSet(dag_.nodes().asNodeSet());
+}
+
+OT::String NamedDAG::__str__(const OT::String &pref) const
+{
+  std::stringstream ss;
+  ss << pref << "[";
+  bool first = true;
+  for (const auto &item : map_)
+  {
+    if (!first)
+      ss << ",";
+    first = false;
+    ss << item;
+  }
+  ss << "]\n" << pref;
+
+  ss << "[";
+  first = true;
+  for (const auto &nod : getNodes())
+  {
+    for (const auto &chi : getChildren(nod))
+    {
+      if (!first)
+        ss << ",";
+      first = false;
+      ss << map_[nod] << "->" << map_[chi];
+    }
+  }
+  ss << "]\n";
+
+  return ss.str();
+}
+
+OT::String NamedDAG::toDot() const
+{
+  std::stringstream ss;
+  ss << "digraph {\n";
+  for (const auto &nod : getNodes())
+  {
+    for (const auto &chi : getChildren(nod))
+    {
+      ss << "    \"" << map_[nod] << "\"->\"" << map_[chi] << "\"\n";
+    }
+  }
+  ss << "}\n";
+
+  return ss.str();
 }
 } // namespace OTAGRUM
