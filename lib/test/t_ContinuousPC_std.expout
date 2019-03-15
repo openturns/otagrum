@@ -1,50 +1,115 @@
-Sample size : 10000
-Sample dimension :4
+Sample size : 7000
+Sample dimension :5
 go
 digraph "skeleton" {
   edge [dir = none];
   node [shape = ellipse];
-  0; 1; 2; 3; 
-  0->1 [label="t=116
+  0; 1; 2; 3; 4; 
+  0->1 [label="t=87.6
 p=0"]
-  2->3 [label="t=213
-p=0"]
+  2->3 [label="t=27.4
+p=0.75"]
+  1->4 [label="t=0.262
+p=0.933"]
+  2->4 [label="t=60.2
+p=6.18e-35"]
+  3->4 [label="t=94.9
+p=3.61e-182"]
 }
 0--1 : p-value=0
-2--3 : p-value=0
+2--3 : p-value=0.750422
+1--4 : p-value=0.933081
+2--4 : p-value=6.18139e-35
+3--4 : p-value=3.61185e-182
+
+
 go
+
+****
+skeletton
+****
 digraph "no_name" {
 edge [dir=none]
 node [shape = ellipse];
-  0;  1;  2;  3;
+  0;  1;  2;  3;  4;
   0 -> 1;
+  1 -> 4;
   2 -> 3;
+  2 -> 4;
+  3 -> 4;
 
 }
 
+
+****
+CPDAG
+****
 digraph "no_name" {
 node [shape = ellipse];
-  0;  1;  2;  3;
+  0;  1;  2;  3;  4;
   0 -> 1 [dir=none];
+  1 -> 4 [dir=none];
   2 -> 3 [dir=none];
+  2 -> 4 [dir=none];
+  3 -> 4 [dir=none];
 
 }
 
+
+****
+Moral graph
+****
 digraph "no_name" {
 edge [dir=none]
 node [shape = ellipse];
-  0;  1;  2;  3;
+  0;  1;  2;  3;  4;
   0 -> 1;
+  1 -> 4;
   2 -> 3;
+  2 -> 4;
+  3 -> 4;
 
 }
 
-digraph "no_name" {
-edge [dir=none]
-node [shape = ellipse];
-  0;  1;  2;  3;
-  0 -> 1;
-  2 -> 3;
 
+****
+Junction tree
+****
+graph {
+  "(0) 3-4-2" [label="3-4-2",fillcolor ="burlywood",style="filled"];
+  "(2) 1-4" [label="1-4",fillcolor ="burlywood",style="filled"];
+  "(3) 1-0" [label="1-0",fillcolor ="burlywood",style="filled"];
+
+  "(2) 1-4^(3) 1-0" [label="1",shape=box,fillcolor="palegreen",style="filled",fontsize=8,width=0,height=0];
+  "(0) 3-4-2^(2) 1-4" [label="4",shape=box,fillcolor="palegreen",style="filled",fontsize=8,width=0,height=0];
+
+  "(2) 1-4"--"(2) 1-4^(3) 1-0"--"(3) 1-0";
+  "(0) 3-4-2"--"(0) 3-4-2^(2) 1-4"--"(2) 1-4";
+}
+
+
+****
+Named Junction tree
+****
+[A1,A2,X0,X1,X2]
+0 : [3(X1),4(X2),2(X0)]
+2 : [1(A2),4(X2)]
+3 : [1(A2),0(A1)]
+2--3 : [1(A2)]
+0--2 : [4(X2)]
+
+
+****
+Named DAG
+****
+[A1,A2,X0,X1,X2]
+[X1->X0,A2->X2,X2->X1,X2->X0,A1->A2]
+
+digraph {
+    "X1"->"X0"
+    "A2"->"X2"
+    "X2"->"X1"
+    "X2"->"X0"
+    "A1"->"A2"
 }
 

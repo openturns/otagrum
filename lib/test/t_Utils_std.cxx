@@ -128,9 +128,9 @@ void test_fromInference()
   bn.add(gum::RangeVariable("C", "C", 1, 4));
   bn.addArc("A", "C");
   bn.addArc("C", "B");
-  bn.cpt("A").fillWith({1,2,3,4,5}).normalize();
-  bn.cpt("C").fillWith({1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}).normalizeAsCPT();
-  bn.cpt("B").fillWith({1,2,3,4,5,6,7,8,9,10,11,12}).normalizeAsCPT();
+  bn.cpt("A").fillWith({1, 2, 3, 4, 5}).normalize();
+  bn.cpt("C").fillWith({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}).normalizeAsCPT();
+  bn.cpt("B").fillWith({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}).normalizeAsCPT();
 
   gum::LazyPropagation<double> ie(&bn);
   ie.addJointTarget({0, 2});
