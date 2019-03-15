@@ -45,11 +45,11 @@ Potential = Potential_double
     val=gum.Potential(val)
     val.__var=args[1]
 %}
-%pythonappend OTAGRUM::ContinuousPC::getSkeleton %{
+%pythonappend OTAGRUM::ContinuousPC::inferSkeleton %{
     #casting into gum namespace
     val=gum.UndiGraph(val)
 %}
-%pythonappend OTAGRUM::ContinuousPC::getPDAG %{
+%pythonappend OTAGRUM::ContinuousPC::inferPDAG %{
     #casting into gum namespace
     val=gum.MixedGraph(val)
 %}

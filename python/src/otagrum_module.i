@@ -23,9 +23,11 @@
 
 // The new classes
 %include otagrum/otagrumprivate.hxx
+
 %include Utils.i
 %include MixedHistogramUserDefined.i
 %include NamedJunctionTree.i
+%include NamedDAG.i
 %include JunctionTreeBernsteinCopula.i
 %include ContinuousTTest.i
 %include ContinuousPC.i

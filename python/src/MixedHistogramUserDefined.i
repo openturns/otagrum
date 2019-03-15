@@ -1,6 +1,8 @@
 // SWIG file MixedHistogramUserDefined.i
 
 %{
+#include <agrum/graphs/undiGraph.h>
+#include <agrum/graphs/mixedGraph.h>
 #include "otagrum/MixedHistogramUserDefined.hxx"
 %}
 
