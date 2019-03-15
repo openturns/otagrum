@@ -26,4 +26,4 @@ t0 = time()
 learner = otagrum.ContinuousPC(data, binNumber, alpha)
 t1 = time() - t0
 
-#skel = learner.learnSkeleton()
+#skel = learner.inferSkeleton()

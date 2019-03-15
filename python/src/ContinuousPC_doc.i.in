@@ -43,7 +43,7 @@ dot : str
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::getMoralGraph
+%feature("docstring") OTAGRUM::ContinuousPC::deriveMoralGraph
 "Moral graph
 
 Parameters
@@ -78,7 +78,7 @@ optimal_policy : bool
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::learnPDAG
+%feature("docstring") OTAGRUM::ContinuousPC::inferPDAG
 "PDAG accessor
 
 Parameters
@@ -154,7 +154,7 @@ ttest : float
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::learnSkeleton
+%feature("docstring") OTAGRUM::ContinuousPC::inferSkeleton
 "Skeleton graph accessor
 
 Returns

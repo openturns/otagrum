@@ -1,6 +1,8 @@
 // SWIG file JunctionTreeBernsteinCopula.i
 
 %{
+#include <agrum/graphs/undiGraph.h>
+#include <agrum/graphs/mixedGraph.h>
 #include "otagrum/JunctionTreeBernsteinCopula.hxx"
 %}
 
