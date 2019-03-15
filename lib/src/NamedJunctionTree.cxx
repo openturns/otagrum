@@ -88,9 +88,11 @@ OT::Indices NamedJunctionTree::getClique(OT::UnsignedInteger nod) const
   return Utils::FromNodeSet(jt_.clique(gum::NodeId(nod)));
 }
 
-OT::Indices NamedJunctionTree::getSeparator(OT::UnsignedInteger nod1, OT::UnsignedInteger nod2) const
+OT::Indices NamedJunctionTree::getSeparator(OT::UnsignedInteger nod1,
+    OT::UnsignedInteger nod2) const
 {
-  return Utils::FromNodeSet(jt_.separator(gum::Edge(gum::NodeId(nod1), gum::NodeId(nod2))));
+  return Utils::FromNodeSet(
+           jt_.separator(gum::Edge(gum::NodeId(nod1), gum::NodeId(nod2))));
 }
 
 OT::Indices NamedJunctionTree::getNeighbours(OT::UnsignedInteger id) const
@@ -220,10 +222,10 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
   return NamedJunctionTree(m_jt, m_names);
 }
 
-OT::String NamedJunctionTree::__str__(const OT::String &) const
+OT::String NamedJunctionTree::__str__(const OT::String &pref) const
 {
   std::stringstream ss;
-  ss << "[";
+  ss << pref << "[";
   bool first = true;
   for (const auto &item : map_)
   {
@@ -232,7 +234,7 @@ OT::String NamedJunctionTree::__str__(const OT::String &) const
     first = false;
     ss << item;
   }
-  ss << "]\n";
+  ss << "]\n" << pref;
 
   for (auto cliq : jt_.nodes())
   {
@@ -245,7 +247,7 @@ OT::String NamedJunctionTree::__str__(const OT::String &) const
       first = false;
       ss << nod << "(" << map_[nod] << ")";
     }
-    ss << "]\n";
+    ss << "]\n" << pref;
   }
   for (auto edg : jt_.edges())
   {
