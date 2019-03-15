@@ -37,10 +37,10 @@ namespace OTAGRUM
 class OTAGRUM_API NamedDAG : public OT::Object
 {
 public:
-  NamedDAG() = delete;
-  NamedDAG(const gum::BayesNet<double> &bn);
+  NamedDAG();
+  explicit NamedDAG(const gum::BayesNet<double> &bn);
   NamedDAG(const gum::DAG &dag,
-                            const std::vector<std::string> &names);
+           const std::vector<std::string> &names);
 
   OT::UnsignedInteger getSize() const;
   OT::Description getDescription() const;
@@ -49,6 +49,8 @@ public:
   OT::Indices getChildren(const OT::UnsignedInteger nod) const;
   OT::Indices getNodes() const;
 
+  virtual OT::String __str__(const OT::String &offset = "") const;
+  OT::String toDot() const;
 private:
   gum::DAG dag_;
   OT::Description map_;
