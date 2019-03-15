@@ -31,6 +31,7 @@
 #include <openturns/Sample.hxx>
 
 #include "otagrum/ContinuousTTest.hxx"
+#include "otagrum/NamedDAG.hxx"
 #include "otagrum/NamedJunctionTree.hxx"
 
 namespace OTAGRUM
@@ -43,40 +44,27 @@ public:
                         const OT::UnsignedInteger maxParents = 5,
                         const double alpha = 0.1);
 
-  gum::UndiGraph learnSkeleton();
   NamedJunctionTree learnJunctionTree();
-  gum::MixedGraph learnPDAG(const gum::UndiGraph &g) const;
+  NamedDAG learnDAG();
 
-  gum::UndiGraph getMoralGraph(const gum::MixedGraph &g) const;
-  NamedJunctionTree getJunctionTree(const gum::UndiGraph &g) const;
-  gum::DAG getDAG(const gum::MixedGraph & p) const;
+  gum::UndiGraph inferSkeleton();
+  gum::MixedGraph inferPDAG(const gum::UndiGraph &g) const;
 
-  void setOptimalPolicy(bool policy)
-  {
-    optimalPolicy_ = policy;
-  };
-  bool getOptimalPolicy() const
-  {
-    return optimalPolicy_;
-  };
+  gum::UndiGraph deriveMoralGraph(const gum::MixedGraph &g) const;
+  gum::JunctionTree deriveJunctionTree(const gum::UndiGraph &g) const;
+  gum::DAG deriveDAG(const gum::MixedGraph &p) const;
 
-  void setVerbosity(bool verbose)
-  {
-    verbose_ = verbose;
-  };
-  bool getVerbosity() const
-  {
-    return verbose_;
-  };
+  void setOptimalPolicy(bool policy);
+  bool getOptimalPolicy() const;
 
-  double getPValue(gum::NodeId x, gum::NodeId y);
-  double getTTest(gum::NodeId x, gum::NodeId y);
-  const OT::Indices getSepset(gum::NodeId x, gum::NodeId y);
+  void setVerbosity(bool verbose);
+  bool getVerbosity() const;
 
-  const std::vector<gum::Edge> &getRemoved()
-  {
-    return removed_;
-  };
+  double getPValue(gum::NodeId x, gum::NodeId y) const;
+  double getTTest(gum::NodeId x, gum::NodeId y) const;
+  const OT::Indices getSepset(gum::NodeId x, gum::NodeId y) const;
+
+  const std::vector<gum::Edge> &getRemoved() const;
 
   std::string skeletonToDot(const gum::UndiGraph &skeleton);
   std::string PDAGtoDot(const gum::MixedGraph &pdag);
@@ -92,11 +80,12 @@ private:
   bool optimalPolicy_;
   ContinuousTTest tester_;
 
-  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n);
+  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n) ;
 
   std::tuple<bool, double, double, OT::Indices>
   bestSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
-                const OT::Indices &neighbours, OT::UnsignedInteger n);
+                const OT::Indices &neighbours, OT::UnsignedInteger n) const;
+  std::vector<std::string> namesFromData(void) const;
 };
 
 } // namespace OTAGRUM
