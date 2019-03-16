@@ -11,6 +11,7 @@ ot_add_source_file ( ContinuousTTest.cxx )
 ot_add_source_file ( IndicesManip.cxx )
 ot_add_source_file ( ContinuousPC.cxx )
 ot_add_source_file ( JunctionTreeBernsteinCopula.cxx )
+ot_add_source_file ( JunctionTreeBernsteinCopulaFactory.cxx )
 
 ot_install_header_file ( MixedHistogramUserDefined.hxx )
 ot_install_header_file ( Utils.hxx )
@@ -21,6 +22,7 @@ ot_install_header_file ( ContinuousTTest.hxx )
 ot_install_header_file ( IndicesManip.hxx )
 ot_install_header_file ( ContinuousPC.hxx )
 ot_install_header_file ( JunctionTreeBernsteinCopula.hxx )
+ot_install_header_file ( JunctionTreeBernsteinCopulaFactory.hxx )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 
