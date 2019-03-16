@@ -82,13 +82,13 @@ namespace OTAGRUM
  * create an learner using PC algorithm with continuous variables
  *
  * @param data : the data
- * @param maxParents : the max parents than a node can have
- * @param alpha : the threshold for the hypothesis test
+ * @param maxConditioningSetSize : the size max for the conditioning set in a independence test
+ * @param alpha : the threshold for the independence test
  */
 ContinuousPC::ContinuousPC(const OT::Sample &data,
-                           const OT::UnsignedInteger maxParents,
+                           const OT::UnsignedInteger maxConditioningSetSize,
                            const double alpha)
-  : OT::Object(), maxParents_(maxParents), verbose_(false),
+  : OT::Object(), maxCondSet_(maxConditioningSetSize), verbose_(false),
     optimalPolicy_(true), tester_(data)
 {
   tester_.setAlpha(alpha);
@@ -258,7 +258,7 @@ gum::UndiGraph ContinuousPC::inferSkeleton()
   }
 
   // for each size of sepset from 0 to n-1
-  for (OT::UnsignedInteger n = 0; n < maxParents_; ++n)
+  for (OT::UnsignedInteger n = 0; n < maxCondSet_; ++n)
   {
     TRACE("==  Size of conditioning set " << n << std::endl);
     // clear the pdfs not used anymore (due to the dimension of data)
