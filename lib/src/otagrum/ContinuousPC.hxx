@@ -41,7 +41,7 @@ class OTAGRUM_API ContinuousPC : public OT::Object
 {
 public:
   explicit ContinuousPC(const OT::Sample &data,
-                        const OT::UnsignedInteger maxParents = 5,
+                        const OT::UnsignedInteger maxConditioningSetSize = 5,
                         const double alpha = 0.1);
 
   NamedJunctionTree learnJunctionTree();
@@ -75,7 +75,7 @@ private:
   gum::EdgeProperty<double> ttests_;
   std::vector<gum::Edge> removed_;
 
-  OT::UnsignedInteger maxParents_;
+  OT::UnsignedInteger maxCondSet_;
   bool verbose_;
   bool optimalPolicy_;
   ContinuousTTest tester_;
