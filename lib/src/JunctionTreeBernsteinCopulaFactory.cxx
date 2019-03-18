@@ -25,51 +25,58 @@
 #include <otagrum/ContinuousPC.hxx>
 #include <otagrum/JunctionTreeBernsteinCopulaFactory.hxx>
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 CLASSNAMEINIT(JunctionTreeBernsteinCopulaFactory)
 
 static const OT::Factory<JunctionTreeBernsteinCopulaFactory>
-    Factory_JunctionTreeBernsteinCopulaFactory;
+Factory_JunctionTreeBernsteinCopulaFactory;
 
 /* Default constructor */
 JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory()
-    : DistributionFactoryImplementation() {
+  : DistributionFactoryImplementation()
+{
   setName("JunctionTreeBernsteinCopulaFactory");
 }
 
 /* Virtual constructor */
 JunctionTreeBernsteinCopulaFactory *
-JunctionTreeBernsteinCopulaFactory::clone() const {
+JunctionTreeBernsteinCopulaFactory::clone() const
+{
   return new JunctionTreeBernsteinCopulaFactory(*this);
 }
 
 /* Here is the interface that all derived class must implement */
 
 OT::Distribution
-JunctionTreeBernsteinCopulaFactory::build(const OT::Sample &sample,const int nbBins,const double alpha,const int maxCondSetSize) const {
+JunctionTreeBernsteinCopulaFactory::build(const OT::Sample &sample, const int nbBins, const double alpha, const int maxCondSetSize) const
+{
   return buildAsJunctionTreeBernsteinCopula(sample).clone();
 }
 
-OT::Distribution JunctionTreeBernsteinCopulaFactory::build() const {
+OT::Distribution JunctionTreeBernsteinCopulaFactory::build() const
+{
   return buildAsJunctionTreeBernsteinCopula().clone();
 }
 
 JunctionTreeBernsteinCopula
 JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula(
-    const OT::Sample &sample,const int nbBins,const double alpha,const int maxCondSetSize) const {
+  const OT::Sample &sample, const int nbBins, const double alpha, const int maxCondSetSize) const
+{
 
   if (sample.getSize() == 0)
     throw OT::InvalidArgumentException(HERE)
         << "Error: cannot build a NormalCopula distribution from an empty "
-           "sample";
+        "sample";
   OTAGRUM::ContinuousPC learner(sample, 5, 0.1);
   learner.setOptimalPolicy(true);
   return JunctionTreeBernsteinCopula(learner.learnJunctionTree(), sample, 5);
 }
 
 JunctionTreeBernsteinCopula
-JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula() const {
+JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula() const
+{
   return JunctionTreeBernsteinCopula();
 }
 
