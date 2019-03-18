@@ -25,13 +25,15 @@
 #include <openturns/DistributionFactoryImplementation.hxx>
 #include <otagrum/JunctionTreeBernsteinCopula.hxx>
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 /**
  * @class JunctionTreeBernsteinCopulaFactory
  */
 class OT_API JunctionTreeBernsteinCopulaFactory
-    : public OT::DistributionFactoryImplementation {
+  : public OT::DistributionFactoryImplementation
+{
   CLASSNAME
 public:
   /** Default constructor */
@@ -48,8 +50,8 @@ public:
   OT::Distribution build() const;
 
   JunctionTreeBernsteinCopula buildAsJunctionTreeBernsteinCopula(
-      const OT::Sample &sample, const int nbBins = 5, const double alpha = 0.1,
-      const int maxCondSetSize = 5) const;
+    const OT::Sample &sample, const int nbBins = 5, const double alpha = 0.1,
+    const int maxCondSetSize = 5) const;
   JunctionTreeBernsteinCopula buildAsJunctionTreeBernsteinCopula() const;
 
 }; /* class JunctionTreeBernsteinCopulaFactory */
