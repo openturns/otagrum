@@ -90,6 +90,7 @@ ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
                       NamedDAG.i NamedDAG_doc.i.in
                       Utils.i Utils_doc.i.in
                       JunctionTreeBernsteinCopula.i JunctionTreeBernsteinCopula_doc.i.in
+                      JunctionTreeBernsteinCopulaFactory.i JunctionTreeBernsteinCopulaFactory_doc.i.in
                      )
 
 
