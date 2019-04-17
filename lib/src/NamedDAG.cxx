@@ -69,6 +69,16 @@ OT::Indices NamedDAG::getNodes() const
   return Utils::FromNodeSet(dag_.nodes().asNodeSet());
 }
 
+OT::Indices NamedDAG::getTopologicalOrder() const
+{
+  OT::Indices res;
+  for (auto nod : dag_.topologicalOrder())
+  {
+    res.add(OT::UnsignedInteger(nod));
+  }
+  return res;
+}
+
 OT::String NamedDAG::__str__(const OT::String &pref) const
 {
   std::stringstream ss;

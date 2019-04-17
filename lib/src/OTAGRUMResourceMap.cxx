@@ -71,8 +71,8 @@ void OTAGRUMResourceMap::Initialize()
   ResourceMap::SetAsNumericalScalar("LibOTAGRUM-Epsilon", 1e-3);
   ResourceMap::SetAsUnsignedInteger("LibOTAGRUMRegression-NumberOfFolds", 3);
   ResourceMap::SetAsUnsignedInteger("LibOTAGRUM-Shrinking", 1);
-  
-  
+
+
 }
 
 
