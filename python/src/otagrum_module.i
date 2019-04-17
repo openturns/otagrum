@@ -29,5 +29,6 @@
 %include NamedJunctionTree.i
 %include NamedDAG.i
 %include JunctionTreeBernsteinCopula.i
+%include JunctionTreeBernsteinCopulaFactory.i
 %include ContinuousTTest.i
 %include ContinuousPC.i

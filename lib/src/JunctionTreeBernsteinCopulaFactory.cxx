@@ -36,6 +36,21 @@ Factory_JunctionTreeBernsteinCopulaFactory;
 /* Default constructor */
 JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory()
   : DistributionFactoryImplementation()
+  , nbBins_(5)
+  , alpha_(0.1)
+  , maximumConditioningSetSize_(5)
+{
+  setName("JunctionTreeBernsteinCopulaFactory");
+}
+
+/* Parameter constructor */
+JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory(const int nbBins,
+								       const double alpha,
+								       const int maximumConditioningSetSize)
+  : DistributionFactoryImplementation()
+  , nbBins_(nbBins)
+  , alpha_(alpha)
+  , maximumConditioningSetSize_(maximumConditioningSetSize)
 {
   setName("JunctionTreeBernsteinCopulaFactory");
 }
@@ -50,9 +65,9 @@ JunctionTreeBernsteinCopulaFactory::clone() const
 /* Here is the interface that all derived class must implement */
 
 OT::Distribution
-JunctionTreeBernsteinCopulaFactory::build(const OT::Sample &sample, const int nbBins, const double alpha, const int maxCondSetSize) const
+JunctionTreeBernsteinCopulaFactory::build(const OT::Sample &sample) const
 {
-  return buildAsJunctionTreeBernsteinCopula(sample).clone();
+  return buildAsJunctionTreeBernsteinCopula(sample);
 }
 
 OT::Distribution JunctionTreeBernsteinCopulaFactory::build() const
@@ -62,16 +77,16 @@ OT::Distribution JunctionTreeBernsteinCopulaFactory::build() const
 
 JunctionTreeBernsteinCopula
 JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula(
-  const OT::Sample &sample, const int nbBins, const double alpha, const int maxCondSetSize) const
+  const OT::Sample &sample) const
 {
 
   if (sample.getSize() == 0)
     throw OT::InvalidArgumentException(HERE)
-        << "Error: cannot build a NormalCopula distribution from an empty "
+        << "Error: cannot build a JunctionTreeBernsteinCopula distribution from an empty "
         "sample";
-  OTAGRUM::ContinuousPC learner(sample, 5, 0.1);
+  OTAGRUM::ContinuousPC learner(sample, maximumConditioningSetSize_, alpha_);
   learner.setOptimalPolicy(true);
-  return JunctionTreeBernsteinCopula(learner.learnJunctionTree(), sample, 5);
+  return JunctionTreeBernsteinCopula(learner.learnJunctionTree(), sample, nbBins_);
 }
 
 JunctionTreeBernsteinCopula
