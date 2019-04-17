@@ -24,6 +24,13 @@ void testConstructor()
   std::cout << std::endl << ndag.__str__("+++ +++ |") << std::endl;
 
   std::cout << std::endl << ndag.toDot();
+  OT::Study study("tmp.xml");
+  study.add("ndag", ndag);
+  study.save();
+  OT::Study study2("tmp.xml");
+  study2.load();
+  NamedDag dag;
+  study2.fill("ndag", dag);
 }
 
 int main(void)

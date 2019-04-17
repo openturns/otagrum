@@ -24,10 +24,16 @@
 
 #include "otagrum/NamedDAG.hxx"
 #include "otagrum/Utils.hxx"
+#include <openturns/PersistentObjectFactory.hxx>
 
 namespace OTAGRUM
 {
-NamedDAG::NamedDAG() {};
+
+CLASSNAMEINIT(NamedDAG);
+
+static const OT::Factory<NamedDAG> Factory_NamedDAG;
+
+  NamedDAG::NamedDAG() {};
 NamedDAG::NamedDAG(const gum::BayesNet<double> &bn)
   : dag_(bn.dag()), map_(bn.size())
 {
@@ -125,4 +131,24 @@ OT::String NamedDAG::toDot() const
 
   return ss.str();
 }
+/* Method save() stores the object through the StorageManager */
+void NamedDAG::save(OT::Advocate & adv) const
+{
+  OT::PersistentObject::save(adv);
+  adv.saveAttribute( "map_", map_ );
+  PersistentCollection< Indices > parentsByNodes;
+  for (const auto &node : getNodes())
+    parentsByNodes.add(getParents(node));
+  adv.saveAttribute( "parentsByNodes_", parentsByNodes );
+}
+
+/* Method load() reloads the object from the StorageManager */
+void NamedDAG::load(OT::Advocate & adv)
+{
+  OT::PersistentObject::load(adv);
+  adv.loadAttribute( "map_", map_ );
+  PersistentCollection< Indices > parentsByNodes;
+  adv.loadAttribute( "parentsByNodes_", parentsByNodes );
+}
+
 } // namespace OTAGRUM
