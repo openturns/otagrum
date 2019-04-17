@@ -42,8 +42,8 @@ public:
 
   /** Parameter constructor */
   explicit JunctionTreeBernsteinCopulaFactory(const int nbBins,
-					      const double alpha = 0.1,
-					      const int maximumConditioningSetSize = 5);
+      const double alpha = 0.1,
+      const int maximumConditioningSetSize = 5);
 
   /** Virtual constructor */
   virtual JunctionTreeBernsteinCopulaFactory *clone() const;
@@ -56,7 +56,7 @@ public:
   JunctionTreeBernsteinCopula buildAsJunctionTreeBernsteinCopula(const OT::Sample &sample) const;
   JunctionTreeBernsteinCopula buildAsJunctionTreeBernsteinCopula() const;
 
- private:
+private:
   /* Bin number */
   int nbBins_;
 
@@ -65,7 +65,7 @@ public:
 
   /* Maximum conditional set size */
   int maximumConditioningSetSize_;
-  
+
 }; /* class JunctionTreeBernsteinCopulaFactory */
 
 } // namespace OTAGRUM

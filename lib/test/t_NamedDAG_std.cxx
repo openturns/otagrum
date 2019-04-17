@@ -19,6 +19,8 @@ void testConstructor()
   std::cout << " parents(0) : " << ndag.getParents(0) << std::endl;
   std::cout << "children(0) : " << ndag.getChildren(0) << std::endl;
 
+  std::cout << "topologicalOrder : " << ndag.getTopologicalOrder() << std::endl;
+
   std::cout << std::endl << ndag.__str__("+++ +++ |") << std::endl;
 
   std::cout << std::endl << ndag.toDot();

@@ -48,6 +48,7 @@ public:
   OT::Indices getParents(const OT::UnsignedInteger nod) const;
   OT::Indices getChildren(const OT::UnsignedInteger nod) const;
   OT::Indices getNodes() const;
+  OT::Indices getTopologicalOrder() const;
 
   virtual OT::String __str__(const OT::String &offset = "") const;
   OT::String toDot() const;
