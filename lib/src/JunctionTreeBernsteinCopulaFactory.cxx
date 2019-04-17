@@ -22,76 +22,69 @@
 #include <openturns/OTprivate.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
+#include "otagrum/OTAgrumResourceMap.hxx"
 #include <otagrum/ContinuousPC.hxx>
 #include <otagrum/JunctionTreeBernsteinCopulaFactory.hxx>
 
-namespace OTAGRUM
-{
+namespace OTAGRUM {
 
 CLASSNAMEINIT(JunctionTreeBernsteinCopulaFactory)
 
 static const OT::Factory<JunctionTreeBernsteinCopulaFactory>
-Factory_JunctionTreeBernsteinCopulaFactory;
+    Factory_JunctionTreeBernsteinCopulaFactory;
 
 /* Default constructor */
 JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory()
-  : DistributionFactoryImplementation()
-  , nbBins_(5)
-  , alpha_(0.1)
-  , maximumConditioningSetSize_(5)
-{
-  setName("JunctionTreeBernsteinCopulaFactory");
+    : DistributionFactoryImplementation() {
+  nbBins_ = OT::ResourceMap::GetAsUnsignedInteger(
+      "OTAgrum.ContinuousPC.defaultNbBins");
+  alpha_ = OT::ResourceMap::GetAsScalar("OTAgrum.ContinuousPC.defaultAlpha");
+  maximumConditioningSetSize_ = OT::ResourceMap::GetAsUnsignedInteger(
+      "OTAgrum.ContinuousPC.defaultMaximumConditioningSetSize");
 }
 
 /* Parameter constructor */
-JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory(const int nbBins,
-    const double alpha,
-    const int maximumConditioningSetSize)
-  : DistributionFactoryImplementation()
-  , nbBins_(nbBins)
-  , alpha_(alpha)
-  , maximumConditioningSetSize_(maximumConditioningSetSize)
-{
+JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory(
+    const int nbBins, const double alpha, const int maximumConditioningSetSize)
+    : DistributionFactoryImplementation(), nbBins_(nbBins), alpha_(alpha),
+      maximumConditioningSetSize_(maximumConditioningSetSize) {
   setName("JunctionTreeBernsteinCopulaFactory");
 }
 
 /* Virtual constructor */
 JunctionTreeBernsteinCopulaFactory *
-JunctionTreeBernsteinCopulaFactory::clone() const
-{
+JunctionTreeBernsteinCopulaFactory::clone() const {
   return new JunctionTreeBernsteinCopulaFactory(*this);
 }
 
 /* Here is the interface that all derived class must implement */
 
 OT::Distribution
-JunctionTreeBernsteinCopulaFactory::build(const OT::Sample &sample) const
-{
+JunctionTreeBernsteinCopulaFactory::build(const OT::Sample &sample) const {
   return buildAsJunctionTreeBernsteinCopula(sample);
 }
 
-OT::Distribution JunctionTreeBernsteinCopulaFactory::build() const
-{
+OT::Distribution JunctionTreeBernsteinCopulaFactory::build() const {
   return buildAsJunctionTreeBernsteinCopula().clone();
 }
 
 JunctionTreeBernsteinCopula
 JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula(
-  const OT::Sample &sample) const
-{
+    const OT::Sample &sample) const {
 
   if (sample.getSize() == 0)
     throw OT::InvalidArgumentException(HERE)
-        << "Error: cannot build a JunctionTreeBernsteinCopula distribution from an empty "
-        "sample";
+        << "Error: cannot build a JunctionTreeBernsteinCopula distribution "
+           "from an empty "
+           "sample";
   OTAGRUM::ContinuousPC learner(sample, maximumConditioningSetSize_, alpha_);
   learner.setOptimalPolicy(true);
-  return JunctionTreeBernsteinCopula(learner.learnJunctionTree(), sample, nbBins_);
+  return JunctionTreeBernsteinCopula(learner.learnJunctionTree(), sample,
+                                     nbBins_);
 }
 
 JunctionTreeBernsteinCopula
-JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula() const
-{
+JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula() const {
   return JunctionTreeBernsteinCopula();
 }
 

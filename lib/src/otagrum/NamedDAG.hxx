@@ -32,15 +32,16 @@
 
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM
-{
-class OTAGRUM_API NamedDAG : public OT::PersistentObject
-{
+namespace OTAGRUM {
+class OTAGRUM_API NamedDAG : public OT::PersistentObject {
+  CLASSNAME;
+
 public:
   NamedDAG();
   explicit NamedDAG(const gum::BayesNet<double> &bn);
-  NamedDAG(const gum::DAG &dag,
-           const std::vector<std::string> &names);
+  NamedDAG(const gum::DAG &dag, const std::vector<std::string> &names);
+
+  virtual OT::PersistentObject *clone() const;
 
   OT::UnsignedInteger getSize() const;
   OT::Description getDescription() const;
@@ -54,12 +55,12 @@ public:
   OT::String toDot() const;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate &adv) const;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate &adv);
 
- private:
+private:
   gum::DAG dag_;
   OT::Description map_;
 };
