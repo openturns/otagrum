@@ -34,7 +34,7 @@
 
 namespace OTAGRUM
 {
-class OTAGRUM_API NamedDAG : public OT::Object
+class OTAGRUM_API NamedDAG : public OT::PersistentObject
 {
 public:
   NamedDAG();
@@ -52,7 +52,14 @@ public:
 
   virtual OT::String __str__(const OT::String &offset = "") const;
   OT::String toDot() const;
-private:
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv);
+
+ private:
   gum::DAG dag_;
   OT::Description map_;
 };
