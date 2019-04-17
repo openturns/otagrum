@@ -31,9 +31,6 @@ class OTAGRUM_API OTAgrumResourceMap {
 
 public:
   static void Initialize();
-
-protected:
-private:
 };
 
 struct OTAGRUM_API OTAgrumResourceMap_init {

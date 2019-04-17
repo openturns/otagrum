@@ -1,0 +1,3 @@
+<OTAgrum.ContinuousPC.defaultNbBins>  =  <5>
+<OTAgrum.ContinuousPC.defaultAlpha>  =  <0.1>
+<OTAgrum.ContinuousPC.defaultMaximumConditioningSetSize>  =  <5>
