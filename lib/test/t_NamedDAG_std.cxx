@@ -25,6 +25,8 @@ void testConstructor() {
 
   std::cout << "topologicalOrder : " << ndag.getTopologicalOrder() << std::endl;
 
+  std::cout << "topologicalOrder : " << ndag.getTopologicalOrder() << std::endl;
+
   std::cout << std::endl << ndag.__str__("+++ +++ |") << std::endl;
 
   std::cout << std::endl << ndag.toDot();
