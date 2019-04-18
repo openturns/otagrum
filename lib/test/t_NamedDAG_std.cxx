@@ -17,8 +17,11 @@ void testConstructor() {
             << std::endl;
 
   std::cout << "      nodes : " << ndag.getNodes() << std::endl;
-  std::cout << " parents(0) : " << ndag.getParents(0) << std::endl;
-  std::cout << "children(0) : " << ndag.getChildren(0) << std::endl;
+  for (const auto &nod : ndag.getNodes())
+    {
+      std::cout << " parents(" << nod << ") : " << ndag.getParents(nod) << std::endl;
+      std::cout << "children(" << nod << ") : " << ndag.getChildren(nod) << std::endl;
+    }
 
   std::cout << "topologicalOrder : " << ndag.getTopologicalOrder() << std::endl;
 
@@ -26,6 +29,7 @@ void testConstructor() {
 
   std::cout << std::endl << ndag.toDot();
 
+  OT::Log::Show(OT::Log::ALL);
   OT::Study study("tmp.xml");
   study.add("ndag", ndag);
   study.save();
@@ -33,11 +37,12 @@ void testConstructor() {
   std::cout << "\n------------------\n";
   OT::Study study2("tmp.xml");
   study2.load();
-  std::cout << "Labels=";
-  study2.printLabels();
+  std::cout << "Labels=" << study2.printLabels() << std::endl;
   std::cout << "\n------------------\n";
-  /*
+
   OTAGRUM::NamedDAG dag;
+  std::cout << "Before fill, " << dag.getClassName() << std::endl;
+  
   study2.fillObjectByName(dag, "ndag");
 
   std::cout << "        size : " << dag.getSize() << std::endl;
@@ -53,7 +58,7 @@ void testConstructor() {
   std::cout << std::endl << dag.__str__("+++ +++ |") << std::endl;
 
   std::cout << std::endl << dag.toDot();
-   */
+
 }
 
 int main(void) {
