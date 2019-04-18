@@ -115,51 +115,36 @@ OT::String NamedDAG::toDot() const {
 }
 /* Method save() stores the object through the StorageManager */
 void NamedDAG::save(OT::Advocate &adv) const {
-  std::cerr << "In NamedDAG::save" << std::endl;
   OT::PersistentObject::save(adv);
-  std::cerr << "map_=" << map_ << std::endl;
   adv.saveAttribute("map_", map_);
   OT::Indices nodes(getNodes());
-  std::cerr << "nodes_=" << nodes << std::endl;
   adv.saveAttribute("nodes_", nodes);
   OT::PersistentCollection<OT::Indices> parentsByNodes;
   for (const auto &node : getNodes())
     parentsByNodes.add(getParents(node));
-  std::cerr << "parentsByNodes_=" << parentsByNodes << std::endl;
   adv.saveAttribute("parentsByNodes_", parentsByNodes);
 }
 
 /* Method load() reloads the object from the StorageManager */
 void NamedDAG::load(OT::Advocate &adv) {
-  std::cerr << "In NamedDAG::load" << std::endl;
   OT::PersistentObject::load(adv);
   adv.loadAttribute("map_", map_);
-  std::cerr << "map_=" << map_ << std::endl;
   OT::Indices nodes;
   adv.loadAttribute("nodes_", nodes);
-  std::cerr << "nodes_=" << nodes << std::endl;
   OT::PersistentCollection<OT::Indices> parentsByNodes;
   adv.loadAttribute("parentsByNodes_", parentsByNodes);
-  std::cerr << "parentsByNodes_=" << parentsByNodes << std::endl;
 
   dag_.clear();
-  std::cerr << "dag cleared" << std::endl;
   for (const auto &nod : nodes) {
     dag_.addNodeWithId(nod);
   }
-  std::cerr << "nodes added" << std::endl;
   for (int i = 0; i < nodes.getSize(); ++i)
     {
       const int nod = nodes[i];
       const OT::Indices parents(parentsByNodes[i]);
       for (const auto &par : parents)
-	{
-	  std::cerr << "arc " << map_[par] << "->" << map_[nod] << std::endl;
-	  dag_.addArc(par, nod);
-	}
+	dag_.addArc(par, nod);
     }
-  std::cerr << "arc added" << std::endl;
-  std::cerr << "ok" << std::endl;
 }
 
 } // namespace OTAGRUM

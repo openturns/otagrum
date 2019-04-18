@@ -41,9 +41,9 @@ void testConstructor() {
   std::cout << "\n------------------\n";
 
   OTAGRUM::NamedDAG dag;
-  std::cout << "Before fill, " << dag.getClassName() << std::endl;
+  std::cout << "Before fill, " << dag.getClassName() << ", " << dag.getName() << std::endl;
   
-  study2.fillObjectByName(dag, "ndag");
+  study2.fillObject("ndag", dag);
 
   std::cout << "        size : " << dag.getSize() << std::endl;
   std::cout << "       desc : " << dag.getDescription() << std::endl
