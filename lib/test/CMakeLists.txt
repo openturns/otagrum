@@ -89,6 +89,7 @@ ot_check_test ( IndicesManip_std )
 ot_check_test ( StratifiedCache_std )
 ot_check_test ( ContinuousTTest_std )
 ot_check_test ( ContinuousPC_std )
+ot_check_test ( ContinuousBayesianNetwork_std )
 ot_check_test ( OTAgrumResourceMap_std )
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"

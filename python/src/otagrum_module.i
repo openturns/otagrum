@@ -32,3 +32,4 @@
 %include JunctionTreeBernsteinCopulaFactory.i
 %include ContinuousTTest.i
 %include ContinuousPC.i
+%include ContinuousBayesianNetwork.i
