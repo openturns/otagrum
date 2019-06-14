@@ -49,7 +49,7 @@ public:
 
   /** Parameters constructor */
   ContinuousBayesianNetwork(const NamedDAG & dag,
-			    const DistributionCollection jointDistributions);
+			    const DistributionCollection & jointDistributions);
 
 public:
   /** Comparison operator */
@@ -77,6 +77,13 @@ public:
   using OT::ContinuousDistribution::computePDF;
   OT::Scalar computePDF(const OT::Point & point) const;
 
+  /** DAG and DistributionCollection accessor */
+  void setDAGAndDistributionCollection(const NamedDAG & dag,
+				       const DistributionCollection & jointDistributions);
+
+  NamedDAG getNamedDAG() const;
+  DistributionCollection getDistributionCollection() const;
+				       
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
