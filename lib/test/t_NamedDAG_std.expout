@@ -39,6 +39,40 @@ Before fill, NamedDAG, Unnamed
        desc : [A,B,C,D,E]
 
       nodes : [3,1,4,2,0]
+ parents(3) : [2]
+children(3) : []
+ parents(1) : [0]
+children(1) : [2]
+ parents(4) : []
+children(4) : [0,2]
+ parents(2) : [1,4,0]
+children(2) : [3]
+ parents(0) : [4]
+children(0) : [1,2]
+topologicalOrder : [4,0,1,2,3]
+
++++ +++ |[A,B,C,D,E]
++++ +++ |[B->C,E->C,E->A,C->D,A->B,A->C]
+
+
+digraph {
+    "B"->"C"
+    "E"->"C"
+    "E"->"A"
+    "C"->"D"
+    "A"->"B"
+    "A"->"C"
+}
+
+------------------
+Labels=ndag
+
+------------------
+Before fill, NamedDAG, Unnamed
+        size : 5
+       desc : [A,B,C,D,E]
+
+      nodes : [3,1,4,2,0]
  parents(0) : [4]
 children(0) : [1,2]
 topologicalOrder : [4,0,1,2,3]
