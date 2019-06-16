@@ -27,19 +27,22 @@ void testConstructor() {
     {
       const OT::UnsignedInteger d = 1 + ndag.getParents(i).getSize();
       std::cout << "i=" << i << ", d=" << d << std::endl;
-      /*if (d == 2) jointDistributions[i] = OT::GumbelCopula(5.0);
-	else*/
-	{
-	  /*OT::CorrelationMatrix R(d);
-	    for (OT::UnsignedInteger i = 0; i < d; ++i)
-	      for (OT::UnsignedInteger j = 0; j < i; ++j)
-	        R(i, j) = 0.5 / d;
-		jointDistributions[i] = OT::NormalCopula(R);*/
-	  OT::Point theta(d + 1);
-	  for (OT::UnsignedInteger i = 0; i <= d; ++i)
-	    theta[i] = std::sqrt((1.0 + i) / d);
-	  jointDistributions[i] = OT::Dirichlet(theta).getCopula();
-	}
+#ifdef USE_NORMAL_COPULA_AND_GUMBEL_COPULA
+      if (d == 2) jointDistributions[i] = OT::GumbelCopula(5.0);
+      else*
+        {
+          OT::CorrelationMatrix R(d);
+          for (OT::UnsignedInteger i = 0; i < d; ++i)
+            for (OT::UnsignedInteger j = 0; j < i; ++j)
+              R(i, j) = 0.5 / d;
+          jointDistributions[i] = OT::NormalCopula(R);
+        }
+#else
+      OT::Point theta(d + 1);
+      for (OT::UnsignedInteger i = 0; i <= d; ++i)
+        theta[i] = std::sqrt((1.0 + i) / d);
+      jointDistributions[i] = OT::Dirichlet(theta).getCopula();
+#endif
       //jointDistributions[i] = OT::KernelSmoothing().build(OT::NormalCopula(R).getSample(10)).getCopula();
     }
   OTAGRUM::ContinuousBayesianNetwork cbn(ndag, jointDistributions);
@@ -59,18 +62,18 @@ void testConstructor() {
   std::cout << "copula=" << copula << std::endl;
   std::cout << "log-l=" << copula.computeLogPDF(sample).computeMean()[0] << std::endl;
   {
-  OT::Graph gr;
-  OT::Pairs pairs(sample);
-  pairs.setPointStyle("dot");
-  gr.add(pairs);
-  gr.draw("pairs.png", 800, 820);
+    OT::Graph gr;
+    OT::Pairs pairs(sample);
+    pairs.setPointStyle("dot");
+    gr.add(pairs);
+    gr.draw("pairs.png", 800, 820);
   }
   {
-  OT::Graph gr;
-  OT::Pairs pairs(copula.getSample(size));
-  pairs.setPointStyle("dot");
-  gr.add(pairs);
-  gr.draw("pairsCopula.png", 800, 820);
+    OT::Graph gr;
+    OT::Pairs pairs(copula.getSample(size));
+    pairs.setPointStyle("dot");
+    gr.add(pairs);
+    gr.draw("pairsCopula.png", 800, 820);
   }
 }
 

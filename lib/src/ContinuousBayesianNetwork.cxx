@@ -145,7 +145,6 @@ OT::Point ContinuousBayesianNetwork::getRealization() const
 /* Get the PDF of the distribution */
 OT::Scalar ContinuousBayesianNetwork::computePDF(const OT::Point & point) const
 {
-  std::cerr << "In ContinuousBayesianNetwork::computePDF, point=" << point << std::endl;
   const OT::Indices order(dag_.getTopologicalOrder());
   OT::Scalar pdf = 1.0;
   for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i)
@@ -154,12 +153,15 @@ OT::Scalar ContinuousBayesianNetwork::computePDF(const OT::Point & point) const
     const OT::Indices parents(dag_.getParents(globalI));
     const OT::UnsignedInteger conditioningDimension(parents.getSize());
     const OT::Scalar x = point[globalI];
-    OT::Point y(conditioningDimension);
-    for (OT::UnsignedInteger j = 0; j < conditioningDimension; ++j)
-      y[j] = point[order[j]];
-    const OT::Scalar conditionalPDF = jointDistributions_[globalI].computeConditionalPDF(x, y);
-    std::cerr << "i=" << i << ", j=" << globalI << ", y=" << y << ", conditionalPDF=" << conditionalPDF << std::endl;
-    pdf *= conditionalPDF;
+    if (conditioningDimension == 0) pdf *= jointDistributions_[globalI].computePDF(x);
+    else
+      {
+	OT::Point y(conditioningDimension);
+	for (OT::UnsignedInteger j = 0; j < conditioningDimension; ++j)
+	  y[j] = point[order[j]];
+	const OT::Scalar conditionalPDF = jointDistributions_[globalI].computeConditionalPDF(x, y);
+	pdf *= conditionalPDF;
+      }
   } // i
   return pdf;
 }
