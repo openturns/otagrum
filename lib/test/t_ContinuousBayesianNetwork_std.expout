@@ -5,19 +5,40 @@
        desc : [A,B,C,D,E]
 
       nodes : [3,1,4,2,0]
+ parents(3) : [2]
+children(3) : []
+ parents(1) : [0]
+children(1) : [2]
+ parents(4) : []
+children(4) : [0,2]
+ parents(2) : [1,4,0]
+children(2) : [3]
  parents(0) : [4]
 children(0) : [1,2]
 topologicalOrder : [4,0,1,2,3]
-
-+++ +++ |[A,B,C,D,E]
-+++ +++ |[B->C,E->A,E->C,C->D,A->B,A->C]
-
-
-digraph {
-    "B"->"C"
-    "E"->"A"
-    "E"->"C"
-    "C"->"D"
-    "A"->"B"
-    "A"->"C"
-}
+i=0, d=2
+i=1, d=2
+i=2, d=4
+i=3, d=2
+i=4, d=1
+cbn=ContinuousBayesianNetwork(dag=[A,B,C,D,E]
+[B->C,E->A,E->C,C->D,A->B,A->C]
+, joint distributions=[class=SklarCopula name=SklarCopula dimension=2 distribution=class=Dirichlet name=Dirichlet dimension=2 theta=class=Point name=Unnamed dimension=3 values=[0.707107,1,1.22474],class=SklarCopula name=SklarCopula dimension=2 distribution=class=Dirichlet name=Dirichlet dimension=2 theta=class=Point name=Unnamed dimension=3 values=[0.707107,1,1.22474],class=SklarCopula name=SklarCopula dimension=4 distribution=class=Dirichlet name=Dirichlet dimension=4 theta=class=Point name=Unnamed dimension=5 values=[0.5,0.707107,0.866025,1,1.11803],class=SklarCopula name=SklarCopula dimension=2 distribution=class=Dirichlet name=Dirichlet dimension=2 theta=class=Point name=Unnamed dimension=3 values=[0.707107,1,1.22474],IndependentCopula(dimension = 1)])
+cbn pdf=-nan
+cbn realization=[0.414516,0.0623498,0,0.15963,0.629877]
+cbn sample=       [ A         B         C         D         E         ]
+   0 : [ 0.111501  0.217256  0         0.269964  0.0177719 ]
+   1 : [ 0.12314   0.156522  0         0.30974   0.139045  ]
+   2 : [ 0.297967  0.297556  0         0.111929  0.781587  ]
+...
+9997 : [ 0.2197    0.334528  0         0.325646  0.432639  ]
+9998 : [ 0.321595  0.355097  0         0.312375  0.564333  ]
+9999 : [ 0.159774  0.103893  0         0.177389  0.218002  ]
+log-l=-inf
+copula=NormalCopula(R = 5x5
+[[  1          -0.0090688   0          -0.0100759  -0.00313273 ]
+ [ -0.0090688   1           0          -0.0136242  -0.00550409 ]
+ [  0           0           1           0           0          ]
+ [ -0.0100759  -0.0136242   0           1           0.0141398  ]
+ [ -0.00313273 -0.00550409  0           0.0141398   1          ]])
+log-l=-708.396
