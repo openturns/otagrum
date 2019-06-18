@@ -378,7 +378,7 @@ bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
     try {
       dag.addArc(i, j);
     } catch (gum::InvalidDirectedCycle &e) {
-      return false;
+      dag.addArc(j,i);
     }
     return true;
   }
@@ -395,7 +395,7 @@ bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) {
     try {
       dag.addArc(i, j);
     } catch (gum::InvalidDirectedCycle &e) {
-      GUM_SHOWERROR(e);
+      dag.addArc(j, i);
     }
     return true;
   }
@@ -418,7 +418,7 @@ bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
       try {
         dag.addArc(i, j);
       } catch (gum::InvalidDirectedCycle &e) {
-        GUM_SHOWERROR(e);
+        dag.addArc(j, i);
       }
       return true;
     }
