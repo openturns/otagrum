@@ -118,11 +118,7 @@ void tests(void) {
 };
 
 int main(void) {
-  // tests();
-  auto x = OT::Sample::ImportFromCSVFile(
-      "/home/phw/Documents/gits/githubs/usingOtagrum/regis/advised.csv");
-  auto learner = OTAGRUM::ContinuousPC(x, 3, 0.1);
-  auto dag = learner.learnDAG();
-  std::cout << dag << std::endl;
+  tests();
+  
   return EXIT_SUCCESS;
 }
