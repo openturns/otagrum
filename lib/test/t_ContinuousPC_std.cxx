@@ -8,11 +8,9 @@
 
 #include "otagrum/ContinuousPC.hxx"
 
-OT::Description DescrFromStringVect(const std::vector<std::string> &v)
-{
+OT::Description DescrFromStringVect(const std::vector<std::string> &v) {
   OT::Description res;
-  for (auto s : v)
-  {
+  for (auto s : v) {
     res.add(s);
   }
   return res;
@@ -24,8 +22,7 @@ OT::Description DescrFromStringVect(const std::vector<std::string> &v)
 2--4 : p-value=6.18139e-35
 3--4 : p-value=3.61185e-182
 */
-OT::Sample getTrucBizarre(OT::UnsignedInteger size)
-{
+OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
   OT::Collection<OT::Copula> copulas;
 
   OT::UnsignedInteger dim = 3;
@@ -41,17 +38,15 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size)
   copula2.setDescription(DescrFromStringVect({"B1", "B2"}));
 
   copulas.add(copula1);
-  //copulas.add(copula2);
+  // copulas.add(copula2);
   copulas.add(OT::NormalCopula(R));
 
   auto copula = OT::ComposedCopula(copulas);
   return copula.getSample(size);
 }
 
-int main(void)
-{
-  try
-  {
+void tests(void) {
+  try {
     OT::RandomGenerator::SetSeed(77);
     OT::Sample sample = getTrucBizarre(7000);
     std::cout << "Sample size : " << sample.getSize() << std::endl
@@ -71,8 +66,7 @@ int main(void)
                   << " sepset=" << learner.getSepset(e.first(), e.second())
                   << std::endl;
       } */
-      for (const auto &e : skel.edges())
-      {
+      for (const auto &e : skel.edges()) {
         std::cout << e
                   << " : p-value=" << learner.getPValue(e.first(), e.second())
                   << std::endl;
@@ -116,15 +110,19 @@ int main(void)
                 << ndag.__str__() << std::endl;
       std::cout << ndag.toDot() << std::endl;
     }
-  }
-  catch (OT::Exception &e)
-  {
+  } catch (OT::Exception &e) {
     std::cout << e.__repr__() << std::endl;
-  }
-  catch (gum::Exception &e)
-  {
+  } catch (gum::Exception &e) {
     GUM_SHOWERROR(e);
   }
+};
 
+int main(void) {
+  // tests();
+  auto x = OT::Sample::ImportFromCSVFile(
+      "/home/phw/Documents/gits/githubs/usingOtagrum/regis/advised.csv");
+  auto learner = OTAGRUM::ContinuousPC(x, 3, 0.1);
+  auto dag = learner.learnDAG();
+  std::cout << dag << std::endl;
   return EXIT_SUCCESS;
 }
