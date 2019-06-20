@@ -119,9 +119,10 @@ ContinuousPC::bestSeparator(const gum::UndiGraph &g, gum::NodeId y,
   for (separator.setFirst(); !separator.isLast(); separator.next()) {
     bool ok = false;
     std::tie(t, p, ok) = tester_.isIndep(y, z, separator.current());
-    TRACE(y << "-" << z << "|" << separator.current() << ":" << t << ", " << p
-            << ", " << ok << "\n")
-
+    if (!ok) {
+      TRACE(y << "-" << z << "|" << separator.current() << ":" << t << ", " << p
+              << ", " << ok << "\n")
+    }
     if (ok) {
       if (!getOptimalPolicy()) // the first separator found is correct
       {
@@ -270,30 +271,31 @@ NamedDAG ContinuousPC::learnDAG() {
   return NamedDAG(dag, names);
 }
 
-// for all triplet x-y-z (no edge between x and z), if y is in sepset[x,z]
+// for all triplet x-y-z (no edge between x and z), if y is not in sepset[x,z]
 // then x->y<-z.
-// the ordering process uses the size of the p-value as a priority.
+// the ordering process uses the p-value as a priority.
 gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const {
   gum::MixedGraph cpdag;
 
   gum::PriorityQueue<Triplet, double> queue;
-  for (auto x : g.nodes()) {
-    cpdag.addNodeWithId(x);
+  for (auto y : g.nodes()) {
+    cpdag.addNodeWithId(y);
 
-    if (g.neighbours(x).size() > 1) {
-      IndicesCombinationIterator couple(Utils::FromNodeSet(g.neighbours(x)), 2);
+    if (g.neighbours(y).size() > 1) {
+      IndicesCombinationIterator couple(Utils::FromNodeSet(g.neighbours(y)), 2);
       for (couple.setFirst(); !couple.isLast(); couple.next()) {
-        const gum::NodeId y = couple.current()[0];
+        const gum::NodeId x = couple.current()[0];
         const gum::NodeId z = couple.current()[1];
-        if (!g.existsEdge(y, z)) // maybe unshielded collider
+        if (!g.existsEdge(x, z)) // maybe unshielded collider
         {
-          bool ok = false;
-          double t = 0.0, p = 0.0;
-          OT::Indices indX;
-          indX = indX + OT::UnsignedInteger(x);
-          std::tie(t, p, ok) = tester_.isIndep(y, z, indX);
-          if (!ok) {
-            queue.insert(Triplet{y, x, z}, p);
+          // bool ok = false;
+          // double t = 0.0, p = 0.0;
+          // OT::Indices indX;
+          // indX = indX + OT::UnsignedInteger(x);
+          // std::tie(t, p, ok) = tester_.isIndep(y, z, indX);
+          const auto xz = gum::Edge(x, z);
+          if (!sepset_[xz].contains(y)) {
+            queue.insert(Triplet{x, y, z}, pvalues_[xz]);
           }
         }
       }
@@ -378,7 +380,7 @@ bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
     try {
       dag.addArc(i, j);
     } catch (gum::InvalidDirectedCycle &e) {
-      dag.addArc(j,i);
+      dag.addArc(j, i);
     }
     return true;
   }
@@ -530,7 +532,6 @@ gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const {
       try {
         dag.addArc(candidate.tail(), candidate.head());
       } catch (gum::InvalidDirectedCycle &e) {
-
       }
       remainings.erase(gum::Edge(candidate.tail(), candidate.head()));
       //@todo : A warning if !found (if we add a bad condidate)
