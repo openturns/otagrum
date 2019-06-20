@@ -22,7 +22,7 @@ void testConstructor() {
 
   OT::Indices order = ndag.getTopologicalOrder();
   std::cout << "topologicalOrder : " << order << std::endl;
-  OT::Collection<OT::Distribution> jointDistributions(5);
+  OT::Collection<OT::Distribution> jointDistributions(order.getSize());
   for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i)
     {
       const OT::UnsignedInteger d = 1 + ndag.getParents(i).getSize();
@@ -52,6 +52,10 @@ void testConstructor() {
   const OT::UnsignedInteger size = 10000;
   const OT::Sample sampleLearn(cbn.getSample(size));
   const OT::Sample sample(cbn.getSample(size));
+
+  sample.exportToCSVFile("samplelearn.csv", ",");
+  sample.exportToCSVFile("sample.csv", ",");
+
   std::cout << "cbn sample=" << sample << std::endl;
   OT::Scalar logL = 0.0;
   for (OT::UnsignedInteger i = 0; i < size; ++i)
