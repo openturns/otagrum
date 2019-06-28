@@ -53,7 +53,6 @@ void tests(void) {
               << "Sample dimension :" << sample.getDimension() << std::endl;
     {
       OTAGRUM::ContinuousPC learner(sample, 3, 0.9);
-      learner.setOptimalPolicy(true);
       std::cout << "go" << std::endl;
       auto skel = learner.inferSkeleton();
       std::cout << learner.skeletonToDot(skel) << std::endl;
@@ -75,7 +74,6 @@ void tests(void) {
     {
       std::cout << "\n\n";
       OTAGRUM::ContinuousPC learner(sample, 5, 0.8);
-      learner.setOptimalPolicy(true);
       std::cout << "go" << std::endl;
       auto skel = learner.inferSkeleton();
       std::cout << "\n****\n"
