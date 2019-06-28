@@ -54,9 +54,6 @@ public:
   gum::JunctionTree deriveJunctionTree(const gum::UndiGraph &g) const;
   gum::DAG deriveDAG(const gum::MixedGraph &p) const;
 
-  void setOptimalPolicy(bool policy);
-  bool getOptimalPolicy() const;
-
   void setVerbosity(bool verbose);
   bool getVerbosity() const;
 
@@ -77,14 +74,13 @@ private:
 
   OT::UnsignedInteger maxCondSet_;
   bool verbose_;
-  bool optimalPolicy_;
   ContinuousTTest tester_;
 
   bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n) ;
 
   std::tuple<bool, double, double, OT::Indices>
-  bestSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
-                const OT::Indices &neighbours, OT::UnsignedInteger n) const;
+  getSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
+               const OT::Indices &neighbours, OT::UnsignedInteger n) const;
   std::vector<std::string> namesFromData(void) const;
 };
 

@@ -78,7 +78,6 @@ JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula(
            "from an empty "
            "sample";
   OTAGRUM::ContinuousPC learner(sample, maximumConditioningSetSize_, alpha_);
-  learner.setOptimalPolicy(true);
   return JunctionTreeBernsteinCopula(learner.learnJunctionTree(), sample,
                                      nbBins_);
 }
