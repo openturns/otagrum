@@ -24,7 +24,7 @@ i=4, d=1
 cbn=ContinuousBayesianNetwork(dag=[A,B,C,D,E]
 [B->C,E->A,E->C,C->D,A->B,A->C]
 , joint distributions=[class=SklarCopula name=SklarCopula dimension=2 distribution=class=Dirichlet name=Dirichlet dimension=2 theta=class=Point name=Unnamed dimension=3 values=[0.707107,1,1.22474],class=SklarCopula name=SklarCopula dimension=2 distribution=class=Dirichlet name=Dirichlet dimension=2 theta=class=Point name=Unnamed dimension=3 values=[0.707107,1,1.22474],class=SklarCopula name=SklarCopula dimension=4 distribution=class=Dirichlet name=Dirichlet dimension=4 theta=class=Point name=Unnamed dimension=5 values=[0.5,0.707107,0.866025,1,1.11803],class=SklarCopula name=SklarCopula dimension=2 distribution=class=Dirichlet name=Dirichlet dimension=2 theta=class=Point name=Unnamed dimension=3 values=[0.707107,1,1.22474],IndependentCopula(dimension = 1)])
-cbn pdf=-nan
+cbn pdf=nan
 cbn realization=[0.414516,0.0623498,0,0.15963,0.629877]
 cbn sample=       [ A         B         C         D         E         ]
    0 : [ 0.111501  0.217256  0         0.269964  0.0177719 ]
