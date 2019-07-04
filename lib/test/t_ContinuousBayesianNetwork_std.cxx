@@ -6,6 +6,7 @@
 #include "otagrum/NamedDAG.hxx"
 
 void testConstructor() {
+  OT::ResourceMap::SetAsBool( "Distribution-Parallel", false);
   const auto proto = "A->B->C->D;E->A->C<-E";
   const auto bn = gum::BayesNet<double>::fastPrototype(proto);
   std::cout << "      proto : " << proto << std::endl;
@@ -25,7 +26,6 @@ void testConstructor() {
   OT::Indices order = ndag.getTopologicalOrder();
   std::cout << "topologicalOrder : " << order << std::endl;
   OT::Collection<OT::Distribution> jointDistributions(order.getSize());
-
   for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i) {
     const OT::UnsignedInteger d = 1 + ndag.getParents(i).getSize();
     std::cout << "i=" << i << ", d=" << d << std::endl;
@@ -36,7 +36,6 @@ void testConstructor() {
     jointDistributions[i] =
         OT::Student(5.0, OT::Point(d), OT::Point(d), R).getCopula();
   }
-
   OTAGRUM::ContinuousBayesianNetwork cbn(ndag, jointDistributions);
   std::cout << "cbn=" << cbn << std::endl;
   std::cout << "cbn pdf=" << cbn.computePDF(OT::Point(cbn.getDimension(), 0.5))
@@ -46,13 +45,15 @@ void testConstructor() {
   const OT::Sample sampleLearn(cbn.getSample(size));
   const OT::Sample sample(cbn.getSample(size));
 
-  sample.exportToCSVFile("samplelearn.csv", ",");
+  sampleLearn.exportToCSVFile("samplelearn.csv", ",");
   sample.exportToCSVFile("sample.csv", ",");
 
   std::cout << "cbn sample=" << sample << std::endl;
   OT::Scalar logL = 0.0;
+  OT::Sample pdfSample(cbn.computePDF(sample));
+  pdfSample.exportToCSVFile("pdfSample.csv", ",");
   for (OT::UnsignedInteger i = 0; i < size; ++i)
-    logL += std::log(cbn.computePDF(sample[i]));
+    logL += std::log(pdfSample(i, 0));
   logL /= size;
   std::cout << "log-l=" << logL << std::endl;
   OT::NormalCopula copula(
