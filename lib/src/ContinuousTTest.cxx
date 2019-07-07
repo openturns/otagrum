@@ -90,7 +90,6 @@ ContinuousTTest::getLogPDFs(const OT::UnsignedInteger Y,
 {
   //@todo how to be smart for k ?
   // k =BernsteinCopulaFactory::ComputeLogLikelihoodBinNumber(sample,2);
-  // k =BernsteinCopulaFactory::ComputeAMISEBinNumber(sample,2);
   OT::UnsignedInteger k = GetK(data_.getSize(), X.getSize() + 2);
   OT::Point logPDF1(getLogPDF(X, k));
   OT::Point logPDF2(getLogPDF(X + Y, k));
