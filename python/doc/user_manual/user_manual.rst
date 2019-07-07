@@ -13,3 +13,5 @@ API
     ContinuousPC
     ContinuousTTest
     NamedJunctionTree
+    NamedDAG
+    ContinuousBayesianNetwork
