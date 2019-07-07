@@ -41,7 +41,7 @@ class OTAGRUM_API ContinuousBayesianNetwork
   CLASSNAME;
 public:
 
-  typedef OT::Collection< OT::Distribution > DistributionCollection;
+  typedef OT::Collection< OT::Distribution >           DistributionCollection;
   typedef OT::PersistentCollection< OT::Distribution > DistributionPersistentCollection;
 
   /** Default constructor */

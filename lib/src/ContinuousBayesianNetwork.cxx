@@ -35,7 +35,7 @@
 namespace OTAGRUM
 {
 
-CLASSNAMEINIT(ContinuousBayesianNetwork);
+CLASSNAMEINIT(ContinuousBayesianNetwork)
 
 static const OT::Factory<ContinuousBayesianNetwork> Factory_ContinuousBayesianNetwork;
 
