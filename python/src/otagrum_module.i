@@ -9,7 +9,6 @@
 
 // Prerequisites needed
 %include typemaps.i
-
 %include exception.i
 
 %ignore *::load(OT::Advocate & adv);
