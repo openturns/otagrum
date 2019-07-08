@@ -37,7 +37,7 @@ ContinuousTTest::ContinuousTTest(const OT::Sample &data, const double alpha)
   : OT::Object()
 {
   setAlpha(alpha);
-  data_ = (data.rank() + 1.0) / data.getSize();
+  data_ = (data.rank() + 0.5) / data.getSize();
 }
 
 OT::UnsignedInteger ContinuousTTest::GetK(const OT::UnsignedInteger size,
