@@ -110,7 +110,7 @@ double ContinuousTTest::getAlpha() const
 
 inline double pPar1MoinsP(const double p)
 {
-  return p * (1 - p);
+  return p * (1.0 - p);
 }
 
 double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
@@ -137,15 +137,24 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
   double B2 = 0.0;
   double B3 = 0.0;
   const double facteurpi = 1.0 / std::pow(4 * M_PI, 0.5 * d + 0.5);
-  const double smallLog = std::log(OT::SpecFunc::ScalarEpsilon);
+  const double small = OT::SpecFunc::Precision;
+  const double smallLog = std::log(OT::SpecFunc::Precision);
   double logDenominator = 0.0;
+  double yI = 0.0;
+  double zI = 0.0;
   if (d == 0)
   {
     const double fX0 = 1.0;
     for (unsigned int i = 0; i < N; ++i)
     {
       logDenominator = logFYZX[i];
-      if (logDenominator > smallLog)
+      yI = data_(i, Y);
+      zI = data_(i, Z);
+      if ( (logDenominator > smallLog) &&
+	   (yI > small) &&
+	   (yI < 1.0 - small) &&
+	   (zI > small) &&
+	   (zI < 1.0 - small))
       {
         // dH^2 = (1-sqrt(1 * 1 / (fYZX * 1)))^2
         //      = (1-exp(0.5*log(1 / fYZX))^2
@@ -153,13 +162,13 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
         //      = (expm1(-0.5*log(fYZX)))^2
         dH = std::expm1(-0.5 * logDenominator);
         H += dH * dH;
-        B1 += facteurpi / std::sqrt(pPar1MoinsP(data_(i, Y)));
-        B2 += facteurpi / std::sqrt(pPar1MoinsP(data_(i, Z)));
+        B1 += facteurpi / std::sqrt(pPar1MoinsP(yI));
+        B2 += facteurpi / std::sqrt(pPar1MoinsP(zI));
         B3 += fX0;
       } // logDenominator > smallLog
       else
-        LOGINFO(OT::OSS() << "Skiped contribution i=" << i
-                << ", logDenominator=" << logDenominator);
+	LOGINFO(OT::OSS() << "Skipped contribution i=" << i
+		<< ", logDenominator=" << logDenominator);
     } // i
   }   // d == 0
   else if (d == 1)
@@ -167,27 +176,35 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
     for (unsigned int i = 0; i < N; ++i)
     {
       logDenominator = logFYZX[i];
-      if (logDenominator > smallLog)
+      yI = data_(i, Y);
+      zI = data_(i, Z);
+      if ( (logDenominator > smallLog) &&
+	   (yI > small) &&
+	   (yI < 1.0 - small) &&
+	   (zI > small) &&
+	   (zI < 1.0 - small))
       {
+	double xJ = data_(i, X[0]);
+	if ((xJ > small) &&
+	    (xJ < 1.0 - small))
+	  continue;
+        double gX = 1.0 / pPar1MoinsP(xJ);
+	gX = std::sqrt(gX);
         // dH^2 = (1-sqrt(fYX * fZX / (fYZX * 1)))^2
         //      = (1-exp(0.5*log(fYX * fZX / fYZX))^2
         //      = (-expm1(0.5*(log(fYX) + log(fZX) - log(fYZX))))^2
         //      = (expm1(0.5*(log(fYX) + log(fZX) - log(fYZX))))^2
         dH = std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator));
         H += dH * dH;
-        double gX = 1.0;
-        for (unsigned int j = 0; j < d; ++j)
-          gX /= pPar1MoinsP(data_(i, X[j]));
-        gX = std::sqrt(gX);
         B1 += facteurpi * gX /
-              (std::sqrt(pPar1MoinsP(data_(i, Y))) * std::exp(logFYX[i]));
+              (std::sqrt(pPar1MoinsP(yI)) * std::exp(logFYX[i]));
         B2 += facteurpi * gX /
-              (std::sqrt(pPar1MoinsP(data_(i, Z))) * std::exp(logFZX[i]));
+              (std::sqrt(pPar1MoinsP(zI)) * std::exp(logFZX[i]));
         B3 += gX;
       } // logDenominator > smallLog
       else
-        LOGDEBUG(OT::OSS() << "Skip contribution i=" << i
-                 << ", logDenominator=" << logDenominator);
+	LOGDEBUG(OT::OSS() << "Skip contribution i=" << i
+		 << ", logDenominator=" << logDenominator);
     } // i
   }   // d == 1
   else
@@ -195,27 +212,46 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
     for (unsigned int i = 0; i < N; ++i)
     {
       logDenominator = logFYZX[i] + logFX[i];
-      if (logDenominator > smallLog)
+      yI = data_(i, Y);
+      zI = data_(i, Z);
+      if ( (logDenominator > smallLog) &&
+	   (yI > small) &&
+	   (yI < 1.0 - small) &&
+	   (zI > small) &&
+	   (zI < 1.0 - small))
       {
+        double gX = 1.0;
+	double xJ = 0.0;
+	OT::Bool isSmall = false;
+        for (unsigned int j = 0; j < d; ++j)
+	  {
+	    xJ = data_(i, X[j]);
+	    if ((xJ > small) &&
+		(xJ < 1.0 - small))
+	      {
+		isSmall = true;
+		break;
+	      }
+	    gX /= pPar1MoinsP(xJ);
+	    gX = std::sqrt(gX);
+	  }
+	if (isSmall)
+	  continue;
         // dH^2 = (1-sqrt(fYX * fZX / (fYZX * fX)))^2
         //      = (1-exp(0.5*log(fYX * fZX / (fYZX * fX)))^2
         //      = (-expm1(0.5*(log(fYX) + log(fZX) - log(fYZX) - log(fX))))^2
         //      = (expm1(0.5*(log(fYX) + log(fZX) - log(fYZX) - log(fX))))^2
         dH = std::expm1(0.5 * (logFYX[i] + logFZX[i] - logDenominator));
         H += dH * dH;
-        double gX = 1.0;
-        for (unsigned int j = 0; j < d; ++j)
-          gX /= pPar1MoinsP(data_(i, X[j]));
-        gX = std::sqrt(gX);
         B1 += facteurpi * gX /
-              (std::sqrt(pPar1MoinsP(data_(i, Y))) * std::exp(logFYX[i]));
+              (std::sqrt(pPar1MoinsP(yI)) * std::exp(logFYX[i]));
         B2 += facteurpi * gX /
-              (std::sqrt(pPar1MoinsP(data_(i, Z))) * std::exp(logFZX[i]));
+              (std::sqrt(pPar1MoinsP(zI)) * std::exp(logFZX[i]));
         B3 += std::exp(logFX[i]) * gX;
       } // logDenominator > smallLog
       else
-        LOGDEBUG(OT::OSS() << "Skip contribution i=" << i
-                 << ", logDenominator=" << logDenominator);
+	LOGDEBUG(OT::OSS() << "Skip contribution i=" << i
+		 << ", logDenominator=" << logDenominator);
     } // i
   }   // d > 0
   // mean
