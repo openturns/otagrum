@@ -42,6 +42,7 @@ void testOK()
   }
   std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
   OT::Sample copulaSample = OT::Normal(OT::Point(dim), C).getSample(1000);
+  std::cout<<copulaSample<<std::endl;
   std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
   std::cout<<"=========================="<<std::endl;
   std::cout<<"=========================="<<std::endl;
@@ -91,6 +92,7 @@ void testOK()
 
 int main(int argc, char **argv)
 {
+  OT::RandomGenerator::SetSeed(0);
   OT::ResourceMap::SetAsUnsignedInteger("parallel-threads",1);
   OT::ResourceMap::SetAsBool("Distribution-Parallel",false);
   testOK();
