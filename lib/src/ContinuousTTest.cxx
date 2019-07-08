@@ -77,7 +77,7 @@ OT::Point ContinuousTTest::getLogPDF(const OT::Indices &l,
 
   LOGINFO(OT::OSS() << "Compute log-PDF for k=" << k << ", l=" << l);
   auto logPDF =
-    OT::EmpiricalBernsteinCopula(dL, k, false).computeLogPDF(dL).asPoint();
+    OT::EmpiricalBernsteinCopula(dL, k, true).computeLogPDF(dL).asPoint();
 
   cache_.set(l.getSize(), key, logPDF);
   return logPDF;
