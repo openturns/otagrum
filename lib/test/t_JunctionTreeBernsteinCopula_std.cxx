@@ -47,6 +47,7 @@ void testOK()
   OT::Sample copulaSample = OT::Normal(OT::Point(dim), C).getSample(1000);
   {
     OT::RandomGenerator::SetSeed(0);
+    std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
     OTAGRUM::JunctionTreeBernsteinCopula copula(jt, copulaSample, 5, false);
     std::cout << "copula=" << copula << std::endl;
     OT::Sample sample = copula.getSample(10);
@@ -55,9 +56,11 @@ void testOK()
     std::cout << "pdf=" << pdf << std::endl;
     double entropyMC = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
     std::cout << "entropy (MC)=" << entropyMC << std::endl;
+    std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
   }
   {
     OT::RandomGenerator::SetSeed(0);
+    std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
     OTAGRUM::JunctionTreeBernsteinCopula copula(jt, jt.getOrderMaxFirst(), copulaSample, 5, false);
     std::cout << "copula=" << copula << std::endl;
     OT::Sample sample = copula.getSample(10);
@@ -66,6 +69,7 @@ void testOK()
     std::cout << "pdf=" << pdf << std::endl;
     double entropyMC = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
     std::cout << "entropy (MC)=" << entropyMC << std::endl;
+    std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
     if (false)
     {
       OT::Indices indices(2);
