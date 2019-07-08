@@ -3,11 +3,7 @@
 #include <agrum/BN/BayesNet.h>
 #include <agrum/BN/inference/lazyPropagation.h>
 
-#include <openturns/Exception.hxx>
-#include <openturns/Indices.hxx>
-#include <openturns/Normal.hxx>
-#include <openturns/Graph.hxx>
-#include <openturns/RandomGenerator.hxx>
+#include <openturns/OT.hxx>
 
 #include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/JunctionTreeBernsteinCopula.hxx"
@@ -44,13 +40,19 @@ void testOK()
       C(i, j) = 1.0;
     C(i, i) = 2.0;
   }
+  std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
   OT::Sample copulaSample = OT::Normal(OT::Point(dim), C).getSample(1000);
+  std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
+  std::cout<<"=========================="<<std::endl;
+  std::cout<<"=========================="<<std::endl;
+
+
   {
     OT::RandomGenerator::SetSeed(0);
     std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
     OTAGRUM::JunctionTreeBernsteinCopula copula(jt, copulaSample, 5, false);
     std::cout << "copula=" << copula << std::endl;
-    OT::Sample sample = copula.getSample(10);
+    OT::Sample sample = copula.getSample(1);
     std::cout << "sample=" << sample << std::endl;
     OT::Sample pdf = copula.computePDF(sample);
     std::cout << "pdf=" << pdf << std::endl;
@@ -89,5 +91,7 @@ void testOK()
 
 int main(int argc, char **argv)
 {
+  OT::ResourceMap::SetAsUnsignedInteger("parallel-threads",1);
+  OT::ResourceMap::SetAsBool("Distribution-Parallel",false);
   testOK();
 }
