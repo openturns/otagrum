@@ -47,10 +47,11 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
 
 void tests(void) {
   try {
-    OT::RandomGenerator::SetSeed(77);
+    OT::RandomGenerator::SetSeed(0);
     OT::Sample sample = getTrucBizarre(7000);
     std::cout << "Sample size : " << sample.getSize() << std::endl
-              << "Sample dimension :" << sample.getDimension() << std::endl;
+              << "Sample dimension :" << sample.getDimension() << std::endl
+              << "Sample "<<sample<<std::endl;
     {
       OTAGRUM::ContinuousPC learner(sample, 3, 0.9);
       std::cout << "go" << std::endl;
