@@ -40,7 +40,7 @@ void testConstructor() {
   std::cout << "cbn pdf=" << cbn.computePDF(OT::Point(cbn.getDimension(), 0.5))
             << std::endl;
   std::cout << "cbn realization=" << cbn.getRealization() << std::endl;
-  const OT::UnsignedInteger size = 300000;
+  const OT::UnsignedInteger size = 1000;
   const OT::Sample sampleLearn(cbn.getSample(size));
   const OT::Sample sample(cbn.getSample(size));
 

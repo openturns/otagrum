@@ -117,6 +117,7 @@ void tests(void) {
 };
 
 int main(void) {
+  OT::Log::Show(OT::Log::ALL);
   tests();
   
   return EXIT_SUCCESS;
