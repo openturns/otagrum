@@ -40,6 +40,7 @@ void testOK()
       C(i, j) = 1.0;
     C(i, i) = 2.0;
   }
+  OT::RandomGenerator::SetSeed(0);
   std::cout<<"Generator "<<OT::RandomGenerator::GetState()<<std::endl;
   OT::Sample copulaSample = OT::Normal(OT::Point(dim), C).getSample(1000);
   std::cout<<copulaSample<<std::endl;
