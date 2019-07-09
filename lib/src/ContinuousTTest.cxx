@@ -22,6 +22,7 @@
 #include <cmath>
 #include <tuple>
 
+#include <agrum/core/timer.h>
 #include <openturns/DistFunc.hxx>
 #include <openturns/EmpiricalBernsteinCopula.hxx>
 #include <openturns/Log.hxx>
@@ -75,9 +76,13 @@ OT::Point ContinuousTTest::getLogPDF(const OT::Indices &l,
   // OT::NormalCopulaFactory factory;
   // auto logPDF = factory.build(dL).computeLogPDF(dL).asPoint();
 
+  gum::Timer t;
+  t.reset();
+
   LOGINFO(OT::OSS() << "Compute log-PDF for k=" << k << ", l=" << l);
   auto logPDF =
     OT::EmpiricalBernsteinCopula(dL, k, true).computeLogPDF(dL).asPoint();
+  LOGINFO(OT::OSS() << "End of compute log-PDF for k=" << k << ", l=" << l<<" Time : "<<t.step()<<"s");
 
   cache_.set(l.getSize(), key, logPDF);
   return logPDF;
