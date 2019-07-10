@@ -61,7 +61,15 @@ public:
   double getTTest(gum::NodeId x, gum::NodeId y) const;
   const OT::Indices getSepset(gum::NodeId x, gum::NodeId y) const;
 
+  double getPValue(const std::string &x, const std::string &y) const;
+  double getTTest(const std::string &x, const std::string &y) const;
+  const std::vector<std::string> getSepsetNames(const std::string &x, const std::string &y) const;
+
+  gum::NodeId idFromName(const std::string& n) const;
+
   const std::vector<gum::Edge> &getRemoved() const;
+  const bool isRemoved(gum::NodeId x, gum::NodeId y) const;
+  const bool isRemoved(const std::string &x, const std::string &y) const;
 
   std::string skeletonToDot(const gum::UndiGraph &skeleton);
   std::string PDAGtoDot(const gum::MixedGraph &pdag);
