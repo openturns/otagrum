@@ -212,20 +212,20 @@ add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
     )
 
-set(OTAGRUM_LIBRARY otagrum)
-set(OTAGRUM_LIBRARIES ${OPENTURNS_LIBRARIES})
-list(APPEND OTAGRUM_LIBRARIES ${OTAGRUM_LIBRARY})
-set(OTAGRUM_LIBRARY_DIRS ${OPENTURNS_LIBRARY_DIRS})
-list(APPEND OTAGRUM_LIBRARY_DIRS ${LIBRARY_PATH})
-set(OTAGRUM_INCLUDE_DIR ${INCLUDE_PATH})
-set(OTAGRUM_INCLUDE_DIRS ${OTAGRUM_INCLUDE_DIR})
-set(OTAGRUM_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
-list(APPEND OTAGRUM_INCLUDE_DIRS ${OPENTURNS_INCLUDE_DIRS})
-set(OTAGRUM_VERSION_STRING ${PACKAGE_VERSION})
-set(OTAGRUM_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR})
-set(OTAGRUM_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR})
-set(OTAGRUM_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH})
-set(OTAGRUM_USE_FILE ${CONFIG_CMAKE_PATH}/Useotagr.cmake)
+set ( OTAGRUM_LIBRARY                 otagrum )
+set ( OTAGRUM_LIBRARIES ${OPENTURNS_LIBRARIES} )
+list ( APPEND OTAGRUM_LIBRARIES ${OTAGRUM_LIBRARY} )
+set ( OTAGRUM_LIBRARY_DIRS ${OPENTURNS_LIBRARY_DIRS} )
+list ( APPEND OTAGRUM_LIBRARY_DIRS ${LIBRARY_PATH} )
+set ( OTAGRUM_INCLUDE_DIR ${INCLUDE_PATH} )
+set ( OTAGRUM_INCLUDE_DIRS ${OTAGRUM_INCLUDE_DIR} )
+set ( OTAGRUM_ROOT_DIR       ${CMAKE_INSTALL_PREFIX} )
+list ( APPEND OTAGRUM_INCLUDE_DIRS ${OPENTURNS_INCLUDE_DIRS} )
+set ( OTAGRUM_VERSION_STRING ${PACKAGE_VERSION} )
+set ( OTAGRUM_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
+set ( OTAGRUM_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
+set ( OTAGRUM_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
+set ( OTAGRUM_USE_FILE      ${CONFIG_CMAKE_PATH}/Useotagrum.cmake )
 
 if (CMAKE_VERSION VERSION_LESS 2.8.8)
   # CMakePackageConfigHelpers is not available
@@ -244,24 +244,24 @@ endmacro(set_and_check _var _value)
     set(PACKAGE_${_var} ${${_var}})
   endforeach ()
 
-  configure_file(${CMAKE_SOURCE_DIR}/cmake/otagrConfig.cmake.in
-      ${CMAKE_BINARY_DIR}/otagrConfig.cmake
-      @ONLY ESCAPE_QUOTES
-      )
+configure_file ( ${CMAKE_SOURCE_DIR}/cmake/otagrumConfig.cmake.in
+                 ${CMAKE_BINARY_DIR}/otagrumConfig.cmake
+                 @ONLY ESCAPE_QUOTES
+               )
 
-  install(FILES cmake/Useotagr.cmake
-      ${CMAKE_BINARY_DIR}/otagrConfig.cmake
-      DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
-      )
+install ( FILES cmake/Useotagrum.cmake
+                ${CMAKE_BINARY_DIR}/otagrumConfig.cmake
+          DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
+        )
 
 else ()
 
   include(CMakePackageConfigHelpers)
-  configure_package_config_file(
-      cmake/otagrConfig.cmake.in
-      ${CMAKE_CURRENT_BINARY_DIR}/otagrConfig.cmake
-      INSTALL_DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
-      PATH_VARS
+  configure_package_config_file (
+    cmake/otagrumConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/otagrumConfig.cmake
+    INSTALL_DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
+    PATH_VARS
       OTAGRUM_USE_FILE
       OTAGRUM_ROOT_DIR
       OTAGRUM_INCLUDE_DIR
@@ -269,13 +269,13 @@ else ()
       OTAGRUM_LIBRARY_DIRS
       NO_CHECK_REQUIRED_COMPONENTS_MACRO
   )
-  write_basic_package_version_file(otagrConfigVersion.cmake VERSION ${OTAGRUM_VERSION_STRING} COMPATIBILITY AnyNewerVersion)
+  write_basic_package_version_file( otagrumConfigVersion.cmake VERSION ${OTAGRUM_VERSION_STRING} COMPATIBILITY AnyNewerVersion )
 
-  install(FILES cmake/Useotagr.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/otagrConfig.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/otagrConfigVersion.cmake
-      DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
-      )
+  install ( FILES cmake/Useotagrum.cmake
+                  ${CMAKE_CURRENT_BINARY_DIR}/otagrumConfig.cmake
+                  ${CMAKE_CURRENT_BINARY_DIR}/otagrumConfigVersion.cmake
+            DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
+          )
 endif ()
 
 include(CPack)
