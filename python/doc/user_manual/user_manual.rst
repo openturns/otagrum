@@ -9,7 +9,7 @@ API
 
     MixedHistogramUserDefined
     JunctionTreeBernsteinCopula
-    JunctionTreeBernsteinCopulaFactory
+.. JunctionTreeBernsteinCopulaFactory
     ContinuousPC
     ContinuousTTest
     NamedJunctionTree
