@@ -46,7 +46,6 @@ void testOK() {
     OT::Sample sample = copula.getSample(1000);
     OT::Sample pdf = copula.computePDF(sample);
     entropyMC1 = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
-    std::cout << "entropy (MC)=" << entropyMC1 << std::endl;
   }
   {
     OT::RandomGenerator::SetSeed(33);
@@ -55,7 +54,6 @@ void testOK() {
     OT::Sample sample = copula.getSample(1000);
     OT::Sample pdf = copula.computePDF(sample);
     entropyMC2 = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
-    std::cout << "entropy (MC)=" << entropyMC2 << std::endl;
   }
   std::cout<<"Same entropy : ";
   if (fabs(entropyMC1-entropyMC2)<1e-5)

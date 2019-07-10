@@ -6,7 +6,7 @@
 #include "otagrum/NamedDAG.hxx"
 
 void testConstructor() {
-  OT::ResourceMap::SetAsBool( "Distribution-Parallel", false);
+  OT::ResourceMap::SetAsBool("Distribution-Parallel", false);
   const auto proto = "A->B->C->D;E->A->C<-E";
   const auto bn = gum::BayesNet<double>::fastPrototype(proto);
   std::cout << "      proto : " << proto << std::endl;
@@ -26,6 +26,7 @@ void testConstructor() {
   OT::Indices order = ndag.getTopologicalOrder();
   std::cout << "topologicalOrder : " << order << std::endl;
   OT::Collection<OT::Distribution> jointDistributions(order.getSize());
+
   for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i) {
     const OT::UnsignedInteger d = 1 + ndag.getParents(i).getSize();
     std::cout << "i=" << i << ", d=" << d << std::endl;
@@ -33,8 +34,33 @@ void testConstructor() {
     for (OT::UnsignedInteger i = 0; i < d; ++i)
       for (OT::UnsignedInteger j = 0; j < i; ++j)
         R(i, j) = 0.5 / d;
-    jointDistributions[i] = OT::Student(5.0, OT::Point(d), OT::Point(d, 1.0), R).getCopula();
+    jointDistributions[i] =
+        OT::Student(5.0, OT::Point(d), OT::Point(d, 1.0), R).getCopula();
   }
+
+  OTAGRUM::ContinuousBayesianNetwork cbn(ndag, jointDistributions);
+  std::cout << "cbn=" << cbn << std::endl;
+  std::cout << "cbn pdf=" << cbn.computePDF(OT::Point(cbn.getDimension(), 0.5))
+            << std::endl;
+  std::cout << "cbn realization=" << cbn.getRealization() << std::endl;
+}
+void genereData() {
+  const auto proto = "A->B->C->D;E->A->C<-E";
+  const auto bn = gum::BayesNet<double>::fastPrototype(proto);
+  OTAGRUM::NamedDAG ndag(bn);
+  OT::Indices order = ndag.getTopologicalOrder();
+  OT::Collection<OT::Distribution> jointDistributions(order.getSize());
+
+  for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i) {
+    const OT::UnsignedInteger d = 1 + ndag.getParents(i).getSize();
+    OT::CorrelationMatrix R(d);
+    for (OT::UnsignedInteger i = 0; i < d; ++i)
+      for (OT::UnsignedInteger j = 0; j < i; ++j)
+        R(i, j) = 0.5 / d;
+    jointDistributions[i] =
+        OT::Student(5.0, OT::Point(d), OT::Point(d, 1.0), R).getCopula();
+  }
+
   OTAGRUM::ContinuousBayesianNetwork cbn(ndag, jointDistributions);
   std::cout << "cbn=" << cbn << std::endl;
   std::cout << "cbn pdf=" << cbn.computePDF(OT::Point(cbn.getDimension(), 0.5))
@@ -60,6 +86,7 @@ void testConstructor() {
   std::cout << "copula=" << copula << std::endl;
   std::cout << "log-l=" << copula.computeLogPDF(sample).computeMean()[0]
             << std::endl;
+  /*
   {
     OT::Graph gr;
     OT::Pairs pairs(sample);
@@ -73,7 +100,7 @@ void testConstructor() {
     pairs.setPointStyle("dot");
     gr.add(pairs);
     gr.draw("pairsCopula.png", 800, 820);
-  }
+  }*/
 }
 
 int main(void) {

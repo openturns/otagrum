@@ -151,12 +151,10 @@ namespace OTAGRUM {
     if (g.sizeEdges() == 0)
       return false;
 
-    gum::PriorityQueue<gum::Edge, double> queue;
     bool atLeastOneInThisStep = false;
 
     do {
       atLeastOneInThisStep = false;
-      queue.clear();
       for (const auto &edge : g.edges()) {
         const auto y = edge.first();
         const auto z = edge.second();
@@ -175,19 +173,14 @@ namespace OTAGRUM {
 
           if (resYZ) // we found at least one separator
           {
-            queue.insert(edge, -pYZ);
             sepset_.set(edge, sepYZ);
+            TRACE("==>" << edge << " cut. Sepset=" << sepset_[edge]
+                        << ", pvalue=" << pvalues_[edge] << std::endl);
+            atLeastOneInThisStep = true;
+            removed_.push_back(edge);
+            g.eraseEdge(edge);
           }
         }
-      }
-      gum::NodeId u;
-      while (!queue.empty()) {
-        const auto &edge = queue.pop();
-        TRACE("==>" << edge << " cut. Sepset=" << sepset_[edge]
-                    << ", pvalue=" << pvalues_[edge] << std::endl);
-        atLeastOneInThisStep = true;
-        removed_.push_back(edge);
-        g.eraseEdge(edge);
       }
     } while (atLeastOneInThisStep);
 
