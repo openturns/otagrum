@@ -131,7 +131,7 @@ namespace OTAGRUM
         OT::Point p;
         if (var.varType() == gum::VarType::Discretized)
           {
-            kind.add(1); // Continuous
+            kind.add(MixedHistogramUserDefined::CONTINUOUS);
 
             for (const auto tick :
                    dynamic_cast<const gum::IDiscretizedVariable &>(var)
@@ -142,7 +142,7 @@ namespace OTAGRUM
           }
         else
           {
-            kind.add(0); // Discrete
+            kind.add(MixedHistogramUserDefined::DISCRETE);
             for (unsigned long v = 0; v < var.domainSize(); v++)
               {
                 p.add(v);

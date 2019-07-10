@@ -44,6 +44,8 @@ public:
   typedef OT::Pointer<OT::DistributionImplementation>   Implementation;
   typedef OT::Collection<OT::Point> PointCollection;
 
+  enum Kind { DISCRETE, CONTINUOUS };
+
   /** Default constructor */
   MixedHistogramUserDefined();
 

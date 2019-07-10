@@ -43,7 +43,7 @@ static const OT::Factory<MixedHistogramUserDefined> Factory_MixedHistogramUserDe
 MixedHistogramUserDefined::MixedHistogramUserDefined()
   : OT::DistributionImplementation()
   , ticksCollection_(1, OT::Point(1))
-  , kind_(1, 1)
+  , kind_(1, CONTINUOUS)
   , probabilityTable_(OT::Point(1, 1.0))
 {
   *this = MixedHistogramUserDefined(ticksCollection_, kind_, probabilityTable_);
@@ -84,8 +84,7 @@ MixedHistogramUserDefined::MixedHistogramUserDefined(const PointCollection & tic
   if (dimension == 1)
   {
     const OT::Point ticks(ticksCollection[0]);
-    // Discrete
-    if (kind[0] == 0)
+    if (kind[0] == DISCRETE)
     {
       const OT::UnsignedInteger size = ticks.getSize();
       OT::SampleImplementation support(size, 1);
@@ -104,7 +103,7 @@ MixedHistogramUserDefined::MixedHistogramUserDefined(const PointCollection & tic
       discretization[i] = ticksCollection[i].getSize() - kind[i];
     OT::Bool allDiscrete = true;
     for (OT::UnsignedInteger i = 0; i < dimension; ++i)
-      allDiscrete = allDiscrete && (kind[i] == 0);
+      allDiscrete = allDiscrete && (kind[i] == DISCRETE);
     OT::IndicesCollection allIndices(OT::Tuples(discretization).generate());
     // Multivariate discrete
     if (allDiscrete)
@@ -127,8 +126,7 @@ MixedHistogramUserDefined::MixedHistogramUserDefined(const PointCollection & tic
         {
           const OT::UnsignedInteger k = allIndices(i, j);
           const OT::Point ticks = ticksCollection[j];
-          // Discrete
-          if (kind[j] == 0)
+          if (kind[j] == DISCRETE)
             subAtoms[j] = OT::Dirac(OT::Point(1, ticks[k]));
           // Continuous
           else
@@ -239,7 +237,7 @@ OT::Distribution MixedHistogramUserDefined::getMarginal(const OT::UnsignedIntege
   const OT::UnsignedInteger dimension = getDimension();
   if (i >= dimension) throw OT::InvalidArgumentException(HERE) << "The index of a marginal distribution must be in the range [0, dim-1]";
   if (dimension == 1) return clone();
-  if (kind_[i] == 0)
+  if (kind_[i] == DISCRETE)
   {
     const OT::UnsignedInteger size = ticksCollection_[i].getSize();
     OT::SampleImplementation support(size, 1);
@@ -266,7 +264,7 @@ OT::Bool MixedHistogramUserDefined::isContinuous() const
 {
   const OT::UnsignedInteger size = kind_.getSize();
   for (OT::UnsignedInteger i = 0; i < size; ++i)
-    if (kind_[i] == 0) return false;
+    if (kind_[i] == DISCRETE) return false;
   return true;
 }
 
@@ -275,7 +273,7 @@ OT::Bool MixedHistogramUserDefined::isDiscrete() const
 {
   const OT::UnsignedInteger size = kind_.getSize();
   for (OT::UnsignedInteger i = 0; i < size; ++i)
-    if (kind_[i] == 1) return false;
+    if (kind_[i] == CONTINUOUS) return false;
   return true;
 }
 
@@ -286,13 +284,13 @@ OT::Bool MixedHistogramUserDefined::isIntegral() const
   const OT::UnsignedInteger size = kind_.getSize();
   for (OT::UnsignedInteger i = 0; i < size; ++i)
   {
-    if (kind_[i] == 1) return false;
-    const OT::UnsignedInteger supportSize = ticksCollection_[i].getSize();
-    for (OT::UnsignedInteger j = 0; j < supportSize; ++j)
-    {
-      const OT::Scalar x = ticksCollection_[i][j];
-      if (std::abs(x - floor(x + 0.5)) > epsilon) return false;
-    }
+      if (kind_[i] == CONTINUOUS) return false;
+      const OT::UnsignedInteger supportSize = ticksCollection_[i].getSize();
+      for (OT::UnsignedInteger j = 0; j < supportSize; ++j)
+	{
+	  const OT::Scalar x = ticksCollection_[i][j];
+	  if (std::abs(x - floor(x + 0.5)) > epsilon) return false;
+	}
   } // i
   return true;
 }

@@ -44,9 +44,8 @@ int main(int argc, char *argv[])
     ticksCollection.add(point);
   }
   Indices kind(0);
-  // 0->Discrete, 1->Continuous
-  kind.add(1);
-  kind.add(0);
+  kind.add(MixedHistogramUserDefined::CONTINUOUS);
+  kind.add(MixedHistogramUserDefined::DISCRETE);
   Point probabilityTable(0);
   probabilityTable.add(0.05);
   probabilityTable.add(0.1);
