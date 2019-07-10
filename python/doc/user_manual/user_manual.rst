@@ -9,7 +9,7 @@ API
 
     Utils
     JunctionTreeBernsteinCopula
-    JunctionTreeBernsteinCopulaFactory
+.. JunctionTreeBernsteinCopulaFactory
     ContinuousPC
     ContinuousTTest
     NamedJunctionTree
