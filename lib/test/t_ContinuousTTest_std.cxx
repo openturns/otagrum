@@ -89,7 +89,7 @@ void testIndepsSeePythonTest()
   bool ok;
   OT::Indices X;
 
-  auto data = getSpecificInstanceSeePythonTest(3000);
+  auto data = getSpecificInstanceSeePythonTest(6000);
 
   ContinuousTTest test(data);
   test.setAlpha(0.1);

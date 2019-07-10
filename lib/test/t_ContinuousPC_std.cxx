@@ -30,7 +30,7 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
   OT::CorrelationMatrix R(dim);
   for (OT::UnsignedInteger i = 0; i < dim; i++)
     for (OT::UnsignedInteger j = 0; j < i; j++)
-      R(i, j) = (i + j + 1) / (2.0 * dim);
+      R(i, j) = 0.6;
 
   auto copula1 = OT::FrankCopula(4.0);
   copula1.setDescription(DescrFromStringVect({"A1", "A2"}));
@@ -38,7 +38,7 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
   copula2.setDescription(DescrFromStringVect({"B1", "B2"}));
 
   copulas.add(copula1);
-  // copulas.add(copula2);
+  copulas.add(copula2);
   copulas.add(OT::NormalCopula(R));
 
   auto copula = OT::ComposedCopula(copulas);
@@ -48,24 +48,24 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
 void tests(void) {
   try {
     OT::RandomGenerator::SetSeed(0);
-    OT::Sample sample = getTrucBizarre(7000);
+    OT::Sample sample = getTrucBizarre(10000);
     std::cout << "Sample size : " << sample.getSize() << std::endl
               << "Sample dimension :" << sample.getDimension() << std::endl
-              << "Sample "<<sample<<std::endl;
+              << "Sample " << sample << std::endl;
     {
-      OTAGRUM::ContinuousPC learner(sample, 3, 0.9);
+      OTAGRUM::ContinuousPC learner(sample, 3, 0.1);
       std::cout << "go" << std::endl;
       auto skel = learner.inferSkeleton();
       std::cout << learner.skeletonToDot(skel) << std::endl;
 
-      /*auto cpdag = learner.inferPDAG(skel);
+      auto cpdag = learner.inferPDAG(skel);
       std::cout << cpdag.toDot() << std::endl;
       for (const auto &e : learner.getRemoved()) {
-        std::cout << e << " : p-value=" << learner.getPValue(e.first(),
-      e.second())
+        std::cout << e
+                  << " : p-value=" << learner.getPValue(e.first(), e.second())
                   << " sepset=" << learner.getSepset(e.first(), e.second())
                   << std::endl;
-      } */
+      }
       for (const auto &e : skel.edges()) {
         std::cout << e
                   << " : p-value=" << learner.getPValue(e.first(), e.second())
@@ -119,6 +119,6 @@ void tests(void) {
 int main(void) {
   OT::Log::Show(OT::Log::ALL);
   tests();
-  
+
   return EXIT_SUCCESS;
 }
