@@ -19,6 +19,7 @@
  *
  */
 
+#include <stdint.h>
 #include "otagrum/Utils.hxx"
 
 #include <openturns/Description.hxx>
@@ -44,6 +45,40 @@
 namespace OTAGRUM
 {
 
+// Underflow of exponential is common practice in numerical routines,
+// so handle it here.
+
+float
+Utils::FastPow2 (float p)
+{
+  float offset = (p < 0) ? 1.0f : 0.0f;
+  float clipp = (p < -126) ? -126.0f : p;
+  int w = clipp;
+  float z = clipp - w + offset;
+  union { uint32_t i; float f; } v = { static_cast<uint32_t> ( (1 << 23) * (clipp + 121.2740575f + 27.7280233f / (4.84252568f - z) - 1.49012907f * z) ) };
+
+  return v.f;
+}
+
+float
+Utils::FastExp (float p)
+{
+  return FastPow2 (1.442695040f * p);
+}
+
+float
+Utils::FasterPow2 (float p)
+{
+  float clipp = (p < -126) ? -126.0f : p;
+  union { uint32_t i; float f; } v = { static_cast<uint32_t> ( (1 << 23) * (clipp + 126.94269504f) ) };
+  return v.f;
+}
+
+float
+Utils::FasterExp (float p)
+{
+  return FasterPow2 (1.442695040f * p);
+}
 
 gum::Potential<double>
 Utils::Discretize(const OT::DistributionImplementation &distribution,
