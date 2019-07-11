@@ -3,6 +3,7 @@
 from __future__ import print_function
 import openturns as ot
 import otagrum
+import time
 
 ticksCollection = [[0.0, 1.0, 3.0, 6.0], [1.0, 2.0, 3.0]]
 
@@ -66,3 +67,23 @@ for i in range(6):
     print("standard moment n=", i, " value=",
           distribution.getStandardMoment(i))
 print("Standard representative=", distribution.getStandardRepresentative())
+
+
+# higher dimension
+dim = 8
+ticksCollection = [[0.0, 1.0, 3.0, 6.0]]*dim
+kind = [otagrum.MixedHistogramUserDefined.DISCRETE] * dim
+kind[dim-2] = otagrum.MixedHistogramUserDefined.CONTINUOUS
+probabilityTable = ot.RandomGenerator.Generate(4**(dim-1)*3)
+x = [3.0]*dim
+x[dim-2] = 5.0
+bench = 0
+distribution = otagrum.MixedHistogramUserDefined(ticksCollection, kind, probabilityTable)
+t0 = time.time()
+print('pdf=%.6g' % distribution.computePDF(x))
+t1 = time.time()
+#print('pdf t=%.6g' % (t1-t0))
+t0 = time.time()
+print('cdf=%.6g' % distribution.computeCDF(x))
+t1 = time.time()
+#print('cdf t=%.6g' % (t1-t0))

@@ -26,11 +26,12 @@
 #include <openturns/Dirac.hxx>
 #include <openturns/Histogram.hxx>
 #include <openturns/Uniform.hxx>
-#include <openturns/UserDefined.hxx>
+#include <openturns/DistFunc.hxx>
 #include <openturns/OSS.hxx>
 #include <openturns/Tuples.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ResourceMap.hxx>
+#include <openturns/RandomGenerator.hxx>
 
 namespace OTAGRUM
 {
@@ -80,65 +81,24 @@ MixedHistogramUserDefined::MixedHistogramUserDefined(const PointCollection & tic
     totalSize *= ticksCollection[i].getSize() - kind[i];
   }
   if (probabilityTable.getSize() != totalSize) throw OT::InvalidArgumentException(HERE) << "Error: expected a probability table of size=" << totalSize << ", got size=" << probabilityTable.getSize();
-  // Special case: dimension 1
-  if (dimension == 1)
-  {
-    const OT::Point ticks(ticksCollection[0]);
-    if (kind[0] == DISCRETE)
-    {
-      const OT::UnsignedInteger size = ticks.getSize();
-      OT::SampleImplementation support(size, 1);
-      support.setData(ticks);
-      mixture_ = OT::Mixture(OT::Mixture::DistributionCollection(1, OT::UserDefined(support, probabilityTable)));
-    }
-    // Continuous
+
+  // cache some data
+  OT::Indices discretization(dimension);
+  for (OT::UnsignedInteger i = 0; i < dimension; ++i)
+    // Here, kind[i] == 0 <-> kind[i] is false <-> i is discrete
+    discretization[i] = ticksCollection_[i].getSize() - kind_[i];
+  allIndices_ = OT::Tuples(discretization).generate();
+  for (OT::UnsignedInteger j = 0; j < dimension; ++ j)
+    if (kind_[j] == DISCRETE)
+      discreteIndices_.add(j);
     else
-      mixture_ = OT::Mixture(OT::Mixture::DistributionCollection(1, OT::Histogram(ticks, probabilityTable)));
-  } // dimension == 1
-  else
-  {
-    OT::Indices discretization(dimension);
-    for (OT::UnsignedInteger i = 0; i < dimension; ++i)
-      // Here, kind[i] == 0 <-> kind[i] is false <-> i is discrete
-      discretization[i] = ticksCollection[i].getSize() - kind[i];
-    OT::Bool allDiscrete = true;
-    for (OT::UnsignedInteger i = 0; i < dimension; ++i)
-      allDiscrete = allDiscrete && (kind[i] == DISCRETE);
-    OT::IndicesCollection allIndices(OT::Tuples(discretization).generate());
-    // Multivariate discrete
-    if (allDiscrete)
-    {
-      OT::Sample support(totalSize, dimension);
-      for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
-      {
-        for (OT::UnsignedInteger j = 0; j < dimension; ++j)
-          support(i, j) = ticksCollection[j][allIndices(i, j)];
-      }
-      mixture_ = OT::Mixture(OT::Mixture::DistributionCollection(1, OT::UserDefined(support, probabilityTable)));
-    } // allDiscrete
-    else
-    {
-      OT::Mixture::DistributionCollection atoms(totalSize);
-      for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
-      {
-        OT::Mixture::DistributionCollection subAtoms(dimension);
-        for (OT::UnsignedInteger j = 0; j < dimension; ++j)
-        {
-          const OT::UnsignedInteger k = allIndices(i, j);
-          const OT::Point ticks = ticksCollection[j];
-          if (kind[j] == DISCRETE)
-            subAtoms[j] = OT::Dirac(OT::Point(1, ticks[k]));
-          // Continuous
-          else
-            subAtoms[j] = OT::Uniform(ticks[k], ticks[k + 1]);
-        } // j
-        atoms[i] = OT::ComposedDistribution(subAtoms);
-      } // i
-      mixture_ = OT::Mixture(atoms, probabilityTable);
-    } // At least one continuous
-  } // dimension > 1
+      continuousIndices_.add(j);
+  OT::Scalar weightSum = 0.0;
+  for (OT::UnsignedInteger i = 0; i < probabilityTable_.getSize(); ++ i)
+    weightSum += probabilityTable_[i];
+  normalizedProbabilityTable_ = probabilityTable_ / weightSum;
+
   setDimension( dimension );
-  mixture_.setDescription(getDescription());
   computeRange();
 }
 
@@ -171,7 +131,7 @@ OT::String MixedHistogramUserDefined::__repr__() const
 OT::String MixedHistogramUserDefined::__str__(const OT::String & offset) const
 {
   OT::OSS oss(false);
-  oss << offset << getClassName() << "(mixture = " << mixture_ << ")";
+  oss << offset << getClassName() << "(ticksCollection = " << ticksCollection_<< ", kind = " << kind_ << ", probabilityTable = "<< probabilityTable_ << ")";
   return oss;
 }
 
@@ -184,70 +144,248 @@ MixedHistogramUserDefined * MixedHistogramUserDefined::clone() const
 /* Compute the numerical range of the distribution given the parameters values */
 void MixedHistogramUserDefined::computeRange()
 {
-  setRange(mixture_.getRange());
+  const OT::UnsignedInteger dimension = getDimension();
+  OT::Point lowerBound(dimension);
+  OT::Point upperBound(dimension);
+  for (OT::UnsignedInteger j = 0; j < dimension; ++j)
+  {
+    const OT::Point ticks(ticksCollection_[j]);
+    lowerBound[j] = ticks[0];
+    upperBound[j] = ticks[0];
+    for (OT::UnsignedInteger k = 1; k < ticks.getSize(); ++ k)
+    {
+      if (ticks[k] < lowerBound[j])
+        lowerBound[j] = ticks[k];
+      if (ticks[k] > upperBound[j])
+        upperBound[j] = ticks[k];
+    }
+  }
+  setRange(OT::Interval(lowerBound, upperBound));
 }
 
 
 /* Get one realization of the distribution */
 OT::Point MixedHistogramUserDefined::getRealization() const
 {
-  return mixture_.getRealization();
+  const OT::UnsignedInteger dimension = getDimension();
+  if (!base_.getSize())
+    (void) OT::DistFunc::rDiscrete(normalizedProbabilityTable_, base_, alias_);
+  const OT::UnsignedInteger index = OT::DistFunc::rDiscrete(base_, alias_);
+  OT::Point realization(dimension);
+  for (OT::UnsignedInteger j = 0; j < discreteIndices_.getSize(); ++j)
+  {
+    const OT::UnsignedInteger jDiscrete = discreteIndices_[j];
+    const OT::UnsignedInteger k = allIndices_(index, jDiscrete);
+    const OT::Point ticks(ticksCollection_[jDiscrete]);
+    realization[jDiscrete] = ticks[k];
+  }
+  for (OT::UnsignedInteger j = 0; j < continuousIndices_.getSize(); ++j)
+  {
+    const OT::UnsignedInteger jContinuous = continuousIndices_[j];
+    const OT::UnsignedInteger k = allIndices_(index, jContinuous);
+    const OT::Point ticks(ticksCollection_[jContinuous]);
+    realization[jContinuous] = ticks[k] + (ticks[k + 1] - ticks[k]) * OT::RandomGenerator::Generate();
+  }
+  return realization;
 }
 
 /* Get a sample of the distribution */
 OT::Sample MixedHistogramUserDefined::getSample(const OT::UnsignedInteger size) const
 {
-  return mixture_.getSample(size);
+  return DistributionImplementation::getSample(size);
 }
 
 /* Get the PDF of the distribution */
 OT::Scalar MixedHistogramUserDefined::computePDF(const OT::Point & point) const
 {
-  return mixture_.computePDF(point);
+  const OT::UnsignedInteger dimension = getDimension();
+  if (point.getDimension() != dimension)
+    throw OT::InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  // build the list of discrete ticks indices, with early exit if no tick matches
+  OT::Indices discreteTicksIndices(discreteIndices_.getSize());
+  for (OT::UnsignedInteger j = 0; j < discreteIndices_.getSize(); ++ j)
+  {
+    const OT::Point ticks(ticksCollection_[discreteIndices_[j]]);
+    OT::UnsignedInteger index = ticks.getSize();
+    // TODO: Add Collection::find(T value)->UnsignedInteger
+    for (OT::UnsignedInteger i = 0; i < ticks.getSize(); ++i)
+      if (ticks[i] == point[discreteIndices_[j]])
+        index = i;
+    if (index >= ticks.getSize())
+      return 0.0;
+    discreteTicksIndices[j] = index;
+  }
+
+  // loop over the cpt
+  OT::Scalar pdfValue = 0.0;
+  const OT::UnsignedInteger totalSize = probabilityTable_.getSize();
+  for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
+  {
+    OT::Bool skip = false;
+    // first, loop over the discrete components
+    for (OT::UnsignedInteger j = 0; j < discreteIndices_.getSize(); ++j)
+    {
+      const OT::UnsignedInteger k = allIndices_(i, discreteIndices_[j]);
+      if (discreteTicksIndices[j] != k)
+      {
+        skip = true;
+        break;
+      }
+    }
+
+    // exclude non-matching discrete terms
+    if (skip)
+      continue;
+
+    skip = false;
+
+    // now compute the pdf over continuous components
+    OT::Scalar pdfI = 1.0;
+    for (OT::UnsignedInteger j = 0; j < continuousIndices_.getSize(); ++j)
+    {
+      const OT::UnsignedInteger k = allIndices_(i, continuousIndices_[j]);
+      const OT::Point ticks(ticksCollection_[continuousIndices_[j]]);
+      const OT::Scalar x = point[continuousIndices_[j]];
+      if ((x <= ticks[k]) || (x > ticks[k + 1]))
+      {
+        skip = true;
+        break;
+      }
+      pdfI *= 1.0 / (ticks[k + 1] - ticks[k]);
+    }
+
+    // exclude non-matching continuous terms
+    if (skip)
+      continue;
+
+    pdfValue += normalizedProbabilityTable_[i] * pdfI;
+  }
+  return pdfValue;
 }
 
 
 /* Get the CDF of the distribution */
 OT::Scalar MixedHistogramUserDefined::computeCDF(const OT::Point & point) const
 {
-  return mixture_.computeCDF(point);
+  const OT::UnsignedInteger dimension = getDimension();
+  if (point.getDimension() != dimension)
+    throw OT::InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  // build the list of discrete ticks, with early exit if no tick matches
+  OT::Indices discreteTicksIndices(discreteIndices_.getSize());
+  for (OT::UnsignedInteger j = 0; j < discreteIndices_.getSize(); ++ j)
+  {
+    const OT::Point ticks(ticksCollection_[discreteIndices_[j]]);
+    const OT::Scalar x = point[discreteIndices_[j]];
+    OT::UnsignedInteger index = ticks.getSize();
+    // TODO: Add Collection::find(T value)->UnsignedInteger
+    for (OT::UnsignedInteger i = 0; i < ticks.getSize(); ++i)
+      if (ticks[i] <= x)
+        index = i;
+    if (index >= ticks.getSize())
+      return 0.0;
+    discreteTicksIndices[j] = index;
+  }
+
+  // loop over the cpt
+  OT::Scalar cdfValue = 0.0;
+  const OT::UnsignedInteger totalSize = probabilityTable_.getSize();
+  for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
+  {
+    OT::Bool skip = false;
+    // first, loop over the discrete components
+    for (OT::UnsignedInteger j = 0; j < discreteIndices_.getSize(); ++j)
+    {
+      const OT::UnsignedInteger k = allIndices_(i, discreteIndices_[j]);
+      if (k > discreteTicksIndices[j])
+      {
+        skip = true;
+        break;
+      }
+    }
+
+    // exclude non-matching discrete terms
+    if (skip)
+      continue;
+
+    skip = false;
+
+    // now compute the cdf over continuous components
+    OT::Scalar cdfI = 1.0;
+    for (OT::UnsignedInteger j = 0; j < continuousIndices_.getSize(); ++j)
+    {
+      const OT::UnsignedInteger k = allIndices_(i, continuousIndices_[j]);
+      const OT::Point ticks(ticksCollection_[continuousIndices_[j]]);
+      const OT::Scalar x = point[continuousIndices_[j]];
+      if (x <= ticks[k])
+      {
+        skip = true;
+        break;
+      }
+      else if (x < ticks[k + 1])
+        cdfI *= (x - ticks[k]) / (ticks[k + 1] - ticks[k]);
+      //else (x>ticks[k + 1]: nothing to do
+    }
+
+    // exclude non-matching continuous terms
+    if (skip)
+      continue;
+
+    cdfValue += normalizedProbabilityTable_[i] * cdfI;
+  }
+  return cdfValue;
 }
 
 OT::Scalar MixedHistogramUserDefined::computeComplementaryCDF(const OT::Point & point) const
 {
-  return mixture_.computeComplementaryCDF(point);
+  return DistributionImplementation::computeComplementaryCDF(point);
 }
 
 /* Get the characteristic function of the distribution, i.e. phi(u) = E(exp(I*u*X)) */
 OT::Complex MixedHistogramUserDefined::computeCharacteristicFunction(const OT::Scalar x) const
 {
-  return mixture_.computeCharacteristicFunction(x);
+  return DistributionImplementation::computeCharacteristicFunction(x);
 }
 
 /* Get the quantile of the distribution */
 OT::Point MixedHistogramUserDefined::computeQuantile(const OT::Scalar prob,
     const OT::Bool tail) const
 {
-  return mixture_.computeQuantile(prob, tail);
+  return DistributionImplementation::computeQuantile(prob, tail);
 }
 
 /* Get the i-th marginal distribution */
-OT::Distribution MixedHistogramUserDefined::getMarginal(const OT::UnsignedInteger i) const
+OT::Distribution MixedHistogramUserDefined::getMarginal(const OT::UnsignedInteger index) const
 {
   const OT::UnsignedInteger dimension = getDimension();
-  if (i >= dimension) throw OT::InvalidArgumentException(HERE) << "The index of a marginal distribution must be in the range [0, dim-1]";
+  if (index >= dimension) throw OT::InvalidArgumentException(HERE) << "The index of a marginal distribution must be in the range [0, dim-1]";
   if (dimension == 1) return clone();
-  if (kind_[i] == DISCRETE)
+
+  // contract probability table
+  const OT::Point ticks(ticksCollection_[index]);
+  const OT::UnsignedInteger size = ticks.getSize();
+  OT::Point marginalProbabilityTable((kind_[index] == DISCRETE) ? size : size - 1);
+  const OT::UnsignedInteger totalSize = probabilityTable_.getSize();
+  for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
   {
-    const OT::UnsignedInteger size = ticksCollection_[i].getSize();
-    OT::SampleImplementation support(size, 1);
-    support.setData(ticksCollection_[i]);
-    const OT::Distribution marginalMixture(mixture_.getMarginal(i));
-    OT::UserDefined marginal(marginalMixture.getSupport(), marginalMixture.getProbabilities());
-    marginal.setDescription(OT::Description(1, getDescription()[i]));
-    return marginal.clone();
+    const OT::UnsignedInteger k = allIndices_(i, index);
+    marginalProbabilityTable[k] += probabilityTable_[i];
   }
-  return mixture_.getMarginal(i);
+
+  OT::Distribution marginal;
+  if (kind_[index] == DISCRETE)
+  {
+    OT::SampleImplementation support(size, 1);
+    support.setData(ticks);
+    marginal = OT::UserDefined(support, marginalProbabilityTable);
+  }
+  else
+  {
+    marginal = OT::Histogram(ticks, marginalProbabilityTable);
+  }
+  marginal.setDescription(OT::Description(1, getDescription()[index]));
+  return marginal;
 }
 
 /* Get the distribution of the marginal distribution corresponding to indices dimensions */
@@ -255,8 +393,56 @@ OT::Distribution MixedHistogramUserDefined::getMarginal(const OT::Indices & indi
 {
   const OT::UnsignedInteger dimension = getDimension();
   if (!indices.check(dimension)) throw OT::InvalidArgumentException(HERE) << "The indices of a marginal distribution must be in the range [0, dim-1] and must be different";
-  if (dimension == 1) return clone();
-  return mixture_.getMarginal(indices);
+
+  OT::Indices full(dimension);
+  full.fill();
+  if (indices == full) return clone();
+
+  // contract probability table
+  OT::Indices marginalKind;
+  PointCollection marginalTicksCollection;
+  OT::UnsignedInteger marginalTotalSize = 1;
+  OT::Description description(getDescription());
+  OT::Description marginalDescription;
+  OT::Indices discretization;
+  for (OT::UnsignedInteger j = 0; j < indices.getSize(); ++j)
+  {
+    const OT::UnsignedInteger index = indices[j];
+    marginalKind.add(kind_[index]);
+    marginalTicksCollection.add(ticksCollection_[index]);
+    const OT::UnsignedInteger size = ticksCollection_[index].getSize();
+    discretization.add((kind_[index] == DISCRETE) ? size : size - 1);
+    marginalTotalSize *= discretization[j];
+    marginalDescription.add(description[index]);
+  }
+  OT::IndicesCollection marginalAllIndices(OT::Tuples(discretization).generate());
+  OT::Point marginalProbabilityTable(marginalTotalSize);
+  const OT::UnsignedInteger totalSize = probabilityTable_.getSize();
+
+  // compute the base of discretization to quickly retrieve the global marginal index
+  OT::Indices productDiscretization(indices.getSize(), 1);
+  for (OT::UnsignedInteger j = 1; j < indices.getSize(); ++j)
+  {
+    productDiscretization[j] = productDiscretization[j - 1] * discretization[j - 1];
+  }
+
+  for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
+  {
+    for (OT::UnsignedInteger j = 0; j < indices.getSize(); ++j)
+    {
+      // find the global marginal index
+      OT::UnsignedInteger marginalProbabilityTableIndex = 0;
+      for (OT::UnsignedInteger k = 0; k < indices.getSize(); ++k)
+      {
+        marginalProbabilityTableIndex += allIndices_(i, indices[k]) * productDiscretization[k];
+      }
+      marginalProbabilityTable[marginalProbabilityTableIndex] += probabilityTable_[i];
+    }
+  }
+
+  MixedHistogramUserDefined marginal(marginalTicksCollection, marginalKind, marginalProbabilityTable);
+  marginal.setDescription(marginalDescription);
+  return marginal;
 } // getMarginal(Indices)
 
 /* Check if the distribution is continuous */
@@ -299,7 +485,23 @@ OT::Bool MixedHistogramUserDefined::isIntegral() const
 /* Compute the mean of the distribution */
 void MixedHistogramUserDefined::computeMean() const
 {
-  mean_ = mixture_.getMean();
+  const OT::UnsignedInteger dimension = getDimension();
+  mean_ = OT::Point(dimension);
+  const OT::UnsignedInteger totalSize = probabilityTable_.getSize();
+  for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
+  {
+    OT::Point meani(dimension);
+    for (OT::UnsignedInteger j = 0; j < dimension; ++j)
+    {
+      const OT::UnsignedInteger k = allIndices_(i, j);
+      const OT::Point ticks(ticksCollection_[j]);
+      if (kind_[j] == DISCRETE)
+        meani[j] = ticks[k];
+      else
+        meani[j] = 0.5 * (ticks[k] + ticks[k + 1]);
+    }
+    mean_ += meani * normalizedProbabilityTable_[i];
+  }
   isAlreadyComputedMean_ = true;
 }
 
@@ -336,7 +538,38 @@ OT::Point MixedHistogramUserDefined::getKurtosis() const
 /* Compute the covariance of the distribution */
 void MixedHistogramUserDefined::computeCovariance() const
 {
-  covariance_ = mixture_.getCovariance();
+  const OT::UnsignedInteger dimension = getDimension();
+  covariance_ = OT::CovarianceMatrix(dimension);
+  for (OT::UnsignedInteger j = 0; j < dimension; ++j)
+    covariance_(j, j) = 0.0;
+  // First, compute E(X.X^t)
+  const OT::UnsignedInteger totalSize = probabilityTable_.getSize();
+  for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
+  {
+    OT::Point meanI(dimension);
+    OT::Point varianceI(dimension);
+    for (OT::UnsignedInteger j = 0; j < dimension; ++j)
+    {
+      const OT::UnsignedInteger k = allIndices_(i, j);
+      const OT::Point ticks(ticksCollection_[j]);
+      if (kind_[j] == DISCRETE)
+        meanI[j] = ticks[k];
+      else
+      {
+        meanI[j] = 0.5 * (ticks[k] + ticks[k + 1]);
+        const OT::Scalar eta = ticks[k + 1] - ticks[k];
+        varianceI[j] = eta * eta / 12.0;
+      }
+    }
+    for(OT::UnsignedInteger row = 0; row < dimension; ++row)
+      for(OT::UnsignedInteger column = 0; column <= row; ++column)
+        covariance_(row, column) += normalizedProbabilityTable_[i] * (((row == column) ? varianceI[row] : 0.0) + meanI[row] * meanI[column]);
+  }
+  // Then, subtract E(X).E(X)^t
+  const OT::Point mean(getMean());
+  for(OT::UnsignedInteger row = 0; row < dimension; ++row)
+    for(OT::UnsignedInteger column = 0; column <= row; ++column)
+      covariance_(row, column) -= mean[row] * mean[column];
   isAlreadyComputedCovariance_ = true;
 }
 
@@ -395,7 +628,61 @@ OT::Point MixedHistogramUserDefined::getProbabilityTable() const
 /* Conversion as a Mixture */
 OT::Mixture MixedHistogramUserDefined::asMixture() const
 {
-  return mixture_;
+  const OT::UnsignedInteger dimension = getDimension();
+  const OT::UnsignedInteger totalSize = probabilityTable_.getSize();
+  OT::Mixture mixture;
+  // Special case: dimension 1
+  if (dimension == 1)
+  {
+    const OT::Point ticks(ticksCollection_[0]);
+    if (kind_[0] == DISCRETE)
+    {
+      const OT::UnsignedInteger size = ticks.getSize();
+      OT::SampleImplementation support(size, 1);
+      support.setData(ticks);
+      mixture = OT::Mixture(OT::Mixture::DistributionCollection(1, OT::UserDefined(support, probabilityTable_)));
+    }
+    // Continuous
+    else
+      mixture = OT::Mixture(OT::Mixture::DistributionCollection(1, OT::Histogram(ticks, probabilityTable_)));
+  } // dimension == 1
+  else
+  {
+    OT::Bool allDiscrete = (discreteIndices_.getSize() == dimension);
+    // Multivariate discrete
+    if (allDiscrete)
+    {
+      OT::Sample support(totalSize, dimension);
+      for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
+      {
+        for (OT::UnsignedInteger j = 0; j < dimension; ++j)
+          support(i, j) = ticksCollection_[j][allIndices_(i, j)];
+      }
+      mixture = OT::Mixture(OT::Mixture::DistributionCollection(1, OT::UserDefined(support, probabilityTable_)));
+    } // allDiscrete
+    else
+    {
+      OT::Mixture::DistributionCollection atoms(totalSize);
+      for (OT::UnsignedInteger i = 0; i < totalSize; ++i)
+      {
+        OT::Mixture::DistributionCollection subAtoms(dimension);
+        for (OT::UnsignedInteger j = 0; j < dimension; ++j)
+        {
+          const OT::UnsignedInteger k = allIndices_(i, j);
+          const OT::Point ticks = ticksCollection_[j];
+          if (kind_[j] == DISCRETE)
+            subAtoms[j] = OT::Dirac(OT::Point(1, ticks[k]));
+          // Continuous
+          else
+            subAtoms[j] = OT::Uniform(ticks[k], ticks[k + 1]);
+        } // j
+        atoms[i] = OT::ComposedDistribution(subAtoms);
+      } // i
+      mixture = OT::Mixture(atoms, probabilityTable_);
+    } // At least one continuous
+  } // dimension > 1
+  mixture.setDescription(getDescription());
+  return mixture;
 }
 
 void MixedHistogramUserDefined::save(OT::Advocate & adv) const
@@ -404,7 +691,6 @@ void MixedHistogramUserDefined::save(OT::Advocate & adv) const
   adv.saveAttribute( "ticksCollection_", ticksCollection_ );
   adv.saveAttribute( "kind_", kind_ );
   adv.saveAttribute( "probabilityTable_", probabilityTable_ );
-  adv.saveAttribute( "mixture_", mixture_ );
 }
 
 /* Method load() reloads the object from the StorageManager */
@@ -414,7 +700,6 @@ void MixedHistogramUserDefined::load(OT::Advocate & adv)
   adv.loadAttribute( "ticksCollection_", ticksCollection_ );
   adv.loadAttribute( "kind_", kind_ );
   adv.loadAttribute( "probabilityTable_", probabilityTable_ );
-  adv.loadAttribute( "mixture_", mixture_ );
   computeRange();
 }
 
@@ -422,7 +707,6 @@ void MixedHistogramUserDefined::load(OT::Advocate & adv)
 void MixedHistogramUserDefined::setDescription(const OT::Description & description)
 {
   OT::DistributionImplementation::setDescription(description);
-  mixture_.setDescription(getDescription());
 }
 
 } /* namespace OTAGRUM */
