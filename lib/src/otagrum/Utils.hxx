@@ -55,6 +55,14 @@ public:
 
   static OT::Indices FromNodeSet(const gum::NodeSet &clique);
 
+  static inline float FastPow2(float p);
+  
+  static inline float FastExp(float p);
+  
+  static inline float FasterPow2(float p);
+  
+  static inline float FasterExp(float p);
+  
 private:
   Utils();
 };
