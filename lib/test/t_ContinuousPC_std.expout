@@ -32,33 +32,33 @@ node [shape = ellipse];
 
 }
 
-0--5 : p-value=0.937185 sepset=[]
-1--3 : p-value=0.811509 sepset=[]
-2--5 : p-value=0.929343 sepset=[]
-3--4 : p-value=0.864607 sepset=[]
-1--4 : p-value=0.957144 sepset=[]
-0--2 : p-value=0.996252 sepset=[]
-0--6 : p-value=0.86123 sepset=[]
-2--6 : p-value=0.984673 sepset=[]
-1--5 : p-value=0.841751 sepset=[]
-0--3 : p-value=0.943264 sepset=[]
-3--5 : p-value=0.946968 sepset=[]
-2--4 : p-value=0.744839 sepset=[]
-0--4 : p-value=0.893104 sepset=[]
-1--2 : p-value=0.957914 sepset=[]
-1--6 : p-value=0.95102 sepset=[]
-3--6 : p-value=0.973885 sepset=[]
-4--5 : p-value=0.884026 sepset=[6]
-0--1 : p-value=0
-4--6 : p-value=0
-2--3 : p-value=0
-5--6 : p-value=0
+0--1 : p-value=0   ttest=117.634
+4--6 : p-value=0   ttest=107.774
+2--3 : p-value=0   ttest=202.118
+5--6 : p-value=0   ttest=106.861
+000 :      A1-X1|                      p=0.937185    ttest=0.0788087
+001 :      A2-B2|                      p=0.811509    ttest=0.238479
+002 :      B1-X1|                      p=0.929343    ttest=0.0886713
+003 :      B2-X0|                      p=0.864607    ttest=0.170512
+004 :      A2-X0|                      p=0.957144    ttest=-0.0537378
+005 :      A1-B1|                      p=0.996252    ttest=0.00469805
+006 :      A1-X2|                      p=0.86123     ttest=-0.174808
+007 :      B1-X2|                      p=0.984673    ttest=-0.019211
+008 :      A2-X1|                      p=0.841751    ttest=-0.199654
+009 :      A1-B2|                      p=0.943264    ttest=-0.071168
+010 :      B2-X1|                      p=0.946968    ttest=-0.0665144
+011 :      B1-X0|                      p=0.744839    ttest=0.325452
+012 :      A1-X0|                      p=0.893104    ttest=-0.134377
+013 :      A2-B1|                      p=0.957914    ttest=-0.052772
+014 :      A2-X2|                      p=0.95102     ttest=0.0614263
+015 :      B2-X2|                      p=0.973885    ttest=0.032736
+016 :      X0-X1|X2                    p=0.884026    ttest=0.145868
 
 
 go
 
 ****
-skeletton
+skeleton
 ****
 digraph "no_name" {
 edge [dir=none]
@@ -147,3 +147,19 @@ digraph {
     "A1"->"A2"
 }
 
+000 :      A1-X1|                      p=0.937185    ttest=0.0788087
+001 :      A2-B2|                      p=0.811509    ttest=0.238479
+002 :      B1-X1|                      p=0.929343    ttest=0.0886713
+003 :      B2-X0|                      p=0.864607    ttest=0.170512
+004 :      A2-X0|                      p=0.957144    ttest=-0.0537378
+005 :      A1-B1|                      p=0.996252    ttest=0.00469805
+006 :      A1-X2|                      p=0.86123     ttest=-0.174808
+007 :      B1-X2|                      p=0.984673    ttest=-0.019211
+008 :      A2-X1|                      p=0.841751    ttest=-0.199654
+009 :      A1-B2|                      p=0.943264    ttest=-0.071168
+010 :      B2-X1|                      p=0.946968    ttest=-0.0665144
+011 :      A1-X0|                      p=0.893104    ttest=-0.134377
+012 :      A2-B1|                      p=0.957914    ttest=-0.052772
+013 :      A2-X2|                      p=0.95102     ttest=0.0614263
+014 :      B2-X2|                      p=0.973885    ttest=0.032736
+015 :      X0-X1|X2                    p=0.884026    ttest=0.145868

@@ -21,6 +21,7 @@
 
 #include <sstream>
 #include <tuple>
+#include <iomanip>
 
 #include <agrum/core/hashFunc.h>
 #include <agrum/core/priorityQueue.h>
@@ -167,17 +168,20 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
         std::tie(resYZ, tYZ, pYZ, sepYZ) =
             getSeparator(g, y, z, Utils::FromNodeSet(nei), n);
 
-        pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
-        ttests_.set(edge, std::max(ttests_.getWithDefault(edge, -10000), tYZ));
-
         if (resYZ) // we found at least one separator
         {
           sepset_.set(edge, sepYZ);
+          pvalues_.set(edge, pYZ);
+          ttests_.set(edge, tYZ);
           TRACE("==>" << edge << " cut. Sepset=" << sepset_[edge]
                       << ", pvalue=" << pvalues_[edge] << std::endl);
           atLeastOneInThisStep = true;
           removed_.push_back(edge);
           g.eraseEdge(edge);
+        } else {
+          pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
+          ttests_.set(edge,
+                      std::max(ttests_.getWithDefault(edge, -10000), tYZ));
         }
       }
     }
@@ -194,6 +198,7 @@ gum::UndiGraph ContinuousPC::inferSkeleton() {
   tester_.clearCache();
   sepset_.clear();
   pvalues_.clear();
+  removed_.clear();
 
   TRACE("== PC algo starting " << std::endl);
   // create the complete graph
@@ -597,7 +602,7 @@ void ContinuousPC::setVerbosity(bool verbose) { verbose_ = verbose; };
 
 bool ContinuousPC::getVerbosity() const { return verbose_; };
 
-const std::vector<gum::Edge> &ContinuousPC::getRemoved() const {
+const std::vector<gum::Edge> &ContinuousPC::getRemoved_() const {
   return removed_;
 }
 
@@ -645,4 +650,27 @@ gum::NodeId ContinuousPC::idFromName(const std::string &n) const {
       << "Error: name '" << n << "' is not a node name.";
 }
 
+std::vector<std::string> ContinuousPC::getTrace() const {
+  const auto &description = tester_.getDataDescription();
+
+  std::vector<std::string> res(removed_.size());
+  for (int i = 0; i < removed_.size(); i++) {
+    std::stringstream ss;
+    ss <<std::setfill('0')<<std::setw(3)<< i<<std::setfill(' ');
+    ss << " : ";
+    const auto edg=description[removed_[i].first()]+"-"+description[removed_[i].second()];
+    std::string cond="";
+    for(const auto s:sepset_[removed_[i]]) {
+      if (cond!="") {
+        cond+=",";
+      }
+      cond+=description[s];
+    }
+    ss << std::setw(10)<<edg << "|" << std::left<<std::setw(20)<<cond;
+    ss << "  p=" << std::left<<std::setw(10)<<pvalues_[removed_[i]];
+    ss << "  ttest=" << ttests_[removed_[i]];
+    res[i] = ss.str();
+  }
+  return res;
+}
 } // namespace OTAGRUM
