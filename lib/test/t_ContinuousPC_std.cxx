@@ -60,17 +60,14 @@ void tests(void) {
 
       auto cpdag = learner.inferPDAG(skel);
       std::cout << cpdag.toDot() << std::endl;
-      for (const auto &e : learner.getRemoved()) {
-        std::cout << e
-                  << " : p-value=" << learner.getPValue(e.first(), e.second())
-                  << " sepset=" << learner.getSepset(e.first(), e.second())
-                  << std::endl;
-      }
       for (const auto &e : skel.edges()) {
         std::cout << e
                   << " : p-value=" << learner.getPValue(e.first(), e.second())
+                  << "   ttest=" << learner.getTTest(e.first(), e.second())
                   << std::endl;
       }
+      for (const auto &s : learner.getTrace())
+        std::cout << s << std::endl;
     }
     {
       std::cout << "\n\n";
@@ -78,7 +75,7 @@ void tests(void) {
       std::cout << "go" << std::endl;
       auto skel = learner.inferSkeleton();
       std::cout << "\n****\n"
-                << "skeletton"
+                << "skeleton"
                 << "\n****\n"
                 << skel.toDot() << std::endl;
       auto cpdag = learner.inferPDAG(skel);
@@ -108,6 +105,9 @@ void tests(void) {
                 << "\n****\n"
                 << ndag.__str__() << std::endl;
       std::cout << ndag.toDot() << std::endl;
+
+      for (const auto &s : learner.getTrace())
+        std::cout << s << std::endl;
     }
   } catch (OT::Exception &e) {
     std::cout << e.__repr__() << std::endl;

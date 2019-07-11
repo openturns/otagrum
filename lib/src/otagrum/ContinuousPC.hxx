@@ -67,13 +67,13 @@ public:
 
   gum::NodeId idFromName(const std::string& n) const;
 
-  const std::vector<gum::Edge> &getRemoved() const;
   const bool isRemoved(gum::NodeId x, gum::NodeId y) const;
   const bool isRemoved(const std::string &x, const std::string &y) const;
 
   std::string skeletonToDot(const gum::UndiGraph &skeleton);
   std::string PDAGtoDot(const gum::MixedGraph &pdag);
 
+  std::vector<std::string> getTrace() const;
 private:
   gum::EdgeProperty<OT::Indices> sepset_;
   gum::EdgeProperty<double> pvalues_;
@@ -90,6 +90,8 @@ private:
   getSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
                const OT::Indices &neighbours, OT::UnsignedInteger n) const;
   std::vector<std::string> namesFromData(void) const;
+
+  const std::vector<gum::Edge> &getRemoved_() const;
 };
 
 } // namespace OTAGRUM

@@ -110,7 +110,7 @@ p_value : float
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::getRemoved
+%feature("docstring") OTAGRUM::ContinuousPC::getRemoved_
 "Removed arcs accessor
 
 Returns
