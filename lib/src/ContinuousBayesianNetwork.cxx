@@ -116,22 +116,16 @@ OT::Point ContinuousBayesianNetwork::getRealization() const {
   for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i) {
     const OT::UnsignedInteger globalI = order[i];
     const OT::Distribution localDistribution(jointDistributions_[globalI]);
-    std::cerr << "i=" << i << ", globalI=" << globalI
-              << ", localDistribution=" << localDistribution << std::endl;
     const OT::Indices parents(dag_.getParents(globalI));
-    std::cerr << "parents=" << parents << std::endl;
     const OT::UnsignedInteger conditioningDimension(parents.getSize());
     if (conditioningDimension == 0) {
       result[globalI] = localDistribution.getRealization()[0];
-      std::cerr << "result[" << globalI << "]=" << result[globalI] << std::endl;
     } else {
       OT::Point y(conditioningDimension);
       for (OT::UnsignedInteger j = 0; j < conditioningDimension; ++j)
         y[j] = result[parents[j]];
-      std::cerr << "y=" << y << std::endl;
       result[globalI] = localDistribution.computeConditionalQuantile(
           OT::RandomGenerator::Generate(), y);
-      std::cerr << "result[" << globalI << "]=" << result[globalI] << std::endl;
     }
   } // i
   return result;
@@ -151,7 +145,7 @@ OT::Scalar ContinuousBayesianNetwork::computePDF(const OT::Point &point) const {
     else {
       OT::Point y(conditioningDimension);
       for (OT::UnsignedInteger j = 0; j < conditioningDimension; ++j)
-        y[j] = point[order[j]];
+        y[j] = point[parents[j]];
       const OT::Scalar conditionalPDF =
           jointDistributions_[globalI].computeConditionalPDF(x, y);
       pdf *= conditionalPDF;
