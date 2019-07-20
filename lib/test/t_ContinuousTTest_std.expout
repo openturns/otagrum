@@ -10,7 +10,7 @@ Cache :
       |2 : [0,1]:11, [8,9]:11
 
 alpha :0.1
-ttest value: 2.28557    pvalue:0.0222796    test: fail
+ttest value: 0.125067    pvalue:0.900471    test: OK 
 ttest value: 13.1826    pvalue:1.10526e-39    test: OK 
 ttest value: 136.914     pvalue:0   test: OK
 ttest value: 0.222379     pvalue:0.824019   test: OK 
