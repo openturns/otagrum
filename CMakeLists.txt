@@ -61,9 +61,10 @@ if (BUILD_PYTHON)
     include(TargetLinkLibrariesWithDynamicLookup)
   endif ()
 
-  find_package(PythonInterp)
-  find_package(PythonLibs)
-  include(FindPythonModule)
+  find_package (PythonInterp)
+  find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT)
+  include (FindPythonModule)
+  find_python_module (nbconvert)
 
   if (USE_SPHINX)
     find_program(SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
