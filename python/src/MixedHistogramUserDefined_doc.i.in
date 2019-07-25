@@ -1,12 +1,12 @@
 %feature("docstring") OTAGRUM::MixedHistogramUserDefined
-"MixedHistogramUserDefined distribution
+"Mixed Histogram/UserDefined distribution
 
 Parameters
 ----------
 ticksCollection : sequence of sequence of float
-    ticksCollection
+    List of ticks for each component
 kind : sequence of int
-    Either MixedHistogramUserDefined.DISCRETE or MixedHistogramUserDefined.CONTINUOUS.
+    Either MixedHistogramUserDefined.DISCRETE or MixedHistogramUserDefined.CONTINUOUS
 probabilityTable : sequence of float
     List of probabilities
 

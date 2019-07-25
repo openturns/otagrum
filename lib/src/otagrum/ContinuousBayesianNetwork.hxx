@@ -24,7 +24,7 @@
 #include <openturns/ContinuousDistribution.hxx>
 #include <openturns/Distribution.hxx>
 
-#include "NamedDAG.hxx"
+#include "otagrum/NamedDAG.hxx"
 #include "otagrum/otagrumprivate.hxx"
 
 namespace OTAGRUM
@@ -48,8 +48,7 @@ public:
   ContinuousBayesianNetwork();
 
   /** Parameters constructor */
-  ContinuousBayesianNetwork(const NamedDAG & dag,
-			    const DistributionCollection & jointDistributions);
+  ContinuousBayesianNetwork(const NamedDAG & dag, const DistributionCollection & jointDistributions);
 
 public:
   /** Comparison operator */

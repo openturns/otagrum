@@ -31,16 +31,18 @@
 #include <openturns/SpecFunc.hxx>
 #include <openturns/Uniform.hxx>
 
+using namespace OT;
+
 namespace OTAGRUM {
 
 CLASSNAMEINIT(ContinuousBayesianNetwork)
 
-static const OT::Factory<ContinuousBayesianNetwork>
+static const Factory<ContinuousBayesianNetwork>
     Factory_ContinuousBayesianNetwork;
 
 /* Default constructor */
 ContinuousBayesianNetwork::ContinuousBayesianNetwork()
-    : OT::ContinuousDistribution(), dag_(), jointDistributions_(0) {
+    : ContinuousDistribution(), dag_(), jointDistributions_(0) {
   setName("ContinuousBayesianNetwork");
   setDAGAndDistributionCollection(dag_, jointDistributions_);
 }
@@ -48,13 +50,13 @@ ContinuousBayesianNetwork::ContinuousBayesianNetwork()
 /* Parameters constructor */
 ContinuousBayesianNetwork::ContinuousBayesianNetwork(
     const NamedDAG &dag, const DistributionCollection &jointDistributions)
-    : OT::ContinuousDistribution(), dag_(dag), jointDistributions_(0) {
+    : ContinuousDistribution(), dag_(dag), jointDistributions_(0) {
   setName("ContinuousBayesianNetwork");
   setDAGAndDistributionCollection(dag, jointDistributions);
 }
 
 /* Comparison operator */
-OT::Bool ContinuousBayesianNetwork::
+Bool ContinuousBayesianNetwork::
 operator==(const ContinuousBayesianNetwork &other) const {
   if (this == &other)
     return true;
@@ -62,7 +64,7 @@ operator==(const ContinuousBayesianNetwork &other) const {
          (jointDistributions_ == other.jointDistributions_);
 }
 
-OT::Bool ContinuousBayesianNetwork::equals(
+Bool ContinuousBayesianNetwork::equals(
     const DistributionImplementation &other) const {
   const ContinuousBayesianNetwork *p_other =
       dynamic_cast<const ContinuousBayesianNetwork *>(&other);
@@ -70,16 +72,16 @@ OT::Bool ContinuousBayesianNetwork::equals(
 }
 
 /* String converter */
-OT::String ContinuousBayesianNetwork::__repr__() const {
-  OT::OSS oss(true);
+String ContinuousBayesianNetwork::__repr__() const {
+  OSS oss(true);
   oss << "class=" << ContinuousBayesianNetwork::GetClassName()
       << " name=" << getName() << " dimension=" << getDimension()
       << " dag=" << dag_ << " jointDistributions=" << jointDistributions_;
   return oss;
 }
 
-OT::String ContinuousBayesianNetwork::__str__(const OT::String &offset) const {
-  OT::OSS oss(false);
+String ContinuousBayesianNetwork::__str__(const String &offset) const {
+  OSS oss(false);
   oss << offset << getClassName() << "(dag=" << dag_
       << ", joint distributions=" << jointDistributions_ << ")";
   return oss;
@@ -93,60 +95,60 @@ ContinuousBayesianNetwork *ContinuousBayesianNetwork::clone() const {
 /* Compute the numerical range of the distribution given the parameters values
  */
 void ContinuousBayesianNetwork::computeRange() {
-  const OT::UnsignedInteger dimension = dag_.getNodes().getSize();
+  const UnsignedInteger dimension = dag_.getNodes().getSize();
   setDimension(dimension);
-  OT::Point lower(dimension);
-  OT::Point upper(dimension);
-  for (OT::UnsignedInteger i = 0; i < dimension; ++i) {
-    const OT::Interval rangeI(jointDistributions_[i].getRange());
-    const OT::UnsignedInteger dimensionI = rangeI.getDimension();
+  Point lower(dimension);
+  Point upper(dimension);
+  for (UnsignedInteger i = 0; i < dimension; ++i) {
+    const Interval rangeI(jointDistributions_[i].getRange());
+    const UnsignedInteger dimensionI = rangeI.getDimension();
     // Check if the current node is a root node
     lower[i] = rangeI.getLowerBound()[dimensionI - 1];
     upper[i] = rangeI.getUpperBound()[dimensionI - 1];
   } // i
-  setRange(OT::Interval(lower, upper));
+  setRange(Interval(lower, upper));
 }
 
 /* Get one realization of the distribution */
-OT::Point ContinuousBayesianNetwork::getRealization() const {
-  const OT::UnsignedInteger dimension = getDimension();
-  OT::Point result(dimension);
-  const OT::Indices order(dag_.getTopologicalOrder());
+Point ContinuousBayesianNetwork::getRealization() const {
+  const UnsignedInteger dimension = getDimension();
+  Point result(dimension);
+  const Indices order(dag_.getTopologicalOrder());
 
-  for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i) {
-    const OT::UnsignedInteger globalI = order[i];
-    const OT::Distribution localDistribution(jointDistributions_[globalI]);
-    const OT::Indices parents(dag_.getParents(globalI));
-    const OT::UnsignedInteger conditioningDimension(parents.getSize());
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i) {
+    const UnsignedInteger globalI = order[i];
+    const Distribution localDistribution(jointDistributions_[globalI]);
+    const Indices parents(dag_.getParents(globalI));
+    const UnsignedInteger conditioningDimension(parents.getSize());
     if (conditioningDimension == 0) {
       result[globalI] = localDistribution.getRealization()[0];
     } else {
-      OT::Point y(conditioningDimension);
-      for (OT::UnsignedInteger j = 0; j < conditioningDimension; ++j)
+      Point y(conditioningDimension);
+      for (UnsignedInteger j = 0; j < conditioningDimension; ++j)
         y[j] = result[parents[j]];
       result[globalI] = localDistribution.computeConditionalQuantile(
-          OT::RandomGenerator::Generate(), y);
+          RandomGenerator::Generate(), y);
     }
   } // i
   return result;
 }
 
 /* Get the PDF of the distribution */
-OT::Scalar ContinuousBayesianNetwork::computePDF(const OT::Point &point) const {
-  const OT::Indices order(dag_.getTopologicalOrder());
-  OT::Scalar pdf = 1.0;
-  for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i) {
-    const OT::UnsignedInteger globalI = order[i];
-    const OT::Indices parents(dag_.getParents(globalI));
-    const OT::UnsignedInteger conditioningDimension(parents.getSize());
-    const OT::Scalar x = point[globalI];
+Scalar ContinuousBayesianNetwork::computePDF(const Point &point) const {
+  const Indices order(dag_.getTopologicalOrder());
+  Scalar pdf = 1.0;
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i) {
+    const UnsignedInteger globalI = order[i];
+    const Indices parents(dag_.getParents(globalI));
+    const UnsignedInteger conditioningDimension(parents.getSize());
+    const Scalar x = point[globalI];
     if (conditioningDimension == 0)
       pdf *= jointDistributions_[globalI].computePDF(x);
     else {
-      OT::Point y(conditioningDimension);
-      for (OT::UnsignedInteger j = 0; j < conditioningDimension; ++j)
+      Point y(conditioningDimension);
+      for (UnsignedInteger j = 0; j < conditioningDimension; ++j)
         y[j] = point[parents[j]];
-      const OT::Scalar conditionalPDF =
+      const Scalar conditionalPDF =
           jointDistributions_[globalI].computeConditionalPDF(x, y);
       pdf *= conditionalPDF;
     }
@@ -157,10 +159,10 @@ OT::Scalar ContinuousBayesianNetwork::computePDF(const OT::Point &point) const {
 /* DAG and DistributionCollection accessor */
 void ContinuousBayesianNetwork::setDAGAndDistributionCollection(
     const NamedDAG &dag, const DistributionCollection &jointDistributions) {
-  const OT::Indices order(dag.getTopologicalOrder());
-  for (OT::UnsignedInteger i = 0; i < order.getSize(); ++i)
+  const Indices order(dag.getTopologicalOrder());
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i)
     if (jointDistributions[i].getDimension() != dag.getParents(i).getSize() + 1)
-      throw OT::InvalidArgumentException(HERE)
+      throw InvalidArgumentException(HERE)
           << "Error: expected a joint distribution of dimension="
           << dag.getParents(i).getSize() + 1 << " for node=" << order[i]
           << " and its parents=" << dag.getParents(i)
@@ -179,15 +181,15 @@ ContinuousBayesianNetwork::getDistributionCollection() const {
 }
 
 /* Method save() stores the object through the StorageManager */
-void ContinuousBayesianNetwork::save(OT::Advocate &adv) const {
-  OT::ContinuousDistribution::save(adv);
+void ContinuousBayesianNetwork::save(Advocate &adv) const {
+  ContinuousDistribution::save(adv);
   adv.saveAttribute("dag_", dag_);
   adv.saveAttribute("jointDistributions_", jointDistributions_);
 }
 
 /* Method load() reloads the object from the StorageManager */
-void ContinuousBayesianNetwork::load(OT::Advocate &adv) {
-  OT::ContinuousDistribution::load(adv);
+void ContinuousBayesianNetwork::load(Advocate &adv) {
+  ContinuousDistribution::load(adv);
   adv.loadAttribute("dag_", dag_);
   adv.loadAttribute("jointDistributions_", jointDistributions_);
   computeRange();

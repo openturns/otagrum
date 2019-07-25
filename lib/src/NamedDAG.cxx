@@ -139,12 +139,12 @@ void NamedDAG::load(OT::Advocate &adv) {
     dag_.addNodeWithId(nod);
   }
   for (OT::UnsignedInteger i = 0; i < nodes.getSize(); ++i)
-    {
-      const int nod = nodes[i];
-      const OT::Indices parents(parentsByNodes[i]);
-      for (const auto &par : parents)
-	dag_.addArc(par, nod);
-    }
+  {
+    const int nod = nodes[i];
+    const OT::Indices parents(parentsByNodes[i]);
+    for (const auto &par : parents)
+      dag_.addArc(par, nod);
+  }
 }
 
 } // namespace OTAGRUM

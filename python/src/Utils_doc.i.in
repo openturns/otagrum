@@ -2,10 +2,10 @@
 "Utility functions"
 
 %feature("docstring") OTAGRUM::Utils::Discretize
-"Discretize a continous distribution.
+"Discretize a continuous distribution.
 
 Compute a probability table according to the domains defined
-in a discretized aGrUM variable and a continous OpenTURNS distribution.
+in a discretized aGrUM variable and a continuous OpenTURNS distribution.
 
 .. math::
 
@@ -16,7 +16,7 @@ where :math:`$t_i$` are the aGrUM ticks, and :math:`$X$` is distributed accordin
 Parameters
 ----------
 distribution : :py:class:`openturns.Distribution`
-    An continous 1-d distribution
+    An continuous 1-d distribution
 v : :py:class:`pyAgrum.pyAgrum.DiscretizedVariable_double`
     A discrete variable
 

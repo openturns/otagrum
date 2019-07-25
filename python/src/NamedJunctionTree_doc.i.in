@@ -1,12 +1,28 @@
 %feature("docstring") OTAGRUM::NamedJunctionTree
 "NamedJunctionTree interface.
 
+Available constuctors:
+    NamedJunctionTree(*jt, names*)
+
+    NamedJunctionTree(*jt, bn*)
+
 Parameters
 ----------
 jt : :py:class:`pyAgrum.CliqueGraph`
     Junction tree
+bn : :py:class:`pyAgrum.BayesNet`
+    Network
 names : sequence of str
-    Node names"
+    Node names
+
+Examples
+--------
+>>> import otagrum
+>>> import pyAgrum as gum
+>>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
+>>> ie = gum.LazyPropagation(bn)
+>>> jtagr = ie.junctionTree()
+>>> njt = otagrum.NamedJunctionTree(jtagr, bn)"
 
 // ----------------------------------------------------------------------------
 
