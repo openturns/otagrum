@@ -30,8 +30,7 @@
 
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM
-{
+namespace OTAGRUM {
 
 class OTAGRUM_API ContinuousTTest : public OT::Object
 {
@@ -51,22 +50,21 @@ public:
                                     const OT::Indices & X) const;
 
   static std::tuple<double, double, bool> isIndepFromTest(const double t,
-      const double alpha);
+                                                          const double alpha);
 
   std::tuple<double, double, bool> isIndep(const OT::UnsignedInteger Y,
-      const OT::UnsignedInteger Z,
-      const OT::Indices & X) const;
+                                           const OT::UnsignedInteger Z,
+                                           const OT::Indices & X) const;
 
   std::string __str__(const std::string &offset = "") const;
 
   void clearCache() const;
   void clearCacheLevel(const OT::UnsignedInteger level) const;
   OT::UnsignedInteger getDimension() const;
-  std::vector<std::string> getSampleNames() const;
 
 private:
   /// computes K from the sample properties (size, dimension, ...)
-  static OT::UnsignedInteger GetK(const OT::Sample & sample);
+  static OT::UnsignedInteger GetK(const OT::UnsignedInteger size, const OT::UnsignedInteger dimension);
 
   /// computes the key from Indices and k
   static std::string GetKey(const OT::Indices & l,
@@ -75,14 +73,14 @@ private:
   /// get the log-pdf of Bernstein Copula on Indice l in data
   /// if k=0 : use getK_ to find the right value
   OT::Point getLogPDF(const OT::Indices & l,
-                      const OT::UnsignedInteger k = 0) const;
+		      const OT::UnsignedInteger k) const;
 
   /// get the log-pdfs of Berstein Copulae fX,fYX,fZX,FUZX
   /// allows to call getLogPDF_ with the same k for all copulae
   std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
   getLogPDFs(const OT::UnsignedInteger Y,
-             const OT::UnsignedInteger Z,
-             const OT::Indices & X) const;
+          const OT::UnsignedInteger Z,
+          const OT::Indices & X) const;
 
   mutable StratifiedCache cache_;
   OT::Sample data_;
