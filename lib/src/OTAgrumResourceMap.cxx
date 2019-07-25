@@ -31,6 +31,8 @@
 
 #include "otagrum/OTAgrumResourceMap.hxx"
 
+using namespace OT;
+
 namespace OTAGRUM {
 
 CLASSNAMEINIT(OTAgrumResourceMap);
@@ -38,8 +40,7 @@ CLASSNAMEINIT(OTAgrumResourceMap);
 static pthread_mutex_t OTAgrumResourceMap_InstanceMutex_;
 
 OTAgrumResourceMap_init::OTAgrumResourceMap_init() {
-  static pthread_once_t OTAgrumResourceMap_InstanceMutex_once =
-      PTHREAD_ONCE_INIT;
+  static pthread_once_t OTAgrumResourceMap_InstanceMutex_once = PTHREAD_ONCE_INIT;
   int rc = pthread_once(&OTAgrumResourceMap_InstanceMutex_once,
                         OTAgrumResourceMap::Initialize);
   if (rc != 0) {
@@ -58,11 +59,9 @@ void OTAgrumResourceMap::Initialize() {
     perror("ResourceMap::Initialize mutex initialization failed");
     exit(1);
   }
-  OT::ResourceMap::SetAsScalar("OTAgrum.ContinuousPC.defaultAlpha", 0.1);
-  OT::ResourceMap::SetAsUnsignedInteger("OTAgrum.ContinuousPC.defaultNbBins",
-                                        5);
-  OT::ResourceMap::SetAsUnsignedInteger(
-      "OTAgrum.ContinuousPC.defaultMaximumConditioningSetSize", 5);
+  ResourceMap::SetAsScalar("OTAgrum.ContinuousPC.defaultAlpha", 0.1);
+  ResourceMap::SetAsUnsignedInteger("OTAgrum.ContinuousPC.defaultNbBins", 5);
+  ResourceMap::SetAsUnsignedInteger("OTAgrum.ContinuousPC.defaultMaximumConditioningSetSize", 5);
 }
 
 } // namespace OTAGRUM

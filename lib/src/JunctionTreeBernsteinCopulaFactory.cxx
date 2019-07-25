@@ -23,23 +23,25 @@
 #include <openturns/PersistentObjectFactory.hxx>
 
 #include "otagrum/OTAgrumResourceMap.hxx"
-#include <otagrum/ContinuousPC.hxx>
-#include <otagrum/JunctionTreeBernsteinCopulaFactory.hxx>
+#include "otagrum/ContinuousPC.hxx"
+#include "otagrum/JunctionTreeBernsteinCopulaFactory.hxx"
+
+using namespace OT;
 
 namespace OTAGRUM {
 
 CLASSNAMEINIT(JunctionTreeBernsteinCopulaFactory)
 
-static const OT::Factory<JunctionTreeBernsteinCopulaFactory>
+static const Factory<JunctionTreeBernsteinCopulaFactory>
     Factory_JunctionTreeBernsteinCopulaFactory;
 
 /* Default constructor */
 JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory()
     : DistributionFactoryImplementation() {
-  nbBins_ = OT::ResourceMap::GetAsUnsignedInteger(
+  nbBins_ = ResourceMap::GetAsUnsignedInteger(
       "OTAgrum.ContinuousPC.defaultNbBins");
-  alpha_ = OT::ResourceMap::GetAsScalar("OTAgrum.ContinuousPC.defaultAlpha");
-  maximumConditioningSetSize_ = OT::ResourceMap::GetAsUnsignedInteger(
+  alpha_ = ResourceMap::GetAsScalar("OTAgrum.ContinuousPC.defaultAlpha");
+  maximumConditioningSetSize_ = ResourceMap::GetAsUnsignedInteger(
       "OTAgrum.ContinuousPC.defaultMaximumConditioningSetSize");
 }
 
@@ -59,21 +61,21 @@ JunctionTreeBernsteinCopulaFactory::clone() const {
 
 /* Here is the interface that all derived class must implement */
 
-OT::Distribution
-JunctionTreeBernsteinCopulaFactory::build(const OT::Sample &sample) const {
+Distribution
+JunctionTreeBernsteinCopulaFactory::build(const Sample &sample) const {
   return buildAsJunctionTreeBernsteinCopula(sample);
 }
 
-OT::Distribution JunctionTreeBernsteinCopulaFactory::build() const {
+Distribution JunctionTreeBernsteinCopulaFactory::build() const {
   return buildAsJunctionTreeBernsteinCopula().clone();
 }
 
 JunctionTreeBernsteinCopula
 JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula(
-    const OT::Sample &sample) const {
+    const Sample &sample) const {
 
   if (sample.getSize() == 0)
-    throw OT::InvalidArgumentException(HERE)
+    throw InvalidArgumentException(HERE)
         << "Error: cannot build a JunctionTreeBernsteinCopula distribution "
            "from an empty "
            "sample";
