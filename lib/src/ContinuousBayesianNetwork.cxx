@@ -99,10 +99,10 @@ void ContinuousBayesianNetwork::computeRange() {
   OT::Point upper(dimension);
   for (OT::UnsignedInteger i = 0; i < dimension; ++i) {
     const OT::Interval rangeI(jointDistributions_[i].getRange());
-    const OT::UnsignedInteger dimension = rangeI.getDimension();
+    const OT::UnsignedInteger dimensionI = rangeI.getDimension();
     // Check if the current node is a root node
-    lower[i] = rangeI.getLowerBound()[dimension - 1];
-    upper[i] = rangeI.getUpperBound()[dimension - 1];
+    lower[i] = rangeI.getLowerBound()[dimensionI - 1];
+    upper[i] = rangeI.getUpperBound()[dimensionI - 1];
   } // i
   setRange(OT::Interval(lower, upper));
 }

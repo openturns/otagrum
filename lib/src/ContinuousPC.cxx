@@ -228,7 +228,7 @@ gum::UndiGraph ContinuousPC::inferSkeleton() {
 std::vector<std::string> ContinuousPC::namesFromData(void) const {
   std::vector<std::string> names;
   const auto &description = tester_.getDataDescription();
-  for (int i = 0; i < description.getSize(); i++) {
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++) {
     names.push_back(description.at(i));
   }
   return names;
@@ -324,7 +324,7 @@ ContinuousPC::deriveJunctionTree(const gum::UndiGraph &g) const {
   gum::NodeProperty<gum::Size> mods;
 
   const auto &description = tester_.getDataDescription();
-  for (int i = 0; i < description.getSize(); i++) {
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++) {
     // triangulation needs modalities. We just say that mods
     // are all the same
     mods.insert(i, 2);
@@ -460,7 +460,7 @@ gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const {
     {
       // a good candidate among the remaining
       gum::Arc candidate(0, 0);
-      bool found = false;
+      found = false;
       auto minPar = dag.size();
       auto minBadPar = dag.size();
       for (const auto &edge : remainings) {
@@ -631,7 +631,7 @@ ContinuousPC::getSepsetNames(const std::string &x, const std::string &y) const {
   const auto &description = tester_.getDataDescription();
 
   auto inds = getSepset(idFromName(x), idFromName(y));
-  for (int i = 0; i < inds.getSize(); i++) {
+  for (OT::UnsignedInteger i = 0; i < inds.getSize(); i++) {
     res.push_back(description.at(inds[i]));
   }
 
@@ -640,7 +640,7 @@ ContinuousPC::getSepsetNames(const std::string &x, const std::string &y) const {
 
 gum::NodeId ContinuousPC::idFromName(const std::string &n) const {
   const auto &description = tester_.getDataDescription();
-  for (int i = 0; i < description.getSize(); i++) {
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++) {
     if (n == description.at(i)) {
       return gum::NodeId(i);
     }
@@ -654,7 +654,7 @@ std::vector<std::string> ContinuousPC::getTrace() const {
   const auto &description = tester_.getDataDescription();
 
   std::vector<std::string> res(removed_.size());
-  for (int i = 0; i < removed_.size(); i++) {
+  for (OT::UnsignedInteger i = 0; i < removed_.size(); i++) {
     std::stringstream ss;
     ss <<std::setfill('0')<<std::setw(3)<< i<<std::setfill(' ');
     ss << " : ";

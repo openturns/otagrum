@@ -138,7 +138,7 @@ void NamedDAG::load(OT::Advocate &adv) {
   for (const auto &nod : nodes) {
     dag_.addNodeWithId(nod);
   }
-  for (int i = 0; i < nodes.getSize(); ++i)
+  for (OT::UnsignedInteger i = 0; i < nodes.getSize(); ++i)
     {
       const int nod = nodes[i];
       const OT::Indices parents(parentsByNodes[i]);
