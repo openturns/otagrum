@@ -334,7 +334,7 @@ ContinuousPC::deriveJunctionTree(const gum::UndiGraph &g) const {
   return triangulation.junctionTree();
 }
 
-bool isAdjacent(const gum::MixedGraph &p, const gum::NodeId i,
+static bool isAdjacent(const gum::MixedGraph &p, const gum::NodeId i,
                 const gum::NodeId j) {
   if (p.children(i).contains(j))
     return true;
@@ -348,7 +348,7 @@ bool isAdjacent(const gum::MixedGraph &p, const gum::NodeId i,
 
 // Rule 1: Orient i-j into i->j whenever there is an arrow k->i
 // such that k and j are nonadjacent.
-bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
+static bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
                 const gum::NodeId j) {
   if (std::any_of(dag.parents(i).begin(), dag.parents(i).end(),
                   [&](const gum::NodeId k) { return !isAdjacent(p, k, j); })) {
@@ -365,7 +365,7 @@ bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
 
 // Rule 2: Orient i-j into i->j whenever there is a chain
 // i->k->j.
-bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) {
+static bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) {
   if (std::any_of(
           dag.parents(j).begin(), dag.parents(j).end(),
           [&](const gum::NodeId k) { return dag.parents(k).contains(i); })) {
@@ -382,7 +382,7 @@ bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) {
 
 // Rule 3: Orient i-j into i->j whenever there are two chains
 // i-k->j and i-l->j such that k and l are nonadjacent.
-bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
+static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
                 const gum::NodeId j) {
   const auto candidates = dag.parents(j) * p.neighbours(i);
   if (candidates.size() <= 1)
@@ -606,12 +606,12 @@ const std::vector<gum::Edge> &ContinuousPC::getRemoved_() const {
   return removed_;
 }
 
-const bool ContinuousPC::isRemoved(gum::NodeId x, gum::NodeId y) const {
+bool ContinuousPC::isRemoved(gum::NodeId x, gum::NodeId y) const {
   return (std::find(removed_.begin(), removed_.end(), gum::Edge(x, y)) !=
           removed_.end());
 }
 
-const bool ContinuousPC::isRemoved(const std::string &x,
+bool ContinuousPC::isRemoved(const std::string &x,
                                    const std::string &y) const {
   return isRemoved(idFromName(x), idFromName(y));
 }
