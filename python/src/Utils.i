@@ -1,6 +1,8 @@
 // SWIG file Utils.i
 
 %{
+#include <agrum/graphs/undiGraph.h>
+#include <agrum/graphs/mixedGraph.h>
 #include "otagrum/Utils.hxx"
 %}
 

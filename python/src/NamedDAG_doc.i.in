@@ -1,0 +1,76 @@
+%feature("docstring") OTAGRUM::NamedDAG
+"NamedDAG interface.
+
+Available constructors:
+    NamedDAG(bn)
+    NamedDAG(dag,names)
+
+Parameters
+----------
+bn : :py:class:`pyAgrum.BayesNet`
+    Bayesian network
+dag : :py:class:`pyAgrum.DAG`
+    Directed Acyclic Graph
+names : sequence of str
+    Node names"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::NamedDAG::getSize
+"Size accessor
+
+Returns
+-------
+size : int
+    Number of nodes in the tree"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::NamedDAG::getDescription
+"Size accessor
+
+Returns
+-------
+names : sequence of str
+    Node names"
+
+// ----------------------------------------------------------------------------
+%feature("docstring") OTAGRUM::NamedDAG::getParents
+"Parents accessor
+
+Parameters
+----------
+node : int
+    Node child of the parents
+
+Returns
+-------
+parents : :py:class:`openturns.Indices`
+    Parents to the node
+"
+
+// ----------------------------------------------------------------------------
+%feature("docstring") OTAGRUM::NamedDAG::getChildren
+"Parents accessor
+
+Parameters
+----------
+node : int
+    Node parent of the children
+
+Returns
+-------
+children : :py:class:`openturns.Indices`
+    Children to the node
+"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::NamedDAG::getNodes
+"Nodes accessor
+
+Returns
+-------
+nodes : :py:class:`openturns.Indices`
+    List of nodes
+"

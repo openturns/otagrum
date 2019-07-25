@@ -5,21 +5,25 @@
 
 using namespace OTAGRUM;
 
-void iterCombinaison(const OT::Indices &supset, int size) {
+void iterCombinaison(const OT::Indices &supset, int size)
+{
   std::cout << std::endl
             << "== " << size << "-Combinations from " << supset.__str__()
             << std::endl;
   IndicesCombinationIterator iter(supset, size);
-  for (iter.setFirst(); !iter.isLast(); iter.next()) {
+  for (iter.setFirst(); !iter.isLast(); iter.next())
+  {
     std::cout << iter.current() << std::endl;
   }
 }
 
-void testIndicesManip() {
+void testIndicesManip()
+{
   OT::Indices indices(0);
   std::cout << indices << std::endl;
   auto ind = indices;
-  for (int i = 0; i < 15; ++i) {
+  for (int i = 0; i < 15; ++i)
+  {
     ind = ind + (15 - i);
     std::cout << ind << std::endl;
   }
@@ -30,48 +34,48 @@ void testIndicesManip() {
   ind = ind - 15;
   std::cout << ind << std::endl;
   std::cout << indices << std::endl;
-               /*
+  /*
   std::cout << "\nlen :";
   if (ind.__len__() == 14) {
-    std::cout << " OK";
+  std::cout << " OK";
   } else {
-    std::cout << " fail";
+  std::cout << " fail";
   }
 
   std::cout << "\n4 in ind : ";
   if (isIn(ind, 4))
-    std::cout << "OK";
+  std::cout << "OK";
   else
-    std::cout << "fail";
+  std::cout << "fail";
 
   std::cout << "\n13 in ind : ";
   if (isIn(ind, 13))
-    std::cout << "OK";
+  std::cout << "OK";
   else
-    std::cout << "fail";
+  std::cout << "fail";
 
   std::cout << "\n5 not in ind : ";
   if (isIn(ind, 5))
-    std::cout << "fail";
+  std::cout << "fail";
   else
-    std::cout << "OK";
+  std::cout << "OK";
 
   std::cout << "\n20 not in ind : ";
   if (isIn(ind, 20))
-    std::cout << "fail";
+  std::cout << "fail";
   else
-    std::cout << "OK";
+  std::cout << "OK";
 
   std::cout << "\nNothing in indices : ";
   bool fail = false;
   for (OTAGRUM::Indice i = 0; i < 15; i++)
-    if (isIn(indices, i)) {
-      std::cout << "fail";
-      fail = true;
-      break;
-    }
+  if (isIn(indices, i)) {
+  std::cout << "fail";
+  fail = true;
+  break;
+  }
   if (!fail)
-    std::cout << "OK";
+  std::cout << "OK";
   std::cout << "\n\n";
 
   OT::Indices ind1, ind2;

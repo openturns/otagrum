@@ -2,7 +2,7 @@
 /**
  *  @brief The MixedHistogramUserDefined distribution
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -285,15 +285,15 @@ OT::Bool MixedHistogramUserDefined::isIntegral() const
   const OT::Scalar epsilon = OT::ResourceMap::GetAsScalar("DiscreteDistribution-SupportEpsilon");
   const OT::UnsignedInteger size = kind_.getSize();
   for (OT::UnsignedInteger i = 0; i < size; ++i)
+  {
+    if (kind_[i] == 1) return false;
+    const OT::UnsignedInteger supportSize = ticksCollection_[i].getSize();
+    for (OT::UnsignedInteger j = 0; j < supportSize; ++j)
     {
-      if (kind_[i] == 1) return false;
-      const OT::UnsignedInteger supportSize = ticksCollection_[i].getSize();
-      for (OT::UnsignedInteger j = 0; j < supportSize; ++j)
-	{
-	  const OT::Scalar x = ticksCollection_[i][j];
-	  if (std::abs(x - floor(x + 0.5)) > epsilon) return false;
-	}
-    } // i
+      const OT::Scalar x = ticksCollection_[i][j];
+      if (std::abs(x - floor(x + 0.5)) > epsilon) return false;
+    }
+  } // i
   return true;
 }
 

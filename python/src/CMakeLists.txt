@@ -86,10 +86,13 @@ ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
                       MixedHistogramUserDefined.i MixedHistogramUserDefined_doc.i.in
                       ContinuousPC.i ContinuousPC_doc.i.in
                       ContinuousTTest.i ContinuousTTest_doc.i.in
-                      JunctionTree.i JunctionTree_doc.i.in
+                      NamedJunctionTree.i NamedJunctionTree_doc.i.in
                       Utils.i Utils_doc.i.in
                       JunctionTreeBernsteinCopula.i JunctionTreeBernsteinCopula_doc.i.in
-                    )
+                      JunctionTreeBernsteinCopulaFactory.i JunctionTreeBernsteinCopulaFactory_doc.i.in
+                      NamedDAG.i NamedDAG_doc.i.in
+                      ContinuousBayesianNetwork.i ContinuousBayesianNetwork_doc.i.in
+                     )
 
 
 install ( FILES __init__.py
@@ -99,9 +102,6 @@ install ( FILES __init__.py
 install ( FILES ${SWIGFILES}
           DESTINATION ${OTAGRUM_SWIG_INCLUDE_PATH}
         )
-
-
-
 
 if (SPHINX_FOUND)
 
@@ -135,7 +135,7 @@ if (SPHINX_FOUND)
     set(OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH})
   endif ()
   configure_file (${SPHINX_SOURCE_DIR}/conf.py.in ${SPHINX_BINARY_DIR}/conf.py @ONLY)
-  
+
   # get sphinx sources
   file (GLOB_RECURSE sphinx_sources
     ${SPHINX_SOURCE_DIR}/*.rst

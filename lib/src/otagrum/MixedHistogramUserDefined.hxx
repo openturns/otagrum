@@ -2,7 +2,7 @@
 /**
  *  @brief The MixedHistogramUserDefined distribution
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,8 @@
 
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 /**
  * @class MixedHistogramUserDefined
@@ -86,7 +87,7 @@ public:
   /** Get the quantile of the distribution */
   using OT::DistributionImplementation::computeQuantile;
   OT::Point computeQuantile(const OT::Scalar prob,
-                        const OT::Bool tail = false) const;
+                            const OT::Bool tail = false) const;
 
   /** Get the characteristic function of the distribution, i.e. phi(u) = E(exp(I*u*X)) */
   OT::Complex computeCharacteristicFunction(const OT::Scalar x) const;
@@ -137,7 +138,7 @@ public:
 
   /** Conversion as a Mixture */
   OT::Mixture asMixture() const;
-  
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 

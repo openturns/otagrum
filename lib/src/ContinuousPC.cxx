@@ -2,7 +2,7 @@
 /**
  *  @brief ContinuousPC
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 
 #include <sstream>
 #include <tuple>
+#include <iomanip>
 
 #include <agrum/core/hashFunc.h>
 #include <agrum/core/priorityQueue.h>
@@ -40,9 +41,11 @@
 class Triplet {
 public:
   gum::NodeId x, y, z;
+
   bool operator==(const Triplet &t) const {
     return (x == t.x) && (y == t.y) && (z == t.z);
   }
+
   std::string toString() const {
     std::stringstream sstr;
     sstr << "{" << x << "," << y << "," << z << "}";
@@ -74,20 +77,18 @@ namespace OTAGRUM {
  * create an learner using PC algorithm with continuous variables
  *
  * @param data : the data
- * @param maxParents : the max parents than a node can have
- * @param alpha : the threshold for the hypothesis test
+ * @param maxConditioningSetSize : the size max for the conditioning set in a
+ * independence test
+ * @param alpha : the threshold for the independence test
  */
 ContinuousPC::ContinuousPC(const OT::Sample &data,
-                           const OT::UnsignedInteger maxParents,
+                           const OT::UnsignedInteger maxConditioningSetSize,
                            const double alpha)
-    : OT::Object()
-    , maxParents_(maxParents)
-    , verbose_(false)
-    , optimalPolicy_(true)
-    , tester_(data)
-{
+    : OT::Object(), maxCondSet_(maxConditioningSetSize), verbose_(false),
+      tester_(data) {
   tester_.setAlpha(alpha);
-  removed_.reserve(data.getDimension() * data.getDimension() / 3); // a rough estimation ...
+  removed_.reserve(data.getDimension() * data.getDimension() /
+                   3); // a rough estimation ...
 }
 
 /**
@@ -106,40 +107,32 @@ ContinuousPC::ContinuousPC(const OT::Sample &data,
  * p-value. Otherwise, it is the first one
  */
 std::tuple<bool, double, double, OT::Indices>
-ContinuousPC::bestSeparator(const gum::UndiGraph &g, gum::NodeId y,
-                             gum::NodeId z, const OT::Indices &neighbours,
-                             OT::UnsignedInteger n) {
+ContinuousPC::getSeparator(const gum::UndiGraph &g, gum::NodeId y,
+                           gum::NodeId z, const OT::Indices &neighbours,
+                           OT::UnsignedInteger n) const {
   double t = 0.0;
   double p = 0.0;
   double pmax = -1.0;
   double tmax = 0.0;
-  bool res = false;
+  bool ok = false;
 
-  OT::Indices bestsep;
+  const OT::Indices nullsep;
 
   IndicesCombinationIterator separator(neighbours, n);
   for (separator.setFirst(); !separator.isLast(); separator.next()) {
-    bool ok = false;
     std::tie(t, p, ok) = tester_.isIndep(y, z, separator.current());
-    TRACE(y << "-" << z << "|" << separator.current() << ":" << t << ", " << p
-            << ", " << ok << "\n")
-
-    if (ok) {
-      if (!getOptimalPolicy()) { // the first separator found is correct
-        return std::make_tuple(true, t, p, separator.current());
-      }
-
-      res = true;
-      if (p > pmax) {
-        bestsep = separator.current();
-      }
+    if (!ok) {
+      TRACE(y << "-" << z << "|" << separator.current() << ":" << t << ", " << p
+              << ", " << ok << "\n")
+    } else {
+      return std::make_tuple(true, t, p, separator.current());
     }
     if (p > pmax) {
       pmax = p;
       tmax = t;
     }
   }
-  return std::make_tuple(res, tmax, pmax, bestsep);
+  return std::make_tuple(false, tmax, pmax, nullsep);
 }
 
 //
@@ -154,16 +147,14 @@ ContinuousPC::bestSeparator(const gum::UndiGraph &g, gum::NodeId y,
  * cut)
  */
 bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
-                                        OT::UnsignedInteger n) {
+                                       OT::UnsignedInteger n) {
   if (g.sizeEdges() == 0)
     return false;
 
-  gum::PriorityQueue<gum::Edge, double> queue;
   bool atLeastOneInThisStep = false;
 
   do {
     atLeastOneInThisStep = false;
-    queue.clear();
     for (const auto &edge : g.edges()) {
       const auto y = edge.first();
       const auto z = edge.second();
@@ -175,38 +166,22 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
         OT::Indices sepYZ;
 
         std::tie(resYZ, tYZ, pYZ, sepYZ) =
-            bestSeparator(g, y, z, Utils::FromNodeSet(nei), n);
+            getSeparator(g, y, z, Utils::FromNodeSet(nei), n);
 
-        pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
-        ttests_.set(edge, std::max(ttests_.getWithDefault(edge, -10000), tYZ));
-
-        if (resYZ) { // we found at least one separator
-          queue.insert(edge, -pYZ);
+        if (resYZ) // we found at least one separator
+        {
           sepset_.set(edge, sepYZ);
-        }
-      }
-    }
-
-    gum::EdgeSet uncutable;
-    uncutable.clear();
-    gum::NodeId u;
-    while (!queue.empty()) {
-      const auto &edge = queue.pop();
-      if (!uncutable.contains(edge)) {
-        TRACE("==>" << edge << " cut. Sepset=" << sepset_[edge]
-                    << ", pvalue=" << pvalues_[edge] << std::endl);
-        atLeastOneInThisStep = true;
-        removed_.push_back(edge);
-        g.eraseEdge(edge);
-
-        // add the uncuttable in the case of optimalPolicy
-        if (getOptimalPolicy()) {
-          u = edge.first();
-          for (const auto &v : g.neighbours(u))
-            uncutable.insert(gum::Edge(u, v));
-          u = edge.second();
-          for (const auto &v : g.neighbours(u))
-            uncutable.insert(gum::Edge(u, v));
+          pvalues_.set(edge, pYZ);
+          ttests_.set(edge, tYZ);
+          TRACE("==>" << edge << " cut. Sepset=" << sepset_[edge]
+                      << ", pvalue=" << pvalues_[edge] << std::endl);
+          atLeastOneInThisStep = true;
+          removed_.push_back(edge);
+          g.eraseEdge(edge);
+        } else {
+          pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
+          ttests_.set(edge,
+                      std::max(ttests_.getWithDefault(edge, -10000), tYZ));
         }
       }
     }
@@ -218,11 +193,12 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
 // From complete graph g, remove as much as possible edge (y,z) in g
 // if (y,z) is removed, it means that sepset_[Edge(y,z)] contains X, set of
 // nodes, such that y and z are tested as independent given X.
-gum::UndiGraph ContinuousPC::getSkeleton() {
+gum::UndiGraph ContinuousPC::inferSkeleton() {
   gum::UndiGraph g;
   tester_.clearCache();
   sepset_.clear();
   pvalues_.clear();
+  removed_.clear();
 
   TRACE("== PC algo starting " << std::endl);
   // create the complete graph
@@ -234,7 +210,7 @@ gum::UndiGraph ContinuousPC::getSkeleton() {
   }
 
   // for each size of sepset from 0 to n-1
-  for (OT::UnsignedInteger n = 0; n < maxParents_; ++n) {
+  for (OT::UnsignedInteger n = 0; n < maxCondSet_; ++n) {
     TRACE("==  Size of conditioning set " << n << std::endl);
     // clear the pdfs not used anymore (due to the dimension of data)
     if (n > 0)
@@ -249,32 +225,52 @@ gum::UndiGraph ContinuousPC::getSkeleton() {
   return g;
 }
 
-// for all triplet x-y-z (no edge between x and z), if y is in sepset[x,z]
+std::vector<std::string> ContinuousPC::namesFromData(void) const {
+  std::vector<std::string> names;
+  const auto &description = tester_.getDataDescription();
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++) {
+    names.push_back(description.at(i));
+  }
+  return names;
+}
+
+NamedJunctionTree ContinuousPC::learnJunctionTree() {
+  return NamedJunctionTree(
+      deriveJunctionTree(deriveMoralGraph(inferPDAG(inferSkeleton()))),
+      namesFromData());
+}
+
+NamedDAG ContinuousPC::learnDAG() {
+  const auto &names = namesFromData();
+  const auto &dag = deriveDAG(inferPDAG(inferSkeleton()));
+  return NamedDAG(dag, names);
+}
+
+// for all triplet x-y-z (no edge between x and z), if y is not in sepset[x,z]
 // then x->y<-z.
-// the ordering process uses the size of the p-value as a priority.
-gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) const {
+// the ordering process uses the p-value as a priority.
+gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const {
   gum::MixedGraph cpdag;
 
   gum::PriorityQueue<Triplet, double> queue;
-  for (auto x : g.nodes()) {
-    cpdag.addNodeWithId(x);
+  for (auto y : g.nodes()) {
+    cpdag.addNodeWithId(y);
 
-    if (g.neighbours(x).size() > 1) {
-      IndicesCombinationIterator couple(Utils::FromNodeSet(g.neighbours(x)), 2);
+    if (g.neighbours(y).size() > 1) {
+      IndicesCombinationIterator couple(Utils::FromNodeSet(g.neighbours(y)), 2);
       for (couple.setFirst(); !couple.isLast(); couple.next()) {
-        bool ok = false;
-        double t = 0.0, p = 0.0;
-        const gum::NodeId y = couple.current()[0];
+        const gum::NodeId x = couple.current()[0];
         const gum::NodeId z = couple.current()[1];
-        if (!g.existsEdge(y, z)) { // maybe unshielded collider
-          // if (OTAGR::isIn(sepset_[gum::Edge(x, z)], y)) {
-          //  queue.insert(Triplet{x, y, z}, pvalues_[gum::Edge(x, z)]);
-          //}
-          OT::Indices indX;
-          indX = indX + OT::UnsignedInteger(x);
-          std::tie(t, p, ok) = tester_.isIndep(y, z, indX);
-          if (!ok) {
-            queue.insert(Triplet{y, x, z}, p);
+        if (!g.existsEdge(x, z)) // maybe unshielded collider
+        {
+          // bool ok = false;
+          // double t = 0.0, p = 0.0;
+          // OT::Indices indX;
+          // indX = indX + OT::UnsignedInteger(x);
+          // std::tie(t, p, ok) = tester_.isIndep(y, z, indX);
+          const auto xz = gum::Edge(x, z);
+          if (!sepset_[xz].contains(y)) {
+            queue.insert(Triplet{x, y, z}, pvalues_[xz]);
           }
         }
       }
@@ -298,7 +294,7 @@ gum::MixedGraph ContinuousPC::getPDAG(const gum::UndiGraph &g) const {
   return cpdag;
 }
 
-gum::UndiGraph ContinuousPC::getMoralGraph(const gum::MixedGraph &g) const {
+gum::UndiGraph ContinuousPC::deriveMoralGraph(const gum::MixedGraph &g) const {
   gum::UndiGraph moral;
   for (auto x : g.nodes())
     moral.addNodeWithId(x);
@@ -322,6 +318,204 @@ gum::UndiGraph ContinuousPC::getMoralGraph(const gum::MixedGraph &g) const {
   return moral;
 }
 
+gum::JunctionTree
+ContinuousPC::deriveJunctionTree(const gum::UndiGraph &g) const {
+  gum::DefaultTriangulation triangulation;
+  gum::NodeProperty<gum::Size> mods;
+
+  const auto &description = tester_.getDataDescription();
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++) {
+    // triangulation needs modalities. We just say that mods
+    // are all the same
+    mods.insert(i, 2);
+  }
+  triangulation.setGraph(&g, &mods);
+
+  return triangulation.junctionTree();
+}
+
+bool isAdjacent(const gum::MixedGraph &p, const gum::NodeId i,
+                const gum::NodeId j) {
+  if (p.children(i).contains(j))
+    return true;
+  if (p.parents(i).contains(j))
+    return true;
+  if (p.neighbours(i).contains(j))
+    return true;
+
+  return false;
+}
+
+// Rule 1: Orient i-j into i->j whenever there is an arrow k->i
+// such that k and j are nonadjacent.
+bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
+                const gum::NodeId j) {
+  if (std::any_of(dag.parents(i).begin(), dag.parents(i).end(),
+                  [&](const gum::NodeId k) { return !isAdjacent(p, k, j); })) {
+    try {
+      dag.addArc(i, j);
+    } catch (gum::InvalidDirectedCycle &e) {
+      dag.addArc(j, i);
+    }
+    return true;
+  }
+
+  return false;
+}
+
+// Rule 2: Orient i-j into i->j whenever there is a chain
+// i->k->j.
+bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) {
+  if (std::any_of(
+          dag.parents(j).begin(), dag.parents(j).end(),
+          [&](const gum::NodeId k) { return dag.parents(k).contains(i); })) {
+    try {
+      dag.addArc(i, j);
+    } catch (gum::InvalidDirectedCycle &e) {
+      dag.addArc(j, i);
+    }
+    return true;
+  }
+
+  return false;
+}
+
+// Rule 3: Orient i-j into i->j whenever there are two chains
+// i-k->j and i-l->j such that k and l are nonadjacent.
+bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
+                const gum::NodeId j) {
+  const auto candidates = dag.parents(j) * p.neighbours(i);
+  if (candidates.size() <= 1)
+    return false;
+
+  for (const auto &k : candidates) {
+    for (const auto &l : candidates) {
+      if (k == l || isAdjacent(p, k, l))
+        continue;
+      try {
+        dag.addArc(i, j);
+      } catch (gum::InvalidDirectedCycle &e) {
+        dag.addArc(j, i);
+      }
+      return true;
+    }
+  }
+
+  return false;
+}
+
+gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const {
+  gum::EdgeSet remainings;
+  gum::DAG dag;
+  for (const auto nod : p.nodes()) {
+    dag.addNodeWithId(nod);
+  }
+  for (const auto &arc : p.arcs()) {
+    try {
+      dag.addArc(arc.tail(), arc.head());
+    } catch (gum::InvalidDirectedCycle &e) {
+      GUM_SHOWERROR(e);
+    }
+  }
+  for (const auto &edge : p.edges()) {
+    remainings.insert(edge);
+  }
+
+  gum::EdgeSet toBeRemoved;
+  while (remainings.size() > 0) {
+    bool found = false;
+    for (const auto &edge : remainings) {
+      if (checkRule1(p, dag, edge.first(), edge.second()) ||
+          checkRule1(p, dag, edge.second(), edge.first())) {
+        toBeRemoved.insert(edge);
+        found = true;
+      }
+    }
+    remainings = remainings - toBeRemoved;
+    toBeRemoved.clear();
+    for (const auto &edge : remainings) {
+      if (checkRule2(dag, edge.first(), edge.second()) ||
+          checkRule2(dag, edge.second(), edge.first())) {
+        toBeRemoved.insert(edge);
+        found = true;
+      }
+    }
+    remainings = remainings - toBeRemoved;
+    toBeRemoved.clear();
+    for (const auto &edge : remainings) {
+      if (checkRule3(p, dag, edge.first(), edge.second()) ||
+          checkRule3(p, dag, edge.second(), edge.first())) {
+        toBeRemoved.insert(edge);
+        found = true;
+      }
+    }
+    remainings = remainings - toBeRemoved;
+    toBeRemoved.clear();
+
+    // Rule 4: Orient i-j into i->j whenever there are two chains
+    // i-k->l and k->l->j such that k and j are nonadjacent.
+    // (not used for dag from cpdag)
+
+    if (!found) // No edge has been oriented in the last step : we try to find
+    {
+      // a good candidate among the remaining
+      gum::Arc candidate(0, 0);
+      found = false;
+      auto minPar = dag.size();
+      auto minBadPar = dag.size();
+      for (const auto &edge : remainings) {
+        auto npf = dag.parents(edge.first()).size();
+        auto nps = dag.parents(edge.second()).size();
+        if (npf == 0 &&
+            nps == 0) // there cannot be better candidate, so we quit
+        {
+          candidate = gum::Arc(edge.first(), edge.second());
+          found = true;
+          break;
+        }
+        if (npf == 0) {
+          if (minPar > nps) // it could be a good candidate
+          {
+            minPar = nps;
+            candidate = gum::Arc(edge.second(), edge.first());
+            found = true;
+          }
+        }
+        if (nps == 0) {
+          if (minPar > npf) // it could be a good candidate
+          {
+            minPar = npf;
+            candidate = gum::Arc(edge.first(), edge.second());
+            found = true;
+          }
+        }
+        if (!found) {
+          // while not found we keep the best bad candidate
+          auto np = std::min(npf, nps);
+          if (minBadPar > np) {
+            minBadPar = np;
+            if (np == npf) // then we add a parent to first
+            {
+              candidate = gum::Arc(edge.second(), edge.first());
+            } else // we add a parent to second
+            {
+              candidate = gum::Arc(edge.first(), edge.second());
+            }
+          }
+        }
+      } // for
+      try {
+        dag.addArc(candidate.tail(), candidate.head());
+      } catch (gum::InvalidDirectedCycle &e) {
+      }
+      remainings.erase(gum::Edge(candidate.tail(), candidate.head()));
+      //@todo : A warning if !found (if we add a bad condidate)
+    } // if (! found)
+  }
+
+  return dag;
+}
+
 std::string ContinuousPC::skeletonToDot(const gum::UndiGraph &skeleton) {
   std::stringstream ss;
   ss << "digraph \"skeleton\" {" << std::endl
@@ -333,29 +527,45 @@ std::string ContinuousPC::skeletonToDot(const gum::UndiGraph &skeleton) {
   }
   ss << std::endl;
   for (const auto edge : skeleton.edges()) {
-    ss << "  " << edge.first() << "->" << edge.second() << " [label=\""
-       << std::setprecision(3) << getTTest(edge.first(), edge.second()) << "\n"
-       << std::setprecision(3) << getPValue(edge.first(), edge.second())
-       << "\"]" << std::endl;
+    ss << "  " << edge.first() << "->" << edge.second()
+       << " [label=\"t=" << std::setprecision(3)
+       << getTTest(edge.first(), edge.second())
+       << "\np=" << std::setprecision(3)
+       << getPValue(edge.first(), edge.second()) << "\"]" << std::endl;
   }
   ss << "}";
   return ss.str();
 }
 
 std::string ContinuousPC::PDAGtoDot(const gum::MixedGraph &pdag) {
-  return "digraph \"no_name\" {"
-         "  node [shape = ellipse];"
-         "  0;  1;  2;  3;  4;  5;  6;  7;  8;  9;  10;  11;  12;  13;"
-         "  0 -> 1 [dir=none];"
-         "  2 -> 3 [dir=none];"
-         "  11 -> 13; "
-         "  12 -> 13;"
-         ""
-         "}";
+  std::stringstream ss;
+  ss << "digraph \"PDAG\" {" << std::endl
+     << "  edge [];" << std::endl
+     << "  node [shape = ellipse];" << std::endl;
+  ss << "  ";
+  for (const auto node : pdag.nodes()) {
+    ss << node << "; ";
+  }
+  ss << std::endl;
+  for (const auto edge : pdag.edges()) {
+    ss << "  " << edge.first() << "->" << edge.second()
+       << " [dir=none,label=\"t=" << std::setprecision(3)
+       << getTTest(edge.first(), edge.second())
+       << "\np=" << std::setprecision(3)
+       << getPValue(edge.first(), edge.second()) << "\"]" << std::endl;
+  }
+  ss << std::endl;
+  for (const auto arc : pdag.arcs()) {
+    ss << "  " << arc.first() << "->" << arc.second()
+       << " [dir=none,label=\"t=" << std::setprecision(3)
+       << getTTest(arc.first(), arc.second()) << "\np=" << std::setprecision(3)
+       << getPValue(arc.first(), arc.second()) << "\"]" << std::endl;
+  }
+  ss << "}";
+  return ss.str();
 }
 
-
-double ContinuousPC::getPValue(gum::NodeId x, gum::NodeId y) {
+double ContinuousPC::getPValue(gum::NodeId x, gum::NodeId y) const {
   gum::Edge e(x, y);
   if (pvalues_.exists(e)) {
     return pvalues_[e];
@@ -365,18 +575,19 @@ double ContinuousPC::getPValue(gum::NodeId x, gum::NodeId y) {
         << ").";
   }
 }
-double ContinuousPC::getTTest(gum::NodeId x, gum::NodeId y) {
+
+double ContinuousPC::getTTest(gum::NodeId x, gum::NodeId y) const {
   gum::Edge e(x, y);
   if (ttests_.exists(e)) {
     return ttests_[e];
   } else {
     throw OT::InvalidArgumentException(HERE)
-        << "Error: No ttest value for edge (" << e.first() << ","
-        << e.second() << ").";
+        << "Error: No ttest value for edge (" << e.first() << "," << e.second()
+        << ").";
   }
 }
 
-const OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) {
+const OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) const {
   gum::Edge e(x, y);
   if (pvalues_.exists(e)) {
     return sepset_[e];
@@ -387,4 +598,79 @@ const OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) {
   }
 }
 
+void ContinuousPC::setVerbosity(bool verbose) { verbose_ = verbose; };
+
+bool ContinuousPC::getVerbosity() const { return verbose_; };
+
+const std::vector<gum::Edge> &ContinuousPC::getRemoved_() const {
+  return removed_;
+}
+
+const bool ContinuousPC::isRemoved(gum::NodeId x, gum::NodeId y) const {
+  return (std::find(removed_.begin(), removed_.end(), gum::Edge(x, y)) !=
+          removed_.end());
+}
+
+const bool ContinuousPC::isRemoved(const std::string &x,
+                                   const std::string &y) const {
+  return isRemoved(idFromName(x), idFromName(y));
+}
+
+double ContinuousPC::getPValue(const std::string &x,
+                               const std::string &y) const {
+  return getPValue(idFromName(x), idFromName(y));
+}
+double ContinuousPC::getTTest(const std::string &x,
+                              const std::string &y) const {
+  return getTTest(idFromName(x), idFromName(y));
+}
+
+const std::vector<std::string>
+ContinuousPC::getSepsetNames(const std::string &x, const std::string &y) const {
+  std::vector<std::string> res;
+  const auto &description = tester_.getDataDescription();
+
+  auto inds = getSepset(idFromName(x), idFromName(y));
+  for (OT::UnsignedInteger i = 0; i < inds.getSize(); i++) {
+    res.push_back(description.at(inds[i]));
+  }
+
+  return res;
+}
+
+gum::NodeId ContinuousPC::idFromName(const std::string &n) const {
+  const auto &description = tester_.getDataDescription();
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++) {
+    if (n == description.at(i)) {
+      return gum::NodeId(i);
+    }
+  }
+
+  throw OT::InvalidArgumentException(HERE)
+      << "Error: name '" << n << "' is not a node name.";
+}
+
+std::vector<std::string> ContinuousPC::getTrace() const {
+  const auto &description = tester_.getDataDescription();
+
+  std::vector<std::string> res(removed_.size());
+  for (OT::UnsignedInteger i = 0; i < removed_.size(); i++) {
+    std::stringstream ss;
+    ss <<std::setfill('0')<<std::setw(3)<< i<<std::setfill(' ');
+    ss << " : ";
+    const auto edg=description[removed_[i].first()]+"-"+description[removed_[i].second()];
+    std::string cond="";
+    for(const auto s:sepset_[removed_[i]]) {
+      if (cond!="") {
+        cond+=",";
+      }
+      cond+=description[s];
+    }
+    ss << std::setw(10)<<edg << "|" << std::left<<std::setw(20)<<cond;
+    ss << "  p=" << std::left<<std::setw(10)<<pvalues_[removed_[i]];
+    ss << "  ttest=" << ttests_[removed_[i]];
+    res[i] = ss.str();
+  }
+  return res;
+}
 } // namespace OTAGRUM

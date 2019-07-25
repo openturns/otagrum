@@ -2,7 +2,7 @@
 /**
  *  @brief The StratifiedCache is a cache for TTest with level
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -28,9 +28,11 @@
 
 #include <openturns/Sample.hxx>
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
-class StratifiedCache : public OT::Object {
+class StratifiedCache : public OT::Object
+{
 private:
   gum::HashTable<std::string, OT::Point> cache_;
   std::vector<std::vector<std::string>> stratified_keys_;
@@ -59,7 +61,7 @@ public:
 
   int maxLevel() const;
 
-  std::string __str__(const std::string& offset="") const;
+  std::string __str__(const std::string& offset = "") const;
 };
 } // OTAGRUM
 #endif // OTAGRUM_STRATIFIEDCACHE_H

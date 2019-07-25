@@ -1,8 +1,8 @@
 //                                               -*- C++ -*-
 /**
- *  @brief JunctionTree
+ *  @brief NamedJunctionTree
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -25,46 +25,49 @@
 #include <string>
 #include <vector>
 
-#include <agrum/core/hashTable.h>
 #include <agrum/graphs/cliqueGraph.h>
+#include <agrum/BN/BayesNet.h>
 
 #include <openturns/Description.hxx>
 #include <openturns/Indices.hxx>
 
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM {
-class OTAGRUM_API JunctionTree : public OT::Object {
+namespace OTAGRUM
+{
+class OTAGRUM_API NamedJunctionTree : public OT::Object
+{
 public:
-
-  JunctionTree(const gum::CliqueGraph &jt,
-               const std::vector<std::string> &names);
+  NamedJunctionTree();
+  NamedJunctionTree(const gum::CliqueGraph &jt, const gum::BayesNet<double> &bn);
+  NamedJunctionTree(const gum::CliqueGraph &jt,
+                    const std::vector<std::string> &names);
 
   OT::UnsignedInteger getSize() const;
 
   OT::Description getDescription() const;
 
-  OT::Indices getClique(gum::NodeId nod) const;
-  OT::Indices getSeparator(gum::Edge edge) const;
+  OT::Indices getClique(OT::UnsignedInteger nod) const;
+  OT::Indices getSeparator(OT::UnsignedInteger nod1, OT::UnsignedInteger nod2) const;
 
-  const gum::NodeSet &getNeighbours(gum::NodeId id) const;
-  gum::EdgeSet getEdges() const;
-  gum::NodeSet getNodes() const;
+  OT::Indices getNeighbours(OT::UnsignedInteger id) const;
+  OT::Indices getNodes() const;
 
   OT::Collection<OT::Indices> getCliquesCollection() const;
   OT::Collection<OT::Indices> getSeparatorsCollection() const;
 
-  JunctionTree getMarginal(OT::Indices indices) const;
+  NamedJunctionTree getMarginal(OT::Indices indices) const;
 
-  OT::String __str__(const OT::String & offset = "") const;
+  OT::String __str__(const OT::String &offset = "") const;
+
+  OT::Indices getOrderMaxFirst() const;
 
 private:
   gum::JunctionTree jt_;
   OT::Description map_;
 
   void checkConsistency() const;
-
 };
 
-}
+} // namespace OTAGRUM
 #endif // OTAGRUM_JUNCTIONTREE_H

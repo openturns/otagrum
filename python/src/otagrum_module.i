@@ -9,7 +9,6 @@
 
 // Prerequisites needed
 %include typemaps.i
-
 %include exception.i
 
 %ignore *::load(OT::Advocate & adv);
@@ -23,9 +22,13 @@
 
 // The new classes
 %include otagrum/otagrumprivate.hxx
+
 %include Utils.i
 %include MixedHistogramUserDefined.i
-%include JunctionTree.i
+%include NamedJunctionTree.i
+%include NamedDAG.i
 %include JunctionTreeBernsteinCopula.i
+%include JunctionTreeBernsteinCopulaFactory.i
 %include ContinuousTTest.i
 %include ContinuousPC.i
+%include ContinuousBayesianNetwork.i

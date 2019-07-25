@@ -54,7 +54,7 @@ macro ( ot_pyinstallcheck_test TESTNAME )
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
   else (_IGNOREOUT)
     set ( TESTNAME_OUT ${TESTNAME_TGT}.expout )
-    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} ) 
+    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} )
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
   endif (_IGNOREOUT)
 
@@ -69,7 +69,7 @@ macro ( ot_pyinstallcheck_test TESTNAME )
   endif ()
   list ( APPEND PYINSTALLCHECK_TO_BE_RUN ${TESTNAME_SRC} )
   install ( FILES ${TESTNAME_SRC}
-            DESTINATION ${OTAGRUM_EXAMPLE_PATH} 
+            DESTINATION ${OTAGRUM_EXAMPLE_PATH}
             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
           )
 endmacro ()
@@ -78,7 +78,7 @@ ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
 ot_pyinstallcheck_test (MixedHistogramUserDefined_std)
 ot_pyinstallcheck_test (ContinuousPC_std)
-ot_pyinstallcheck_test (JunctionTree_std)
+ot_pyinstallcheck_test (NamedJunctionTree_std)
 ot_pyinstallcheck_test (JunctionTreeBernsteinCopula_std)
 if (NBSPHINX_FOUND) # depends on nbconvert, nbformat
   ot_pyinstallcheck_test (notebook IGNOREOUT)

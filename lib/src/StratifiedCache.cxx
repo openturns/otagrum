@@ -2,7 +2,7 @@
 /**
  *  @brief The StratifiedCache is a cache for TTest with level
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -28,25 +28,33 @@
 
 #include "otagrum/StratifiedCache.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
-StratifiedCache::StratifiedCache() : OT::Object(), get_(0u), set_(0u){}
+StratifiedCache::StratifiedCache() : OT::Object(), get_(0u), set_(0u) {}
 
-StratifiedCache::~StratifiedCache() { clear(); }
+StratifiedCache::~StratifiedCache()
+{
+  clear();
+}
 
-bool StratifiedCache::exists(const std::string &key) const {
+bool StratifiedCache::exists(const std::string &key) const
+{
   return cache_.exists(key);
 }
 
-const OT::Point StratifiedCache::get(const std::string &key) const {
+const OT::Point StratifiedCache::get(const std::string &key) const
+{
   get_++;
   return cache_[key];
 };
 
 void StratifiedCache::set(OT::UnsignedInteger level, const std::string &key,
-                          const OT::Point sample) {
+                          const OT::Point sample)
+{
   set_++;
-  if (cache_.exists(key)) {
+  if (cache_.exists(key))
+  {
     return; // throw something ?
   }
   cache_.insert(key, sample);
@@ -56,34 +64,49 @@ void StratifiedCache::set(OT::UnsignedInteger level, const std::string &key,
   stratified_keys_[level].push_back(key);
 };
 
-void StratifiedCache::clearLevel(unsigned long level) {
-  if (level < stratified_keys_.size()) {
+void StratifiedCache::clearLevel(unsigned long level)
+{
+  if (level < stratified_keys_.size())
+  {
     for (auto &elt : stratified_keys_[level])
       cache_.erase(elt);
     stratified_keys_[level].clear();
   }
 };
 
-void StratifiedCache::clear() {
-  for (unsigned long level = 0; level < stratified_keys_.size(); ++level) {
+void StratifiedCache::clear()
+{
+  for (unsigned long level = 0; level < stratified_keys_.size(); ++level)
+  {
     clearLevel(level);
   }
 };
 
-int StratifiedCache::size() const { return cache_.size(); };
-int StratifiedCache::size(int level) const {
+int StratifiedCache::size() const
+{
+  return cache_.size();
+};
+int StratifiedCache::size(int level) const
+{
   return stratified_keys_[level].size();
 }
 
-int StratifiedCache::maxLevel() const { return stratified_keys_.size() - 1; };
+int StratifiedCache::maxLevel() const
+{
+  return stratified_keys_.size() - 1;
+};
 
-std::string StratifiedCache::__str__(const std::string &offset) const {
+std::string StratifiedCache::__str__(const std::string &offset) const
+{
   std::stringstream ss;
-  for (int i = 0; i <= maxLevel(); i++) {
-    if (stratified_keys_[i].size() > 0) {
+  for (int i = 0; i <= maxLevel(); i++)
+  {
+    if (stratified_keys_[i].size() > 0)
+    {
       ss << offset << i << " ";
       char delim = ':';
-      for (const auto key : stratified_keys_[i]) {
+      for (const auto key : stratified_keys_[i])
+      {
         ss << delim << ' ' << key;
         delim = ',';
       }

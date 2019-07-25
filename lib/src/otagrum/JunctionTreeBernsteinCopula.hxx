@@ -2,7 +2,7 @@
 /**
  *  @brief The JunctionTreeBernsteinCopula distribution
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -22,12 +22,14 @@
 #define OTAGRUM_JUNCTIONTREEBERNSTEINCOPULA_HXX
 
 #include <openturns/ContinuousDistribution.hxx>
+#include <openturns/Distribution.hxx>
 #include <openturns/Sample.hxx>
 
-#include "JunctionTree.hxx"
+#include "NamedJunctionTree.hxx"
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 /**
  * @class JunctionTreeBernsteinCopula
@@ -42,22 +44,23 @@ public:
 
   typedef OT::Collection< OT::Indices > IndicesCollection;
   typedef OT::PersistentCollection< OT::Indices > IndicesPersistentCollection;
-  
+
   /** Default constructor */
   JunctionTreeBernsteinCopula();
 
   /** Parameters constructor */
-  JunctionTreeBernsteinCopula(const JunctionTree & junctionTree,
-			      const OT::Sample & copulaSample,
-			      const OT::UnsignedInteger binNumber,
-			      const OT::Bool isCopulaSample);
+  JunctionTreeBernsteinCopula(const NamedJunctionTree & junctionTree,
+                              const OT::Sample & copulaSample,
+                              const OT::UnsignedInteger binNumber,
+                              const OT::Bool isCopulaSample = false);
 
-  JunctionTreeBernsteinCopula(const IndicesCollection & cliquesCollection,
-			      const IndicesCollection & separatorsCollection,
-			      const OT::Sample & copulaSample,
-			      const OT::UnsignedInteger binNumber,
-			      const OT::Bool isCopulaSample);
+  JunctionTreeBernsteinCopula(const NamedJunctionTree & junctionTree,
+                              const OT::Indices & cliquesOrder,
+                              const OT::Sample & copulaSample,
+                              const OT::UnsignedInteger binNumber,
+                              const OT::Bool isCopulaSample = false);
 
+public:
   /** Comparison operator */
   using OT::ContinuousDistribution::operator ==;
   OT::Bool operator ==(const JunctionTreeBernsteinCopula & other) const;
@@ -85,16 +88,25 @@ public:
 
   /** Copula sample accessor */
   void setCopulaSample(const OT::Sample & copulaSample,
-		       const OT::Bool isEmpiricalCopulaSample = false);
+                       const OT::Bool isEmpiricalCopulaSample = false);
   OT::Sample getCopulaSample() const;
 
+  /** Set the order according to which the cliques are traversed */
+  void setCliquesOrder(const OT::Indices & cliquesOrder);
+
   /** Bin number accessor */
- private:
+private:
   void setBinNumber(const OT::UnsignedInteger binNumber);
 
- public:
+public:
   OT::UnsignedInteger getBinNumber() const;
-  
+
+  /** Get the i-th marginal distribution */
+  OT::Distribution getMarginal(const OT::UnsignedInteger i) const;
+
+  /** Get the distribution of the marginal distribution corresponding to indices dimensions */
+  OT::Distribution getMarginal(const OT::Indices & indices) const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 
@@ -112,10 +124,15 @@ private:
 
   /** The main parameter set of the distribution */
 
-  /** Cliques and Separators as collections of Indices */
+  /** Underlying junction tree */
+  NamedJunctionTree junctionTree_;
+
+  /** Cliques as collections of Indices */
   IndicesPersistentCollection cliquesCollection_;
+
+  /** Separators as collections of Indices */
   IndicesPersistentCollection separatorsCollection_;
-  
+
   /** The underlying sample */
   OT::Sample copulaSample_;
 
@@ -125,7 +142,7 @@ private:
   /** Normalization factors */
   OT::SampleImplementation logBetaMarginalFactors_;
   OT::SampleImplementation logFactors_;
-  
+
 }; /* class JunctionTreeBernsteinCopula */
 
 } /* namespace OTAGRUM */

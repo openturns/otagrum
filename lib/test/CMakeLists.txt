@@ -11,8 +11,8 @@ if ( MINGW )
   set_target_properties ( CRT_fp8 PROPERTIES LINKER_LANGUAGE CXX )
 endif ()
 
-set ( CHECK_ENVIRONMENT 
-      ${ADAPT_CHECK_TESTS_EXPONENT} 
+set ( CHECK_ENVIRONMENT
+      ${ADAPT_CHECK_TESTS_EXPONENT}
     )
 
 set ( CHECK_TO_BE_RUN )
@@ -28,7 +28,7 @@ macro ( ot_check_test TESTNAME )
   endif ()
   set_target_properties ( ${TESTNAME_TGT} PROPERTIES
                                           INSTALL_RPATH "${CMAKE_BINARY_DIR}/lib/src;${CMAKE_INSTALL_RPATH}" )
-  set ( TESTNAME_LOC ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}${CMAKE_EXECUTABLE_SUFFIX} ) 
+  set ( TESTNAME_LOC ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}${CMAKE_EXECUTABLE_SUFFIX} )
   set ( _CMD )
   set ( _PRE )
   set ( _POST )
@@ -60,7 +60,7 @@ macro ( ot_check_test TESTNAME )
     set ( COMMAND "( ${CMAKE_CROSSCOMPILING_EMULATOR} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
   else (_IGNOREOUT)
     set ( TESTNAME_OUT ${TESTNAME_TGT}.expout )
-    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} ) 
+    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} )
     set ( COMMAND "( ${CMAKE_CROSSCOMPILING_EMULATOR} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
   endif (_IGNOREOUT)
 
@@ -82,12 +82,15 @@ include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
 ot_check_test ( Utils_std )
 ot_check_test ( MixedHistogramUserDefined_std )
-ot_check_test ( JunctionTree_std )
+ot_check_test ( NamedJunctionTree_std )
+ot_check_test ( NamedDAG_std )
 ot_check_test ( JunctionTreeBernsteinCopula_std )
 ot_check_test ( IndicesManip_std )
 ot_check_test ( StratifiedCache_std )
 ot_check_test ( ContinuousTTest_std )
 ot_check_test ( ContinuousPC_std )
+ot_check_test ( ContinuousBayesianNetwork_std )
+ot_check_test ( OTAgrumResourceMap_std )
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"
                     DEPENDS ${CHECK_TO_BE_RUN}

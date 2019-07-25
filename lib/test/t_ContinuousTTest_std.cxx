@@ -9,7 +9,8 @@
 
 using namespace OTAGRUM;
 
-OT::Sample getNormalSample(OT::UnsignedInteger size) {
+OT::Sample getNormalSample(OT::UnsignedInteger size)
+{
   OT::UnsignedInteger dim = 10;
 
   OT::CorrelationMatrix R(dim);
@@ -24,21 +25,43 @@ OT::Sample getNormalSample(OT::UnsignedInteger size) {
   return distribution.getSample(size);
 }
 
-OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size) {
+OT::Description DescrFromStringVect(const std::vector<std::string>& v)
+{
+  OT::Description res;
+  for(auto s : v)
+  {
+    res.add(s);
+  }
+  return res;
+}
+
+OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
+{
   auto R = OT::CorrelationMatrix(3);
   R(0, 1) = 0.9;
   R(0, 2) = 0.25;
+  auto copula1 = OT::NormalCopula(R);
+  copula1.setDescription(DescrFromStringVect({"A1", "A2", "A3"}));
+
+  auto copula2 = OT::FrankCopula(3.0);
+  copula2.setDescription(DescrFromStringVect({"B1", "B2"}));
+
+  auto copula3 = OT::ClaytonCopula(2.0);
+  copula2.setDescription(DescrFromStringVect({"C1", "C2"}));
 
   OT::Collection<OT::Copula> copulas;
-  copulas.add(OT::NormalCopula(R));
-  copulas.add(OT::FrankCopula(3.0));
-  copulas.add(OT::ClaytonCopula(2.0));
+  copulas.add(copula1);
+  copulas.add(copula2);
+  copulas.add(copula3);
 
   auto copula = OT::ComposedCopula(copulas);
-  return copula.getSample(size);
+
+  auto sample = copula.getSample(size);
+  return sample;
 }
 
-void testNormalSample() {
+void testNormalSample()
+{
   double t1;
   double p1;
   bool ok1;
@@ -59,13 +82,15 @@ void testNormalSample() {
             << "    test:" << (ok2 ? " fail " : " OK ") << "\n";
 }
 
-void testIndepsSeePythonTest() {
+void testIndepsSeePythonTest()
+{
   double t;
   double p;
   bool ok;
   OT::Indices X;
 
-  auto data = getSpecificInstanceSeePythonTest(3000);
+  auto data = getSpecificInstanceSeePythonTest(6000);
+
   ContinuousTTest test(data);
   test.setAlpha(0.1);
 
@@ -90,7 +115,8 @@ void testIndepsSeePythonTest() {
             << "   test:" << (ok ? " OK " : " fail ") << "\n";
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   testNormalSample();
   testIndepsSeePythonTest();
   return EXIT_SUCCESS;

@@ -2,7 +2,7 @@
 /**
  *  @brief IndicesCombinationIterator
  *
- *  Copyright 2010-2018 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,8 @@
 
 #include <openturns/Indices.hxx>
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger y);
 bool isIn(const OT::Indices &X, OT::UnsignedInteger y);
@@ -41,7 +42,7 @@ public:
   bool isLast() const;
   void next();
   const OT::Indices &current() const;
-  std::string __str__(const std::string &delim="") const;
+  std::string __str__(const std::string &delim = "") const;
 
 private:
   void set_(OT::UnsignedInteger pos, int val);

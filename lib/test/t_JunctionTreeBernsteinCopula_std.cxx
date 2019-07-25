@@ -3,13 +3,10 @@
 #include <agrum/BN/BayesNet.h>
 #include <agrum/BN/inference/lazyPropagation.h>
 
-#include <openturns/Exception.hxx>
-#include <openturns/Indices.hxx>
-#include <openturns/Normal.hxx>
-#include <openturns/Graph.hxx>
+#include <openturns/OT.hxx>
 
-#include "otagrum/JunctionTree.hxx"
 #include "otagrum/JunctionTreeBernsteinCopula.hxx"
+#include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/otagrum.hxx"
 
 void testOK() {
@@ -32,18 +29,41 @@ void testOK() {
   for (const auto &elt : bn.nodes()) {
     names.push_back(bn.variable(elt).name());
   }
-  auto jt = OTAGRUM::JunctionTree(*jtagr, names);
-  OT::Sample copulaSample = OT::Normal(jt.getSize()).getSample(1000);
-  OTAGRUM::JunctionTreeBernsteinCopula copula(jt, copulaSample, 5, false);
-  std::cout << "copula=" << copula << std::endl;
-  OT::Sample sample = copula.getSample(10);
-  std::cout << "sample=" << sample << std::endl;
-  OT::Sample pdf = copula.computePDF(sample);
-  std::cout << "pdf=" << pdf << std::endl;
-  //OT::Graph graph = copula.drawMarginal2DPDF(0, 1, OT::Point(2, 0.0), OT::Point(2, 1.0), OT::Indices(2, 31));
-  //graph.draw("test_marginal_pdf.png");
+  auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
+  unsigned int dim = jt.getSize();
+  OT::CovarianceMatrix C(dim);
+  for (unsigned int i = 0; i < dim; ++i) {
+    for (unsigned int j = 0; j < i; ++j)
+      C(i, j) = 1.0;
+    C(i, i) = 2.0;
+  }
+  double entropyMC1, entropyMC2;
+  OT::RandomGenerator::SetSeed(0);
+  OT::Sample copulaSample = OT::Normal(OT::Point(dim), C).getSample(1000);
+  {
+    OT::RandomGenerator::SetSeed(33);
+    OTAGRUM::JunctionTreeBernsteinCopula copula(jt, copulaSample, 5, false);
+    OT::Sample sample = copula.getSample(1000);
+    OT::Sample pdf = copula.computePDF(sample);
+    entropyMC1 = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
+  }
+  {
+    OT::RandomGenerator::SetSeed(33);
+    OTAGRUM::JunctionTreeBernsteinCopula copula(jt, jt.getOrderMaxFirst(),
+                                                copulaSample, 5, false);
+    OT::Sample sample = copula.getSample(1000);
+    OT::Sample pdf = copula.computePDF(sample);
+    entropyMC2 = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
+  }
+  std::cout<<"Same entropy : ";
+  if (fabs(entropyMC1-entropyMC2)<1e-5)
+    std::cout<<"OK"<<std::endl;
+  else
+    std::cout<<"not OK"<<std::endl;
 }
 
 int main(int argc, char **argv) {
+  OT::ResourceMap::SetAsUnsignedInteger("parallel-threads", 1);
+  OT::ResourceMap::SetAsBool("Distribution-Parallel", false);
   testOK();
 }
