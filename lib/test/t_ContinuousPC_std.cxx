@@ -48,7 +48,7 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
 void tests(void) {
   try {
     OT::RandomGenerator::SetSeed(0);
-    OT::Sample sample = getTrucBizarre(10000);
+    OT::Sample sample = getTrucBizarre(5000);
     std::cout << "Sample size : " << sample.getSize() << std::endl
               << "Sample dimension :" << sample.getDimension() << std::endl
               << "Sample " << sample << std::endl;
@@ -117,7 +117,7 @@ void tests(void) {
 };
 
 int main(void) {
-  OT::Log::Show(OT::Log::ALL);
+//   OT::Log::Show(OT::Log::ALL);
   tests();
 
   return EXIT_SUCCESS;
