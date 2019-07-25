@@ -35,7 +35,7 @@ Examples
 >>> jt = otagrum.NamedJunctionTree(jtagr, bn.names())
 >>> sample = ot.Normal(5).getSample(1000)
 >>> binNumber = 5
->>> copula = otagrum.ContinuousBayesianNetwork(jt, sample, binNumber, False)"
+>>> #copula = otagrum.ContinuousBayesianNetwork(jt, sample, binNumber, False)"
 
 
 // ----------------------------------------------------------------------------
