@@ -37,12 +37,11 @@ static const Factory<JunctionTreeBernsteinCopulaFactory>
 
 /* Default constructor */
 JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory()
-    : DistributionFactoryImplementation() {
-  nbBins_ = ResourceMap::GetAsUnsignedInteger(
-      "OTAgrum.ContinuousPC.defaultNbBins");
-  alpha_ = ResourceMap::GetAsScalar("OTAgrum.ContinuousPC.defaultAlpha");
-  maximumConditioningSetSize_ = ResourceMap::GetAsUnsignedInteger(
-      "OTAgrum.ContinuousPC.defaultMaximumConditioningSetSize");
+    : DistributionFactoryImplementation()
+{
+  nbBins_ = ResourceMap::GetAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber");
+  alpha_ = ResourceMap::GetAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha");
+  maximumConditioningSetSize_ = ResourceMap::GetAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize");
 }
 
 /* Parameter constructor */

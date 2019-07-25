@@ -11,9 +11,9 @@ void check(const std::string &key) {
 
 int main(int argc, char **argv) {
   try {
-    check("OTAgrum.ContinuousPC.defaultNbBins");
-    check("OTAgrum.ContinuousPC.defaultAlpha");
-    check("OTAgrum.ContinuousPC.defaultMaximumConditioningSetSize");
+    check("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber");
+    check("JunctionTreeBernsteinCopulaFactory-DefaultAlpha");
+    check("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize");
   } catch (OT::Exception &e) {
     std::cout << e.__repr__() << std::endl;
     return 1;

@@ -59,9 +59,9 @@ void OTAgrumResourceMap::Initialize() {
     perror("ResourceMap::Initialize mutex initialization failed");
     exit(1);
   }
-  ResourceMap::SetAsScalar("OTAgrum.ContinuousPC.defaultAlpha", 0.1);
-  ResourceMap::SetAsUnsignedInteger("OTAgrum.ContinuousPC.defaultNbBins", 5);
-  ResourceMap::SetAsUnsignedInteger("OTAgrum.ContinuousPC.defaultMaximumConditioningSetSize", 5);
+  ResourceMap::SetAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha", 0.1);
+  ResourceMap::SetAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);
+  ResourceMap::SetAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize", 5);
 }
 
 } // namespace OTAGRUM
