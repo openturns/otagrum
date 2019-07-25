@@ -67,8 +67,8 @@ public:
 
   gum::NodeId idFromName(const std::string& n) const;
 
-  const bool isRemoved(gum::NodeId x, gum::NodeId y) const;
-  const bool isRemoved(const std::string &x, const std::string &y) const;
+  bool isRemoved(gum::NodeId x, gum::NodeId y) const;
+  bool isRemoved(const std::string &x, const std::string &y) const;
 
   std::string skeletonToDot(const gum::UndiGraph &skeleton);
   std::string PDAGtoDot(const gum::MixedGraph &pdag);
