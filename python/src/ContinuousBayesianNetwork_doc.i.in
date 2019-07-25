@@ -1,73 +1,52 @@
 %feature("docstring") OTAGRUM::ContinuousBayesianNetwork
-"ContinuousBayesianNetwork distribution
-
-Available constructors:
-    ContinuousBayesianNetwork(*junctionTree, copulaSample, binNumber, isCopulaSample*)
-
-    ContinuousBayesianNetwork(*cliquesCollection, separatorsCollection, binNumber, isCopulaSample*)
+"ContinuousBayesianNetwork distribution.
 
 Parameters
 ----------
-junctionTree : a :class:`~otagrum.NamedJunctionTree`
-    The junction tree describing the dependence structure of the copula.
-copulaSample : a 2-d sequence of float
-    The sample defining the copula
-binNumber : int
-    The common number of bins for all the Bernstein copulas involved in modelling
-    cliques and separators copulas.
-isCopulaSample : bool
-    Flag to tell if the given sample is already in the normalized rank space.
-
-Notes
------
-This class allows to build a nonparametric copula from a given sample, a bin
-count and a junction tree describing the conditional independencies in the data.
-It is based on a Bernstein estimation of each sub-copulas of the model.
+dag : :class:`~otagrum.NamedDAG`
+    Underlying junction tree
+jointDistributions : sequence of :py:class:`openturns.Distribution`
+    Collection of joint distributions
 
 Examples
 --------
 >>> import otagrum
 >>> import openturns as ot
 >>> import pyAgrum as gum
->>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
->>> ie = gum.LazyPropagation(bn)
->>> jtagr = ie.junctionTree()
->>> jt = otagrum.NamedJunctionTree(jtagr, bn.names())
->>> sample = ot.Normal(5).getSample(1000)
->>> binNumber = 5
->>> #copula = otagrum.ContinuousBayesianNetwork(jt, sample, binNumber, False)"
-
+>>> bn = gum.BayesNet.fastPrototype('A->B->C->D;E->A->C<-E')
+>>> ndag = otagrum.NamedDAG(bn)
+>>> jointDistributions = []
+>>> #distribution = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)"
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getCopulaSample
-"Accessor to the sample defining the copula.
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getNamedDAG
+"Accessor to the DAG.
 
 Returns
 -------
-copulaSample : :py:class:`openturns.Sample`
-    Sample in the normalized rank space."
+dag : :class:`~otagrum.NamedDAG`
+    Underlying junction tree"
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::setCopulaSample
-"Accessor to the sample defining the copula.
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::setDAGAndDistributionCollection
+"Accessor to the DAG and distribution collection.
 
 Parameters
 ----------
-copulaSample : 2-d sequence of float
-    The sample defining the copula
-isCopulaSample : bool
-    Flag to tell if the given sample is already in the normalized rank space.
-"
+dag : :class:`~otagrum.NamedDAG`
+    Underlying junction tree
+jointDistributions : sequence of :py:class:`openturns.Distribution`
+    Collection of joint distributions"
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getBinNumber
-"Bin number accessor
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getDistributionCollection
+"Distribution collection accessor.
 
 Returns
 -------
-binNumber : int
-    The number of bins common to all the Bernstein copulas in the copula.
+jointDistributions : sequence of :py:class:`openturns.Distribution`
+    Collection of joint distributions
 "

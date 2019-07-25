@@ -46,7 +46,7 @@ JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory()
 
 /* Parameter constructor */
 JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory(
-    const int nbBins, const double alpha, const int maximumConditioningSetSize)
+    const UnsignedInteger nbBins, const Scalar alpha, const UnsignedInteger maximumConditioningSetSize)
     : DistributionFactoryImplementation(), nbBins_(nbBins), alpha_(alpha),
       maximumConditioningSetSize_(maximumConditioningSetSize) {
   setName("JunctionTreeBernsteinCopulaFactory");
