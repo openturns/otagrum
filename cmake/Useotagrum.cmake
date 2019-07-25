@@ -1,8 +1,8 @@
 #                                               -*- cmake -*-
 #
-#  Useotagr.cmake
+#  Useotagrum.cmake
 #
-#  Use otagr in CMake files
+#  Use otagrum in CMake files
 #
 #  Copyright 2010-2019 Airbus-LIP6-Phimeca
 #
@@ -21,7 +21,7 @@
 #
 #
 
-add_definitions     ( ${OTAGR_DEFINITIONS} )
-include_directories ( ${OTAGR_INCLUDE_DIRS} )
-link_directories    ( ${OTAGR_LIBRARY_DIRS} )
+add_definitions     ( ${OTAGRUM_DEFINITIONS} )
+include_directories ( ${OTAGRUM_INCLUDE_DIRS} )
+link_directories    ( ${OTAGRUM_LIBRARY_DIRS} )
 

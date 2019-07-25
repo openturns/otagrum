@@ -22,9 +22,8 @@
 #ifndef OTAGRUM_JUNCTIONTREEBERNSTEINCOPULAFACTORY_HXX
 #define OTAGRUM_JUNCTIONTREEBERNSTEINCOPULAFACTORY_HXX
 
-//#include <openturns/DistributionFactoryImplementation.hxx>
 #include <openturns/OT.hxx>
-#include <otagrum/JunctionTreeBernsteinCopula.hxx>
+#include "otagrum/JunctionTreeBernsteinCopula.hxx"
 
 namespace OTAGRUM
 {
@@ -32,7 +31,7 @@ namespace OTAGRUM
 /**
  * @class JunctionTreeBernsteinCopulaFactory
  */
-class OT_API JunctionTreeBernsteinCopulaFactory
+class OTAGRUM_API JunctionTreeBernsteinCopulaFactory
   : public OT::DistributionFactoryImplementation
 {
   CLASSNAME
@@ -41,9 +40,9 @@ public:
   JunctionTreeBernsteinCopulaFactory();
 
   /** Parameter constructor */
-  explicit JunctionTreeBernsteinCopulaFactory(const int nbBins,
-      const double alpha = 0.1,
-      const int maximumConditioningSetSize = 5);
+  explicit JunctionTreeBernsteinCopulaFactory(const OT::UnsignedInteger nbBins,
+      const OT::Scalar alpha = 0.1,
+      const OT::UnsignedInteger maximumConditioningSetSize = 5);
 
   /** Virtual constructor */
   virtual JunctionTreeBernsteinCopulaFactory *clone() const;
@@ -58,13 +57,13 @@ public:
 
 private:
   /* Bin number */
-  int nbBins_;
+  OT::UnsignedInteger nbBins_;
 
   /* Threshold */
-  double alpha_;
+  OT::Scalar alpha_;
 
   /* Maximum conditional set size */
-  int maximumConditioningSetSize_;
+  OT::UnsignedInteger maximumConditioningSetSize_;
 
 }; /* class JunctionTreeBernsteinCopulaFactory */
 

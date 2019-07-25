@@ -80,7 +80,7 @@ ot_pyinstallcheck_test (MixedHistogramUserDefined_std)
 ot_pyinstallcheck_test (ContinuousPC_std)
 ot_pyinstallcheck_test (NamedJunctionTree_std)
 ot_pyinstallcheck_test (JunctionTreeBernsteinCopula_std)
-if (NBSPHINX_FOUND) # depends on nbconvert, nbformat
+if (NBCONVERT_FOUND)
   ot_pyinstallcheck_test (notebook IGNOREOUT)
 endif ()
 ot_pyinstallcheck_test (plant_growth)

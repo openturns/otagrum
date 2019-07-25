@@ -2,10 +2,10 @@
 "Utility functions"
 
 %feature("docstring") OTAGRUM::Utils::Discretize
-"Discretize a continous distribution.
+"Discretize a continuous distribution.
 
 Compute a probability table according to the domains defined
-in a discretized aGrUM variable and a continous OpenTURNS distribution.
+in a discretized aGrUM variable and a continuous OpenTURNS distribution.
 
 .. math::
 
@@ -16,7 +16,7 @@ where :math:`$t_i$` are the aGrUM ticks, and :math:`$X$` is distributed accordin
 Parameters
 ----------
 distribution : :py:class:`openturns.Distribution`
-    An continous 1-d distribution
+    An continuous 1-d distribution
 v : :py:class:`pyAgrum.pyAgrum.DiscretizedVariable_double`
     A discrete variable
 
@@ -93,4 +93,4 @@ Examples
 >>> pot[{'Light': 'Bright', 'Moisture': 'Dry'}] = 0.1
 >>> pot[{'Light': 'Bright', 'Moisture': 'Wet'}] = 0.4
 >>> str(otagrum.Utils.FromPotential(pot))
-'MixedHistogramUserDefined(mixture = Mixture((w = 1, d = UserDefined({x = [0,0], p = 0.3}, {x = [0,1], p = 0.2}, {x = [1,1], p = 0.4}, {x = [1,0], p = 0.1}))))'"
+'MixedHistogramUserDefined(ticksCollection = [[0,1],[0,1]], kind = [0,0], probabilityTable = [0.3,0.1,0.2,0.4])'"

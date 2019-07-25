@@ -1,73 +1,31 @@
 %feature("docstring") OTAGRUM::JunctionTreeBernsteinCopulaFactory
-"JunctionTreeBernsteinCopulaFactory distribution
-
-Available constructors:
-    JunctionTreeBernsteinCopulaFactory(*junctionTree, copulaSample, binNumber, isCopulaSample*)
-
-    JunctionTreeBernsteinCopulaFactory(*cliquesCollection, separatorsCollection, binNumber, isCopulaSample*)
+"Estimate a Junction-Tree Bernstein Copula.
 
 Parameters
 ----------
-junctionTree : a :class:`~otagrum.NamedJunctionTree`
-    The junction tree describing the dependence structure of the copula.
-copulaSample : a 2-d sequence of float
-    The sample defining the copula
-binNumber : int
-    The common number of bins for all the Bernstein copulas involved in modelling
-    cliques and separators copulas.
-isCopulaSample : bool
-    Flag to tell if the given sample is already in the normalized rank space.
-
-Notes
------
-This class allows to build a nonparametric copula from a given sample, a bin
-count and a junction tree describing the conditional independencies in the data.
-It is based on a Bernstein estimation of each sub-copulas of the model.
+nbBins : int
+    Number of bins
+alpha : float
+    Threshold
+maximumConditioningSetSize : int
+    Maximum conditional set size
 
 Examples
 --------
 >>> import otagrum
->>> import openturns as ot
->>> import pyAgrum as gum
->>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
->>> ie = gum.LazyPropagation(bn)
->>> jtagr = ie.junctionTree()
->>> jt = otagrum.NamedJunctionTree(jtagr, bn.names())
->>> sample = ot.Normal(5).getSample(1000)
->>> binNumber = 5
->>> copula = otagrum.JunctionTreeBernsteinCopulaFactory(jt, sample, binNumber, False)"
-
+>>> factory = otagrum.JunctionTreeBernsteinCopulaFactory(5, 0.1, 5)"
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::JunctionTreeBernsteinCopulaFactory::getCopulaSample
-"Accessor to the sample defining the copula.
-
-Returns
--------
-copulaSample : :py:class:`openturns.Sample`
-    Sample in the normalized rank space."
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::JunctionTreeBernsteinCopulaFactory::setCopulaSample
-"Accessor to the sample defining the copula.
+%feature("docstring") OTAGRUM::JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula
+"Build as JunctionTreeBernsteinCopula distribution.
 
 Parameters
 ----------
-copulaSample : 2-d sequence of float
-    The sample defining the copula
-isCopulaSample : bool
-    Flag to tell if the given sample is already in the normalized rank space.
-"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::JunctionTreeBernsteinCopulaFactory::getBinNumber
-"Bin number accessor
+sample : :py:class:`openturns.Sample`
+    Input sample.
 
 Returns
 -------
-binNumber : int
-    The number of bins common to all the Bernstein copulas in the copula.
-"
+distribution : :class:`~otagrum.JunctionTreeBernsteinCopula`
+    Estimated distribution."
