@@ -44,6 +44,8 @@ public:
   typedef OT::Pointer<OT::DistributionImplementation>   Implementation;
   typedef OT::Collection<OT::Point> PointCollection;
 
+  enum Kind { DISCRETE, CONTINUOUS };
+
   /** Default constructor */
   MixedHistogramUserDefined();
 
@@ -171,8 +173,16 @@ private:
   /** Probability table as a flat vector (no d-dim array available) */
   OT::Point probabilityTable_;
 
-  /** Underlying mixture, waiting for a better implementation. */
-  OT::Mixture mixture_;
+  /** Cache some data */
+  OT::Indices discreteIndices_;
+  OT::Indices continuousIndices_;
+  OT::IndicesCollection allIndices_;
+  OT::Point normalizedProbabilityTable_;
+
+  /** Structures for the alias sampling method */
+  mutable OT::Point base_;
+  mutable OT::Indices alias_;
+
 }; /* class MixedHistogramUserDefined */
 
 } /* namespace OTAGRUM */
