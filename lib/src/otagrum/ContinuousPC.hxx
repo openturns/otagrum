@@ -59,11 +59,11 @@ public:
 
   double getPValue(gum::NodeId x, gum::NodeId y) const;
   double getTTest(gum::NodeId x, gum::NodeId y) const;
-  const OT::Indices getSepset(gum::NodeId x, gum::NodeId y) const;
+  OT::Indices getSepset(gum::NodeId x, gum::NodeId y) const;
 
   double getPValue(const std::string &x, const std::string &y) const;
   double getTTest(const std::string &x, const std::string &y) const;
-  const std::vector<std::string> getSepsetNames(const std::string &x, const std::string &y) const;
+  OT::Description getSepsetNames(const std::string &x, const std::string &y) const;
 
   gum::NodeId idFromName(const std::string& n) const;
 
@@ -73,7 +73,7 @@ public:
   std::string skeletonToDot(const gum::UndiGraph &skeleton);
   std::string PDAGtoDot(const gum::MixedGraph &pdag);
 
-  std::vector<std::string> getTrace() const;
+  OT::Description getTrace() const;
 private:
   gum::EdgeProperty<OT::Indices> sepset_;
   gum::EdgeProperty<double> pvalues_;

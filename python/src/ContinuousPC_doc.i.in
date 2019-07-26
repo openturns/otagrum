@@ -1,19 +1,109 @@
 %feature("docstring") OTAGRUM::ContinuousPC
-"ContinuousPC learner
+"ContinuousPC learner.
 
 Parameters
 ----------
 data : 2-d sequence of float
     The data
-maxParents : int
+maxParents : int, optional
     The maximum number of parents a node can have
-alpha : float
+alpha : float, optional
     Hypothesis test threshold"
 
 // ----------------------------------------------------------------------------
 
+%feature("docstring") OTAGRUM::ContinuousPC::learnJunctionTree
+"Learn junction tree.
+
+Returns
+-------
+njt : :class:`~otagrum.NamedJunctionTree`
+    Junction tree"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::learnDAG
+"Learn DAG.
+
+Returns
+-------
+dag : :class:`~otagrum.NamedDAG`
+    DAG"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::inferSkeleton
+"Skeleton graph accessor.
+
+Returns
+-------
+skeleton : :py:class:`pyAgrum.UndiGraph`
+    Skeleton graph"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::inferPDAG
+"Infger PDAG.
+
+Parameters
+----------
+g : :py:class:`pyAgrum.UndiGraph`
+    g
+
+Returns
+-------
+pdag : :py:class:`pyAgrum.MixedGraph`
+    PDAG"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::deriveMoralGraph
+"Derive moral graph.
+
+Parameters
+----------
+g : :py:class:`pyAgrum.MixedGraph`
+    g
+
+Returns
+-------
+moral_graph : :py:class:`pyAgrum.UndiGraph`
+    Moral graph."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::deriveDAG
+"Derive DAG.
+
+Parameters
+----------
+p : :py:class:`pyAgrum.MixedGraph`
+    p
+
+Returns
+-------
+junction_tree : :py:class:`pyAgrum.DAG`
+    DAG"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::deriveJunctionTree
+"Derive Junction Tree.
+
+Parameters
+----------
+g : :py:class:`pyAgrum.UndiGraph`
+    g
+
+Returns
+-------
+junction_tree : :py:class:`pyAgrum.JunctionTree`
+    Junction Tree"
+
+// ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::ContinuousPC::PDAGtoDot
-"Convert PDAG graph to dot
+"Convert PDAG graph to dot.
 
 Parameters
 ----------
@@ -25,11 +115,10 @@ Returns
 dot : str
     Dot format representation"
 
-
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::skeletonToDot
-"Convert skeleton graph to dot
+"Convert skeleton graph to dot.
 
 Parameters
 ----------
@@ -43,58 +132,8 @@ dot : str
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::deriveMoralGraph
-"Moral graph
-
-Parameters
-----------
-q : :py:class:`pyAgrum.MixedGraph`
-    q
-
-Returns
--------
-moral_graph : :py:class:`pyAgrum.UndiGraph`
-    moral_graph"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::setOptimalPolicy
-"Optimal policy flag accessor
-
-Parameters
-----------
-optimal_policy : bool
-    Optimal policy flag value"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::getOptimalPolicy
-"Optimal policy flag accessor
-
-Returns
--------
-optimal_policy : bool
-    Optimal policy flag value"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::inferPDAG
-"PDAG accessor
-
-Parameters
-----------
-q : :py:class:`pyAgrum.MixedGraph`
-    q
-
-Returns
--------
-moral_graph : :py:class:`pyAgrum.UndiGraph`
-    moral_graph"
-
-// ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::getPValue
-"P-Value accessor
+"P-Value accessor.
 
 Parameters
 ----------
@@ -110,18 +149,18 @@ p_value : float
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::getRemoved_
-"Removed arcs accessor
+%feature("docstring") OTAGRUM::ContinuousPC::getSepsetNames
+"Sep names accessor.
 
 Returns
 -------
-removed : sequence of :py:class:`pyAgrum.Edge`
-    Removed arcs"
+sepset_names : :py:class:`openturns.Description`
+    Separator set names"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getSepset
-"Sep indices
+"Sep indices.
 
 Parameters
 ----------
@@ -138,7 +177,7 @@ sep_set : :py:class:`openturns.Indices`
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getTTest
-"Test statistics accessor
+"Test statistics accessor.
 
 Parameters
 ----------
@@ -154,18 +193,8 @@ ttest : float
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::inferSkeleton
-"Skeleton graph accessor
-
-Returns
--------
-skeleton : :py:class:`pyAgrum.UndiGraph`
-    Skeleton graph"
-
-// ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::setVerbosity
-"Verbosity flag accessor
+"Verbosity flag accessor.
 
 Parameters
 ----------
@@ -175,10 +204,51 @@ verbose : bool
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getVerbosity
-"Verbosity flag accessor
+"Verbosity flag accessor.
 
 Returns
 -------
 verbose : bool
     Verbosity flag value"
 
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::getTrace
+"Trace accessor.
+
+Returns
+-------
+trace : :py:class:`openturns.Description`
+    Trace"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::idFromName
+"ID accessor.
+
+Parameters
+----------
+n : str
+    Name
+
+Returns
+-------
+id : int
+    ID"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::isRemoved
+"Test if an arc is removed.
+
+Parameters
+----------
+x : int or str
+    Node id
+y : int or str
+    Node id
+
+Returns
+-------
+removed : bool
+    Whether the arc x-y can be removed, this is equivalent to x and y being independent"
