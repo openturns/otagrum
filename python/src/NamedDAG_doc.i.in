@@ -2,8 +2,9 @@
 "NamedDAG interface.
 
 Available constructors:
-    NamedDAG(bn)
-    NamedDAG(dag,names)
+    NamedDAG(*bn*)
+
+    NamedDAG(*dag,names*)
 
 Parameters
 ----------
@@ -36,7 +37,7 @@ names : sequence of str
 
 // ----------------------------------------------------------------------------
 %feature("docstring") OTAGRUM::NamedDAG::getParents
-"Parents accessor
+"Parents accessor.
 
 Parameters
 ----------
@@ -51,7 +52,7 @@ parents : :py:class:`openturns.Indices`
 
 // ----------------------------------------------------------------------------
 %feature("docstring") OTAGRUM::NamedDAG::getChildren
-"Parents accessor
+"Children accessor.
 
 Parameters
 ----------
@@ -67,7 +68,18 @@ children : :py:class:`openturns.Indices`
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getNodes
-"Nodes accessor
+"Nodes accessor.
+
+Returns
+-------
+nodes : :py:class:`openturns.Indices`
+    List of nodes
+"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::NamedDAG::getTopologicalOrder
+"Get topological order of nodes.
 
 Returns
 -------
