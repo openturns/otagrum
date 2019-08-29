@@ -31,12 +31,19 @@
 
 #include "otagrum/ContinuousTTest.hxx"
 
+#define TRACE_CONTINUOUS_TTEST(x)                                         \
+  {                                                                       \
+    if (verbose_)                                                         \
+        std::cout << x;                                                   \
+  }                                                                       \
+
 namespace OTAGRUM {
 
 ContinuousTTest::ContinuousTTest(const OT::Sample &data, const double alpha)
-    : OT::Object() {
+    : OT::Object(),
+      verbose_(false) {
   setAlpha(alpha);
-  data_ = (data.rank() + 0.5) / data.getSize();
+  data_ = (data.rank() + 0.5) / data.getSize();  // Switching data to rank space
 }
 
 OT::UnsignedInteger ContinuousTTest::GetK(const OT::UnsignedInteger size,
@@ -95,7 +102,6 @@ ContinuousTTest::getLogPDFs(const OT::UnsignedInteger Y,
 }
 
 void ContinuousTTest::setAlpha(const double alpha) { alpha_ = alpha; }
-
 double ContinuousTTest::getAlpha() const { return alpha_; }
 
 inline double pPar1MoinsP(const double p) { return p * (1.0 - p); }
@@ -103,7 +109,8 @@ inline double pPar1MoinsP(const double p) { return p * (1.0 - p); }
 double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
                                  const OT::UnsignedInteger Z,
                                  const OT::Indices &X) const {
-  OT::UnsignedInteger k = 0;
+
+  OT::UnsignedInteger k = 0;  // Bandwidth parameter
 
   const auto dY = data_.getMarginal(Y);
   const auto dZ = data_.getMarginal(Z);
@@ -111,25 +118,33 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
 
   OT::Point logFX, logFYX, logFZX, logFYZX;
   std::tie(logFX, logFYX, logFZX, logFYZX, k) = getLogPDFs(Y, Z, X);
-  const auto d = X.getSize();
-  const auto N = data_.getSize();
+
+  const auto d = X.getSize();     // Conditioning set dimension
+  const auto N = data_.getSize(); // Size of data set
 
   const auto C1 = std::pow(0.5, d + 2.0) * std::pow(M_PI, 0.5 * d + 1.0);
   const auto sigma = M_SQRT2 * std::pow(M_PI / 4.0, 0.5 * d + 1.0);
 
   double H = 0.0;
   double dH = 0.0;
+
   double B1 = 0.0;
   double B2 = 0.0;
   double B3 = 0.0;
+
   const double facteurpi = 1.0 / std::pow(4 * M_PI, 0.5 * d + 0.5);
+
   const double small = OT::SpecFunc::Precision;
   const double smallLog = std::log(OT::SpecFunc::Precision);
+
   double logDenominator = 0.0;
+
   double yI = 0.0;
   double zI = 0.0;
-  if (d == 0) {
-    const double fX0 = 1.0;
+
+
+  if (d == 0) {  // If the conditioning set is empty
+    const double fX0 = 1.0;  // Why isn't it 0.0 ?
     for (unsigned int i = 0; i < N; ++i) {
       logDenominator = logFYZX[i];
       yI = data_(i, Y);
@@ -151,7 +166,8 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
                           << ", logDenominator=" << logDenominator);
     } // i
   }   // d == 0
-  else if (d == 1) {
+
+  else if (d == 1) {  // If the conditioning set is of size 1
     for (unsigned int i = 0; i < N; ++i) {
       logDenominator = logFYZX[i];
       yI = data_(i, Y);
@@ -159,8 +175,9 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
       if ((logDenominator > smallLog) && (yI > small) && (yI < 1.0 - small) &&
           (zI > small) && (zI < 1.0 - small)) {
         double xJ = data_(i, X[0]);
-        if ((xJ > small) && (xJ < 1.0 - small))
+        if ((xJ <= small) || (xJ >= 1.0 - small)){
           continue;
+        }
         double gX = 1.0 / pPar1MoinsP(xJ);
         gX = std::sqrt(gX);
         // dH^2 = (1-sqrt(fYX * fZX / (fYZX * 1)))^2
@@ -174,12 +191,18 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
         B2 +=
             facteurpi * gX / (std::sqrt(pPar1MoinsP(zI)) * std::exp(logFZX[i]));
         B3 += gX;
+
+        TRACE_CONTINUOUS_TTEST("B1 = " << B1 << std::endl);
+        TRACE_CONTINUOUS_TTEST("B2 = " << B2 << std::endl);
+        TRACE_CONTINUOUS_TTEST("B3 = " << B3 << std::endl);
+
       } // logDenominator > smallLog
       else
         LOGDEBUG(OT::OSS() << "Skip contribution i=" << i
                            << ", logDenominator=" << logDenominator);
     } // i
   }   // d == 1
+
   else {
     for (unsigned int i = 0; i < N; ++i) {
       logDenominator = logFYZX[i] + logFX[i];
@@ -192,7 +215,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
         OT::Bool isSmall = false;
         for (unsigned int j = 0; j < d; ++j) {
           xJ = data_(i, X[j]);
-          if ((xJ > small) && (xJ < 1.0 - small)) {
+          if ((xJ <= small) || (xJ >= 1.0 - small)) {
             isSmall = true;
             break;
           }
@@ -212,26 +235,35 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
         B2 +=
             facteurpi * gX / (std::sqrt(pPar1MoinsP(zI)) * std::exp(logFZX[i]));
         B3 += std::exp(logFX[i]) * gX;
+
+        TRACE_CONTINUOUS_TTEST("B1 = " << B1 << std::endl);
+        TRACE_CONTINUOUS_TTEST("B2 = " << B2 << std::endl);
+        TRACE_CONTINUOUS_TTEST("B3 = " << B3 << std::endl);
+
       } // logDenominator > smallLog
       else
         LOGDEBUG(OT::OSS() << "Skip contribution i=" << i
                            << ", logDenominator=" << logDenominator);
     } // i
   }   // d > 0
+
   // mean
   H /= N;
 
   const double term12 = -std::pow(0.5, d) * std::pow(M_PI, 0.5 * d + 0.5);
-  const double fact3 = std::pow(0.5, d + 1.0) / std::pow(M_PI, 0.5 * d);
+  const double fact3 = std::pow(0.5, d - 1.0) / std::pow(M_PI, 0.5 * d);
+
   B1 = term12 + B1 / N;
   B2 = term12 + B2 / N;
   B3 = fact3 * B3 / N;
 
   auto T = std::pow(1.0 / k, 0.5 * d + 1.0) / sigma;
   T *= 4 * H * N - pow(k, 0.5 * d) * (C1 * k + (B1 + B2) * std::sqrt(k) + B3);
+
   LOGINFO(OT::OSS() << "Y=" << Y << ", Z=" << Z << ", X=" << X << ", T=" << T
                     << ", H=" << H << ", B1=" << B1 << ", B2=" << B2
                     << ", B3=" << B3);
+
   return T;
 }
 

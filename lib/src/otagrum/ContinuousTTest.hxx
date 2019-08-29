@@ -87,7 +87,8 @@ private:
 
   mutable StratifiedCache cache_;
   OT::Sample data_;
-  double alpha_;
+  bool verbose_;
+  double alpha_;  //Confidence threshold
 
 };
 
