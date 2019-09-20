@@ -153,8 +153,6 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
 
   bool atLeastOneInThisStep = false;
 
-  do {
-    atLeastOneInThisStep = false;
     for (const auto &edge : g.edges()) {
       const auto y = edge.first();
       const auto z = edge.second();
@@ -185,9 +183,8 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
         }
       }
     }
-  } while (atLeastOneInThisStep);
 
-  return true;
+  return atLeastOneInThisStep;
 }
 
 // From complete graph g, remove as much as possible edge (y,z) in g
@@ -216,9 +213,10 @@ gum::UndiGraph ContinuousPC::inferSkeleton() {
     if (n > 0)
       tester_.clearCacheLevel(n - 1);
 
+    testCondSetWithSize(g,n);
     // perform all the tests for size n
-    if (!testCondSetWithSize(g, n))
-      break;
+    //if (!testCondSetWithSize(g, n))
+      //break;
   }
   TRACE("== end" << std::endl);
 
