@@ -152,12 +152,16 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
     return false;
 
   bool atLeastOneInThisStep = false;
-
-    for (const auto &edge : g.edges()) {
+  gum::EdgeProperty<gum::NodeSet> intersections;
+for(const auto& edge: g.edges()){
       const auto y = edge.first();
       const auto z = edge.second();
       const auto nei = g.neighbours(y) * g.neighbours(z);
+        intersections.set(edge,nei);
+}
 
+    for (const auto &edge : g.edges()) {
+        const auto& nei=intersections[edge];
       if (nei.size() >= n) {
         bool resYZ = false;
         double pYZ = 0.0, tYZ = 0.0;
