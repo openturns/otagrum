@@ -19,9 +19,9 @@
  *
  */
 
+#include <iomanip>
 #include <sstream>
 #include <tuple>
-#include <iomanip>
 
 #include <agrum/core/hashFunc.h>
 #include <agrum/core/priorityQueue.h>
@@ -153,40 +153,43 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
 
   bool atLeastOneInThisStep = false;
   gum::EdgeProperty<gum::NodeSet> intersections;
-for(const auto& edge: g.edges()){
-      const auto y = edge.first();
-      const auto z = edge.second();
-      const auto nei = g.neighbours(y) * g.neighbours(z);
-        intersections.set(edge,nei);
-}
+  for (const auto &edge : g.edges()) {
+    const auto y = edge.first();
+    const auto z = edge.second();
+    const auto nei = g.neighbours(y) * g.neighbours(z);
+    if (nei.size() >= n)
+      intersections.set(edge, nei);
+  }
 
-    for (const auto &edge : g.edges()) {
-        const auto& nei=intersections[edge];
-      if (nei.size() >= n) {
-        bool resYZ = false;
-        double pYZ = 0.0, tYZ = 0.0;
-        OT::Indices sepYZ;
-
-        std::tie(resYZ, tYZ, pYZ, sepYZ) =
-            getSeparator(g, y, z, Utils::FromNodeSet(nei), n);
-
-        if (resYZ) // we found at least one separator
-        {
-          sepset_.set(edge, sepYZ);
-          pvalues_.set(edge, pYZ);
-          ttests_.set(edge, tYZ);
-          TRACE("==>" << edge << " cut. Sepset=" << sepset_[edge]
-                      << ", pvalue=" << pvalues_[edge] << std::endl);
-          atLeastOneInThisStep = true;
-          removed_.push_back(edge);
-          g.eraseEdge(edge);
-        } else {
-          pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
-          ttests_.set(edge,
-                      std::max(ttests_.getWithDefault(edge, -10000), tYZ));
-        }
-      }
+  for (const auto &edge : g.edges()) {
+    if (!intersections.exists(edge)) {
+      continue;
     }
+    const auto &nei = intersections[edge];
+    const auto y = edge.first();
+    const auto z = edge.second();
+    bool resYZ = false;
+    double pYZ = 0.0, tYZ = 0.0;
+    OT::Indices sepYZ;
+
+    std::tie(resYZ, tYZ, pYZ, sepYZ) =
+        getSeparator(g, y, z, Utils::FromNodeSet(nei), n);
+
+    if (resYZ) // we found at least one separator
+    {
+      sepset_.set(edge, sepYZ);
+      pvalues_.set(edge, pYZ);
+      ttests_.set(edge, tYZ);
+      TRACE("==>" << edge << " cut. Sepset=" << sepset_[edge]
+                  << ", pvalue=" << pvalues_[edge] << std::endl);
+      atLeastOneInThisStep = true;
+      removed_.push_back(edge);
+      g.eraseEdge(edge);
+    } else {
+      pvalues_.set(edge, std::max(pvalues_.getWithDefault(edge, 0), pYZ));
+      ttests_.set(edge, std::max(ttests_.getWithDefault(edge, -10000), tYZ));
+    }
+  }
 
   return atLeastOneInThisStep;
 }
@@ -217,10 +220,10 @@ gum::UndiGraph ContinuousPC::inferSkeleton() {
     if (n > 0)
       tester_.clearCacheLevel(n - 1);
 
-    testCondSetWithSize(g,n);
+    testCondSetWithSize(g, n);
     // perform all the tests for size n
-    //if (!testCondSetWithSize(g, n))
-      //break;
+    // if (!testCondSetWithSize(g, n))
+    // break;
   }
   TRACE("== end" << std::endl);
 
@@ -337,7 +340,7 @@ ContinuousPC::deriveJunctionTree(const gum::UndiGraph &g) const {
 }
 
 static bool isAdjacent(const gum::MixedGraph &p, const gum::NodeId i,
-                const gum::NodeId j) {
+                       const gum::NodeId j) {
   if (p.children(i).contains(j))
     return true;
   if (p.parents(i).contains(j))
@@ -350,8 +353,8 @@ static bool isAdjacent(const gum::MixedGraph &p, const gum::NodeId i,
 
 // Rule 1: Orient i-j into i->j whenever there is an arrow k->i
 // such that k and j are nonadjacent.
-static bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
-                const gum::NodeId j) {
+static bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag,
+                       const gum::NodeId i, const gum::NodeId j) {
   if (std::any_of(dag.parents(i).begin(), dag.parents(i).end(),
                   [&](const gum::NodeId k) { return !isAdjacent(p, k, j); })) {
     try {
@@ -367,7 +370,8 @@ static bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeI
 
 // Rule 2: Orient i-j into i->j whenever there is a chain
 // i->k->j.
-static bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) {
+static bool checkRule2(gum::DAG &dag, const gum::NodeId i,
+                       const gum::NodeId j) {
   if (std::any_of(
           dag.parents(j).begin(), dag.parents(j).end(),
           [&](const gum::NodeId k) { return dag.parents(k).contains(i); })) {
@@ -384,8 +388,8 @@ static bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) 
 
 // Rule 3: Orient i-j into i->j whenever there are two chains
 // i-k->j and i-l->j such that k and l are nonadjacent.
-static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
-                const gum::NodeId j) {
+static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag,
+                       const gum::NodeId i, const gum::NodeId j) {
   const auto candidates = dag.parents(j) * p.neighbours(i);
   if (candidates.size() <= 1)
     return false;
@@ -613,8 +617,7 @@ bool ContinuousPC::isRemoved(gum::NodeId x, gum::NodeId y) const {
           removed_.end());
 }
 
-bool ContinuousPC::isRemoved(const std::string &x,
-                                   const std::string &y) const {
+bool ContinuousPC::isRemoved(const std::string &x, const std::string &y) const {
   return isRemoved(idFromName(x), idFromName(y));
 }
 
@@ -658,18 +661,19 @@ OT::Description ContinuousPC::getTrace() const {
   OT::Description res(removed_.size());
   for (OT::UnsignedInteger i = 0; i < removed_.size(); i++) {
     std::stringstream ss;
-    ss <<std::setfill('0')<<std::setw(3)<< i<<std::setfill(' ');
+    ss << std::setfill('0') << std::setw(3) << i << std::setfill(' ');
     ss << " : ";
-    const auto edg=description[removed_[i].first()]+"-"+description[removed_[i].second()];
-    std::string cond="";
-    for(const auto s:sepset_[removed_[i]]) {
-      if (cond!="") {
-        cond+=",";
+    const auto edg = description[removed_[i].first()] + "-" +
+                     description[removed_[i].second()];
+    std::string cond = "";
+    for (const auto s : sepset_[removed_[i]]) {
+      if (cond != "") {
+        cond += ",";
       }
-      cond+=description[s];
+      cond += description[s];
     }
-    ss << std::setw(10)<<edg << "|" << std::left<<std::setw(20)<<cond;
-    ss << "  p=" << std::left<<std::setw(10)<<pvalues_[removed_[i]];
+    ss << std::setw(10) << edg << "|" << std::left << std::setw(20) << cond;
+    ss << "  p=" << std::left << std::setw(10) << pvalues_[removed_[i]];
     ss << "  ttest=" << ttests_[removed_[i]];
     res[i] = ss.str();
   }
