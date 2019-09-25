@@ -85,7 +85,8 @@ ContinuousPC::ContinuousPC(const OT::Sample &data,
                            const OT::UnsignedInteger maxConditioningSetSize,
                            const double alpha)
     : OT::Object(), maxCondSet_(maxConditioningSetSize), verbose_(false),
-      tester_(data) {
+      tester_(data), skel_done_(false), pdag_done_(false), dag_done_(false),
+      jt_done_(false) {
   tester_.setAlpha(alpha);
   removed_.reserve(data.getDimension() * data.getDimension() /
                    3); // a rough estimation ...
@@ -197,7 +198,7 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
 // From complete graph g, remove as much as possible edge (y,z) in g
 // if (y,z) is removed, it means that sepset_[Edge(y,z)] contains X, set of
 // nodes, such that y and z are tested as independent given X.
-gum::UndiGraph ContinuousPC::inferSkeleton() {
+gum::UndiGraph ContinuousPC::inferSkeleton_() {
   gum::UndiGraph g;
   tester_.clearCache();
   sepset_.clear();
@@ -240,21 +241,51 @@ std::vector<std::string> ContinuousPC::namesFromData(void) const {
 }
 
 NamedJunctionTree ContinuousPC::learnJunctionTree() {
-  return NamedJunctionTree(
-      deriveJunctionTree(deriveMoralGraph(inferPDAG(inferSkeleton()))),
-      namesFromData());
+  if (jt_done_)
+    return jt_;
+  if (!pdag_done_)
+    learnPDAG();
+
+  jt_ = NamedJunctionTree(deriveJunctionTree_(deriveMoralGraph_(pdag_)),
+                          namesFromData());
+  jt_done_ = true;
+  return jt_;
 }
 
 NamedDAG ContinuousPC::learnDAG() {
-  const auto &names = namesFromData();
-  const auto &dag = deriveDAG(inferPDAG(inferSkeleton()));
-  return NamedDAG(dag, names);
+  if (dag_done_)
+    return dag_;
+  if (!pdag_done_)
+    learnPDAG();
+
+  dag_ = NamedDAG(deriveDAG_(pdag_), namesFromData());
+  dag_done_ = true;
+  return dag_;
 }
 
+gum::MixedGraph ContinuousPC::learnPDAG() {
+  if (pdag_done_)
+    return pdag_;
+  if (!skel_done_)
+    learnSkeleton();
+
+  pdag_ = inferPDAG_(skel_);
+  pdag_done_ = true;
+  return pdag_;
+}
+
+gum::UndiGraph ContinuousPC::learnSkeleton() {
+  if (skel_done_)
+    return skel_;
+
+  skel_ = inferSkeleton_();
+  skel_done_ = true;
+  return skel_;
+}
 // for all triplet x-y-z (no edge between x and z), if y is not in sepset[x,z]
 // then x->y<-z.
 // the ordering process uses the p-value as a priority.
-gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const {
+gum::MixedGraph ContinuousPC::inferPDAG_(const gum::UndiGraph &g) const {
   gum::MixedGraph cpdag;
 
   gum::PriorityQueue<Triplet, double> queue;
@@ -274,8 +305,10 @@ gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const {
           // indX = indX + OT::UnsignedInteger(x);
           // std::tie(t, p, ok) = tester_.isIndep(y, z, indX);
           const auto xz = gum::Edge(x, z);
-          if (!sepset_[xz].contains(y)) {
-            queue.insert(Triplet{x, y, z}, pvalues_[xz]);
+          if (sepset_.exists(xz)) {
+            if (!sepset_[xz].contains(y)) {
+              queue.insert(Triplet{x, y, z}, pvalues_[xz]);
+            }
           }
         }
       }
@@ -299,7 +332,7 @@ gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const {
   return cpdag;
 }
 
-gum::UndiGraph ContinuousPC::deriveMoralGraph(const gum::MixedGraph &g) const {
+gum::UndiGraph ContinuousPC::deriveMoralGraph_(const gum::MixedGraph &g) const {
   gum::UndiGraph moral;
   for (auto x : g.nodes())
     moral.addNodeWithId(x);
@@ -324,7 +357,7 @@ gum::UndiGraph ContinuousPC::deriveMoralGraph(const gum::MixedGraph &g) const {
 }
 
 gum::JunctionTree
-ContinuousPC::deriveJunctionTree(const gum::UndiGraph &g) const {
+ContinuousPC::deriveJunctionTree_(const gum::UndiGraph &g) const {
   gum::DefaultTriangulation triangulation;
   gum::NodeProperty<gum::Size> mods;
 
@@ -410,7 +443,7 @@ static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag,
   return false;
 }
 
-gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const {
+gum::DAG ContinuousPC::deriveDAG_(const gum::MixedGraph &p) const {
   gum::EdgeSet remainings;
   gum::DAG dag;
   for (const auto nod : p.nodes()) {
