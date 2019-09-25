@@ -322,6 +322,16 @@ gum::MixedGraph ContinuousPC::inferPDAG_(const gum::UndiGraph &g) const {
     Triplet t = queue.pop();
     if (!(cpdag.existsArc(t.y, t.x) || cpdag.existsArc(t.y, t.z))) {
       // we can add the v-structure
+      try {
+        cpdag.directedPath(t.y, t.x);
+        continue;
+      } catch (gum::NotFound) {
+      }
+      try {
+        cpdag.directedPath(t.y, t.z);
+        continue;
+      } catch (gum::NotFound) {
+      }
       cpdag.eraseEdge(gum::Edge(t.x, t.y));
       cpdag.eraseEdge(gum::Edge(t.z, t.y));
       cpdag.addArc(t.x, t.y);
