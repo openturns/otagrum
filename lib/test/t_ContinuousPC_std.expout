@@ -92,34 +92,6 @@ node [shape = ellipse];
 
 
 ****
-Moral graph
-****
-digraph "no_name" {
-edge [dir=none]
-node [shape = ellipse];
-  0;  1;  2;  3;  4;  5;  6;
-  0 -> 1;
-  2 -> 3;
-  4 -> 6;
-  4 -> 5;
-  5 -> 6;
-
-}
-
-
-****
-Junction tree
-****
-graph {
-  "(0) 3-2" [label="3-2",fillcolor ="burlywood",style="filled"];
-  "(1) 6-4-5" [label="6-4-5",fillcolor ="burlywood",style="filled"];
-  "(2) 1-0" [label="1-0",fillcolor ="burlywood",style="filled"];
-
-
-}
-
-
-****
 Named Junction tree
 ****
 [A1,A2,B1,B2,X0,X1,X2]
@@ -158,3 +130,8 @@ digraph {
 013 :      A2-B1|                      p=0.923336    ttest=-0.0962327
 014 :      A2-X2|                      p=0.953908    ttest=-0.0578002
 015 :      B2-X2|                      p=0.943116    ttest=-0.071354
+[x1,x2,x3,x4,x5,x6,x7,y11,y12,y13,y21,y22,y31]#13
+pdag:{0,1,2,3,4,5,6,7,8,9,10,11,12} , {6->9,0->9,5->9} , {7--11,2--7,8--10,11--12}
+dag:[x1,x2,x3,x4,x5,x6,x7,y11,y12,y13,y21,y22,y31]
+[y12->y21,y22->y31,x7->y13,y11->y22,x3->y11,x6->y13,x1->y13]
+

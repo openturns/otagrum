@@ -122,7 +122,7 @@ void testJulien() {
   std::cout << desc << std::endl;
 
   try {
-    auto learner = OTAGRUM::ContinuousPC(data, 3, 0.9);
+    auto learner = OTAGRUM::ContinuousPC(data, 3, 0.1);
     auto pdag = learner.learnPDAG();
     std::cout << "pdag:" << pdag << std::endl;
     auto dag = learner.learnDAG();
@@ -133,6 +133,8 @@ void testJulien() {
 }
 
 int main(void) {
+  tests();
+  
   testJulien();
 
   return EXIT_SUCCESS;
