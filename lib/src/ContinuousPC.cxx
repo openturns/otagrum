@@ -19,9 +19,9 @@
  *
  */
 
+#include <iomanip>
 #include <sstream>
 #include <tuple>
-#include <iomanip>
 
 #include <agrum/core/hashFunc.h>
 #include <agrum/core/priorityQueue.h>
@@ -85,7 +85,8 @@ ContinuousPC::ContinuousPC(const OT::Sample &data,
                            const OT::UnsignedInteger maxConditioningSetSize,
                            const double alpha)
     : OT::Object(), maxCondSet_(maxConditioningSetSize), verbose_(false),
-      tester_(data) {
+      tester_(data), skel_done_(false), pdag_done_(false), dag_done_(false),
+      jt_done_(false) {
   tester_.setAlpha(alpha);
   removed_.reserve(data.getDimension() * data.getDimension() /
                    3); // a rough estimation ...
@@ -193,7 +194,7 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
 // From complete graph g, remove as much as possible edge (y,z) in g
 // if (y,z) is removed, it means that sepset_[Edge(y,z)] contains X, set of
 // nodes, such that y and z are tested as independent given X.
-gum::UndiGraph ContinuousPC::inferSkeleton() {
+gum::UndiGraph ContinuousPC::inferSkeleton_() {
   gum::UndiGraph g;
   tester_.clearCache();
   sepset_.clear();
@@ -235,21 +236,51 @@ std::vector<std::string> ContinuousPC::namesFromData(void) const {
 }
 
 NamedJunctionTree ContinuousPC::learnJunctionTree() {
-  return NamedJunctionTree(
-      deriveJunctionTree(deriveMoralGraph(inferPDAG(inferSkeleton()))),
-      namesFromData());
+  if (jt_done_)
+    return jt_;
+  if (!pdag_done_)
+    learnPDAG();
+
+  jt_ = NamedJunctionTree(deriveJunctionTree_(deriveMoralGraph_(pdag_)),
+                          namesFromData());
+  jt_done_ = true;
+  return jt_;
 }
 
 NamedDAG ContinuousPC::learnDAG() {
-  const auto &names = namesFromData();
-  const auto &dag = deriveDAG(inferPDAG(inferSkeleton()));
-  return NamedDAG(dag, names);
+  if (dag_done_)
+    return dag_;
+  if (!pdag_done_)
+    learnPDAG();
+
+  dag_ = NamedDAG(deriveDAG_(pdag_), namesFromData());
+  dag_done_ = true;
+  return dag_;
 }
 
+gum::MixedGraph ContinuousPC::learnPDAG() {
+  if (pdag_done_)
+    return pdag_;
+  if (!skel_done_)
+    learnSkeleton();
+
+  pdag_ = inferPDAG_(skel_);
+  pdag_done_ = true;
+  return pdag_;
+}
+
+gum::UndiGraph ContinuousPC::learnSkeleton() {
+  if (skel_done_)
+    return skel_;
+
+  skel_ = inferSkeleton_();
+  skel_done_ = true;
+  return skel_;
+}
 // for all triplet x-y-z (no edge between x and z), if y is not in sepset[x,z]
 // then x->y<-z.
 // the ordering process uses the p-value as a priority.
-gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const {
+gum::MixedGraph ContinuousPC::inferPDAG_(const gum::UndiGraph &g) const {
   gum::MixedGraph cpdag;
 
   gum::PriorityQueue<Triplet, double> queue;
@@ -269,8 +300,10 @@ gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const {
           // indX = indX + OT::UnsignedInteger(x);
           // std::tie(t, p, ok) = tester_.isIndep(y, z, indX);
           const auto xz = gum::Edge(x, z);
-          if (!sepset_[xz].contains(y)) {
-            queue.insert(Triplet{x, y, z}, pvalues_[xz]);
+          if (sepset_.exists(xz)) {
+            if (!sepset_[xz].contains(y)) {
+              queue.insert(Triplet{x, y, z}, pvalues_[xz]);
+            }
           }
         }
       }
@@ -294,7 +327,7 @@ gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const {
   return cpdag;
 }
 
-gum::UndiGraph ContinuousPC::deriveMoralGraph(const gum::MixedGraph &g) const {
+gum::UndiGraph ContinuousPC::deriveMoralGraph_(const gum::MixedGraph &g) const {
   gum::UndiGraph moral;
   for (auto x : g.nodes())
     moral.addNodeWithId(x);
@@ -319,7 +352,7 @@ gum::UndiGraph ContinuousPC::deriveMoralGraph(const gum::MixedGraph &g) const {
 }
 
 gum::JunctionTree
-ContinuousPC::deriveJunctionTree(const gum::UndiGraph &g) const {
+ContinuousPC::deriveJunctionTree_(const gum::UndiGraph &g) const {
   gum::DefaultTriangulation triangulation;
   gum::NodeProperty<gum::Size> mods;
 
@@ -335,7 +368,7 @@ ContinuousPC::deriveJunctionTree(const gum::UndiGraph &g) const {
 }
 
 static bool isAdjacent(const gum::MixedGraph &p, const gum::NodeId i,
-                const gum::NodeId j) {
+                       const gum::NodeId j) {
   if (p.children(i).contains(j))
     return true;
   if (p.parents(i).contains(j))
@@ -348,8 +381,8 @@ static bool isAdjacent(const gum::MixedGraph &p, const gum::NodeId i,
 
 // Rule 1: Orient i-j into i->j whenever there is an arrow k->i
 // such that k and j are nonadjacent.
-static bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
-                const gum::NodeId j) {
+static bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag,
+                       const gum::NodeId i, const gum::NodeId j) {
   if (std::any_of(dag.parents(i).begin(), dag.parents(i).end(),
                   [&](const gum::NodeId k) { return !isAdjacent(p, k, j); })) {
     try {
@@ -365,7 +398,8 @@ static bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeI
 
 // Rule 2: Orient i-j into i->j whenever there is a chain
 // i->k->j.
-static bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) {
+static bool checkRule2(gum::DAG &dag, const gum::NodeId i,
+                       const gum::NodeId j) {
   if (std::any_of(
           dag.parents(j).begin(), dag.parents(j).end(),
           [&](const gum::NodeId k) { return dag.parents(k).contains(i); })) {
@@ -382,8 +416,8 @@ static bool checkRule2(gum::DAG &dag, const gum::NodeId i, const gum::NodeId j) 
 
 // Rule 3: Orient i-j into i->j whenever there are two chains
 // i-k->j and i-l->j such that k and l are nonadjacent.
-static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeId i,
-                const gum::NodeId j) {
+static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag,
+                       const gum::NodeId i, const gum::NodeId j) {
   const auto candidates = dag.parents(j) * p.neighbours(i);
   if (candidates.size() <= 1)
     return false;
@@ -404,7 +438,7 @@ static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag, const gum::NodeI
   return false;
 }
 
-gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const {
+gum::DAG ContinuousPC::deriveDAG_(const gum::MixedGraph &p) const {
   gum::EdgeSet remainings;
   gum::DAG dag;
   for (const auto nod : p.nodes()) {
@@ -611,8 +645,7 @@ bool ContinuousPC::isRemoved(gum::NodeId x, gum::NodeId y) const {
           removed_.end());
 }
 
-bool ContinuousPC::isRemoved(const std::string &x,
-                                   const std::string &y) const {
+bool ContinuousPC::isRemoved(const std::string &x, const std::string &y) const {
   return isRemoved(idFromName(x), idFromName(y));
 }
 
@@ -656,18 +689,19 @@ std::vector<std::string> ContinuousPC::getTrace() const {
   std::vector<std::string> res(removed_.size());
   for (OT::UnsignedInteger i = 0; i < removed_.size(); i++) {
     std::stringstream ss;
-    ss <<std::setfill('0')<<std::setw(3)<< i<<std::setfill(' ');
+    ss << std::setfill('0') << std::setw(3) << i << std::setfill(' ');
     ss << " : ";
-    const auto edg=description[removed_[i].first()]+"-"+description[removed_[i].second()];
-    std::string cond="";
-    for(const auto s:sepset_[removed_[i]]) {
-      if (cond!="") {
-        cond+=",";
+    const auto edg = description[removed_[i].first()] + "-" +
+                     description[removed_[i].second()];
+    std::string cond = "";
+    for (const auto s : sepset_[removed_[i]]) {
+      if (cond != "") {
+        cond += ",";
       }
-      cond+=description[s];
+      cond += description[s];
     }
-    ss << std::setw(10)<<edg << "|" << std::left<<std::setw(20)<<cond;
-    ss << "  p=" << std::left<<std::setw(10)<<pvalues_[removed_[i]];
+    ss << std::setw(10) << edg << "|" << std::left << std::setw(20) << cond;
+    ss << "  p=" << std::left << std::setw(10) << pvalues_[removed_[i]];
     ss << "  ttest=" << ttests_[removed_[i]];
     res[i] = ss.str();
   }
