@@ -1,3 +1,7 @@
 build*/
 *~
 *.ipynb_checkpoints
+.venv
+cmake-build-release
+cmake-build-debug
+.vscode
