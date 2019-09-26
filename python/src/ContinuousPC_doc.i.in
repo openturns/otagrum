@@ -5,13 +5,12 @@ Parameters
 ----------
 data : 2-d sequence of float
     The data
-maxParents : int
-    The maximum number of parents a node can have
+maxConditioningSetSize : int
+    The maximum conditioning set for independecy test
 alpha : float
     Hypothesis test threshold"
 
 // ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::PDAGtoDot
 "Convert PDAG graph to dot
 
@@ -27,7 +26,6 @@ dot : str
 
 
 // ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::skeletonToDot
 "Convert skeleton graph to dot
 
@@ -42,57 +40,25 @@ dot : str
     Dot format representation"
 
 // ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::deriveMoralGraph
-"Moral graph
-
-Parameters
-----------
-q : :py:class:`pyAgrum.MixedGraph`
-    q
+%feature("docstring") OTAGRUM::ContinuousPC::learnSkeleton
+"Skeleton leaner
 
 Returns
 -------
-moral_graph : :py:class:`pyAgrum.UndiGraph`
-    moral_graph"
+gum::UndiGraph : :py:class:`pyAgrum.UndiGraph`
+    the skeleton"
 
 // ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::setOptimalPolicy
-"Optimal policy flag accessor
-
-Parameters
-----------
-optimal_policy : bool
-    Optimal policy flag value"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::getOptimalPolicy
-"Optimal policy flag accessor
+%feature("docstring") OTAGRUM::ContinuousPC::learnPDAG
+"PDAG leaner
 
 Returns
 -------
-optimal_policy : bool
-    Optimal policy flag value"
+gum::MixedGraph : :py:class:`pyAgrum.MixedGraph`
+    the PDAG"
+
 
 // ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::inferPDAG
-"PDAG accessor
-
-Parameters
-----------
-q : :py:class:`pyAgrum.MixedGraph`
-    q
-
-Returns
--------
-moral_graph : :py:class:`pyAgrum.UndiGraph`
-    moral_graph"
-
-// ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::getPValue
 "P-Value accessor
 
@@ -109,7 +75,6 @@ p_value : float
     P-Value"
 
 // ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::getRemoved_
 "Removed arcs accessor
 
@@ -119,7 +84,6 @@ removed : sequence of :py:class:`pyAgrum.Edge`
     Removed arcs"
 
 // ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::getSepset
 "Sep indices
 
@@ -136,7 +100,6 @@ sep_set : :py:class:`openturns.Indices`
     Indices"
 
 // ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::getTTest
 "Test statistics accessor
 
@@ -153,17 +116,6 @@ ttest : float
     Test statistics"
 
 // ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::inferSkeleton
-"Skeleton graph accessor
-
-Returns
--------
-skeleton : :py:class:`pyAgrum.UndiGraph`
-    Skeleton graph"
-
-// ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::setVerbosity
 "Verbosity flag accessor
 
@@ -173,7 +125,6 @@ verbose : bool
     Verbosity flag value"
 
 // ----------------------------------------------------------------------------
-
 %feature("docstring") OTAGRUM::ContinuousPC::getVerbosity
 "Verbosity flag accessor
 
