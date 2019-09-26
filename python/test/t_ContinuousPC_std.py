@@ -7,23 +7,41 @@ import pyAgrum as gum
 
 import otagrum
 
+
 def generateDataForSpecificInstance(size):
-  R = ot.CorrelationMatrix(3)
-  R[0, 1] = 0.5
-  R[0, 2] = 0.45
-  collection = [ot.FrankCopula(3.0), ot.NormalCopula(R), ot.ClaytonCopula(2.0)]
-  copula = ot.ComposedCopula(collection)
-  return copula.getSample(size)
+    R = ot.CorrelationMatrix(3)
+    R[0, 1] = 0.5
+    R[0, 2] = 0.45
+    collection = [ot.FrankCopula(3.0), ot.NormalCopula(R), ot.ClaytonCopula(2.0)]
+    copula = ot.ComposedCopula(collection)
+    copula.setDescription("ABCDEFG")
+    return copula.getSample(size)
 
 
-size = 1000
-data = generateDataForSpecificInstance(size)
+def testSpecificInstance():
+    size = 1000
+    data = generateDataForSpecificInstance(size)
+    alpha = 0.1
+    binNumber = 3
+    learner = otagrum.ContinuousPC(data, binNumber, alpha)
 
-alpha = 0.9
-binNumber = 3
+    # skel = learner.learnSkeleton()
+    # print(skel.toDot())
 
-t0 = time()
-learner = otagrum.ContinuousPC(data, binNumber, alpha)
-t1 = time() - t0
+    dag = learner.learnDAG()
+    print(dag.toDot())
 
-#skel = learner.inferSkeleton()
+
+def testAsiaDirichlet():
+    data = ot.Sample.ImportFromTextFile("asia_dirichlet_5000.csv", ",")
+    alpha = 0.1
+    binNumber = 3
+    learner = otagrum.ContinuousPC(data, binNumber, alpha)
+    learner.setVerbosity(True)
+    dag = learner.learnDAG()
+    
+    print(dag.toDot())
+
+
+testSpecificInstance()
+testAsiaDirichlet()
