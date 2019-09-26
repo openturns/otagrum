@@ -37,6 +37,13 @@
       std::cout << x;                                                          \
   }
 
+#define TRACE_NAME(x)                                                          \
+  std::setw(15) << tester_.getDataDescription().__getitem__((x))
+
+#define TRACE_EDGE(x, y)                                                       \
+  std::setw(30) << (tester_.getDataDescription().__getitem__((x)) + "--" +     \
+                    tester_.getDataDescription().__getitem__((y)))
+
 // Triplet class, its HashFunc and its textual represenration
 class Triplet {
 public:
@@ -123,8 +130,8 @@ ContinuousPC::getSeparator(const gum::UndiGraph & /*g*/, gum::NodeId y,
   for (separator.setFirst(); !separator.isLast(); separator.next()) {
     std::tie(t, p, ok) = tester_.isIndep(y, z, separator.current());
     if (!ok) {
-      TRACE(y << "-" << z << "|" << separator.current() << ":" << t << ", " << p
-              << ", " << ok << "\n")
+      TRACE(TRACE_EDGE((y), (z))
+            << "     |" << separator.current() << ", pvalue=" << p << "\n");
     } else {
       return std::make_tuple(true, t, p, separator.current());
     }
@@ -181,8 +188,9 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
       sepset_.set(edge, sepYZ);
       pvalues_.set(edge, pYZ);
       ttests_.set(edge, tYZ);
-      TRACE("==>" << edge << " cut. Sepset=" << sepset_[edge]
-                  << ", pvalue=" << pvalues_[edge] << std::endl);
+      TRACE(TRACE_EDGE(edge.first(), edge.second())
+            << " CUT |" << sepset_[edge] << ", pvalue=" << pvalues_[edge]
+            << std::endl);
       atLeastOneInThisStep = true;
       removed_.push_back(edge);
       g.eraseEdge(edge);
