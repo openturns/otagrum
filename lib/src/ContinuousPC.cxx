@@ -614,7 +614,7 @@ std::string ContinuousPC::PDAGtoDot(const gum::MixedGraph &pdag) {
   ss << std::endl;
   for (const auto arc : pdag.arcs()) {
     ss << "  " << arc.first() << "->" << arc.second()
-       << " [dir=none,label=\"t=" << std::setprecision(3)
+       << " [label=\"t=" << std::setprecision(3)
        << getTTest(arc.first(), arc.second()) << "\np=" << std::setprecision(3)
        << getPValue(arc.first(), arc.second()) << "\"]" << std::endl;
   }
