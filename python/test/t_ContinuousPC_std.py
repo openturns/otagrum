@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+import os
 from time import time
 
 import openturns as ot
@@ -33,12 +33,14 @@ def testSpecificInstance():
 
 
 def testAsiaDirichlet():
-    data = ot.Sample.ImportFromTextFile("asia_dirichlet_5000.csv", ",")
+    data = ot.Sample.ImportFromTextFile(os.path.dirname(__file__)+"/asia_dirichlet_5000.csv", ",")
     alpha = 0.1
     binNumber = 3
     learner = otagrum.ContinuousPC(data, binNumber, alpha)
     learner.setVerbosity(True)
-    print(learner.PDAGtoDot(learner.learnPDAG()))
+    pdag = learner.learnPDAG()
+    print(pdag)
+    print(learner.PDAGtoDot(pdag))
     dag = learner.learnDAG()
     print(dag.toDot())
 
