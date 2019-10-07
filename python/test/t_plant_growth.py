@@ -108,9 +108,10 @@ l_dist_wet.drawPDF()
 
 # Get the joint distribution [H, M]
 ie = gum.LazyPropagation(bn)
-ie.addJointTarget(["Height","Moisture"])
+targets=set(["Height","Moisture"])
+ie.addJointTarget(targets)
 ie.makeInference()
-h_m_dist = otagrum.Utils.FromPotential(ie.jointPosterior(["Height","Moisture"]))
+h_m_dist = otagrum.Utils.FromPotential(ie.jointPosterior(targets))
 print(h_m_dist.getDescription())
 print(h_m_dist.getMarginal(0))
 
