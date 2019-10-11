@@ -9,7 +9,7 @@ install:
   - sudo rm -r /opt/python/*
   - pip install sphinx numpydoc nbsphinx jupyter_client "Tornado<5" "ipython<7" matplotlib ipykernel pydotplus --user --upgrade
   - curl -L https://github.com/swig/swig/archive/rel-3.0.12.tar.gz | tar xz && cd swig-rel-3.0.12 && ./autogen.sh && ./configure --without-alllang && make -j2 && sudo make install && cd -
-  - git clone --depth 1 https://gitlab.com/agrumery/aGrUM.git && cd aGrUM && cmake -DUSE_NANODBC=OFF -DSWIG_EXECUTABLE=/usr/local/bin/swig . && make -j2 && sudo make install && cd -
+  - git clone --depth 1 https://gitlab.com/agrumery/aGrUM.git && cd aGrUM && sed -i "s|SWIG_TYPE_TABLE=pyproba|SWIG_TYPE_TABLE=openturns|g" wrappers/pyAgrum/CMakeLists.txt && cmake -DUSE_NANODBC=OFF -DSWIG_EXECUTABLE=/usr/local/bin/swig . && make -j2 && sudo make install && cd -
 
 script:
   - cmake -DCMAKE_INSTALL_PREFIX=~/.local
