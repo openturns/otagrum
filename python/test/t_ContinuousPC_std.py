@@ -39,7 +39,7 @@ def testAsiaDirichlet():
     learner = otagrum.ContinuousPC(data, binNumber, alpha)
     learner.setVerbosity(True)
     pdag = learner.learnPDAG()
-    print(pdag)
+    #print(pdag)
     print(learner.PDAGtoDot(pdag))
     dag = learner.learnDAG()
     print(dag.toDot())

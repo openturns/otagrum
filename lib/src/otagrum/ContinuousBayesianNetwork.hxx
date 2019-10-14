@@ -78,11 +78,11 @@ public:
 
   /** DAG and DistributionCollection accessor */
   void setDAGAndDistributionCollection(const NamedDAG & dag,
-				       const DistributionCollection & jointDistributions);
+                                       const DistributionCollection & jointDistributions);
 
   NamedDAG getNamedDAG() const;
   DistributionCollection getDistributionCollection() const;
-				       
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;
 

@@ -34,9 +34,11 @@
 #include "otagrum/NamedDAG.hxx"
 #include "otagrum/NamedJunctionTree.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
-class OTAGRUM_API ContinuousPC : public OT::Object {
+class OTAGRUM_API ContinuousPC : public OT::Object
+{
 
 public:
   explicit ContinuousPC(const OT::Sample &data,
@@ -62,7 +64,7 @@ public:
   double getPValue(const std::string &x, const std::string &y) const;
   double getTTest(const std::string &x, const std::string &y) const;
   const std::vector<std::string> getSepsetNames(const std::string &x,
-                                                const std::string &y) const;
+      const std::string &y) const;
 
   gum::NodeId idFromName(const std::string &n) const;
 

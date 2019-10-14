@@ -24,16 +24,19 @@
 #include "otagrum/otagrumprivate.hxx"
 #include <openturns/OT.hxx>
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
-class OTAGRUM_API OTAgrumResourceMap {
+class OTAGRUM_API OTAgrumResourceMap
+{
   CLASSNAME;
 
 public:
   static void Initialize();
 };
 
-struct OTAGRUM_API OTAgrumResourceMap_init {
+struct OTAGRUM_API OTAgrumResourceMap_init
+{
   OTAgrumResourceMap_init();
 };
 static OTAgrumResourceMap_init __OTAgrumResourceMap_initializer;

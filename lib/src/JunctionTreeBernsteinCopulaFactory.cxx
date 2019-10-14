@@ -28,16 +28,17 @@
 
 using namespace OT;
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 CLASSNAMEINIT(JunctionTreeBernsteinCopulaFactory)
 
 static const Factory<JunctionTreeBernsteinCopulaFactory>
-    Factory_JunctionTreeBernsteinCopulaFactory;
+Factory_JunctionTreeBernsteinCopulaFactory;
 
 /* Default constructor */
 JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory()
-    : DistributionFactoryImplementation()
+  : DistributionFactoryImplementation()
 {
   nbBins_ = ResourceMap::GetAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber");
   alpha_ = ResourceMap::GetAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha");
@@ -46,45 +47,51 @@ JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory()
 
 /* Parameter constructor */
 JunctionTreeBernsteinCopulaFactory::JunctionTreeBernsteinCopulaFactory(
-    const UnsignedInteger nbBins, const Scalar alpha, const UnsignedInteger maximumConditioningSetSize)
-    : DistributionFactoryImplementation(), nbBins_(nbBins), alpha_(alpha),
-      maximumConditioningSetSize_(maximumConditioningSetSize) {
+  const UnsignedInteger nbBins, const Scalar alpha, const UnsignedInteger maximumConditioningSetSize)
+  : DistributionFactoryImplementation(), nbBins_(nbBins), alpha_(alpha),
+    maximumConditioningSetSize_(maximumConditioningSetSize)
+{
   setName("JunctionTreeBernsteinCopulaFactory");
 }
 
 /* Virtual constructor */
 JunctionTreeBernsteinCopulaFactory *
-JunctionTreeBernsteinCopulaFactory::clone() const {
+JunctionTreeBernsteinCopulaFactory::clone() const
+{
   return new JunctionTreeBernsteinCopulaFactory(*this);
 }
 
 /* Here is the interface that all derived class must implement */
 
 Distribution
-JunctionTreeBernsteinCopulaFactory::build(const Sample &sample) const {
+JunctionTreeBernsteinCopulaFactory::build(const Sample &sample) const
+{
   return buildAsJunctionTreeBernsteinCopula(sample);
 }
 
-Distribution JunctionTreeBernsteinCopulaFactory::build() const {
+Distribution JunctionTreeBernsteinCopulaFactory::build() const
+{
   return buildAsJunctionTreeBernsteinCopula().clone();
 }
 
 JunctionTreeBernsteinCopula
 JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula(
-    const Sample &sample) const {
+  const Sample &sample) const
+{
 
   if (sample.getSize() == 0)
     throw InvalidArgumentException(HERE)
         << "Error: cannot build a JunctionTreeBernsteinCopula distribution "
-           "from an empty "
-           "sample";
+        "from an empty "
+        "sample";
   OTAGRUM::ContinuousPC learner(sample, maximumConditioningSetSize_, alpha_);
   return JunctionTreeBernsteinCopula(learner.learnJunctionTree(), sample,
                                      nbBins_);
 }
 
 JunctionTreeBernsteinCopula
-JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula() const {
+JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula() const
+{
   return JunctionTreeBernsteinCopula();
 }
 
