@@ -3,7 +3,8 @@
 #include "otagrum/NamedDAG.hxx"
 #include <iostream>
 
-void testConstructor() {
+void testConstructor()
+{
   const auto proto = "A->B->C->D;E->A->C<-E";
   const auto bn = gum::BayesNet<double>::fastPrototype(proto);
 
@@ -18,10 +19,10 @@ void testConstructor() {
 
   std::cout << "      nodes : " << ndag.getNodes() << std::endl;
   for (const auto &nod : ndag.getNodes())
-    {
-      std::cout << " parents(" << nod << ") : " << ndag.getParents(nod) << std::endl;
-      std::cout << "children(" << nod << ") : " << ndag.getChildren(nod) << std::endl;
-    }
+  {
+    std::cout << " parents(" << nod << ") : " << ndag.getParents(nod) << std::endl;
+    std::cout << "children(" << nod << ") : " << ndag.getChildren(nod) << std::endl;
+  }
 
   std::cout << "topologicalOrder : " << ndag.getTopologicalOrder() << std::endl;
 
@@ -44,7 +45,7 @@ void testConstructor() {
 
   OTAGRUM::NamedDAG dag;
   std::cout << "Before fill, " << dag.getClassName() << ", " << dag.getName() << std::endl;
-  
+
   study2.fillObject("ndag", dag);
 
   std::cout << "        size : " << dag.getSize() << std::endl;
@@ -63,7 +64,8 @@ void testConstructor() {
 
 }
 
-int main(void) {
+int main(void)
+{
   testConstructor();
 
   return 0;
