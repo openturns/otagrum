@@ -39,7 +39,6 @@ namespace OTAGRUM
 
 class OTAGRUM_API ContinuousPC : public OT::Object
 {
-
 public:
   explicit ContinuousPC(const OT::Sample &data,
                         const OT::UnsignedInteger maxConditioningSetSize = 5,
@@ -54,6 +53,7 @@ public:
   /// lazy computation of the DAG
   NamedDAG learnDAG();
 
+
   void setVerbosity(bool verbose);
   bool getVerbosity() const;
 
@@ -63,8 +63,7 @@ public:
 
   double getPValue(const std::string &x, const std::string &y) const;
   double getTTest(const std::string &x, const std::string &y) const;
-  const std::vector<std::string> getSepsetNames(const std::string &x,
-      const std::string &y) const;
+  const std::vector<std::string> getSepsetNames(const std::string &x, const std::string &y) const;
 
   gum::NodeId idFromName(const std::string &n) const;
 
@@ -75,10 +74,8 @@ public:
   std::string PDAGtoDot(const gum::MixedGraph &pdag);
 
   std::vector<std::string> getTrace() const;
-
 private:
   bool skel_done_, pdag_done_, dag_done_, jt_done_;
-
   gum::EdgeProperty<OT::Indices> sepset_;
   gum::EdgeProperty<double> pvalues_;
   gum::EdgeProperty<double> ttests_;
@@ -96,7 +93,6 @@ private:
   std::vector<std::string> namesFromData(void) const;
 
   const std::vector<gum::Edge> &getRemoved_() const;
-
   gum::UndiGraph inferSkeleton_();
   gum::MixedGraph inferPDAG_(const gum::UndiGraph &g) const;
 

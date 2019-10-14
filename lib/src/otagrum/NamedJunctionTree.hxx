@@ -40,8 +40,7 @@ class OTAGRUM_API NamedJunctionTree : public OT::Object
 public:
   NamedJunctionTree();
   NamedJunctionTree(const gum::CliqueGraph &jt, const gum::BayesNet<double> &bn);
-  NamedJunctionTree(const gum::CliqueGraph &jt,
-                    const std::vector<std::string> &names);
+  NamedJunctionTree(const gum::CliqueGraph &jt, const std::vector<std::string> &names);
 
   OT::UnsignedInteger getSize() const;
 
