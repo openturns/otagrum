@@ -28,57 +28,77 @@
 #include "otagrum/NamedDAG.hxx"
 #include "otagrum/Utils.hxx"
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 CLASSNAMEINIT(NamedDAG);
 
 static const OT::Factory<NamedDAG> Factory_NamedDAG;
 
-NamedDAG::NamedDAG(){};
+NamedDAG::NamedDAG() {};
 NamedDAG::NamedDAG(const gum::BayesNet<double> &bn)
-    : dag_(bn.dag()), map_(bn.size()) {
+  : dag_(bn.dag()), map_(bn.size())
+{
   std::transform(bn.nodes().begin(), bn.nodes().end(), map_.begin(),
-                 [&bn](const gum::NodeId nod) -> std::string {
-                   return bn.variable(nod).name();
-                 });
+                 [&bn](const gum::NodeId nod) -> std::string
+  {
+    return bn.variable(nod).name();
+  });
 }
 
 NamedDAG::NamedDAG(const gum::DAG &dag, const std::vector<std::string> &names)
-    : dag_(dag), map_(dag.size()) {
+  : dag_(dag), map_(dag.size())
+{
   std::copy(names.begin(), names.end(), map_.begin());
 }
 
-OT::PersistentObject *NamedDAG::clone() const { return new NamedDAG(*this); }
+OT::PersistentObject *NamedDAG::clone() const
+{
+  return new NamedDAG(*this);
+}
 
-OT::UnsignedInteger NamedDAG::getSize() const { return map_.getSize(); }
+OT::UnsignedInteger NamedDAG::getSize() const
+{
+  return map_.getSize();
+}
 
-OT::Description NamedDAG::getDescription() const { return map_; }
+OT::Description NamedDAG::getDescription() const
+{
+  return map_;
+}
 
-OT::Indices NamedDAG::getParents(const OT::UnsignedInteger nod) const {
+OT::Indices NamedDAG::getParents(const OT::UnsignedInteger nod) const
+{
   return Utils::FromNodeSet(dag_.parents(nod));
 }
 
-OT::Indices NamedDAG::getChildren(const OT::UnsignedInteger nod) const {
+OT::Indices NamedDAG::getChildren(const OT::UnsignedInteger nod) const
+{
   return Utils::FromNodeSet(dag_.children(nod));
 }
 
-OT::Indices NamedDAG::getNodes() const {
+OT::Indices NamedDAG::getNodes() const
+{
   return Utils::FromNodeSet(dag_.nodes().asNodeSet());
 }
 
-OT::Indices NamedDAG::getTopologicalOrder() const {
+OT::Indices NamedDAG::getTopologicalOrder() const
+{
   OT::Indices res;
-  for (auto nod : dag_.topologicalOrder()) {
+  for (auto nod : dag_.topologicalOrder())
+  {
     res.add(OT::UnsignedInteger(nod));
   }
   return res;
 }
 
-OT::String NamedDAG::__str__(const OT::String &pref) const {
+OT::String NamedDAG::__str__(const OT::String &pref) const
+{
   std::stringstream ss;
   ss << pref << "[";
   bool first = true;
-  for (const auto &item : map_) {
+  for (const auto &item : map_)
+  {
     if (!first)
       ss << ",";
     first = false;
@@ -88,8 +108,10 @@ OT::String NamedDAG::__str__(const OT::String &pref) const {
 
   ss << "[";
   first = true;
-  for (const auto &nod : getNodes()) {
-    for (const auto &chi : getChildren(nod)) {
+  for (const auto &nod : getNodes())
+  {
+    for (const auto &chi : getChildren(nod))
+    {
       if (!first)
         ss << ",";
       first = false;
@@ -101,11 +123,14 @@ OT::String NamedDAG::__str__(const OT::String &pref) const {
   return ss.str();
 }
 
-OT::String NamedDAG::toDot() const {
+OT::String NamedDAG::toDot() const
+{
   std::stringstream ss;
   ss << "digraph {\n";
-  for (const auto &nod : getNodes()) {
-    for (const auto &chi : getChildren(nod)) {
+  for (const auto &nod : getNodes())
+  {
+    for (const auto &chi : getChildren(nod))
+    {
       ss << "    \"" << map_[nod] << "\"->\"" << map_[chi] << "\"\n";
     }
   }
@@ -114,7 +139,8 @@ OT::String NamedDAG::toDot() const {
   return ss.str();
 }
 /* Method save() stores the object through the StorageManager */
-void NamedDAG::save(OT::Advocate &adv) const {
+void NamedDAG::save(OT::Advocate &adv) const
+{
   OT::PersistentObject::save(adv);
   adv.saveAttribute("map_", map_);
   OT::Indices nodes(getNodes());
@@ -126,7 +152,8 @@ void NamedDAG::save(OT::Advocate &adv) const {
 }
 
 /* Method load() reloads the object from the StorageManager */
-void NamedDAG::load(OT::Advocate &adv) {
+void NamedDAG::load(OT::Advocate &adv)
+{
   OT::PersistentObject::load(adv);
   adv.loadAttribute("map_", map_);
   OT::Indices nodes;
@@ -135,7 +162,8 @@ void NamedDAG::load(OT::Advocate &adv) {
   adv.loadAttribute("parentsByNodes_", parentsByNodes);
 
   dag_.clear();
-  for (const auto &nod : nodes) {
+  for (const auto &nod : nodes)
+  {
     dag_.addNodeWithId(nod);
   }
   for (OT::UnsignedInteger i = 0; i < nodes.getSize(); ++i)
