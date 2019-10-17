@@ -1,5 +1,5 @@
       proto : A->B->C->D;E->A->C<-E
-         BN : BN{nodes: 5, arcs: 6, domainSize: 32, parameters: 30, compression ratio: 6% }
+         BN : BN{nodes: 5, arcs: 6, domainSize: 32, dim: 30}
 
        size : 5
        desc : [A,B,C,D,E]

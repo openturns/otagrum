@@ -20,12 +20,12 @@ string(TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 
-find_package (aGrUM 0.13.4 NO_MODULE REQUIRED)
+find_package (aGrUM 0.16 NO_MODULE REQUIRED)
 if (aGrUM_FOUND)
   message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
 endif ()
 
-find_package(OpenTURNS 1.12 NO_MODULE REQUIRED)
+find_package(OpenTURNS 1.13 NO_MODULE REQUIRED)
 if (OPENTURNS_FOUND)
   message(STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 endif ()
