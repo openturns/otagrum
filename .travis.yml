@@ -1,23 +1,14 @@
-language: cpp
+language: generic
 sudo: required
 
+services:
+  - docker
+
 install:
-  - curl http://ubuntu.openturns.org/openturns.org-repo.key | sudo apt-key add -
-  - echo deb http://ubuntu.openturns.org xenial main | sudo tee /etc/apt/sources.list.d/openturns.list
-  - sudo apt-get update
-  - sudo apt-get -y install libopenturns-dev python-openturns cmake gfortran swig texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra python-matplotlib python-tk pandoc graphviz
-  - sudo rm -r /opt/python/*
-  - pip install sphinx numpydoc nbsphinx jupyter_client "Tornado<5" "ipython<7" matplotlib ipykernel pydotplus --user --upgrade
-  - curl -L https://github.com/swig/swig/archive/rel-3.0.12.tar.gz | tar xz && cd swig-rel-3.0.12 && ./autogen.sh && ./configure --without-alllang && make -j2 && sudo make install && cd -
-  - git clone --depth 1 https://gitlab.com/agrumery/aGrUM.git && cd aGrUM && sed -i "s|SWIG_TYPE_TABLE=pyproba|SWIG_TYPE_TABLE=openturns|g" wrappers/pyAgrum/CMakeLists.txt && cmake -DSWIG_EXECUTABLE=/usr/local/bin/swig . && make -j2 && sudo make install && cd -
+  - docker pull openturns/archlinux-agrum
 
 script:
-  - cmake -DCMAKE_INSTALL_PREFIX=~/.local
-    -DCMAKE_CXX_FLAGS="-Wall -D_GLIBCXX_ASSERTIONS"
-    -DSPHINX_EXECUTABLE=~/.local/bin/sphinx-build
-    -DSWIG_EXECUTABLE=/usr/local/bin/swig
-    .
-  - make install -j2 && make tests -j2 && ctest -j2 --output-on-failure --timeout 100
+  - docker run -e MAKEFLAGS='-j2' -v `pwd`:/io openturns/archlinux-agrum /io/.ci_support/run_docker_build.sh `id -u` `id -g`
 
 after_success:
   - test "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_BRANCH" = "master" || exit 0
@@ -27,7 +18,7 @@ after_success:
         TRAVIS_BRANCH=${TRAVIS_TAG:1};
     fi
   - mkdir -p openturns.github.io/${PROJECT_REPONAME}/${TRAVIS_BRANCH}
-  - cp -r ~/.local/share/${PROJECT_REPONAME}/doc/html/* openturns.github.io/${PROJECT_REPONAME}/${TRAVIS_BRANCH}
+  - cp -r ./html/* openturns.github.io/${PROJECT_REPONAME}/${TRAVIS_BRANCH}
   - cd openturns.github.io
   - touch .nojekyll
   - git config user.email "support@travis-ci.com"
