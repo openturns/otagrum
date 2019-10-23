@@ -19,17 +19,15 @@ string(TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 # set module dir to find custom scripts
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-
 find_package (aGrUM 0.16 NO_MODULE REQUIRED)
-if (aGrUM_FOUND)
-  message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
-endif ()
+message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
 
 find_package(OpenTURNS 1.13 NO_MODULE REQUIRED)
-if (OPENTURNS_FOUND)
-  message(STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
+message(STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
+if (CMAKE_VERSION VERSION_LESS 3)
+  include(${OPENTURNS_USE_FILE})
 endif ()
-include(${OPENTURNS_USE_FILE})
+
 set(OTAGRUM_DEFINITIONS ${OPENTURNS_DEFINITIONS})
 if (NOT BUILD_SHARED_LIBS)
   list(APPEND OTAGRUM_DEFINITIONS "-DOTAGRUM_STATIC")

@@ -23,7 +23,7 @@ OT::Description DescrFromStringVect(const std::vector<std::string> &v) {
 3--4 : p-value=3.61185e-182
 */
 OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
-  OT::Collection<OT::Copula> copulas;
+  OT::Collection<OT::Distribution> copulas;
 
   OT::UnsignedInteger dim = 3;
 

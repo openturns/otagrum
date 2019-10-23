@@ -105,12 +105,13 @@ node [shape = ellipse];
 Junction tree
 ****
 graph {
-  "(0) 3-2" [label="3-2",fillcolor ="burlywood",style="filled"];
-  "(1) 1-0" [label="1-0",fillcolor ="burlywood",style="filled"];
-  "(2) 6-4" [label="6-4",fillcolor ="burlywood",style="filled"];
-  "(3) 6-5" [label="6-5",fillcolor ="burlywood",style="filled"];
+  node [style="filled", fontcolor="black"];
+  "(0) 3-2" [label="3-2",fillcolor ="burlywood"];
+  "(1) 1-0" [label="1-0",fillcolor ="burlywood"];
+  "(2) 6-4" [label="6-4",fillcolor ="burlywood"];
+  "(3) 6-5" [label="6-5",fillcolor ="burlywood"];
 
-  "(2) 6-4^(3) 6-5" [label="6",shape=box,fillcolor="palegreen",style="filled",fontsize=8,width=0,height=0];
+  "(2) 6-4^(3) 6-5" [label="6",shape=box,fillcolor="palegreen",fontsize=8,width=0,height=0];
 
   "(2) 6-4"--"(2) 6-4^(3) 6-5"--"(3) 6-5";
 }
