@@ -22,7 +22,7 @@ PY3VER = $(shell py3versions -d)
 PYALL = $(PYVER) $(PY3VER)
 
 %:
-	dh $@ --buildsystem=cmake --with python2,python3 --with quilt --parallel
+	dh $@ --buildsystem=cmake --with python2,python3 --parallel
 
 override_dh_auto_configure: $(PYALL:python%=cmake-configure-%) \
 
@@ -38,7 +38,6 @@ cmake-configure-%:
             -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
             -DCMAKE_INSTALL_PREFIX:PATH=/usr \
             -DINSTALL_DESTDIR:PATH=$(CURDIR)/debian/otagrum \
-            -DLINK_PYTHON_LIBRARY:BOOL=OFF \
             -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python$* \
             -DPYTHON_INCLUDE_DIR:PATH=$$(python$*-config --includes | sed -e 's/ .*//' -e 's/^-I//') \
             -DPYTHON_INCLUDE_DIR2:PATH=$$(python$*-config --includes | sed -e 's/ .*//' -e 's/^-I//') \

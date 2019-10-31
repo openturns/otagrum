@@ -49,7 +49,7 @@ OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
   auto copula3 = OT::ClaytonCopula(2.0);
   copula2.setDescription(DescrFromStringVect({"C1", "C2"}));
 
-  OT::Collection<OT::Copula> copulas;
+  OT::Collection<OT::Distribution> copulas;
   copulas.add(copula1);
   copulas.add(copula2);
   copulas.add(copula3);
