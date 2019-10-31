@@ -12,7 +12,7 @@ cmake -DCMAKE_INSTALL_PREFIX=~/.local \
       /io
 make install
 make tests
-ctest --output-on-failure --timeout 100 ${MAKEFLAGS}
+ctest --output-on-failure --timeout 50 ${MAKEFLAGS}
 
 if test -n "${uid}" -a -n "${gid}"
 then
