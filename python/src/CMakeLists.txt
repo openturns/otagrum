@@ -84,7 +84,6 @@ endmacro ()
 
 
 ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
-                      MixedHistogramUserDefined.i MixedHistogramUserDefined_doc.i.in
                       ContinuousPC.i ContinuousPC_doc.i.in
                       ContinuousTTest.i ContinuousTTest_doc.i.in
                       NamedJunctionTree.i NamedJunctionTree_doc.i.in

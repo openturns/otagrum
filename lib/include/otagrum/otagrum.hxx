@@ -23,7 +23,6 @@
 #define OTAGRUM_HXX
 
 #include "otagrum/Utils.hxx"
-#include "otagrum/MixedHistogramUserDefined.hxx"
 #include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/ContinuousTTest.hxx"
 #include "otagrum/ContinuousPC.hxx"

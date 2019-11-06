@@ -28,6 +28,7 @@
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ResourceMap.hxx>
 #include <openturns/UserDefined.hxx>
+#include <openturns/MixedHistogramUserDefined.hxx>
 
 #include <agrum/BN/io/BIF/BIFReader.h>
 #include <agrum/BN/io/BIF/BIFWriter.h>
@@ -39,8 +40,6 @@
 #include <agrum/variables/IDiscretizedVariable.h>
 #include <agrum/variables/discretizedVariable.h>
 #include <agrum/variables/rangeVariable.h>
-
-#include "otagrum/MixedHistogramUserDefined.hxx"
 
 namespace OTAGRUM
 {
@@ -131,7 +130,7 @@ namespace OTAGRUM
         OT::Point p;
         if (var.varType() == gum::VarType::Discretized)
           {
-            kind.add(MixedHistogramUserDefined::CONTINUOUS);
+            kind.add(OT::MixedHistogramUserDefined::CONTINUOUS);
 
             for (const auto tick :
                    dynamic_cast<const gum::IDiscretizedVariable &>(var)
@@ -142,7 +141,7 @@ namespace OTAGRUM
           }
         else
           {
-            kind.add(MixedHistogramUserDefined::DISCRETE);
+            kind.add(OT::MixedHistogramUserDefined::DISCRETE);
             for (unsigned long v = 0; v < var.domainSize(); v++)
               {
                 p.add(v);
@@ -159,7 +158,7 @@ namespace OTAGRUM
         probabilityTable.add(pot.get(I));
       }
 
-    MixedHistogramUserDefined distribution(ticksCollection, kind,
+    OT::MixedHistogramUserDefined distribution(ticksCollection, kind,
                                            probabilityTable);
     distribution.setDescription(description);
     return distribution;
