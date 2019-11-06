@@ -76,7 +76,6 @@ endmacro ()
 
 ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
-ot_pyinstallcheck_test (MixedHistogramUserDefined_std)
 ot_pyinstallcheck_test (ContinuousPC_std)
 ot_pyinstallcheck_test (NamedJunctionTree_std)
 ot_pyinstallcheck_test (JunctionTreeBernsteinCopula_std)

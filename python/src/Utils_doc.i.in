@@ -69,7 +69,7 @@ Examples
 "Convert an n-d probability table to a distribution.
 
 Converts a multivariate aGrUM probability table to an OpenTURNS distribution,
-using :class:`~otagrum.MixedHistogramUserDefined`
+using :py:class:`openturns.MixedHistogramUserDefined`
 
 Parameters
 ----------

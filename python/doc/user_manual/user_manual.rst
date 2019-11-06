@@ -8,7 +8,6 @@ API
     :template: class.rst_t
 
     Utils
-    MixedHistogramUserDefined
     JunctionTreeBernsteinCopula
     JunctionTreeBernsteinCopulaFactory
     ContinuousPC

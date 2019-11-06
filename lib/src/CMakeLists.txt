@@ -3,7 +3,6 @@
 ot_add_current_dir_to_include_dirs ()
 
 ot_add_source_file ( Utils.cxx )
-ot_add_source_file ( MixedHistogramUserDefined.cxx )
 ot_add_source_file ( NamedDAG.cxx)
 ot_add_source_file ( NamedJunctionTree.cxx)
 ot_add_source_file ( StratifiedCache.cxx )
@@ -15,7 +14,6 @@ ot_add_source_file ( JunctionTreeBernsteinCopula.cxx )
 ot_add_source_file ( JunctionTreeBernsteinCopulaFactory.cxx )
 ot_add_source_file ( OTAgrumResourceMap.cxx )
 
-ot_install_header_file ( MixedHistogramUserDefined.hxx )
 ot_install_header_file ( Utils.hxx )
 ot_install_header_file ( NamedDAG.hxx )
 ot_install_header_file ( NamedJunctionTree.hxx )
