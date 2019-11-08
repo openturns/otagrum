@@ -62,7 +62,7 @@ void testOK() {
     std::cout<<"not OK"<<std::endl;
 }
 
-int main(int argc, char **argv) {
+int main(int /*argc*/, char ** /*argv*/) {
   OT::ResourceMap::SetAsUnsignedInteger("parallel-threads", 1);
   OT::ResourceMap::SetAsBool("Distribution-Parallel", false);
   testOK();

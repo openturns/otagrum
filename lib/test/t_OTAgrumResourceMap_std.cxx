@@ -9,7 +9,7 @@ void check(const std::string &key) {
     std::cout << "!HasKey " << key << std::endl;
 }
 
-int main(int argc, char **argv) {
+int main(int /*argc*/, char ** /*argv*/) {
   try {
     check("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber");
     check("JunctionTreeBernsteinCopulaFactory-DefaultAlpha");

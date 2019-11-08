@@ -115,7 +115,7 @@ void testIndepsSeePythonTest()
             << "   test:" << (ok ? " OK " : " fail ") << "\n";
 }
 
-int main(int argc, char **argv)
+int main(int /*argc*/, char ** /*argv*/)
 {
   testNormalSample();
   testIndepsSeePythonTest();

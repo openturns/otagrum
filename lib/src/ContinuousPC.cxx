@@ -107,7 +107,7 @@ ContinuousPC::ContinuousPC(const OT::Sample &data,
  * p-value. Otherwise, it is the first one
  */
 std::tuple<bool, double, double, OT::Indices>
-ContinuousPC::getSeparator(const gum::UndiGraph &g, gum::NodeId y,
+ContinuousPC::getSeparator(const gum::UndiGraph & /*g*/, gum::NodeId y,
                            gum::NodeId z, const OT::Indices &neighbours,
                            OT::UnsignedInteger n) const {
   double t = 0.0;
