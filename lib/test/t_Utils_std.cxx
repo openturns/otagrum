@@ -151,7 +151,7 @@ void test_fromInference()
 
 }
 
-int main(int argc, char **argv)
+int main(int /*argc*/, char ** /*argv*/)
 {
   //test_basics();
   //test_fromMarginal();

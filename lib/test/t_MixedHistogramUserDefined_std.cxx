@@ -25,7 +25,7 @@
 using namespace OT;
 using namespace OTAGRUM;
 
-int main(int argc, char *argv[])
+int main(int /*argc*/, char * /*argv*/ [])
 {
   Collection<Point> ticksCollection(0);
   {
