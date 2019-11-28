@@ -8,7 +8,7 @@
 
 using namespace OTAGRUM;
 
-int main(int argc, char **argv)
+int main(int /*argc*/, char ** /*argv*/)
 {
   StratifiedCache cache;
 

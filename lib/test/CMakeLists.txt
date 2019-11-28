@@ -27,6 +27,7 @@ macro ( ot_check_test TESTNAME )
     target_link_libraries ( ${TESTNAME_TGT} CRT_fp8 )
   endif ()
   set_target_properties ( ${TESTNAME_TGT} PROPERTIES
+                                          UNITY_BUILD OFF
                                           INSTALL_RPATH "${CMAKE_BINARY_DIR}/lib/src;${CMAKE_INSTALL_RPATH}" )
   set ( TESTNAME_LOC ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}${CMAKE_EXECUTABLE_SUFFIX} )
   set ( _CMD )
@@ -81,7 +82,6 @@ include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
 
 ot_check_test ( Utils_std )
-ot_check_test ( MixedHistogramUserDefined_std )
 ot_check_test ( NamedJunctionTree_std )
 ot_check_test ( NamedDAG_std )
 ot_check_test ( JunctionTreeBernsteinCopula_std )

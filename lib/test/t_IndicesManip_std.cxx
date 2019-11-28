@@ -101,7 +101,7 @@ void testIndicesManip()
   iterCombinaison(supset, 5);*/
 }
 
-int main(int argc, char **argv)
+int main(int /*argc*/, char ** /*argv*/)
 {
   testIndicesManip();
   return EXIT_SUCCESS;

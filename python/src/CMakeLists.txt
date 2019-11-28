@@ -1,6 +1,7 @@
 
 include ( ${SWIG_USE_FILE} )
 
+include_directories (${OPENTURNS_INCLUDE_DIRS})
 include_directories ( ${OPENTURNS_SWIG_INCLUDE_DIRS} )
 add_definitions( ${OPENTURNS_SWIG_DEFINITIONS} )
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
@@ -83,7 +84,6 @@ endmacro ()
 
 
 ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
-                      MixedHistogramUserDefined.i MixedHistogramUserDefined_doc.i.in
                       ContinuousPC.i ContinuousPC_doc.i.in
                       ContinuousTTest.i ContinuousTTest_doc.i.in
                       NamedJunctionTree.i NamedJunctionTree_doc.i.in

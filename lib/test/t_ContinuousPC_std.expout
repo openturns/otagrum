@@ -92,6 +92,37 @@ node [shape = ellipse];
 
 
 ****
+Moral graph
+****
+digraph "no_name" {
+edge [dir=none]
+node [shape = ellipse];
+  0;  1;  2;  3;  4;  5;  6;
+  0 -> 1;
+  2 -> 3;
+  4 -> 6;
+  5 -> 6;
+
+}
+
+
+****
+Junction tree
+****
+graph {
+  node [style="filled", fontcolor="black"];
+  "(0) 3-2" [label="3-2",fillcolor ="burlywood"];
+  "(1) 1-0" [label="1-0",fillcolor ="burlywood"];
+  "(2) 6-4" [label="6-4",fillcolor ="burlywood"];
+  "(3) 6-5" [label="6-5",fillcolor ="burlywood"];
+
+  "(2) 6-4^(3) 6-5" [label="6",shape=box,fillcolor="palegreen",fontsize=8,width=0,height=0];
+
+  "(2) 6-4"--"(2) 6-4^(3) 6-5"--"(3) 6-5";
+}
+
+
+****
 Named Junction tree
 ****
 [A1,A2,B1,B2,X0,X1,X2]

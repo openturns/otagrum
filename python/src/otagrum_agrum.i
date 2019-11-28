@@ -28,28 +28,3 @@ using namespace gum;
 %import (module="pyAgrum") <agrum/graphs/mixedGraph.h>
 
 
-%import <agrum/multidim/potential.h>
-
-// needed for template instantiation
-// get rid of swig messages :
-// 'swig/python detected a memory leak of type 'gum::Potential< double > *', no destructor found.'
-// (other way to do that ?)
-%template ( Potential_double ) gum::Potential<double>;
-%pythoncode %{
-Potential = Potential_double
-%}
-
-// forcing the type from otagr.Potential (from above) to pyAgrum.Potential
-%pythonappend OTAGRUM::Utils::Discretize %{
-    #casting into gum namespace
-    val=gum.Potential(val)
-    val.__var=args[1]
-%}
-%pythonappend OTAGRUM::ContinuousPC::inferSkeleton %{
-    #casting into gum namespace
-    val=gum.UndiGraph(val)
-%}
-%pythonappend OTAGRUM::ContinuousPC::inferPDAG %{
-    #casting into gum namespace
-    val=gum.MixedGraph(val)
-%}

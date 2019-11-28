@@ -17,12 +17,12 @@ Parameters
 ----------
 distribution : :py:class:`openturns.Distribution`
     An continuous 1-d distribution
-v : :py:class:`pyAgrum.pyAgrum.DiscretizedVariable_double`
+v : :py:class:`pyAgrum.DiscretizedVariable`
     A discrete variable
 
 Returns
 -------
-p : :py:class:`pyAgrum.pyAgrum.Potential_double`
+p : :py:class:`pyAgrum.Potential`
     The resulting potential
 
 Examples
@@ -45,7 +45,7 @@ either :py:class:`openturns.Histogram` or :py:class:`openturns.UserDefined`.
 
 Parameters
 ----------
-p : :py:class:`pyAgrum.pyAgrum.Potential_double`
+p : :py:class:`pyAgrum.Potential`
     A potential with one variable.
 
 Returns
@@ -69,11 +69,11 @@ Examples
 "Convert an n-d probability table to a distribution.
 
 Converts a multivariate aGrUM probability table to an OpenTURNS distribution,
-using :class:`~otagrum.MixedHistogramUserDefined`
+using :py:class:`openturns.MixedHistogramUserDefined`
 
 Parameters
 ----------
-p : :py:class:`pyAgrum.pyAgrum.Potential_double`
+p : :py:class:`pyAgrum.Potential`
     The potential
 
 Returns
