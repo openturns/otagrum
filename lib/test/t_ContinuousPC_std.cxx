@@ -83,11 +83,6 @@ void tests(void) {
                 << "CPDAG"
                 << "\n****\n"
                 << cpdag.toDot() << std::endl;
-      auto moral = learner.deriveMoralGraph(cpdag);
-      std::cout << "\n****\n"
-                << "Moral graph"
-                << "\n****\n"
-                << moral.toDot() << std::endl;
       auto jt = learner.deriveJunctionTree(cpdag);
       std::cout << "\n****\n"
                 << "Junction tree"
