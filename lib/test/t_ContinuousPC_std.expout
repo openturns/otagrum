@@ -87,21 +87,6 @@ node [shape = ellipse];
 
 
 ****
-Moral graph
-****
-digraph "no_name" {
-edge [dir=none]
-node [shape = ellipse];
-  0;  1;  2;  3;  4;  5;  6;
-  0 -> 1;
-  2 -> 3;
-  4 -> 6;
-  5 -> 6;
-
-}
-
-
-****
 Junction tree
 ****
 graph {
