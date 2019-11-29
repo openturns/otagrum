@@ -83,11 +83,6 @@ void tests(void) {
                 << "CPDAG"
                 << "\n****\n"
                 << cpdag.toDot() << std::endl;
-      auto jt = learner.deriveJunctionTree(cpdag);
-      std::cout << "\n****\n"
-                << "Junction tree"
-                << "\n****\n"
-                << jt.toDot() << std::endl;
 
       auto njt = learner.learnJunctionTree();
       std::cout << "\n****\n"
