@@ -84,4 +84,3 @@ digraph {
     "xray"->"either"
 }
 
-swig/python detected a memory leak of type 'gum::MixedGraph *', no destructor found.
