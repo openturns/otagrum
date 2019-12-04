@@ -8,9 +8,11 @@
 
 #include "otagrum/ContinuousPC.hxx"
 
-OT::Description DescrFromStringVect(const std::vector<std::string> &v) {
+OT::Description DescrFromStringVect(const std::vector<std::string> &v)
+{
   OT::Description res;
-  for (auto s : v) {
+  for (auto s : v)
+  {
     res.add(s);
   }
   return res;
@@ -22,7 +24,8 @@ OT::Description DescrFromStringVect(const std::vector<std::string> &v) {
 2--4 : p-value=6.18139e-35
 3--4 : p-value=3.61185e-182
 */
-OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
+OT::Sample getTrucBizarre(OT::UnsignedInteger size)
+{
   OT::Collection<OT::Distribution> copulas;
 
   OT::UnsignedInteger dim = 3;
@@ -45,8 +48,10 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size) {
   return copula.getSample(size);
 }
 
-void tests(void) {
-  try {
+void tests(void)
+{
+  try
+  {
     OT::RandomGenerator::SetSeed(0);
     OT::Sample sample = getTrucBizarre(5000);
     std::cout << "Sample size : " << sample.getSize() << std::endl
@@ -60,7 +65,8 @@ void tests(void) {
 
       auto cpdag = learner.learnPDAG();
       std::cout << cpdag.toDot() << std::endl;
-      for (const auto &e : skel.edges()) {
+      for (const auto &e : skel.edges())
+      {
         std::cout << e
                   << " : p-value=" << learner.getPValue(e.first(), e.second())
                   << "   ttest=" << learner.getTTest(e.first(), e.second())
@@ -99,9 +105,13 @@ void tests(void) {
       for (const auto &s : learner.getTrace())
         std::cout << s << std::endl;
     }
-  } catch (OT::Exception &e) {
+  }
+  catch (OT::Exception &e)
+  {
     std::cout << e.__repr__() << std::endl;
-  } catch (gum::Exception &e) {
+  }
+  catch (gum::Exception &e)
+  {
     GUM_SHOWERROR(e);
   }
 };
@@ -139,7 +149,8 @@ void testJulien()
   }
 }
 
-int main(void) {
+int main(void)
+{
 //   OT::Log::Show(OT::Log::ALL);
   tests();
 

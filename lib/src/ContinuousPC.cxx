@@ -755,7 +755,8 @@ double ContinuousPC::getTTest(gum::NodeId x, gum::NodeId y) const
   }
 }
 
-const OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) const {
+const OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) const
+{
   gum::Edge e(x, y);
   if (pvalues_.exists(e))
   {
@@ -836,7 +837,8 @@ gum::NodeId ContinuousPC::idFromName(const std::string &n) const
       << "Error: name '" << n << "' is not a node name.";
 }
 
-std::vector<std::string> ContinuousPC::getTrace() const {
+std::vector<std::string> ContinuousPC::getTrace() const
+{
   const auto &description = tester_.getDataDescription();
 
   std::vector<std::string> res(removed_.size());
