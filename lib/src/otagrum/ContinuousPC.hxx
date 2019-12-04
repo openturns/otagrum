@@ -75,7 +75,6 @@ public:
 
   std::vector<std::string> getTrace() const;
 private:
-  bool skel_done_, pdag_done_, dag_done_, jt_done_;
   gum::EdgeProperty<OT::Indices> sepset_;
   gum::EdgeProperty<double> pvalues_;
   gum::EdgeProperty<double> ttests_;
@@ -84,6 +83,8 @@ private:
   OT::UnsignedInteger maxCondSet_;
   bool verbose_;
   ContinuousTTest tester_;
+
+  bool skel_done_, pdag_done_, dag_done_, jt_done_;
 
   bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n);
 
