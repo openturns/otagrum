@@ -55,6 +55,16 @@ alpha : float
 
 // ----------------------------------------------------------------------------
 
+%feature("docstring") OTAGRUM::ContinuousTTest::getDataDescription
+"Data description accessor
+
+Returns
+-------
+description : str
+    Data description"
+
+// ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::ContinuousTTest::getTTest
 "Test statistics accessor
 
