@@ -74,7 +74,6 @@ public:
 
   OT::Description getTrace() const;
 private:
-  bool skel_done_, pdag_done_, dag_done_, jt_done_;
   gum::EdgeProperty<OT::Indices> sepset_;
   gum::EdgeProperty<double> pvalues_;
   gum::EdgeProperty<double> ttests_;
@@ -84,7 +83,9 @@ private:
   bool verbose_;
   ContinuousTTest tester_;
 
-  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n) ;
+  bool skel_done_, pdag_done_, dag_done_, jt_done_;
+
+  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n);
 
   std::tuple<bool, double, double, OT::Indices>
   getSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
