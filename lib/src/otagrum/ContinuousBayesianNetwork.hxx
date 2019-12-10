@@ -24,7 +24,7 @@
 #include <openturns/ContinuousDistribution.hxx>
 #include <openturns/Distribution.hxx>
 
-#include "NamedDAG.hxx"
+#include "otagrum/NamedDAG.hxx"
 #include "otagrum/otagrumprivate.hxx"
 
 namespace OTAGRUM
