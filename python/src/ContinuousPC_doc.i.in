@@ -1,14 +1,65 @@
 %feature("docstring") OTAGRUM::ContinuousPC
-"ContinuousPC learner.
+"ContinuousPC learner
 
 Parameters
 ----------
 data : 2-d sequence of float
     The data
-maxParents : int, optional
-    The maximum number of parents a node can have
-alpha : float, optional
+maxConditioningSetSize : int, optional
+    The maximum conditioning set for independecy test
+alpha : float
     Hypothesis test threshold"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::PDAGtoDot
+"Convert PDAG graph to dot
+
+Parameters
+----------
+pdag : :py:class:`pyAgrum.MixedGraph`
+    dag
+
+Returns
+-------
+dot : str
+    Dot format representation"
+
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::skeletonToDot
+"Convert skeleton graph to dot
+
+Parameters
+----------
+pdag : :py:class:`pyAgrum.UndiGraph`
+    dag
+
+Returns
+-------
+dot : str
+    Dot format representation"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::learnSkeleton
+"Skeleton learner
+
+Returns
+-------
+gum::UndiGraph : :py:class:`pyAgrum.UndiGraph`
+    the skeleton"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::learnPDAG
+"PDAG leaner
+
+Returns
+-------
+gum::MixedGraph : :py:class:`pyAgrum.MixedGraph`
+    the PDAG"
 
 // ----------------------------------------------------------------------------
 
@@ -29,31 +80,6 @@ Returns
 -------
 dag : :class:`~otagrum.NamedDAG`
     DAG"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::inferSkeleton
-"Skeleton graph accessor.
-
-Returns
--------
-skeleton : :py:class:`pyAgrum.UndiGraph`
-    Skeleton graph"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::inferPDAG
-"Infger PDAG.
-
-Parameters
-----------
-g : :py:class:`pyAgrum.UndiGraph`
-    g
-
-Returns
--------
-pdag : :py:class:`pyAgrum.MixedGraph`
-    PDAG"
 
 // ----------------------------------------------------------------------------
 
@@ -102,38 +128,10 @@ junction_tree : :py:class:`pyAgrum.JunctionTree`
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousPC::PDAGtoDot
-"Convert PDAG graph to dot.
 
-Parameters
-----------
-pdag : :py:class:`pyAgrum.MixedGraph`
-    dag
-
-Returns
--------
-dot : str
-    Dot format representation"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::skeletonToDot
-"Convert skeleton graph to dot.
-
-Parameters
-----------
-pdag : :py:class:`pyAgrum.UndiGraph`
-    dag
-
-Returns
--------
-dot : str
-    Dot format representation"
-
-// ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getPValue
-"P-Value accessor.
+"P-Value accessor
 
 Parameters
 ----------
@@ -160,7 +158,7 @@ sepset_names : :py:class:`openturns.Description`
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getSepset
-"Sep indices.
+"Sep indices
 
 Parameters
 ----------
@@ -177,7 +175,7 @@ sep_set : :py:class:`openturns.Indices`
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getTTest
-"Test statistics accessor.
+"Test statistics accessor
 
 Parameters
 ----------
@@ -194,7 +192,7 @@ ttest : float
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::setVerbosity
-"Verbosity flag accessor.
+"Verbosity flag accessor
 
 Parameters
 ----------
@@ -204,7 +202,7 @@ verbose : bool
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getVerbosity
-"Verbosity flag accessor.
+"Verbosity flag accessor
 
 Returns
 -------
