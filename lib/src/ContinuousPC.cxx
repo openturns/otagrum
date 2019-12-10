@@ -644,7 +644,7 @@ double ContinuousPC::getTTest(gum::NodeId x, gum::NodeId y) const {
   }
 }
 
-OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) const {
+const OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) const {
   gum::Edge e(x, y);
   if (pvalues_.exists(e)) {
     return sepset_[e];
@@ -681,14 +681,16 @@ double ContinuousPC::getTTest(const std::string &x,
   return getTTest(idFromName(x), idFromName(y));
 }
 
-OT::Description
-ContinuousPC::getSepsetNames(const std::string &x, const std::string &y) const {
-  OT::Description res;
+const std::vector<std::string>
+ContinuousPC::getSepsetNames(const std::string &x, const std::string &y) const
+{
+  std::vector<std::string> res;
   const auto &description = tester_.getDataDescription();
 
   auto inds = getSepset(idFromName(x), idFromName(y));
-  for (OT::UnsignedInteger i = 0; i < inds.getSize(); i++) {
-    res.add(description.at(inds[i]));
+  for (OT::UnsignedInteger i = 0; i < inds.getSize(); i++)
+  {
+    res.push_back(description.at(inds[i]));
   }
 
   return res;
@@ -706,11 +708,12 @@ gum::NodeId ContinuousPC::idFromName(const std::string &n) const {
       << "Error: name '" << n << "' is not a node name.";
 }
 
-OT::Description ContinuousPC::getTrace() const {
+std::vector<std::string> ContinuousPC::getTrace() const {
   const auto &description = tester_.getDataDescription();
 
-  OT::Description res(removed_.size());
-  for (OT::UnsignedInteger i = 0; i < removed_.size(); i++) {
+  std::vector<std::string> res(removed_.size());
+  for (OT::UnsignedInteger i = 0; i < removed_.size(); i++)
+  {
     std::stringstream ss;
     ss << std::setfill('0') << std::setw(3) << i << std::setfill(' ');
     ss << " : ";
