@@ -63,6 +63,21 @@ gum::MixedGraph : :py:class:`pyAgrum.MixedGraph`
 
 // ----------------------------------------------------------------------------
 
+%feature("docstring") OTAGRUM::ContinuousPC::inferPDAG
+"PDAG accessor
+
+Parameters
+----------
+q : :py:class:`pyAgrum.MixedGraph`
+    q
+
+Returns
+-------
+moral_graph : :py:class:`pyAgrum.UndiGraph`
+    moral_graph"
+
+// ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::ContinuousPC::learnJunctionTree
 "Learn junction tree.
 
@@ -188,6 +203,16 @@ Returns
 -------
 ttest : float
     Test statistics"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::inferSkeleton
+"Skeleton graph accessor
+
+Returns
+-------
+skeleton : :py:class:`pyAgrum.UndiGraph`
+    Skeleton graph"
 
 // ----------------------------------------------------------------------------
 

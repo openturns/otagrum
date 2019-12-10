@@ -1,5 +1,6 @@
 %feature("docstring") OTAGRUM::NamedDAG
-"NamedDAG interface.
+"NamedDAG represents a directed acyclic graph (DAG) whose nodes have an
+associated name.
 
 Available constructors:
     NamedDAG(*bn*)
@@ -18,36 +19,36 @@ names : sequence of str
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getSize
-"Size accessor
+"Get size of the DAG.
 
 Returns
 -------
 size : int
-    Number of nodes in the tree"
+    The number of nodes in the DAG"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getDescription
-"Size accessor
+"Get the list of node names.
 
 Returns
 -------
-names : sequence of str
-    Node names"
+names : list
+    The list of node names"
 
 // ----------------------------------------------------------------------------
 %feature("docstring") OTAGRUM::NamedDAG::getParents
-"Parents accessor.
+"Get :py:class:`openturns.Indices` of parents.
 
 Parameters
 ----------
 node : int
-    Node child of the parents
+    Node id
 
 Returns
 -------
 parents : :py:class:`openturns.Indices`
-    Parents to the node
+    Indices of parent node
 "
 
 // ----------------------------------------------------------------------------
@@ -86,3 +87,16 @@ Returns
 nodes : :py:class:`openturns.Indices`
     List of nodes
 "
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::NamedDAG::toDot
+"Displays the graph in DOT format
+
+Returns
+-------
+dot : str
+    DOT graph
+"
+
+// ----------------------------------------------------------------------------
