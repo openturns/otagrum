@@ -1,0 +1,68 @@
+%feature("docstring") OTAGRUM::ContinuousBayesianNetworkFactory
+"Estimate a ContinuousBayesianNetwork distribution.
+
+Parameters
+----------
+factories : sequence of :class:`~openturns.Distribution`
+    The models to test for each local distribution. Default value is
+    (:class:`~openturns.BernsteinCopulaFactory`).
+namedDAG : :class:`~otagrum.NamedDAG`
+    The structure of the underlying graphical model. Default value is
+    :class:`~otagrum.NamedDAG()`
+alpha : float
+    Threshold on the p-value for the conditional independence tests. Default
+    value is *0.1*.
+maximumConditioningSetSize : int
+    Maximum conditional set size. Default value is *5*.
+
+Notes
+-----
+    A *namedDAG* parameter of size 0 (ie equal to NamedDAG(), default value) means
+    that the structure has also to be learnt, using the
+    :class:`~otagrum.ContinuousPC` algorithm.
+    The parameters *alpha* and *maximumConditioningSetSize* are used only if the
+    :class:`~otagrum.NamedDAG` has to be learnt.
+    The following keys in :class:`~openturns.ResourceMap` can be used to fine-tune
+    the learning process:
+           
+    - *'ContinuousBayesianNetworkFactory-DefaultAlpha'* to set the p-value
+      threshold for the independence test in :class:`~otagrum.ContinuousPC`.
+      Default value is *0.1*.
+    - *'ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize'*
+      to set the maximum dimension of the parents in the Bayesian network.
+      Default value is *5*.
+    - *'ContinuousBayesianNetworkFactory-WorkInCopulaSpace'* to indicate if the
+      estimated distribution should be a copula. Default value is *True*
+    - *'ContinuousBayesianNetworkFactory-LearningRatio'* to set the proportion of
+      the given sample to be used for the learning phase. Default value is *0.5*.
+
+    If the parameter *factories* contains more than one factory, the given sample
+    is split into a learning sample and a validation sample. At each node,
+    each of these factories is used to build a local model using the learning
+    sample, then the best model is the one maximizing the log-likelihood of the
+    validation sample.
+     
+Examples
+--------
+>>> import otagrum
+>>> import openturns as ot
+>>> factories = [ot.NormalCopulaFactory(), ot.BernsteinCopulaFactory()]
+>>> ndag = otagrum.NamedDAG()
+>>> threshold = 0.1
+>>> maxParents = 5
+>>> factory = otagrum.ContinuousBayesianNetworkFactory(factories, ndag, threshold, maxParents)"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork
+"Build as ContinuousBayesianNetwork distribution.
+
+Parameters
+----------
+sample : :py:class:`openturns.Sample`
+    Input sample.
+
+Returns
+-------
+distribution : :class:`~otagrum.ContinuousBayesianNetwork`
+    Estimated distribution."

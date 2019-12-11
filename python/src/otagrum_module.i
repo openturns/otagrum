@@ -31,3 +31,4 @@
 %include ContinuousTTest.i
 %include ContinuousPC.i
 %include ContinuousBayesianNetwork.i
+%include ContinuousBayesianNetworkFactory.i

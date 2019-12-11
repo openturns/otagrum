@@ -15,3 +15,4 @@ API
     NamedJunctionTree
     NamedDAG
     ContinuousBayesianNetwork
+    ContinuousBayesianNetworkFactory
