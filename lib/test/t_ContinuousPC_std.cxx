@@ -121,7 +121,7 @@ void testJulien()
 {
   const auto data =
     OT::Sample::ImportFromCSVFile(dirname() + "correlated_sample.csv");
-  const auto n_nodes = data.getDimension();
+  //const auto n_nodes = data.getDimension();
   const auto desc = data.getDescription();
   std::cout << desc << std::endl;
 
