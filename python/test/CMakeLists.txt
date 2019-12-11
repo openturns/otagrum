@@ -84,6 +84,7 @@ if (NBCONVERT_FOUND)
 endif ()
 ot_pyinstallcheck_test (plant_growth)
 ot_pyinstallcheck_test (ContinuousBayesianNetwork_std)
+ot_pyinstallcheck_test (ContinuousBayesianNetworkFactory_std)
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
                     DEPENDS ${PYINSTALLCHECK_TO_BE_RUN}
