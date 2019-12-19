@@ -19,17 +19,17 @@ names : sequence of str
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getSize
-"Get size of the DAG.
+"The number of nodes in the DAG.
 
 Returns
 -------
 size : int
-    The number of nodes in the DAG"
+    The DAG size"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getDescription
-"Get the list of node names.
+"The names of the DAG variables.
 
 Returns
 -------
@@ -37,8 +37,9 @@ names : list
     The list of node names"
 
 // ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::NamedDAG::getParents
-"Get :py:class:`openturns.Indices` of parents.
+"The parents of a node.
 
 Parameters
 ----------
@@ -48,22 +49,23 @@ node : int
 Returns
 -------
 parents : :py:class:`openturns.Indices`
-    Indices of parent node
+    Indices of parent nodes
 "
 
 // ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::NamedDAG::getChildren
-"Children accessor.
+"The children of a node.
 
 Parameters
 ----------
 node : int
-    Node parent of the children
+    Node id
 
 Returns
 -------
 children : :py:class:`openturns.Indices`
-    Children to the node
+    Indices of children nodes
 "
 
 // ----------------------------------------------------------------------------
@@ -80,18 +82,18 @@ nodes : :py:class:`openturns.Indices`
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getTopologicalOrder
-"Get topological order of nodes.
+"The list of the nodes IDs in a topological order.
 
 Returns
 -------
 nodes : :py:class:`openturns.Indices`
-    List of nodes
+    Indices of nodes
 "
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::toDot
-"Displays the graph in DOT format
+"Displays the graph in DOT format.
 
 Returns
 -------

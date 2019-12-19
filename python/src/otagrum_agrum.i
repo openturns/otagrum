@@ -22,6 +22,7 @@ using namespace gum;
 
 %import (module="pyAgrum") <agrum/core/set.h>
 
+%import (module="pyAgrum") <agrum/core/types.h>
 %import (module="pyAgrum") <agrum/graphs/graphElements.h>
 %import (module="pyAgrum") <agrum/graphs/diGraph.h>
 %import (module="pyAgrum") <agrum/graphs/undiGraph.h>

@@ -16,14 +16,14 @@ where :math:`$t_i$` are the aGrUM ticks, and :math:`$X$` is distributed accordin
 Parameters
 ----------
 distribution : :py:class:`openturns.Distribution`
-    An continuous 1-d distribution
+    An continuous 1-d distribution.
 v : :py:class:`pyAgrum.DiscretizedVariable`
-    A discrete variable
+    A discrete variable.
 
 Returns
 -------
 p : :py:class:`pyAgrum.Potential`
-    The resulting potential
+    The resulting potential.
 
 Examples
 --------
@@ -51,7 +51,7 @@ p : :py:class:`pyAgrum.Potential`
 Returns
 -------
 distribution : :py:class:`openturns.Distribution`
-    A distribution
+    A distribution.
 
 Examples
 --------
@@ -74,12 +74,12 @@ using :py:class:`openturns.MixedHistogramUserDefined`
 Parameters
 ----------
 p : :py:class:`pyAgrum.Potential`
-    The potential
+    The potential.
 
 Returns
 -------
 distribution : :py:class:`openturns.Distribution`
-    A distribution
+    A distribution.
 
 Examples
 --------

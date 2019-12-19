@@ -4,11 +4,11 @@
 Parameters
 ----------
 nbBins : int
-    Number of bins
+    Number of bins.
 alpha : float
-    Threshold
+    Threshold.
 maximumConditioningSetSize : int
-    Maximum conditional set size
+    Maximum conditional set size.
 
 Examples
 --------
@@ -18,7 +18,7 @@ Examples
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::JunctionTreeBernsteinCopulaFactory::buildAsJunctionTreeBernsteinCopula
-"Build as JunctionTreeBernsteinCopula distribution.
+"Build a JunctionTreeBernsteinCopula distribution estimated from a sample.
 
 Parameters
 ----------
@@ -28,4 +28,4 @@ sample : :py:class:`openturns.Sample`
 Returns
 -------
 distribution : :class:`~otagrum.JunctionTreeBernsteinCopula`
-    Estimated distribution."
+    The estimated JunctionTreeBernsteinCopula distribution."
