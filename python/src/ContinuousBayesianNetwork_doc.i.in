@@ -24,12 +24,12 @@ Create a CBN from a DAG structure and a collection of distributions
 >>> ndag = otagrum.NamedDAG(bn)
 >>> jointDistributions = []
 >>> for i in range(ndag.getSize()):
->>>     dim = 1 + ndag.getParents(i).getSize()
->>>     R = ot.CorrelationMatrix(dim)
->>>     for j in range(dim):
->>>         for k in range(j):
->>>             R[j, k] = 0.8
->>>     jointDistributions.append(ot.Normal([0.0]*dim, [1.0]*dim, R).getCopula())
+...     dim = 1 + ndag.getParents(i).getSize()
+...     R = ot.CorrelationMatrix(dim)
+...     for j in range(dim):
+...         for k in range(j):
+...             R[j, k] = 0.8
+...     jointDistributions.append(ot.Normal([0.0]*dim, [1.0]*dim, R).getCopula())
 >>> cbn = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)
 
 Draw a sample from the joint distribution encoded by the CBN
