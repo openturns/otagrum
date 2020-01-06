@@ -64,15 +64,22 @@ void OTAgrumResourceMap::Initialize()
     perror("ResourceMap::Initialize mutex initialization failed");
     exit(1);
   }
+  // openturns<1.15
+#ifndef OPENTURNS_VERSION
+#define AddAsScalar SetAsScalar
+#define AddAsUnsignedInteger SetAsUnsignedInteger
+#define AddAsBool SetAsBool
+#define AddAsScalar SetAsScalar
+#endif
   // JunctionTreeBernsteinCopulaFactory
-  ResourceMap::SetAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha", 0.1);
-  ResourceMap::SetAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);
-  ResourceMap::SetAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize", 5);
+  ResourceMap::AddAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha", 0.1);
+  ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);
+  ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize", 5);
   // ContinuousBayesianNetworkFactory
-  ResourceMap::SetAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
-  ResourceMap::SetAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
-  ResourceMap::SetAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
-  ResourceMap::SetAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);  
+  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
+  ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
+  ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
+  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);  
 }
 
 } // namespace OTAGRUM
