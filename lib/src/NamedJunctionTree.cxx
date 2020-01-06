@@ -2,7 +2,7 @@
 /**
  *  @brief NamedJunctionTree
  *
- *  Copyright 2010-2019 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2020 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -105,17 +105,17 @@ OT::Indices NamedJunctionTree::getNodes() const
   return Utils::FromNodeSet(jt_.asNodeSet());
 }
 
-OT::Collection<OT::Indices> NamedJunctionTree::getCliquesCollection() const
+NamedJunctionTree::IndicesList NamedJunctionTree::getCliquesCollection() const
 {
-  OT::Collection<OT::Indices> res;
+  IndicesList res;
   for (const auto &cliq : jt_.nodes())
     res.add(getClique(cliq));
   return res;
 }
 
-OT::Collection<OT::Indices> NamedJunctionTree::getSeparatorsCollection() const
+NamedJunctionTree::IndicesList NamedJunctionTree::getSeparatorsCollection() const
 {
-  OT::Collection<OT::Indices> res;
+  IndicesList res;
   for (const auto &edg : jt_.edges())
     res.add(getSeparator(edg.first(), edg.second()));
   return res;

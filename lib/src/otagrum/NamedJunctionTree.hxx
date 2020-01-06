@@ -2,7 +2,7 @@
 /**
  *  @brief NamedJunctionTree
  *
- *  Copyright 2010-2019 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2020 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +38,8 @@ namespace OTAGRUM
 class OTAGRUM_API NamedJunctionTree : public OT::Object
 {
 public:
+  typedef OT::Collection<OT::Indices> IndicesList;
+
   NamedJunctionTree();
   NamedJunctionTree(const gum::CliqueGraph &jt, const gum::BayesNet<double> &bn);
   NamedJunctionTree(const gum::CliqueGraph &jt, const std::vector<std::string> &names);
@@ -52,8 +54,8 @@ public:
   OT::Indices getNeighbours(OT::UnsignedInteger id) const;
   OT::Indices getNodes() const;
 
-  OT::Collection<OT::Indices> getCliquesCollection() const;
-  OT::Collection<OT::Indices> getSeparatorsCollection() const;
+  IndicesList getCliquesCollection() const;
+  IndicesList getSeparatorsCollection() const;
 
   NamedJunctionTree getMarginal(OT::Indices indices) const;
 
