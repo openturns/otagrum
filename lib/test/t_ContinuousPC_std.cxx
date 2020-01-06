@@ -55,10 +55,10 @@ void tests(void) {
     {
       OTAGRUM::ContinuousPC learner(sample, 3, 0.1);
       std::cout << "go" << std::endl;
-      auto skel = learner.inferSkeleton();
+      auto skel = learner.learnSkeleton();
       std::cout << learner.skeletonToDot(skel) << std::endl;
 
-      auto cpdag = learner.inferPDAG(skel);
+      auto cpdag = learner.learnPDAG();
       std::cout << cpdag.toDot() << std::endl;
       for (const auto &e : skel.edges()) {
         std::cout << e
@@ -73,26 +73,16 @@ void tests(void) {
       std::cout << "\n\n";
       OTAGRUM::ContinuousPC learner(sample, 5, 0.8);
       std::cout << "go" << std::endl;
-      auto skel = learner.inferSkeleton();
+      auto skel = learner.learnSkeleton();
       std::cout << "\n****\n"
                 << "skeleton"
                 << "\n****\n"
                 << skel.toDot() << std::endl;
-      auto cpdag = learner.inferPDAG(skel);
+      auto cpdag = learner.learnPDAG();
       std::cout << "\n****\n"
                 << "CPDAG"
                 << "\n****\n"
                 << cpdag.toDot() << std::endl;
-      auto moral = learner.deriveMoralGraph(cpdag);
-      std::cout << "\n****\n"
-                << "Moral graph"
-                << "\n****\n"
-                << moral.toDot() << std::endl;
-      auto jt = learner.deriveJunctionTree(cpdag);
-      std::cout << "\n****\n"
-                << "Junction tree"
-                << "\n****\n"
-                << jt.toDot() << std::endl;
 
       auto njt = learner.learnJunctionTree();
       std::cout << "\n****\n"
@@ -116,9 +106,44 @@ void tests(void) {
   }
 };
 
+std::string dirname()
+{
+  std::string res = __FILE__;
+  const size_t last_slash_idx = res.find_last_of("\\/");
+  if (std::string::npos != last_slash_idx)
+  {
+    res.erase(last_slash_idx + 1);
+  }
+  return res;
+}
+
+void testJulien()
+{
+  const auto data =
+    OT::Sample::ImportFromCSVFile(dirname() + "correlated_sample.csv");
+  //const auto n_nodes = data.getDimension();
+  const auto desc = data.getDescription();
+  std::cout << desc << std::endl;
+
+  try
+  {
+    auto learner = OTAGRUM::ContinuousPC(data, 3, 0.1);
+    auto pdag = learner.learnPDAG();
+    std::cout << "pdag:" << pdag << std::endl;
+    auto dag = learner.learnDAG();
+    std::cout << "dag:" << dag << std::endl;
+  }
+  catch (gum::Exception &e)
+  {
+    GUM_SHOWERROR(e);
+  }
+}
+
 int main(void) {
 //   OT::Log::Show(OT::Log::ALL);
   tests();
+
+  testJulien();
 
   return EXIT_SUCCESS;
 }

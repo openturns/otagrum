@@ -1,52 +1,53 @@
 %feature("docstring") OTAGRUM::ContinuousTTest
-"ContinuousTTest learner
+"ContinuousTTest class.
 
 Parameters
 ----------
 data : 2-d sequence of float
-    The data
+    The data from which the t-test statistics are extracted.
 alpha : float
-    Hypothesis test threshold"
+    The confidence level. If not specified, its value is set to 0.1."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::clearCache
-"Clear cache"
+"Clear cache containing the logPDFs of conditional empirical Bernstein copula
+(X,Y|Z) that are used to compute the test statistics."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::clearCacheLevel
-"Clear cache at specific level
+"Clear cache for a fixed size of conditioning set (cache level).
 
 Parameters
 ----------
 level : int
-    Cache level"
+    The cache level."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::getDimension
-"Dimension accessor
+"Return the dimension of the underlying data set.
 
 Returns
 -------
 dimension : int
-    Dimension"
+    Dimension of the data set."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::setAlpha
-"Hypothesis test threshold accessor
+"Change the hypothesis test threshold.
 
 Parameters
 ----------
-alpha : float
-    Hypothesis test threshold"
+alpha : float, :math:`\alpha \in [0, 1]`
+    New value of the hypothesis test threshold."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::getAlpha
-"Hypothesis test threshold accessor
+"Return the hypothesis test threshold.
 
 Returns
 -------
@@ -55,86 +56,107 @@ alpha : float
 
 // ----------------------------------------------------------------------------
 
+%feature("docstring") OTAGRUM::ContinuousTTest::getDataDescription
+"Return the description (variable names) of the underlying data set.
+
+Returns
+-------
+description : :class:`~openturns.Description`
+    Data description."
+
+// ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::ContinuousTTest::getTTest
-"Test statistics accessor
+"Return the value of t-test statistics for the hypothesis Y indep Z | X.
 
 Parameters
 ----------
 Y : int
-    Y
+    Y node id.
 Z : int
-    Z
-X : sequence of int
-    X
+    Z node id.
+X : list
+    list of node ids in the set X.
 
 Returns
 -------
 ttest : float
-    Test statistics value"
+    Value of the t-test statistics."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::getTTestWithoutCorrections
-"Raw test statistics accessor
+"Return the value of t-test statistics without corrections for the hypothesis
+Y indep Z | X.
 
 Parameters
 ----------
 Y : int
-    Y
+    Y node id.
 Z : int
-    Z
-X : sequence of int
-    X
+    Z node id.
+X : list
+    list of node ids in the set X.
 
 Returns
 -------
 ttest : float
-    Raw test statistics value"
+    Value of the raw t-test statistics"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::isIndepFromTest
-"isIndepFromTest
-
-Test whether TODO
+"Test independence from a given t-test statistics value and a given confidence
+threshold.
 
 Parameters
 ----------
 t : float
-    t
+    A value of t-test statistics.
 alpha : float
-    Hypothesis test threshold
+    A confidence threshold.
 
 Returns
 -------
-Y : float
-    Y
-Z : float
-    Z
-X : bool
-    X"
+result : tuple
+    (t-test, p-value, independent?)"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::isIndep
-"isIndep
-
-Test whether TODO
+"Test the hypothesis Y indep Z | X.
 
 Parameters
 ----------
 Y : int
-    Y
+    Y node id.
 Z : int
-    Z
-X : sequence of int
-    X
+    Z node id.
+X : list
+    list of node ids in the set X.
 
 Returns
 -------
-rvalue1 : float
-    rvalue1
-rvalue2 : float
-    rvalue2
-rvalue3 : bool
-    rvalue3"
+result : tuple
+    (t-test, p-value, independent?)"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousTTest::GetK
+"Static method to compute the bin number of an empirical Bernstein copula.
+
+Parameters
+----------
+size : int
+    Size of the sample from which the empirical Bernstein copula is extracted.
+dimension : int
+    Dimension of the sample from which the empirical Bernstein copula is extracted.
+
+Returns
+-------
+K : int
+    The number of cells into which each dimension of the unit hypercube is divided
+    to cluster the empirical copula sample."
+
+// ----------------------------------------------------------------------------
+

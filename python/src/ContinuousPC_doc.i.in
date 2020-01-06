@@ -5,105 +5,21 @@ Parameters
 ----------
 data : 2-d sequence of float
     The data
-maxParents : int, optional
-    The maximum number of parents a node can have
-alpha : float, optional
-    Hypothesis test threshold"
+maxConditioningSetSize : int, optional
+    The maximum conditioning set for independecy test
+alpha : float
+    Hypothesis test threshold
 
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::learnJunctionTree
-"Learn junction tree.
-
-Returns
--------
-njt : :class:`~otagrum.NamedJunctionTree`
-    Junction tree"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::learnDAG
-"Learn DAG.
-
-Returns
--------
-dag : :class:`~otagrum.NamedDAG`
-    DAG"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::inferSkeleton
-"Skeleton graph accessor.
-
-Returns
--------
-skeleton : :py:class:`pyAgrum.UndiGraph`
-    Skeleton graph"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::inferPDAG
-"Infger PDAG.
-
-Parameters
-----------
-g : :py:class:`pyAgrum.UndiGraph`
-    g
-
-Returns
--------
-pdag : :py:class:`pyAgrum.MixedGraph`
-    PDAG"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::deriveMoralGraph
-"Derive moral graph.
-
-Parameters
-----------
-g : :py:class:`pyAgrum.MixedGraph`
-    g
-
-Returns
--------
-moral_graph : :py:class:`pyAgrum.UndiGraph`
-    Moral graph."
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::deriveDAG
-"Derive DAG.
-
-Parameters
-----------
-p : :py:class:`pyAgrum.MixedGraph`
-    p
-
-Returns
--------
-junction_tree : :py:class:`pyAgrum.DAG`
-    DAG"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousPC::deriveJunctionTree
-"Derive Junction Tree.
-
-Parameters
-----------
-g : :py:class:`pyAgrum.UndiGraph`
-    g
-
-Returns
--------
-junction_tree : :py:class:`pyAgrum.JunctionTree`
-    Junction Tree"
+Notes
+-----
+PC algorithm is a constrained method allowing to learn the structure of a bayesian
+network. It consists in three steps : skeleton learning, V-structure searching
+and constraint propagation."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::PDAGtoDot
-"Convert PDAG graph to dot.
+"Displays the PDAG in DOT format.
 
 Parameters
 ----------
@@ -118,7 +34,7 @@ dot : str
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::skeletonToDot
-"Convert skeleton graph to dot.
+"Displays the skeleton graph to dot
 
 Parameters
 ----------
@@ -132,35 +48,112 @@ dot : str
 
 // ----------------------------------------------------------------------------
 
+%feature("docstring") OTAGRUM::ContinuousPC::learnSkeleton
+"Learn the skeleton.
+
+Returns
+-------
+gum::UndiGraph : :py:class:`pyAgrum.UndiGraph`
+    The learned skeleton
+
+Notes
+-----
+This step consists in taking the complete undirected graph on the set of variables
+and to remove an edge if the linked variables are independent conditionnaly to
+a subset of their neighbors."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::learnPDAG
+"Learn the PDAG.
+
+Returns
+-------
+gum::MixedGraph : :py:class:`pyAgrum.MixedGraph`
+    the learned PDAG
+
+Notes
+-----
+This step starts with the learned skeleton and looks at each triplet of variables
+X, Y, Z such that X-Z-Y and there is no edge between X and Y. If Z is in the sepset
+of X and Y, that is if it was in the conditional set that allowed to remove the edge
+between X and Y then we orient the triplet as X->Z<-Y."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::learnJunctionTree
+"Learn the junction tree.
+
+Returns
+-------
+njt : :class:`~otagrum.NamedJunctionTree`
+    the learned junction tree
+
+Notes
+-----
+In order to learn the junction tree, the PDAG is moralized and then triangulated
+giving an undirected graph. Each clique in this graph is then associated to a
+node in the junction tree and there is an edge between nodes sharing common
+variables. Finally to each edge is associated a separator containing the intersection
+of variables in the two linked nodes."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousPC::learnDAG
+"Learn the DAG.
+
+Returns
+-------
+dag : :class:`~otagrum.NamedDAG`
+    the learned DAG
+
+Notes
+-----
+This step starts with the learned PDAG and orient the remaining undirected edges
+by avoiding to add new V-structures unless it implies to create an oriented circle."
+
+// ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::ContinuousPC::getPValue
-"P-Value accessor.
+"P-value accessor.
 
 Parameters
 ----------
+x : str
+    A variable's name
+y : str
+    A variable's name
 x : int
-    Node id
+    A variable's id
 y : int
-    Node id
+    A variable's id
 
 Returns
 -------
 p_value : float
-    P-Value"
+    P-value of edge x - y"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getSepsetNames
-"Sep names accessor.
+"Separator set names accessor.
+
+Parameters
+----------
+x : str
+    A variable's name
+y : str
+    A variables's name
 
 Returns
 -------
 sepset_names : :py:class:`openturns.Description`
-    Separator set names"
+    The names of variables in the separator set of variables x and y"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getSepset
-"Sep indices.
+"Separator set indices accessor.
 
 Parameters
 ----------
@@ -172,39 +165,44 @@ y : int
 Returns
 -------
 sep_set : :py:class:`openturns.Indices`
-    Indices"
+    Indices of variables in the separator set of variables x and y"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getTTest
-"Test statistics accessor.
+"T-Test statistics accessor.
 
 Parameters
 ----------
+x : str
+    A variable's name
+y : str
+    A variable's name
 x : int
-    Node id
+    A variable's id
 y : int
-    Node id
+    A variable's id
 
 Returns
 -------
 ttest : float
-    Test statistics"
+    T-Test statistics value of edge x - y"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::setVerbosity
-"Verbosity flag accessor.
+"Change the value of verbosity flag. 
 
 Parameters
 ----------
 verbose : bool
-    Verbosity flag value"
+    New verbosity flag value. If True, a lot of details about the learning procedure
+    are printed."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getVerbosity
-"Verbosity flag accessor.
+"Returns the verbosity flag value.
 
 Returns
 -------
@@ -214,27 +212,28 @@ verbose : bool
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::getTrace
-"Trace accessor.
+"Returns a summary of the learning algorithm containing which conditional indepences
+have been found and the associated T-test and p-values.
 
 Returns
 -------
 trace : :py:class:`openturns.Description`
-    Trace"
+    Trace of the learning algorithm"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousPC::idFromName
-"ID accessor.
+"Id accessor.
 
 Parameters
 ----------
 n : str
-    Name
+    Node name
 
 Returns
 -------
 id : int
-    ID"
+    Id of the node"
 
 // ----------------------------------------------------------------------------
 
@@ -243,12 +242,17 @@ id : int
 
 Parameters
 ----------
-x : int or str
-    Node id
-y : int or str
-    Node id
+x : str
+    A variable's name
+y : str
+    A variable's name
+x : int
+    A variable's id
+y : int
+    A variable's id
 
 Returns
 -------
 removed : bool
-    Whether the arc x-y can be removed, this is equivalent to x and y being independent"
+    Whether the arc x-y has been removed, this is equivalent to x and y
+    being independent"

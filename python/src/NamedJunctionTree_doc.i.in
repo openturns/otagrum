@@ -9,11 +9,11 @@ Available constuctors:
 Parameters
 ----------
 jt : :py:class:`pyAgrum.CliqueGraph`
-    Junction tree
+    A junction tree.
 bn : :py:class:`pyAgrum.BayesNet`
-    Network
-names : sequence of str
-    Node names
+    A bayesian network.
+names : list
+    A list of node names.
 
 Examples
 --------
@@ -27,79 +27,79 @@ Examples
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedJunctionTree::getSize
-"Size accessor
+"Return size of the named junction tree.
 
 Returns
 -------
 size : int
-    Number of nodes in the tree"
+    The number of nodes in the junction tree."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedJunctionTree::getDescription
-"Size accessor
+"Return the description of the named junction tree.
 
 Returns
 -------
-names : sequence of str
-    Node names"
+names : list
+    The list of variable names."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedJunctionTree::getClique
-"Clique accessor
+"Return id of the variables in the clique.
 
 Parameters
 ----------
 node : int
-    Node associated to the desired clique
+    Id of the desired node clique.
 
 Returns
 -------
-clique : :py:class:`openturns.Indices`
-    Clique associated to the desired node"
+clique : :py:class:`~openturns.Indices`
+    Indices of the variables in the desired clique node."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedJunctionTree::getSeparator
-"Separator accessor
+"Return the separator associated to an edge of the junction tree.
 
 Parameters
 ----------
-nod1 : :in
-    one of the nodeId for the cliques associated to the desired edge
-nod2 : :in
-    the other for the cliques associated to the desired edge
+node1 : int
+    Id of one end of the desired edge.
+node2 : int
+    Id of the other end of the desired edge.
 
 Returns
 -------
-separator : :py:class:`openturns.Indices`
-    Separator associated to the desired arc"
+separator : :py:class:`~openturns.Indices`
+    Separator associated to the desired edge."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedJunctionTree::getNeighbours
-"Neighbours accessor
+"Return the neighbours of a clique node.
 
 Parameters
 ----------
 node : int
-    Node associated to the desired neighbours
+    Id of a clique node  in the junction tree.
 
 Returns
 -------
-neighbours : :py:class:`openturns.Indices`
-    Neighbours associated to the desired node"
+neighbours : :py:class:`~openturns.Indices`
+    Neighbours of the desired clique node."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedJunctionTree::getNodes
-"Nodes accessor
+"Return ids of the clique nodes in the junction tree.
 
 Returns
 -------
-nodes : :py:class:`openturns.Indices`
-    List of nodes"
+nodes : :py:class:`~openturns.Indices`
+    Ids of the clique nodes"
 
 // ----------------------------------------------------------------------------
 
@@ -124,14 +124,25 @@ separators : sequence of :py:class:`openturns.Indices`
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedJunctionTree::getMarginal
-"Marginal tree accessor
+"Return the marginal junction tree on desired variables.
 
 Parameters
 ----------
-nodes : :py:class:`openturns.Indices`
-    Nodes list
+nodes : :py:class:`~openturns.Indices`
+    Ids of target variables.
 
 Returns
 -------
 marginal : :class:`~otagrum.NamedJunctionTree`
-    Marginal junction tree"
+    Marginal junction tree on target variables."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::NamedJunctionTree::getOrderMaxFirst
+"Return an order on the junction tree beginning with the largest clique.
+
+Returns
+-------
+order : :class:`~openturns.Indices`
+    The order.
+"

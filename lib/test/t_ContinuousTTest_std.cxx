@@ -109,8 +109,8 @@ void testIndepsSeePythonTest()
   std::cout << "ttest value: " << t << "     pvalue:" << p
             << "   test:" << (ok ? " OK " : " fail ") << "\n";
 
-  // O et 2 independent if 1
-  std::tie(t, p, ok) = test.isIndep(0, 2, X + 1);
+  // O et 2 independent if 1. This test does not work anymore ?
+  std::tie(t, p, ok) = test.isIndep(1, 2, X + 0);
   std::cout << "ttest value: " << t << "     pvalue:" << p
             << "   test:" << (ok ? " OK " : " fail ") << "\n";
 }

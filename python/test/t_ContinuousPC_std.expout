@@ -1,0 +1,86 @@
+== PC algo starting 
+==  Size of conditioning set 0
+                     tub--lung CUT |[], pvalue=0.997208
+                  either--xray     |[], pvalue=3.2342e-23
+                    asia--xray CUT |[], pvalue=0.920563
+                    xray--lung     |[], pvalue=0.0465137
+                  bronc--smoke     |[], pvalue=4.18817e-30
+                   asia--bronc CUT |[], pvalue=0.975442
+                   tub--either     |[], pvalue=2.44594e-20
+                    asia--lung CUT |[], pvalue=0.94876
+                    dysp--xray CUT |[], pvalue=0.384636
+                   bronc--dysp     |[], pvalue=4.18993e-51
+                  either--lung     |[], pvalue=2.67064e-53
+                   xray--smoke CUT |[], pvalue=0.823419
+                    tub--smoke CUT |[], pvalue=0.971789
+                  asia--either CUT |[], pvalue=0.147766
+                   bronc--xray CUT |[], pvalue=0.846575
+                     asia--tub     |[], pvalue=1.70816e-22
+                     tub--dysp CUT |[], pvalue=0.397969
+                    dysp--lung CUT |[], pvalue=0.535078
+                 either--smoke     |[], pvalue=0.085204
+                   asia--smoke CUT |[], pvalue=0.894033
+                  dysp--either     |[], pvalue=3.2623e-19
+                   bronc--lung     |[], pvalue=0.0888096
+                    asia--dysp CUT |[], pvalue=0.806729
+                     tub--xray CUT |[], pvalue=0.149228
+                   smoke--lung     |[], pvalue=8.18981e-25
+                   dysp--smoke     |[], pvalue=0.0106764
+                    tub--bronc CUT |[], pvalue=0.810503
+                 bronc--either CUT |[], pvalue=0.93686
+==  Size of conditioning set 1
+                  either--xray     |[7], pvalue=0.000119679
+                    xray--lung CUT |[4], pvalue=0.949106
+                  bronc--smoke     |[3], pvalue=1.36151e-05
+                  bronc--smoke     |[7], pvalue=4.05109e-06
+                   bronc--dysp     |[6], pvalue=1.00259e-08
+                  either--lung     |[6], pvalue=6.6132e-10
+                  either--lung     |[5], pvalue=5.95522e-10
+                 either--smoke CUT |[3], pvalue=0.278818
+                  dysp--either     |[6], pvalue=0.000162402
+                   bronc--lung CUT |[6], pvalue=0.998298
+                   smoke--lung     |[4], pvalue=5.2663e-05
+                   smoke--lung     |[2], pvalue=3.73373e-05
+                   dysp--smoke CUT |[4], pvalue=0.16654
+==  Size of conditioning set 2
+== end
+digraph {
+    "D"->"C"
+    "E"->"C"
+    "A"->"B"
+    "F"->"G"
+}
+
+digraph "PDAG" {
+  edge [];
+  node [shape = ellipse];
+  0; 1; 2; 3; 4; 5; 6; 7; 
+
+  4->1 [label="t=9.24
+p=2.45e-20"]
+  0->1 [label="t=9.76
+p=1.71e-22"]
+  6->7 [label="t=10.3
+p=5.27e-05"]
+  4->7 [label="t=15.4
+p=6.61e-10"]
+  3->2 [label="t=15
+p=1e-08"]
+  6->2 [label="t=11.4
+p=1.36e-05"]
+  3->4 [label="t=8.96
+p=0.000162"]
+  5->4 [label="t=9.93
+p=0.00012"]
+}
+digraph {
+    "dysp"->"either"
+    "dysp"->"bronc"
+    "smoke"->"lung"
+    "smoke"->"bronc"
+    "either"->"tub"
+    "either"->"lung"
+    "asia"->"tub"
+    "xray"->"either"
+}
+

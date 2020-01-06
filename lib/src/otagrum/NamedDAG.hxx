@@ -32,8 +32,10 @@
 
 #include "otagrum/otagrumprivate.hxx"
 
-namespace OTAGRUM {
-class OTAGRUM_API NamedDAG : public OT::PersistentObject {
+namespace OTAGRUM
+{
+class OTAGRUM_API NamedDAG : public OT::PersistentObject
+{
   CLASSNAME;
 
 public:

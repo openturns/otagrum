@@ -274,6 +274,7 @@ OT::Indices NamedJunctionTree::getOrderMaxFirst() const
 
   while (marked.size() < jt_.size())
   {
+    // Looking for the largest possible root in the junction tree
     max = -1;
     for (auto nod : jt_.nodes())
     {

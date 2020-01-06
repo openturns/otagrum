@@ -1,5 +1,6 @@
 %feature("docstring") OTAGRUM::NamedDAG
-"NamedDAG interface.
+"NamedDAG represents a directed acyclic graph (DAG) whose nodes have an
+associated name.
 
 Available constructors:
     NamedDAG(*bn*)
@@ -18,51 +19,53 @@ names : sequence of str
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getSize
-"Size accessor
+"The number of nodes in the DAG.
 
 Returns
 -------
 size : int
-    Number of nodes in the tree"
+    The DAG size"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getDescription
-"Size accessor
+"The names of the DAG variables.
 
 Returns
 -------
-names : sequence of str
-    Node names"
+names : list
+    The list of node names"
 
 // ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::NamedDAG::getParents
-"Parents accessor.
+"The parents of a node.
 
 Parameters
 ----------
 node : int
-    Node child of the parents
+    Node id
 
 Returns
 -------
 parents : :py:class:`openturns.Indices`
-    Parents to the node
+    Indices of parent nodes
 "
 
 // ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::NamedDAG::getChildren
-"Children accessor.
+"The children of a node.
 
 Parameters
 ----------
 node : int
-    Node parent of the children
+    Node id
 
 Returns
 -------
 children : :py:class:`openturns.Indices`
-    Children to the node
+    Indices of children nodes
 "
 
 // ----------------------------------------------------------------------------
@@ -79,10 +82,23 @@ nodes : :py:class:`openturns.Indices`
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::NamedDAG::getTopologicalOrder
-"Get topological order of nodes.
+"The list of the nodes IDs in a topological order.
 
 Returns
 -------
 nodes : :py:class:`openturns.Indices`
-    List of nodes
+    Indices of nodes
 "
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::NamedDAG::toDot
+"Displays the graph in DOT format.
+
+Returns
+-------
+dot : str
+    DOT graph
+"
+
+// ----------------------------------------------------------------------------

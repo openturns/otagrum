@@ -44,26 +44,25 @@ public:
                         const OT::UnsignedInteger maxConditioningSetSize = 5,
                         const double alpha = 0.1);
 
+  /// lazy computation of the learnedSkeleton
+  gum::UndiGraph learnSkeleton();
+  /// lazy computation of the PDAG
+  gum::MixedGraph learnPDAG();
+  /// lazy computation of the junction tree
   NamedJunctionTree learnJunctionTree();
+  /// lazy computation of the DAG
   NamedDAG learnDAG();
-
-  gum::UndiGraph inferSkeleton();
-  gum::MixedGraph inferPDAG(const gum::UndiGraph &g) const;
-
-  gum::UndiGraph deriveMoralGraph(const gum::MixedGraph &g) const;
-  gum::JunctionTree deriveJunctionTree(const gum::UndiGraph &g) const;
-  gum::DAG deriveDAG(const gum::MixedGraph &p) const;
 
   void setVerbosity(bool verbose);
   bool getVerbosity() const;
 
   double getPValue(gum::NodeId x, gum::NodeId y) const;
   double getTTest(gum::NodeId x, gum::NodeId y) const;
-  OT::Indices getSepset(gum::NodeId x, gum::NodeId y) const;
+  const OT::Indices getSepset(gum::NodeId x, gum::NodeId y) const;
 
   double getPValue(const std::string &x, const std::string &y) const;
   double getTTest(const std::string &x, const std::string &y) const;
-  OT::Description getSepsetNames(const std::string &x, const std::string &y) const;
+  const std::vector<std::string> getSepsetNames(const std::string &x, const std::string &y) const;
 
   gum::NodeId idFromName(const std::string& n) const;
 
@@ -73,7 +72,7 @@ public:
   std::string skeletonToDot(const gum::UndiGraph &skeleton);
   std::string PDAGtoDot(const gum::MixedGraph &pdag);
 
-  OT::Description getTrace() const;
+  std::vector<std::string> getTrace() const;
 private:
   gum::EdgeProperty<OT::Indices> sepset_;
   gum::EdgeProperty<double> pvalues_;
@@ -84,7 +83,9 @@ private:
   bool verbose_;
   ContinuousTTest tester_;
 
-  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n) ;
+  bool skel_done_, pdag_done_, dag_done_, jt_done_;
+
+  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n);
 
   std::tuple<bool, double, double, OT::Indices>
   getSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
@@ -92,6 +93,17 @@ private:
   std::vector<std::string> namesFromData(void) const;
 
   const std::vector<gum::Edge> &getRemoved_() const;
+  gum::UndiGraph inferSkeleton_();
+  gum::MixedGraph inferPDAG_(const gum::UndiGraph &g) const;
+
+  gum::UndiGraph deriveMoralGraph_(const gum::MixedGraph &g) const;
+  gum::JunctionTree deriveJunctionTree_(const gum::UndiGraph &g) const;
+  gum::DAG deriveDAG_(const gum::MixedGraph &p) const;
+
+  gum::UndiGraph skel_;
+  gum::MixedGraph pdag_;
+  NamedDAG dag_;
+  NamedJunctionTree jt_;
 };
 
 } // namespace OTAGRUM

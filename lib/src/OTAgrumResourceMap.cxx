@@ -33,29 +33,34 @@
 
 using namespace OT;
 
-namespace OTAGRUM {
+namespace OTAGRUM
+{
 
 CLASSNAMEINIT(OTAgrumResourceMap);
 
 static pthread_mutex_t OTAgrumResourceMap_InstanceMutex_;
 
-OTAgrumResourceMap_init::OTAgrumResourceMap_init() {
+OTAgrumResourceMap_init::OTAgrumResourceMap_init()
+{
   static pthread_once_t OTAgrumResourceMap_InstanceMutex_once = PTHREAD_ONCE_INIT;
   int rc = pthread_once(&OTAgrumResourceMap_InstanceMutex_once,
                         OTAgrumResourceMap::Initialize);
-  if (rc != 0) {
+  if (rc != 0)
+  {
     perror("OTAgrumResourceMap_init::OTAgrumResourceMap_init once "
            "Initialization failed");
     exit(1);
   }
 }
 
-void OTAgrumResourceMap::Initialize() {
+void OTAgrumResourceMap::Initialize()
+{
   pthread_mutexattr_t attr;
   pthread_mutexattr_init(&attr);
   pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
   int rc = pthread_mutex_init(&OTAgrumResourceMap_InstanceMutex_, &attr);
-  if (rc != 0) {
+  if (rc != 0)
+  {
     perror("ResourceMap::Initialize mutex initialization failed");
     exit(1);
   }

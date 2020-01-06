@@ -1,32 +1,50 @@
 %feature("docstring") OTAGRUM::ContinuousBayesianNetwork
-"ContinuousBayesianNetwork distribution.
+"ContinuousBayesianNetwork class represents a copula bayesian network (CBN), that is
+a bayesian networks parameterized by local conditional copula functions for each
+node. The scope of each copula function is the node and its parents.
+
+Available constructor:
+    ContinuousBayesianNetwork(*NamedDAG, DistributionCollection*)
 
 Parameters
 ----------
 dag : :class:`~otagrum.NamedDAG`
-    Underlying junction tree
-jointDistributions : sequence of :py:class:`openturns.Distribution`
-    Collection of joint distributions
+    The structure of the CBN
+jointDistributions : :py:class:`openturns.DistributionCollection`
+    Collection of local conditional copula functions
 
 Examples
 --------
+Create a CBN from a DAG structure and a collection of distributions
+
 >>> import otagrum
 >>> import openturns as ot
 >>> import pyAgrum as gum
->>> bn = gum.BayesNet.fastPrototype('A->B->C->D;E->A->C<-E')
+>>> bn = gum.BayesNet.fastPrototype('A->C->B;')
 >>> ndag = otagrum.NamedDAG(bn)
 >>> jointDistributions = []
->>> #distribution = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)"
+>>> for i in range(ndag.getSize()):
+...     dim = 1 + ndag.getParents(i).getSize()
+...     R = ot.CorrelationMatrix(dim)
+...     for j in range(dim):
+...         for k in range(j):
+...             R[j, k] = 0.8
+...     jointDistributions.append(ot.Normal([0.0]*dim, [1.0]*dim, R).getCopula())
+>>> cbn = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)
+
+Draw a sample from the joint distribution encoded by the CBN
+
+>>> sample = cbn.getSample(100)"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getNamedDAG
-"Accessor to the DAG.
+"The CBN structure.
 
 Returns
 -------
 dag : :class:`~otagrum.NamedDAG`
-    Underlying junction tree"
+    The underlying NamedDAG"
 
 // ----------------------------------------------------------------------------
 
@@ -36,17 +54,17 @@ dag : :class:`~otagrum.NamedDAG`
 Parameters
 ----------
 dag : :class:`~otagrum.NamedDAG`
-    Underlying junction tree
-jointDistributions : sequence of :py:class:`openturns.Distribution`
-    Collection of joint distributions"
+    The underlying NamedDAG
+jointDistributions : sequence of :py:class:`openturns.DistributionCollection`
+    The collection of local conditional copulas"
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getDistributionCollection
-"Distribution collection accessor.
+"The collection of local conditional copulas.
 
 Returns
 -------
-jointDistributions : sequence of :py:class:`openturns.Distribution`
-    Collection of joint distributions
+jointDistributions : sequence of :py:class:`openturns.DistributionCollection`
+    Collection of local conditional copulas
 "
