@@ -38,6 +38,8 @@ namespace OTAGRUM
 class OTAGRUM_API NamedJunctionTree : public OT::Object
 {
 public:
+  typedef OT::Collection<OT::Indices> IndicesList;
+
   NamedJunctionTree();
   NamedJunctionTree(const gum::CliqueGraph &jt, const gum::BayesNet<double> &bn);
   NamedJunctionTree(const gum::CliqueGraph &jt, const std::vector<std::string> &names);
@@ -52,8 +54,8 @@ public:
   OT::Indices getNeighbours(OT::UnsignedInteger id) const;
   OT::Indices getNodes() const;
 
-  OT::Collection<OT::Indices> getCliquesCollection() const;
-  OT::Collection<OT::Indices> getSeparatorsCollection() const;
+  IndicesList getCliquesCollection() const;
+  IndicesList getSeparatorsCollection() const;
 
   NamedJunctionTree getMarginal(OT::Indices indices) const;
 

@@ -53,3 +53,6 @@ for cliq in njt.getOrderMaxFirst():
     else:
         print("FAILED")
 print()
+
+print('cliques=', njt.getCliquesCollection())
+print('separators=', njt.getSeparatorsCollection())

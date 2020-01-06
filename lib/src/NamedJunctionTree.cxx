@@ -105,17 +105,17 @@ OT::Indices NamedJunctionTree::getNodes() const
   return Utils::FromNodeSet(jt_.asNodeSet());
 }
 
-OT::Collection<OT::Indices> NamedJunctionTree::getCliquesCollection() const
+NamedJunctionTree::IndicesList NamedJunctionTree::getCliquesCollection() const
 {
-  OT::Collection<OT::Indices> res;
+  IndicesList res;
   for (const auto &cliq : jt_.nodes())
     res.add(getClique(cliq));
   return res;
 }
 
-OT::Collection<OT::Indices> NamedJunctionTree::getSeparatorsCollection() const
+NamedJunctionTree::IndicesList NamedJunctionTree::getSeparatorsCollection() const
 {
-  OT::Collection<OT::Indices> res;
+  IndicesList res;
   for (const auto &edg : jt_.edges())
     res.add(getSeparator(edg.first(), edg.second()));
   return res;
