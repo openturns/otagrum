@@ -29,7 +29,7 @@ def testSpecificInstance():
     # print(skel.toDot())
 
     dag = learner.learnDAG()
-    print(dag.toDot())
+    print(dag.toDot(), flush=True)
 
 
 def testAsiaDirichlet():

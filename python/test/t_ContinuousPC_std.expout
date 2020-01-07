@@ -1,3 +1,10 @@
+digraph {
+    "D"->"C"
+    "E"->"C"
+    "A"->"B"
+    "F"->"G"
+}
+
 == PC algo starting 
 ==  Size of conditioning set 0
                      tub--lung CUT |[], pvalue=0.997208
@@ -44,13 +51,6 @@
                    dysp--smoke CUT |[4], pvalue=0.16654
 ==  Size of conditioning set 2
 == end
-digraph {
-    "D"->"C"
-    "E"->"C"
-    "A"->"B"
-    "F"->"G"
-}
-
 digraph "PDAG" {
   edge [];
   node [shape = ellipse];
