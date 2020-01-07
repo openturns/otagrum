@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 import openturns as ot
-import openturns.viewer as otv
 import otagrum
 import pyAgrum as gum
 import sys
@@ -60,6 +59,7 @@ if False:
     pairs = ot.Pairs(sample)
     pairs.setPointStyle("dot")
     gr.add(pairs)
+    import openturns.viewer as otv
     view = otv.View(gr, (800, 820), square_axes=True)
     view.save("pairs.png")
     view.close()
