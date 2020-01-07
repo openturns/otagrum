@@ -4,8 +4,8 @@ from time import time
 
 import openturns as ot
 import pyAgrum as gum
-
 import otagrum
+import sys
 
 
 def generateDataForSpecificInstance(size):
@@ -29,8 +29,8 @@ def testSpecificInstance():
     # print(skel.toDot())
 
     dag = learner.learnDAG()
-    print(dag.toDot(), flush=True)
-
+    print(dag.toDot())
+    sys.stdout.flush()
 
 def testAsiaDirichlet():
     data = ot.Sample.ImportFromTextFile(os.path.dirname(__file__)+"/asia_dirichlet_5000.csv", ",")
