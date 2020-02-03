@@ -22,39 +22,40 @@ for nod in ndag.getNodes():
 
 order = ndag.getTopologicalOrder()
 print("topologicalOrder : ", order)
-if False:
-    jointDistributions = list()
-    for i in range(order.getSize()):
-        d = 1 + ndag.getParents(i).getSize()
-        print("i=", i, ", d=", d)
-        R = ot.CorrelationMatrix(d)
-        for i in range(d):
-            for j in range(i):
-                R[i, j] = 0.5 / d
-        jointDistributions.append(ot.Student(5.0, [0.0]*d, [1.0]*d, R).getCopula())
 
-    cbn = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)
-    print("cbn=", cbn)
-    print("cbn pdf=", cbn.computePDF([0.5]*d))
-    print("cbn realization=", cbn.getRealization())
-    size = 300
-    sampleLearn = cbn.getSample(size)
-    sample = cbn.getSample(size)
-    
-    sampleLearn.exportToCSVFile("samplelearn.csv", ",")
-    sample.exportToCSVFile("sample.csv", ",")
-    
-    print("cbn sample=", sample)
-    logL = 0.0
-    pdfSample = cbn.computePDF(sample)
-    pdfSample.exportToCSVFile("pdfSample.csv", ",")
-    for i in range(size):
-        logL += m.log(pdfSample(i, 0))
-        logL /= size
-    print("log-l=", logL)
-    copula = ot.NormalCopulaFactory().buildAsNormalCopula(sampleLearn)
-    print("copula=", copula)
-    print("log-l=", copula.computeLogPDF(sample).computeMean()[0])
+jointDistributions = list()
+for i in range(order.getSize()):
+    d = 1 + ndag.getParents(i).getSize()
+    print("i=", i, ", d=", d)
+    R = ot.CorrelationMatrix(d)
+    for i in range(d):
+        for j in range(i):
+            R[i, j] = 0.5 / d
+    jointDistributions.append(ot.Student(5.0, [0.0]*d, [1.0]*d, R).getCopula())
+
+cbn = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)
+print("cbn=", cbn)
+print("cbn pdf=", cbn.computePDF([0.5]*d))
+print("cbn realization=", cbn.getRealization())
+size = 300
+sampleLearn = cbn.getSample(size)
+sample = cbn.getSample(size)
+
+#sampleLearn.exportToCSVFile("samplelearn.csv", ",")
+#sample.exportToCSVFile("sample.csv", ",")
+
+print("cbn sample=", sample)
+logL = 0.0
+pdfSample = cbn.computePDF(sample)
+#pdfSample.exportToCSVFile("pdfSample.csv", ",")
+for i in range(size):
+    logL += m.log(pdfSample(i, 0))
+    logL /= size
+print("log-l=", logL)
+copula = ot.NormalCopulaFactory().buildAsNormalCopula(sampleLearn)
+print("copula=", copula)
+print("log-l=", copula.computeLogPDF(sample).computeMean()[0])
+if False:
     gr = ot.Graph()
     pairs = ot.Pairs(sample)
     pairs.setPointStyle("dot")
