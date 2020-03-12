@@ -41,9 +41,9 @@ public:
 
   /** Parameter constructor */
   explicit ContinuousBayesianNetworkFactory(const OT::Collection< OT::DistributionFactory > & factories,
-                                            const NamedDAG & namedDag = NamedDAG(),
-                                            const OT::Scalar alpha = 0.1,
-                                            const OT::UnsignedInteger maximumConditioningSetSize = 5);
+      const NamedDAG & namedDag = NamedDAG(),
+      const OT::Scalar alpha = 0.1,
+      const OT::UnsignedInteger maximumConditioningSetSize = 5);
 
   /** Virtual constructor */
   virtual ContinuousBayesianNetworkFactory *clone() const;

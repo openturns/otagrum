@@ -31,21 +31,20 @@
 
 #include "otagrum/ContinuousTTest.hxx"
 
-#define TRACE_CONTINUOUS_TTEST(x)                                         \
-  {                                                                       \
-    if (verbose_)                                                         \
-        std::cout << x;                                                   \
-  }                                                                       \
+#define TRACE_CONTINUOUS_TTEST(x)                                              \
+  {                                                                            \
+    if (verbose_)                                                              \
+      std::cout << x;                                                          \
+  }
 
 namespace OTAGRUM
 {
 
 ContinuousTTest::ContinuousTTest(const OT::Sample &data, const double alpha)
-  : OT::Object(),
-    verbose_(false)
+  : OT::Object(), verbose_(false)
 {
   setAlpha(alpha);
-  data_ = (data.rank() + 0.5) / data.getSize();  // Switching data to rank space
+  data_ = (data.rank() + 0.5) / data.getSize(); // Switching data to rank space
 }
 
 OT::UnsignedInteger ContinuousTTest::GetK(const OT::UnsignedInteger size,
@@ -127,7 +126,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
                                  const OT::Indices &X) const
 {
 
-  OT::UnsignedInteger k = 0;  // Bandwidth parameter
+  OT::UnsignedInteger k = 0; // Bandwidth parameter
 
   const auto dY = data_.getMarginal(Y);
   const auto dZ = data_.getMarginal(Z);
@@ -159,10 +158,9 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
   double yI = 0.0;
   double zI = 0.0;
 
-
-  if (d == 0)    // If the conditioning set is empty
+  if (d == 0) // If the conditioning set is empty
   {
-    const double fX0 = 1.0;  // Why isn't it 0.0 ?
+    const double fX0 = 1.0; // Why isn't it 0.0 ?
     for (unsigned int i = 0; i < N; ++i)
     {
       logDenominator = logFYZX[i];
@@ -187,7 +185,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
     } // i
   }   // d == 0
 
-  else if (d == 1)    // If the conditioning set is of size 1
+  else if (d == 1) // If the conditioning set is of size 1
   {
     for (unsigned int i = 0; i < N; ++i)
     {
