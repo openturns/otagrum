@@ -58,11 +58,11 @@ void testOK()
     OT::Sample pdf = copula.computePDF(sample);
     entropyMC2 = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
   }
-  std::cout<<"Same entropy : ";
-  if (fabs(entropyMC1-entropyMC2)<1e-5)
-    std::cout<<"OK"<<std::endl;
+  std::cout << "Same entropy : ";
+  if (fabs(entropyMC1 - entropyMC2) < 1e-5)
+    std::cout << "OK" << std::endl;
   else
-    std::cout<<"not OK"<<std::endl;
+    std::cout << "not OK" << std::endl;
 }
 
 int main(int /*argc*/, char ** /*argv*/)

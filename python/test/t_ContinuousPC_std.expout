@@ -1,8 +1,8 @@
 digraph {
-    "D"->"C"
-    "E"->"C"
-    "A"->"B"
     "F"->"G"
+    "E"->"C"
+    "D"->"C"
+    "A"->"B"
 }
 
 == PC algo starting 
@@ -74,13 +74,13 @@ p=0.000162"]
 p=0.00012"]
 }
 digraph {
-    "dysp"->"either"
-    "dysp"->"bronc"
     "smoke"->"lung"
     "smoke"->"bronc"
+    "xray"->"either"
+    "dysp"->"either"
+    "dysp"->"bronc"
     "either"->"tub"
     "either"->"lung"
     "asia"->"tub"
-    "xray"->"either"
 }
 

@@ -2,25 +2,24 @@
          BN :  BN{nodes: 5, arcs: 6, domainSize: 32, dim: 30}
        size :  5
        desc :  [A,B,C,D,E]
-      nodes :  [3,1,4,2,0]
- parents( 3 ) :  [2]
-children( 3 ) :  []
- parents( 1 ) :  [0]
-children( 1 ) :  [2]
+      nodes :  [4,0,1,2,3]
  parents( 4 ) :  []
 children( 4 ) :  [0,2]
- parents( 2 ) :  [1,4,0]
-children( 2 ) :  [3]
  parents( 0 ) :  [4]
 children( 0 ) :  [1,2]
-topologicalOrder :  [4,0,1,2,3]
+ parents( 1 ) :  [0]
+children( 1 ) :  [2]
+ parents( 2 ) :  [1,4,0]
+children( 2 ) :  [3]
+ parents( 3 ) :  [2]
+children( 3 ) :  []
 i= 0 , d= 2
 i= 1 , d= 2
 i= 2 , d= 4
 i= 3 , d= 2
 i= 4 , d= 1
 cbn= ContinuousBayesianNetwork(dag=[A,B,C,D,E]
-[B->C,E->A,E->C,C->D,A->B,A->C]
+[E->A,E->C,A->B,A->C,B->C,C->D]
 , joint distributions=[EmpiricalBernsteinCopula( copulaSample=      [ E          A          ]
   0 : [ 0.611111   0.847222   ]
   1 : [ 0.958333   0.972222   ]

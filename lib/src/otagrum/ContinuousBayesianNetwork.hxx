@@ -49,7 +49,7 @@ public:
 
   /** Parameters constructor */
   ContinuousBayesianNetwork(const NamedDAG & dag,
-			    const DistributionCollection & jointDistributions);
+                            const DistributionCollection & jointDistributions);
 
 public:
   /** Comparison operator */

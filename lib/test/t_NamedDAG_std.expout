@@ -1,57 +1,77 @@
-      proto : A->B->C->D;E->A->C<-E
+
+
+** Checking constructor 
+      proto : A->C->B->D;E->A->B<-E
          BN : BN{nodes: 5, arcs: 6, domainSize: 32, dim: 30}
 
        size : 5
-       desc : [A,B,C,D,E]
+       desc : [A,C,B,D,E]
 
-      nodes : [3,1,4,2,0]
- parents(3) : [2]
-children(3) : []
- parents(1) : [0]
-children(1) : [2]
- parents(4) : []
-children(4) : [0,2]
- parents(2) : [1,4,0]
-children(2) : [3]
  parents(0) : [4]
 children(0) : [1,2]
+ parents(1) : [0]
+children(1) : [2]
+ parents(2) : [1,4,0]
+children(2) : [3]
+ parents(3) : [2]
+children(3) : []
+ parents(4) : []
+children(4) : [0,2]
 topologicalOrder : [4,0,1,2,3]
 
-+++ +++ |[A,B,C,D,E]
-+++ +++ |[B->C,E->A,E->C,C->D,A->B,A->C]
+__str__ | [A,C,B,D,E]
+__str__ | [E->A,E->B,A->C,A->B,C->B,B->D]
 
 
-digraph {
-    "B"->"C"
+todo : digraph {
     "E"->"A"
-    "E"->"C"
-    "C"->"D"
-    "A"->"B"
+    "E"->"B"
     "A"->"C"
+    "A"->"B"
+    "C"->"B"
+    "B"->"D"
 }
+
+
+** Checking serialization 
+Before saving, NamedDAG, ndagFromTest
 
 ------------------
 Labels=ndag
 
 ------------------
 Before fill, NamedDAG, Unnamed
+After fill, NamedDAG, ndagFromTest
         size : 5
-       desc : [A,B,C,D,E]
+       desc : [A,C,B,D,E]
 
-      nodes : [3,1,4,2,0]
  parents(0) : [4]
 children(0) : [1,2]
+ parents(1) : [0]
+children(1) : [2]
+ parents(2) : [1,4,0]
+children(2) : [3]
+ parents(3) : [2]
+children(3) : []
+ parents(4) : []
+children(4) : [0,2]
 topologicalOrder : [4,0,1,2,3]
 
-+++ +++ |[A,B,C,D,E]
-+++ +++ |[B->C,E->C,E->A,C->D,A->B,A->C]
+__str__ |[A,C,B,D,E]
+__str__ |[E->A,E->B,A->C,A->B,C->B,B->D]
 
 
 digraph {
-    "B"->"C"
-    "E"->"C"
     "E"->"A"
-    "C"->"D"
-    "A"->"B"
+    "E"->"B"
     "A"->"C"
+    "A"->"B"
+    "C"->"B"
+    "B"->"D"
 }
+
+
+** Checking raised exceptions 
+  - Before removing a node : BN{nodes: 5, arcs: 5, domainSize: 32, dim: 24}
+  - After removing node C : BN{nodes: 4, arcs: 3, domainSize: 16, dim: 16}
+=> Trying to build a dag with non contiguous ids : OK 

@@ -48,10 +48,10 @@ ContinuousBayesianNetworkFactory::ContinuousBayesianNetworkFactory()
 }
 
 /* Parameter constructor */
-  ContinuousBayesianNetworkFactory::ContinuousBayesianNetworkFactory(const Collection< DistributionFactory > & factories,
-                                                                     const NamedDAG & namedDAG,
-                                                                     const Scalar alpha,
-                                                                     const UnsignedInteger maximumConditioningSetSize)
+ContinuousBayesianNetworkFactory::ContinuousBayesianNetworkFactory(const Collection< DistributionFactory > & factories,
+    const NamedDAG & namedDAG,
+    const Scalar alpha,
+    const UnsignedInteger maximumConditioningSetSize)
   : DistributionFactoryImplementation()
   , factories_(factories)
   , namedDAG_(namedDAG)
@@ -95,10 +95,10 @@ ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork(
   // Check if the named DAG has to be learnt
   NamedDAG localDAG;
   if (namedDAG_.getSize() == 0)
-    {
-      ContinuousPC learner(sample, maximumConditioningSetSize_, alpha_);
-      localDAG = learner.learnDAG();
-    }
+  {
+    ContinuousPC learner(sample, maximumConditioningSetSize_, alpha_);
+    localDAG = learner.learnDAG();
+  }
   else localDAG = namedDAG_;
   // Now, learn the local distributions
   Indices order = localDAG.getTopologicalOrder();
@@ -110,44 +110,44 @@ ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork(
   if ((learningSize == 0) || (learningSize == size))
     throw InvalidArgumentException(HERE) << "Error: expected a learning size between 1 and size-1, here learning size=" << learningSize << ". Check \"ContinuousBayesianNetworkFactory-LearningRatio\" in ResourceMap.";
   for (UnsignedInteger i = 0; i < order.getSize(); ++i)
+  {
+    Indices indices(localDAG.getParents(i));
+    LOGINFO(OSS() << "Learn node=" << i << ", with parents=" << indices);
+    const UnsignedInteger dimension =  1 + indices.getSize();
+    if (dimension == 1 && workInCopulaSpace) localDistributions.add(Uniform(0.0, 1.0));
+    else
     {
-      Indices indices(localDAG.getParents(i));
-      LOGINFO(OSS() << "Learn node=" << i << ", with parents=" << indices);
-      const UnsignedInteger dimension =  1 + indices.getSize();
-      if (dimension == 1 && workInCopulaSpace) localDistributions.add(Uniform(0.0, 1.0));
+      indices.add(i);
+      Sample localSample(sample.getMarginal(indices));
+      // Now, check if we have to perform a model selection
+      if (factories_.getSize() == 1)
+        localDistributions.add(factories_[0].build(localSample));
       else
+      {
+        // Select the best model using a cross-validation based on
+        // log-likelihood
+        Sample validationSample(localSample.split(learningSize));
+        const UnsignedInteger factoriesNumber = factories_.getSize();
+        Scalar bestScore = -SpecFunc::MaxScalar;
+        Distribution bestCandidate;
+        for (UnsignedInteger j = 0; j < factoriesNumber; ++j)
         {
-          indices.add(i);
-          Sample localSample(sample.getMarginal(indices));
-          // Now, check if we have to perform a model selection
-          if (factories_.getSize() == 1)
-            localDistributions.add(factories_[0].build(localSample));
-          else
-            {
-              // Select the best model using a cross-validation based on
-              // log-likelihood
-              Sample validationSample(localSample.split(learningSize));
-              const UnsignedInteger factoriesNumber = factories_.getSize();
-              Scalar bestScore = -SpecFunc::MaxScalar;
-              Distribution bestCandidate;
-              for (UnsignedInteger j = 0; j < factoriesNumber; ++j)
-                {
-                  Distribution candidate(factories_[j].build(localSample));
-                  // Enforce the candidate to be a copula
-                  if (workInCopulaSpace && !candidate.isCopula())
-                    candidate = candidate.getCopula();
-                  const Scalar score = candidate.computeLogPDF(validationSample).computeMean()[0];
-                  LOGINFO(OSS() << "Candidate " << j << "=" << candidate << ", score=" << score);
-                  if (score > bestScore)
-                    {
-                      bestScore = score;
-                      bestCandidate = candidate;
-                    }
-                } // j (factories)
-            localDistributions.add(bestCandidate);              
-            } // factories_.getSize() > 1
-        } // d > 1 or !workInCopulaSpace
-    } // i (nodes)
+          Distribution candidate(factories_[j].build(localSample));
+          // Enforce the candidate to be a copula
+          if (workInCopulaSpace && !candidate.isCopula())
+            candidate = candidate.getCopula();
+          const Scalar score = candidate.computeLogPDF(validationSample).computeMean()[0];
+          LOGINFO(OSS() << "Candidate " << j << "=" << candidate << ", score=" << score);
+          if (score > bestScore)
+          {
+            bestScore = score;
+            bestCandidate = candidate;
+          }
+        } // j (factories)
+        localDistributions.add(bestCandidate);
+      } // factories_.getSize() > 1
+    } // d > 1 or !workInCopulaSpace
+  } // i (nodes)
   return ContinuousBayesianNetwork(localDAG, localDistributions);
 }
 
