@@ -2,10 +2,10 @@
 /**
  *  @brief ContinuousBayesianNetworkFactory
  *
- *  Copyright 2010-2019 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2020 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
@@ -24,6 +24,7 @@
 
 #include <openturns/OT.hxx>
 #include "otagrum/ContinuousBayesianNetwork.hxx"
+#include "otagrum/OTAgrumResourceMap.hxx"
 
 namespace OTAGRUM
 {
@@ -42,8 +43,9 @@ public:
   /** Parameter constructor */
   explicit ContinuousBayesianNetworkFactory(const OT::Collection< OT::DistributionFactory > & factories,
       const NamedDAG & namedDag = NamedDAG(),
-      const OT::Scalar alpha = 0.1,
-      const OT::UnsignedInteger maximumConditioningSetSize = 5);
+      const OT::Scalar alpha = OT::ResourceMap::GetAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha"),
+      const OT::UnsignedInteger maximumConditioningSetSize = OT::ResourceMap::GetAsScalar("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize"),
+      const OT::Bool workInCopulaSpace = OT::ResourceMap::GetAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace"));
 
   /** Virtual constructor */
   virtual ContinuousBayesianNetworkFactory *clone() const;
@@ -68,6 +70,9 @@ private:
 
   /* Maximum conditional set size */
   OT::UnsignedInteger maximumConditioningSetSize_;
+
+  /* Do we build copulas as local distributions? */
+  OT::Bool workInCopulaSpace_;
 
 }; /* class ContinuousBayesianNetworkFactory */
 

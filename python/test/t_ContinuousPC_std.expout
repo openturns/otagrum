@@ -1,8 +1,11 @@
 digraph {
     "F"->"G"
+    "G"
     "E"->"C"
     "D"->"C"
+    "C"
     "A"->"B"
+    "B"
 }
 
 == PC algo starting 
@@ -79,8 +82,11 @@ digraph {
     "xray"->"either"
     "dysp"->"either"
     "dysp"->"bronc"
+    "bronc"
     "either"->"tub"
     "either"->"lung"
+    "lung"
     "asia"->"tub"
+    "tub"
 }
 

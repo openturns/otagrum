@@ -5,7 +5,7 @@
  *  Copyright 2010-2020 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
@@ -79,7 +79,7 @@ void OTAgrumResourceMap::Initialize()
   ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
   ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
   ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
-  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);
+  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);  
 }
 
 } // namespace OTAGRUM

@@ -318,4 +318,4 @@ cbn= ContinuousBayesianNetwork(dag=[A,B,C,D,E]
 146 : [ 0.533333   0.466667   ]
 147 : [ 0.566667   0.48       ]
 148 : [ 0.873333   0.773333   ]
-149 : [ 0.573333   0.753333   ] binNumber=5),Uniform(a = 0, b = 1)])
+149 : [ 0.573333   0.753333   ] binNumber=5),Uniform(a = -1, b = 1),Uniform(a = 0, b = 1)])
