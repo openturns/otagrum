@@ -2,10 +2,10 @@
 /**
  *  @brief OTAgrum_ResourceMap.cxx
  *
- *  Copyright 2010-2020 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2019 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
@@ -64,13 +64,6 @@ void OTAgrumResourceMap::Initialize()
     perror("ResourceMap::Initialize mutex initialization failed");
     exit(1);
   }
-  // openturns<1.15
-#ifndef OPENTURNS_VERSION
-#define AddAsScalar SetAsScalar
-#define AddAsUnsignedInteger SetAsUnsignedInteger
-#define AddAsBool SetAsBool
-#define AddAsScalar SetAsScalar
-#endif
   // JunctionTreeBernsteinCopulaFactory
   ResourceMap::AddAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha", 0.1);
   ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);
@@ -79,7 +72,7 @@ void OTAgrumResourceMap::Initialize()
   ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
   ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
   ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
-  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);
+  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);  
 }
 
 } // namespace OTAGRUM

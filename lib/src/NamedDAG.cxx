@@ -5,7 +5,7 @@
  *  Copyright 2010-2020 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
@@ -28,12 +28,14 @@
 #include "otagrum/NamedDAG.hxx"
 #include "otagrum/Utils.hxx"
 
+using namespace OT;
+
 namespace OTAGRUM
 {
 
 CLASSNAMEINIT(NamedDAG);
 
-static const OT::Factory<NamedDAG> Factory_NamedDAG;
+static const Factory<NamedDAG> Factory_NamedDAG;
 
 NamedDAG::NamedDAG() {};
 NamedDAG::NamedDAG(const gum::BayesNet<double> &bn)
@@ -58,7 +60,7 @@ void NamedDAG::build_OTrepr_()
 {
   if (dag_.nextNodeId() != dag_.size())
   {
-    throw OT::InvalidArgumentException(HERE)
+    throw InvalidArgumentException(HERE)
         << "nodeIds in the gum::dag are not contiguous.";
   }
 
@@ -75,37 +77,37 @@ void NamedDAG::build_OTrepr_()
   }
 }
 
-OT::PersistentObject *NamedDAG::clone() const
+PersistentObject *NamedDAG::clone() const
 {
   return new NamedDAG(*this);
 }
 
-OT::UnsignedInteger NamedDAG::getSize() const
+UnsignedInteger NamedDAG::getSize() const
 {
   return map_.getSize();
 }
 
-OT::Description NamedDAG::getDescription() const
+Description NamedDAG::getDescription() const
 {
   return map_;
 }
 
-OT::Indices NamedDAG::getParents(const OT::UnsignedInteger nod) const
+Indices NamedDAG::getParents(const UnsignedInteger nod) const
 {
   return parents_[nod];
 }
 
-OT::Indices NamedDAG::getChildren(const OT::UnsignedInteger nod) const
+Indices NamedDAG::getChildren(const UnsignedInteger nod) const
 {
   return children_[nod];
 }
 
-OT::Indices NamedDAG::getTopologicalOrder() const
+Indices NamedDAG::getTopologicalOrder() const
 {
   return topo_order_;
 }
 
-OT::String NamedDAG::__str__(const OT::String &pref) const
+String NamedDAG::__str__(const String &pref) const
 {
   std::stringstream ss;
   ss << pref << "[";
@@ -136,48 +138,54 @@ OT::String NamedDAG::__str__(const OT::String &pref) const
   return ss.str();
 }
 
-OT::String NamedDAG::toDot() const
+String NamedDAG::toDot() const
 {
   std::stringstream ss;
   ss << "digraph {\n";
   for (const auto &nod : topo_order_)
   {
-    for (const auto &chi : getChildren(nod))
+    const Indices children(getChildren(nod));
+    if (children.getSize() == 0)
     {
-      ss << "    \"" << map_[nod] << "\"->\"" << map_[chi] << "\"\n";
+      ss << "    \"" << map_[nod] << "\"\n";
     }
+    else
+      for (const auto &chi : children)
+      {
+        ss << "    \"" << map_[nod] << "\"->\"" << map_[chi] << "\"\n";
+      }
   }
   ss << "}\n";
 
   return ss.str();
 }
 /* Method save() stores the object through the StorageManager */
-void NamedDAG::save(OT::Advocate &adv) const
+void NamedDAG::save(Advocate &adv) const
 {
-  OT::PersistentObject::save(adv);
+  PersistentObject::save(adv);
   adv.saveAttribute("map_", map_);
-  OT::PersistentCollection<OT::Indices> parentsByNodes;
+  PersistentCollection<Indices> parentsByNodes;
   parentsByNodes = parents_;
   adv.saveAttribute("parentsByNodes_", parentsByNodes);
 }
 
 /* Method load() reloads the object from the StorageManager */
-void NamedDAG::load(OT::Advocate &adv)
+void NamedDAG::load(Advocate &adv)
 {
-  OT::PersistentObject::load(adv);
+  PersistentObject::load(adv);
   adv.loadAttribute("map_", map_);
-  OT::PersistentCollection<OT::Indices> parentsByNodes;
+  PersistentCollection<Indices> parentsByNodes;
   adv.loadAttribute("parentsByNodes_", parentsByNodes);
 
   dag_.clear();
-  OT::UnsignedInteger graphsize = map_.getSize();
+  UnsignedInteger graphsize = map_.getSize();
   for (gum::NodeId nod = 0; nod < graphsize; ++nod)
   {
     dag_.addNodeWithId(nod);
   }
   for (gum::NodeId nod = 0; nod < graphsize; ++nod)
   {
-    const OT::Indices parents(parentsByNodes[nod]);
+    const Indices parents(parentsByNodes[nod]);
     for (const auto &par : parents)
       dag_.addArc(par, nod);
   }
