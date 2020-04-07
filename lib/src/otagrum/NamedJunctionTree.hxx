@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-#include <agrum/graphs/cliqueGraph.h>
+#include <agrum/tools/graphs/cliqueGraph.h>
 #include <agrum/BN/BayesNet.h>
 
 #include <openturns/Description.hxx>

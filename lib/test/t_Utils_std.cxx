@@ -2,10 +2,10 @@
 
 #include <agrum/BN/BayesNet.h>
 #include <agrum/BN/inference/lazyPropagation.h>
-#include <agrum/multidim/potential.h>
-#include <agrum/variables/discretizedVariable.h>
-#include <agrum/variables/labelizedVariable.h>
-#include <agrum/variables/rangeVariable.h>
+#include <agrum/tools/multidim/potential.h>
+#include <agrum/tools/variables/discretizedVariable.h>
+#include <agrum/tools/variables/labelizedVariable.h>
+#include <agrum/tools/variables/rangeVariable.h>
 
 #include <openturns/Exception.hxx>
 #include <openturns/Point.hxx>

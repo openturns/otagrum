@@ -23,10 +23,10 @@
 #include <sstream>
 #include <tuple>
 
-#include <agrum/core/hashFunc.h>
-#include <agrum/core/priorityQueue.h>
-#include <agrum/graphs/DAG.h>
-#include <agrum/graphs/mixedGraph.h>
+#include <agrum/tools/core/hashFunc.h>
+#include <agrum/tools/core/priorityQueue.h>
+#include <agrum/tools/graphs/DAG.h>
+#include <agrum/tools/graphs/mixedGraph.h>
 
 #include "otagrum/ContinuousPC.hxx"
 #include "otagrum/Utils.hxx"

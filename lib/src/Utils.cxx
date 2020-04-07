@@ -33,13 +33,13 @@
 #include <agrum/BN/io/BIF/BIFReader.h>
 #include <agrum/BN/io/BIF/BIFWriter.h>
 
-#include <agrum/core/exceptions.h>
+#include <agrum/tools/core/exceptions.h>
 
-#include <agrum/multidim/instantiation.h>
-#include <agrum/multidim/potential.h>
-#include <agrum/variables/IDiscretizedVariable.h>
-#include <agrum/variables/discretizedVariable.h>
-#include <agrum/variables/rangeVariable.h>
+#include <agrum/tools/multidim/instantiation.h>
+#include <agrum/tools/multidim/potential.h>
+#include <agrum/tools/variables/IDiscretizedVariable.h>
+#include <agrum/tools/variables/discretizedVariable.h>
+#include <agrum/tools/variables/rangeVariable.h>
 
 namespace OTAGRUM
 {

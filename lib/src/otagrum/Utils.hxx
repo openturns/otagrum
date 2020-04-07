@@ -29,8 +29,8 @@
 #include <openturns/StorageManager.hxx>
 #include <openturns/UserDefined.hxx>
 
-#include <agrum/multidim/potential.h>
-#include <agrum/variables/discretizedVariable.h>
+#include <agrum/tools/multidim/potential.h>
+#include <agrum/tools/variables/discretizedVariable.h>
 
 #include "otagrum/otagrumprivate.hxx"
 
