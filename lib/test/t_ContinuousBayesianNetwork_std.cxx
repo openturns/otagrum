@@ -16,8 +16,7 @@ void testConstructor()
   std::cout << "       size : " << ndag.getSize() << std::endl;
   std::cout << "       desc : " << ndag.getDescription() << std::endl
             << std::endl;
-  std::cout << "      nodes : " << ndag.getNodes() << std::endl;
-  for (const auto &nod : ndag.getNodes())
+  for (const auto &nod : ndag.getTopologicalOrder())
   {
     std::cout << " parents(" << nod << ") : " << ndag.getParents(nod)
               << std::endl;

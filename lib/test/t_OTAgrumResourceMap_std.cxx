@@ -5,7 +5,7 @@
 void check(const std::string &key)
 {
   if (OT::ResourceMap::HasKey(key))
-    std::cout <<"<"<< key << ">  =  <" << OT::ResourceMap::Get(key)<<">\n";
+    std::cout << "<" << key << ">  =  <" << OT::ResourceMap::Get(key) << ">\n";
   else
     std::cout << "!HasKey " << key << std::endl;
 }

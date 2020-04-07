@@ -15,13 +15,11 @@ print("         BN : ", bn)
 ndag = otagrum.NamedDAG(bn)
 print("       size : ", ndag.getSize())
 print("       desc : ", ndag.getDescription())
-print("      nodes : ", ndag.getNodes())
-for nod in ndag.getNodes():
+print("      nodes : ", ndag.getTopologicalOrder())
+for nod in ndag.getTopologicalOrder():
     print(" parents(", nod, ") : ", ndag.getParents(nod))
     print("children(", nod, ") : ", ndag.getChildren(nod))
 
-order = ndag.getTopologicalOrder()
-print("topologicalOrder : ", order)
 if False:
     jointDistributions = list()
     for i in range(order.getSize()):

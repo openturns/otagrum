@@ -138,8 +138,8 @@ void test_fromInference()
   ie.addTarget(1);
   ie.makeInference();
 
-  std::cout << ie.jointPosterior({0, 2}) << std::endl;
-  std::cout << Utils::FromPotential(ie.jointPosterior({0, 2})) << std::endl;
+  std::cout << ie.jointPosterior({0, 2}).putFirst(&bn.variable("A")) << std::endl;
+  std::cout << Utils::FromPotential(ie.jointPosterior({0, 2}).putFirst(&bn.variable("A"))) << std::endl;
 
   std::cout << ie.posterior(0) << std::endl;
   std::cout << Utils::FromPotential(ie.posterior(0)) << std::endl;

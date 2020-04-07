@@ -5,7 +5,7 @@
  *  Copyright 2010-2020 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
@@ -50,7 +50,6 @@ public:
 
   OT::Indices getParents(const OT::UnsignedInteger nod) const;
   OT::Indices getChildren(const OT::UnsignedInteger nod) const;
-  OT::Indices getNodes() const;
   OT::Indices getTopologicalOrder() const;
 
   virtual OT::String __str__(const OT::String &offset = "") const;
@@ -63,8 +62,15 @@ public:
   void load(OT::Advocate &adv);
 
 private:
+  void build_OTrepr_();
+
   gum::DAG dag_;
+
   OT::Description map_;
+  OT::Description nodes_; // no need
+  OT::Collection<OT::Indices> parents_;
+  OT::Collection<OT::Indices> children_;
+  OT::Indices topo_order_;
 };
 
 } // namespace OTAGRUM
