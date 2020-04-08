@@ -31,7 +31,7 @@ It offers the ability to:
 
   - define discretized aGrUM distributions from OpenTURNS distributions
   - extract marginal distributions of aGrUM Bayesian networks as OpenTURNS distributions
-
+  - define and estimate bayesian networks parameterized by local conditional copula functions for each node (CBN)
 
 User documentation
 ------------------
