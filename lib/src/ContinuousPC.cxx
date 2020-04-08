@@ -227,7 +227,7 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
 // From complete graph g, remove as much as possible edge (y,z) in g
 // if (y,z) is removed, it means that sepset_[Edge(y,z)] contains X, set of
 // nodes, such that y and z are tested as independent given X.
-gum::UndiGraph ContinuousPC::inferSkeleton_()
+gum::UndiGraph ContinuousPC::inferSkeleton()
 {
   gum::UndiGraph g;
   tester_.clearCache();
@@ -282,7 +282,7 @@ NamedJunctionTree ContinuousPC::learnJunctionTree()
   if (!pdag_done_)
     learnPDAG();
 
-  jt_ = NamedJunctionTree(deriveJunctionTree_(deriveMoralGraph_(pdag_)),
+  jt_ = NamedJunctionTree(deriveJunctionTree(deriveMoralGraph(pdag_)),
                           namesFromData());
   jt_done_ = true;
   return jt_;
@@ -295,7 +295,7 @@ NamedDAG ContinuousPC::learnDAG()
   if (!pdag_done_)
     learnPDAG();
 
-  dag_ = NamedDAG(deriveDAG_(pdag_), namesFromData());
+  dag_ = NamedDAG(deriveDAG(pdag_), namesFromData());
   dag_done_ = true;
   return dag_;
 }
@@ -307,7 +307,7 @@ gum::MixedGraph ContinuousPC::learnPDAG()
   if (!skel_done_)
     learnSkeleton();
 
-  pdag_ = inferPDAG_(skel_);
+  pdag_ = inferPDAG(skel_);
   pdag_done_ = true;
   return pdag_;
 }
@@ -317,14 +317,14 @@ gum::UndiGraph ContinuousPC::learnSkeleton()
   if (skel_done_)
     return skel_;
 
-  skel_ = inferSkeleton_();
+  skel_ = inferSkeleton();
   skel_done_ = true;
   return skel_;
 }
 // for all triplet x-y-z (no edge between x and z), if y is not in sepset[x,z]
 // then x->y<-z.
 // the ordering process uses the p-value as a priority.
-gum::MixedGraph ContinuousPC::inferPDAG_(const gum::UndiGraph &g) const
+gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const
 {
   gum::MixedGraph cpdag;
 
@@ -396,7 +396,7 @@ gum::MixedGraph ContinuousPC::inferPDAG_(const gum::UndiGraph &g) const
   return cpdag;
 }
 
-gum::UndiGraph ContinuousPC::deriveMoralGraph_(const gum::MixedGraph &g) const
+gum::UndiGraph ContinuousPC::deriveMoralGraph(const gum::MixedGraph &g) const
 {
   gum::UndiGraph moral;
   for (auto x : g.nodes())
@@ -424,7 +424,7 @@ gum::UndiGraph ContinuousPC::deriveMoralGraph_(const gum::MixedGraph &g) const
 }
 
 gum::JunctionTree
-ContinuousPC::deriveJunctionTree_(const gum::UndiGraph &g) const
+ContinuousPC::deriveJunctionTree(const gum::UndiGraph &g) const
 {
   gum::DefaultTriangulation triangulation;
   gum::NodeProperty<gum::Size> mods;
@@ -535,7 +535,7 @@ static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag,
   return false;
 }
 
-gum::DAG ContinuousPC::deriveDAG_(const gum::MixedGraph &p) const
+gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const
 {
   gum::EdgeSet remainings;
   gum::DAG dag;
@@ -781,7 +781,7 @@ bool ContinuousPC::getVerbosity() const
   return verbose_;
 };
 
-const std::vector<gum::Edge> &ContinuousPC::getRemoved_() const
+const std::vector<gum::Edge> &ContinuousPC::getRemoved() const
 {
   return removed_;
 }

@@ -74,6 +74,24 @@ public:
 
   std::vector<std::string> getTrace() const;
 private:
+  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n);
+
+  std::tuple<bool, double, double, OT::Indices>
+  getSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
+               const OT::Indices &neighbours, OT::UnsignedInteger n) const;
+
+  std::vector<std::string> namesFromData(void) const;
+
+  const std::vector<gum::Edge> &getRemoved() const;
+
+  gum::UndiGraph inferSkeleton();
+  gum::MixedGraph inferPDAG(const gum::UndiGraph &g) const;
+
+  gum::UndiGraph deriveMoralGraph(const gum::MixedGraph &g) const;
+  gum::JunctionTree deriveJunctionTree(const gum::UndiGraph &g) const;
+  gum::DAG deriveDAG(const gum::MixedGraph &p) const;
+
+
   gum::EdgeProperty<OT::Indices> sepset_;
   gum::EdgeProperty<double> pvalues_;
   gum::EdgeProperty<double> ttests_;
@@ -84,21 +102,6 @@ private:
   ContinuousTTest tester_;
 
   bool skel_done_, pdag_done_, dag_done_, jt_done_;
-
-  bool testCondSetWithSize(gum::UndiGraph &g, OT::UnsignedInteger n);
-
-  std::tuple<bool, double, double, OT::Indices>
-  getSeparator(const gum::UndiGraph &g, gum::NodeId y, gum::NodeId z,
-               const OT::Indices &neighbours, OT::UnsignedInteger n) const;
-  std::vector<std::string> namesFromData(void) const;
-
-  const std::vector<gum::Edge> &getRemoved_() const;
-  gum::UndiGraph inferSkeleton_();
-  gum::MixedGraph inferPDAG_(const gum::UndiGraph &g) const;
-
-  gum::UndiGraph deriveMoralGraph_(const gum::MixedGraph &g) const;
-  gum::JunctionTree deriveJunctionTree_(const gum::UndiGraph &g) const;
-  gum::DAG deriveDAG_(const gum::MixedGraph &p) const;
 
   gum::UndiGraph skel_;
   gum::MixedGraph pdag_;
