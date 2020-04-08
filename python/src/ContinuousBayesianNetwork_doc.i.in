@@ -1,6 +1,6 @@
 %feature("docstring") OTAGRUM::ContinuousBayesianNetwork
 "ContinuousBayesianNetwork class represents a copula bayesian network (CBN), that is
-a bayesian networks parameterized by local conditional copula functions for each
+a bayesian network parameterized by local conditional copula functions for each
 node. The scope of each copula function is the node and its parents.
 
 Available constructor:

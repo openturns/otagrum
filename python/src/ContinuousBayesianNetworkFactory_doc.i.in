@@ -5,7 +5,7 @@ Parameters
 ----------
 factories : sequence of :class:`~openturns.Distribution`
     The models to test for each local distribution. Default value is
-    (:class:`~openturns.BernsteinCopulaFactory`).
+    :class:`~openturns.BernsteinCopulaFactory`.
 namedDAG : :class:`~otagrum.NamedDAG`
     The structure of the underlying graphical model. Default value is
     :class:`~otagrum.NamedDAG()`
