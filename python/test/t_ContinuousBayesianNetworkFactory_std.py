@@ -40,7 +40,7 @@ sample = cbn.getSample(size)
 factories = [ot.NormalCopulaFactory(), ot.BernsteinCopulaFactory()]
 threshold = 0.1
 maxParents = 5
-factory = otagrum.ContinuousBayesianNetworkFactory(factories, ndag, threshold, maxParents)
+factory = otagrum.ContinuousBayesianNetworkFactory(
+    factories, ndag, threshold, maxParents)
 cbn = factory.build(sample)
 print('cbn=', cbn)
-

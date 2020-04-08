@@ -79,7 +79,7 @@ void OTAgrumResourceMap::Initialize()
   ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
   ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
   ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
-  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);  
+  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);
 }
 
 } // namespace OTAGRUM

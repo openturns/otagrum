@@ -53,7 +53,7 @@ ContinuousBayesianNetwork::ContinuousBayesianNetwork()
 
 /* Parameters constructor */
 ContinuousBayesianNetwork::ContinuousBayesianNetwork(const NamedDAG &dag,
-                                                     const DistributionCollection &jointDistributions)
+    const DistributionCollection &jointDistributions)
   : ContinuousDistribution()
   , dag_(dag)
   , jointDistributions_(0)
@@ -193,15 +193,15 @@ void ContinuousBayesianNetwork::setDAGAndDistributionCollection(
 {
   const Indices order(dag.getTopologicalOrder());
   for (UnsignedInteger i = 0; i < order.getSize(); ++i)
-    {
-      const UnsignedInteger globalIndex(order[i]);
-      if (jointDistributions[globalIndex].getDimension() != dag.getParents(globalIndex).getSize() + 1)
-        throw InvalidArgumentException(HERE)
+  {
+    const UnsignedInteger globalIndex = order[i];
+    if (jointDistributions[globalIndex].getDimension() != dag.getParents(globalIndex).getSize() + 1)
+      throw InvalidArgumentException(HERE)
           << "Error: expected a joint distribution of dimension="
           << dag.getParents(globalIndex).getSize() + 1 << " for node=" << globalIndex
           << " and its parents=" << dag.getParents(globalIndex)
           << ", got dimension=" << jointDistributions[globalIndex].getDimension();
-    }
+  }
   dag_ = dag;
   jointDistributions_ = jointDistributions;
   computeRange();
