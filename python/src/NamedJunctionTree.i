@@ -4,8 +4,6 @@
 %template(IndicesList) OT::Collection<OT::Indices>;
 
 %{
-#include <agrum/tools/graphs/undiGraph.h>
-#include <agrum/tools/graphs/mixedGraph.h>
 #include "otagrum/NamedJunctionTree.hxx"
 
 #include "openturns/PythonWrappingFunctions.hxx"

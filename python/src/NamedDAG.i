@@ -1,7 +1,6 @@
 // SWIG file NamedJunctionTree.i
 
 %{
-#include <agrum/tools/graphs/DAG.h>
 #include "otagrum/NamedDAG.hxx"
 %}
 
