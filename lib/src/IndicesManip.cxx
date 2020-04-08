@@ -100,11 +100,11 @@ void IndicesCombinationIterator::next()
   {
     if (coord_[i] < base_.getSize() + i - size_)
     {
-      set_(i, coord_[i] + 1);
+      set(i, coord_[i] + 1);
 
       for (int j = i + 1; j < size_; ++j)
       {
-        set_(j, coord_[j - 1] + 1);
+        set(j, coord_[j - 1] + 1);
       }
       return;
     }
@@ -117,7 +117,7 @@ const OT::Indices &IndicesCombinationIterator::current() const
   return current_;
 }
 
-void IndicesCombinationIterator::set_(OT::UnsignedInteger pos, int val)
+void IndicesCombinationIterator::set(OT::UnsignedInteger pos, int val)
 {
   coord_[pos] = val;
   current_[pos] = base_[coord_[pos]];

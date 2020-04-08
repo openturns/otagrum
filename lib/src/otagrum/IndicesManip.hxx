@@ -45,7 +45,8 @@ public:
   std::string __str__(const std::string &delim = "") const;
 
 private:
-  void set_(OT::UnsignedInteger pos, int val);
+  void set(OT::UnsignedInteger pos, int val);
+
   const OT::Indices base_;
   OT::Indices current_;
   std::vector<OT::UnsignedInteger> coord_;
