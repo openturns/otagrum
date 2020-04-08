@@ -19,10 +19,10 @@ builddir := obj-$(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 
 PYVER = $(shell pyversions -d)
 PY3VER = $(shell py3versions -d)
-PYALL = $(PYVER) $(PY3VER)
+PYALL = $(PY3VER)
 
 %:
-	dh $@ --buildsystem=cmake --with python2,python3 --parallel
+	dh $@ --buildsystem=cmake --with python3 --parallel
 
 override_dh_auto_configure: $(PYALL:python%=cmake-configure-%) \
 
@@ -40,7 +40,6 @@ cmake-configure-%:
             -DINSTALL_DESTDIR:PATH=$(CURDIR)/debian/otagrum \
             -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python$* \
             -DPYTHON_INCLUDE_DIR:PATH=$$(python$*-config --includes | sed -e 's/ .*//' -e 's/^-I//') \
-            -DPYTHON_INCLUDE_DIR2:PATH=$$(python$*-config --includes | sed -e 's/ .*//' -e 's/^-I//') \
             -DPYTHON_LIBRARY:PATH=$$(python$*-config --ldflags | sed -e 's/ .*//' -e 's/^-L//')/libpython$*.so
 
 override_dh_auto_build: $(PYALL:python%=cmake-build-%)
@@ -56,20 +55,16 @@ ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
 	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$${LD_LIBRARY_PATH}:}$(CURDIR)/debian/otagrum/usr/lib \
 	  CTEST_OUTPUT_ON_FAILURE=1 \
 	  $(MAKE) $(test_makeflags) -C build-python$* test ARGS="$(test_makeflags) -R pyinstallcheck"
-	find $(CURDIR)/debian/otagrum -name "*.pyc" -o -name "__pycache__" | xargs rm -rf
 endif
 
 override_dh_makeshlibs:
 	dh_makeshlibs -Xpyshared
 
-override_dh_python2:
-	dh_python2 debian/otagrum$(shell $(PYVER) -c "from distutils import sysconfig; print(sysconfig.get_python_lib())")
-
 override_dh_python3:
 	dh_python3 debian/otagrum$(shell $(PY3VER) -c "from distutils import sysconfig; print(sysconfig.get_python_lib())")
 
 override_dh_compress:
-	dh_compress -X.pdf -X.svn -X.py
+	dh_compress -X.pdf -X.git -X.py
 
 override_dh_auto_test: $(PYALL:python%=cmake-test-%)
 

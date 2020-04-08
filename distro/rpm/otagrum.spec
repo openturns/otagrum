@@ -1,5 +1,10 @@
 # norootforbuild
+%{?__python3: %global __python %{__python3}}
+%if 0%{?suse_version}
+%global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
+%else
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%endif
 
 %define __cmake %{_bindir}/cmake
 %define _cmake_lib_suffix64 -DLIB_SUFFIX=64
@@ -19,21 +24,16 @@ Version:        0.2
 Release:        0%{?dist}
 Summary:        OpenTURNS module
 Group:          System Environment/Libraries
-License:        GPLv3+
+License:        LGPLv3+
 URL:            http://www.openturns.org/
 Source0:        http://downloads.sourceforge.net/openturns-modules/otagrum/otagrum-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gcc-c++, cmake, swig
-%if 0%{?suse_version}
-BuildRequires:  gcc-fortran
-%else
-BuildRequires:  gcc-gfortran
-%endif
 BuildRequires:  openturns-devel
-BuildRequires:  python-openturns
-BuildRequires:  python-devel
+BuildRequires:  python3-openturns
+BuildRequires:  python3-devel
 BuildRequires:  agrum-devel
-BuildRequires:  python-agrum
+BuildRequires:  python3-agrum
 Requires:       libotagrum0
 
 %description
@@ -63,11 +63,11 @@ Group:          Productivity/Scientific/Math
 %description examples
 Example files for otagrum
 
-%package -n python-%{name}
+%package -n python3-%{name}
 Summary:        otagrum library
 Group:          Productivity/Scientific/Math
-Requires:       python-openturns
-%description -n python-%{name}
+Requires:       python3-openturns
+%description -n python3-%{name}
 Python textual interface to otagrum uncertainty library
 
 %prep
@@ -76,6 +76,7 @@ Python textual interface to otagrum uncertainty library
 %build
 %cmake -DINSTALL_DESTDIR:PATH=%{buildroot} \
        -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
+       -DPYTHON_EXECUTABLE=%{__python} \
        -DUSE_SPHINX=OFF .
 make %{?_smp_mflags}
 
@@ -86,7 +87,6 @@ make install DESTDIR=%{buildroot}
 %check
 make tests %{?_smp_mflags}
 LD_LIBRARY_PATH=%{buildroot}%{_libdir} ctest %{?_smp_mflags} --output-on-failure
-rm %{buildroot}%{python_sitearch}/%{name}/*.pyc
 
 %clean
 rm -rf %{buildroot}
@@ -111,9 +111,9 @@ rm -rf %{buildroot}
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/examples/
 
-%files -n python-%{name}
+%files -n python3-%{name}
 %defattr(-,root,root,-)
-%{python_sitearch}/%{name}
+%{python_sitearch}/%{name}/
 
 
 %changelog
