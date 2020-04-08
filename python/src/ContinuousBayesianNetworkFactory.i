@@ -2,8 +2,6 @@
 
 %{
 #include "otagrum/ContinuousBayesianNetworkFactory.hxx"
-#include <agrum/tools/graphs/undiGraph.h>
-#include <agrum/tools/graphs/mixedGraph.h>
 #include <openturns/PythonWrappingFunctions.hxx>
 
 namespace OT {

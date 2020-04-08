@@ -2,10 +2,6 @@
 
 %{
 #include <tuple>
-#include <agrum/tools/graphs/undiGraph.h>
-#include <agrum/tools/graphs/mixedGraph.h>
-
-#include "otagrum/IndicesManip.hxx"
 #include "otagrum/ContinuousTTest.hxx"
 %}
 
