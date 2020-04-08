@@ -29,7 +29,8 @@ if False:
         for i in range(d):
             for j in range(i):
                 R[i, j] = 0.5 / d
-        jointDistributions.append(ot.Student(5.0, [0.0]*d, [1.0]*d, R).getCopula())
+        jointDistributions.append(ot.Student(
+            5.0, [0.0]*d, [1.0]*d, R).getCopula())
 
     cbn = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)
     print("cbn=", cbn)
@@ -38,10 +39,10 @@ if False:
     size = 300
     sampleLearn = cbn.getSample(size)
     sample = cbn.getSample(size)
-    
+
     sampleLearn.exportToCSVFile("samplelearn.csv", ",")
     sample.exportToCSVFile("sample.csv", ",")
-    
+
     print("cbn sample=", sample)
     logL = 0.0
     pdfSample = cbn.computePDF(sample)
@@ -68,4 +69,3 @@ if False:
     view = otv.View(gr, (800, 820), square_axes=True)
     view.save("pairsCopula.png")
     view.close()
-    
