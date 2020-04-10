@@ -186,7 +186,8 @@ bool ContinuousPC::testCondSetWithSize(gum::UndiGraph &g,
       intersections.set(edge, nei);
   }
 
-  for (const auto &edge : g.edges())
+  gum::EdgeSet edgeset = g.edges();
+  for (const auto &edge : edgeset)
   {
     if (!intersections.exists(edge))
     {
