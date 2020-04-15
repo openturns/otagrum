@@ -33,5 +33,5 @@ Classifier: Intended Audience :: Financial and Insurance Industry
 Classifier: Intended Audience :: Information Technology
 Classifier: Intended Audience :: Science/Research
 
-Template module for OpenTURNS
-It provides useful features
+OT/aGrUM module for OpenTURNS
+Distributions/graphical models features
