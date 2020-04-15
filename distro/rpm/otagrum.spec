@@ -114,6 +114,7 @@ rm -rf %{buildroot}
 %files -n python3-%{name}
 %defattr(-,root,root,-)
 %{python_sitearch}/%{name}/
+%{python_sitearch}/%{name}-*.dist-info/
 
 
 %changelog
