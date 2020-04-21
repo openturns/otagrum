@@ -85,6 +85,7 @@ endmacro ()
 
 ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
                       ContinuousPC.i ContinuousPC_doc.i.in
+                      ContinuousMIIC.i ContinuousMIIC_doc.i.in
                       ContinuousTTest.i ContinuousTTest_doc.i.in
                       NamedJunctionTree.i NamedJunctionTree_doc.i.in
                       NamedDAG.i NamedDAG_doc.i.in
