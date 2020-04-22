@@ -6,6 +6,8 @@
 #include <openturns/Sample.hxx>
 
 #include "otagrum/NamedDAG.hxx"
+#include "otagrum/IndicesManip.hxx"
+#include "otagrum/StratifiedCache.hxx"
 
 namespace OTAGRUM{
 
@@ -19,22 +21,35 @@ namespace OTAGRUM{
 
 class OTAGRUM_API ContinuousMIIC : public OT::Object {
     public:
-        explicit ContinuousMIIC(const OT::Sample &data);
+        // Constructor
+        explicit ContinuousMIIC(const OT::Sample &data, const int maxLog=100);
+
+        // Destructor
+        ~ContinuousMIIC();
+
         //gum::UndiGraph learnSkeleton();
         //gum::MixedGraph learnPDAG();
         //NamedDAG learnDAG();
 
-        //void setVerbosity(bool verbose);
-        //bool getVerbosity() const;
+        void setVerbosity(bool verbose);
+        bool getVerbosity() const;
             
     private:
+        //void initiation();
+        //void iteration();
+
+        std::string GetKey(OT::Indices l, const OT::UnsignedInteger k) const;
+        double computeEntropy(const OT::Indices &variables, const int K);
+
+        int maxLog_;
         bool verbose_;
 
+        mutable gum::HashTable< OT::Indices, double > Hcache_;
         OT::Sample data_;
 
         //gum::EdgeProperty<OT::Indices> sepset_;
 
-        //gum::UndiGraph skeleton_;
+        gum::UndiGraph skeleton_;
         //gum::MixedGraph pdag_;
         //NamedDAG dag_;
 };

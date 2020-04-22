@@ -44,7 +44,7 @@
   std::setw(30) << (tester_.getDataDescription().__getitem__((x)) + "--" +     \
                     tester_.getDataDescription().__getitem__((y)))
 
-// Triplet class, its HashFunc and its textual represenration
+// Triplet class, its HashFunc and its textual representation
 class Triplet
 {
 public:
