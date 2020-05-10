@@ -26,6 +26,7 @@
 #include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/ContinuousTTest.hxx"
 #include "otagrum/ContinuousPC.hxx"
+#include "otagrum/CorrectedMutualInformation.hxx"
 #include "otagrum/ContinuousMIIC.hxx"
 
 #endif // OTAGRUM_HXX
