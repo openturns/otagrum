@@ -46,7 +46,7 @@ dot : str
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousMIIC::learnSkeleton
-"Learn the skeleton.
+"Learn the skeleton from data.
 
 Returns
 -------
@@ -55,14 +55,13 @@ gum::UndiGraph : :py:class:`pyAgrum.UndiGraph`
 
 Notes
 -----
-This step consists in taking the complete undirected graph on the set of variables
-and to remove an edge if the linked variables are independent conditionnaly to
-a subset of their neighbors."
+The skeleton is obtained starting from the complete undirected graph on the set of variables
+and removing edges which (corrected) conditional mutual information is negative."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousMIIC::learnPDAG
-"Learn the PDAG.
+"Learn the PDAG from data.
 
 Returns
 -------
@@ -71,33 +70,15 @@ gum::MixedGraph : :py:class:`pyAgrum.MixedGraph`
 
 Notes
 -----
-This step starts with the learned skeleton and looks at each triplet of variables
-X, Y, Z such that X-Z-Y and there is no edge between X and Y. If Z is in the sepset
-of X and Y, that is if it was in the conditional set that allowed to remove the edge
-between X and Y then we orient the triplet as X->Z<-Y."
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousMIIC::learnJunctionTree
-"Learn the junction tree.
-
-Returns
--------
-njt : :class:`~otagrum.NamedJunctionTree`
-    the learned junction tree
-
-Notes
------
-In order to learn the junction tree, the PDAG is moralized and then triangulated
-giving an undirected graph. Each clique in this graph is then associated to a
-node in the junction tree and there is an edge between nodes sharing common
-variables. Finally to each edge is associated a separator containing the intersection
-of variables in the two linked nodes."
+Starting with the learned skeleton, each triplet of variables
+X, Y, Z such that X-Z-Y and such that there is no edge between X and Y is oriented
+as X->Z<-Y if its (corrected) three-point conditional information is negative and 
+as X->Z->Y (or X<-Z<-Y) if not."
 
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousMIIC::learnDAG
-"Learn the DAG.
+"Learn the DAG from data.
 
 Returns
 -------
@@ -108,82 +89,6 @@ Notes
 -----
 This step starts with the learned PDAG and orient the remaining undirected edges
 by avoiding to add new V-structures unless it implies to create an oriented circle."
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousMIIC::getPValue
-"P-value accessor.
-
-Parameters
-----------
-x : str
-    A variable's name
-y : str
-    A variable's name
-x : int
-    A variable's id
-y : int
-    A variable's id
-
-Returns
--------
-p_value : float
-    P-value of edge x - y"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousMIIC::getSepsetNames
-"Separator set names accessor.
-
-Parameters
-----------
-x : str
-    A variable's name
-y : str
-    A variables's name
-
-Returns
--------
-sepset_names : :py:class:`openturns.Description`
-    The names of variables in the separator set of variables x and y"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousMIIC::getSepset
-"Separator set indices accessor.
-
-Parameters
-----------
-x : int
-    Node id
-y : int
-    Node id
-
-Returns
--------
-sep_set : :py:class:`openturns.Indices`
-    Indices of variables in the separator set of variables x and y"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousMIIC::getTTest
-"T-Test statistics accessor.
-
-Parameters
-----------
-x : str
-    A variable's name
-y : str
-    A variable's name
-x : int
-    A variable's id
-y : int
-    A variable's id
-
-Returns
--------
-ttest : float
-    T-Test statistics value of edge x - y"
 
 // ----------------------------------------------------------------------------
 
@@ -208,48 +113,66 @@ verbose : bool
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousMIIC::getTrace
-"Returns a summary of the learning algorithm containing which conditional indepences
-have been found and the associated T-test and p-values.
-
-Returns
--------
-trace : :py:class:`openturns.Description`
-    Trace of the learning algorithm"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::ContinuousMIIC::idFromName
-"Id accessor.
+%feature("docstring") OTAGRUM::ContinuousMIIC::setCMode
+"Change the copula model used for computing corrected mutual information.
 
 Parameters
 ----------
-n : str
-    Node name
-
-Returns
--------
-id : int
-    Id of the node"
+cmode : CorrectedMutualInformation.CModeTypes
+    Copula model (Gaussian or Bernstein)"
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousMIIC::isRemoved
-"Test if an arc is removed.
+%feature("docstring") OTAGRUM::ContinuousMIIC::setKMode
+"Change the correction mode for mutual information.
 
 Parameters
 ----------
-x : str
-    A variable's name
-y : str
-    A variable's name
-x : int
-    A variable's id
-y : int
-    A variable's id
+kmode : CorrectedMutualInformation.CModeTypes
+    Correction mode (NoCorr or Naive)"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousMIIC::getAlpha
+"Returns the alpha correction value of mutual information when using
+the naive KMode..
 
 Returns
 -------
-removed : bool
-    Whether the arc x-y has been removed, this is equivalent to x and y
-    being independent"
+alpha : float
+    Correction value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousMIIC::addForbiddenArc
+"The arc will not be added in the learned DAG.
+
+Parameters
+----------
+arc : :py:class:`pyAgrum.Arc`
+head : int
+    Head node id
+tail : int
+    Tail node id
+head : str
+    Name of the head node
+tail : str
+    Name of the tail node"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousMIIC::addMandatoryArc
+"The arc will be added in the learned DAG. This allows to add prior structural
+knowledge.
+
+Parameters
+----------
+arc : :py:class:`pyAgrum.Arc`
+head : int
+    Head node id
+tail : int
+    Tail node id
+head : str
+    Name of the head node
+tail : str
+    Name of the tail node"

@@ -12,6 +12,8 @@ API
     JunctionTreeBernsteinCopulaFactory
     ContinuousPC
     ContinuousTTest
+    ContinuousMIIC
+    CorrectedMutualInformation
     NamedJunctionTree
     NamedDAG
     ContinuousBayesianNetwork
