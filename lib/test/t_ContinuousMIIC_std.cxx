@@ -47,20 +47,10 @@ void tests(void)
   try
   {
     OT::RandomGenerator::SetSeed(0);
-    OT::Sample sample = getTrucBizarre(5000);
+    OT::Sample sample = getTrucBizarre(4000);
     std::cout << "Sample size: " << sample.getSize() << std::endl
               << "Sample dimension:" << sample.getDimension() << std::endl
               << "Sample " << std::endl << sample << std::endl;
-    {
-      OTAGRUM::ContinuousMIIC learner(sample);
-      learner.setAlpha(0.1);
-      std::cout << "go" << std::endl;
-      auto skeleton = learner.learnSkeleton();
-      std::cout << skeleton.toDot() << std::endl;
-
-      auto cpdag = learner.learnPDAG();
-      std::cout << cpdag.toDot() << std::endl;
-    }
     {
       std::cout << "\n\n";
       OTAGRUM::ContinuousMIIC learner(sample);
