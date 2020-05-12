@@ -803,10 +803,10 @@ namespace OTAGRUM {
        return proba_triples;
     }
 
-    const bool ContinuousMIIC::existsDirectedPath(const gum::MixedGraph& graph,
-                                                  const OT::UnsignedInteger n1,
-                                                  const OT::UnsignedInteger n2,
-                                                  const bool countArc) const {
+    bool ContinuousMIIC::existsDirectedPath(const gum::MixedGraph& graph,
+                                            const OT::UnsignedInteger n1,
+                                            const OT::UnsignedInteger n2,
+                                            const bool countArc) const {
         // not recursive version => use a FIFO for simulating the recursion
         gum::List< gum::NodeId > nodeFIFO;
         nodeFIFO.pushBack(n2);

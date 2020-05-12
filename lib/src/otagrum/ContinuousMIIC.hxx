@@ -107,10 +107,10 @@ class OTAGRUM_API ContinuousMIIC : public OT::Object {
 
         void propagatesHead(gum::MixedGraph& graph, gum::NodeId node);
 
-        const bool existsDirectedPath(const gum::MixedGraph& graph,
-                                      const OT::UnsignedInteger n1,
-                                      const OT::UnsignedInteger n2,
-                                      const bool countArc = true) const;
+        bool existsDirectedPath(const gum::MixedGraph& graph,
+                                const OT::UnsignedInteger n1,
+                                const OT::UnsignedInteger n2,
+                                const bool countArc = true) const;
 
         gum::MixedGraph UGtoMG(const gum::UndiGraph& graph) const;
         gum::NodeId idFromName(const std::string& name) const;
