@@ -1,0 +1,17 @@
+Sample size: 1300
+Sample dimension: 10
+Sample 
+       [ X0         X1         X2         ... X7         X8         X9         ]
+   0 : [  3.8246    -1.70254    0.465823  ...  4.50223    3.2805     3.34289   ]
+   1 : [  0.588423   2.7115    -4.84917   ... -1.08344   -2.4237    -0.470398  ]
+   2 : [  2.96878    3.38412   -0.889383  ...  6.24085    2.50671    0.514748  ]
+...
+1297 : [  4.06598    4.23756    2.61955   ...  5.20337    2.53733    5.12222   ]
+1298 : [  9.38158    5.4072     3.61393   ...  7.81768    5.87491    6.33198   ]
+1299 : [  0.57634    3.0404     1.85532   ... -3.59819    0.0149824 -1.77947   ]
+Two-point corrected information: -0.00407465
+Three-point corrected information: 0.00227678
+Two-point corrected information: : 0.0984647
+Three-point corrected information: 0.0287848
+Two-point corrected information: 0.70964	Test: OK 
+Two-point corrected information: -0.00719534	Test: OK 
