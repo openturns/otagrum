@@ -14,8 +14,6 @@ CorrectedMutualInformation::CorrectedMutualInformation(const OT::Sample &data)
   data_ = (data.rank() + 1) / (data.getSize() + 2); // Switching data to rank space
 }
 
-CorrectedMutualInformation::~CorrectedMutualInformation() { }
-
 void CorrectedMutualInformation::setKMode(KModeTypes kmode)
 {
   clearCaches();

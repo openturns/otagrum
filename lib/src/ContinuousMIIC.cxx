@@ -43,8 +43,6 @@ ContinuousMIIC::ContinuousMIIC(const OT::Sample &data)
   }
 }
 
-ContinuousMIIC::~ContinuousMIIC() { }
-
 bool GreaterPairOn2nd::operator()(
   const std::pair <
   std::tuple< OT::UnsignedInteger,
