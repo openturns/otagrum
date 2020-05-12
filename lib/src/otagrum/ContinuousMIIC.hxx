@@ -74,6 +74,7 @@ class OTAGRUM_API ContinuousMIIC : public OT::Object {
         void setVerbosity(bool verbose);
         bool getVerbosity() const;
 
+        void setAlpha(double alpha);
         double getAlpha() const;
             
     private:

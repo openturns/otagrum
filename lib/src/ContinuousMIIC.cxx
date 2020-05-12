@@ -115,6 +115,10 @@ namespace OTAGRUM {
         return verbose_;
     }
 
+    void ContinuousMIIC::setAlpha(double alpha) {
+        info_.setAlpha(alpha);
+    }
+
     double ContinuousMIIC::getAlpha() const {
         return info_.getAlpha();
     }
