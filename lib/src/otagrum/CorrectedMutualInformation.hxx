@@ -65,18 +65,24 @@ class OTAGRUM_API CorrectedMutualInformation : public OT::Object {
                                      const OT::UnsignedInteger Y,
                                      const OT::Indices &U = OT::Indices());
 
-        double compute2PtPenalty(const OT::UnsignedInteger X,
-                                 const OT::UnsignedInteger Y,
-                                 const OT::Indices &U = OT::Indices());
+        double compute2PtPenalty(
+                // Commented until a better correction is found
+                //const OT::UnsignedInteger X,
+                //const OT::UnsignedInteger Y,
+                //const OT::Indices &U = OT::Indices()
+                );
 
         double compute3PtInformation(const OT::UnsignedInteger X,
                                      const OT::UnsignedInteger Y,
                                      const OT::UnsignedInteger Z,
                                      const OT::Indices &U = OT::Indices());
-        double compute3PtPenalty(const OT::UnsignedInteger X,
-                                 const OT::UnsignedInteger Y,
-                                 const OT::UnsignedInteger Z,
-                                 const OT::Indices &U = OT::Indices());
+        double compute3PtPenalty(
+                // Commented until a better correction is found
+                //const OT::UnsignedInteger X,
+                //const OT::UnsignedInteger Y,
+                //const OT::UnsignedInteger Z,
+                //const OT::Indices &U = OT::Indices()
+                );
 
         //OT::NormalCopula learnNormalCopula(const OT::Sample &data) const;
 

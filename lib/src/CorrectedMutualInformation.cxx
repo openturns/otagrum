@@ -167,9 +167,12 @@ namespace OTAGRUM {
 
     }
 
-    double CorrectedMutualInformation::compute2PtPenalty(const OT::UnsignedInteger X,
-                                                         const OT::UnsignedInteger Y,
-                                                         const OT::Indices &U) {
+    double CorrectedMutualInformation::compute2PtPenalty(
+            // Commented until a better correction is found
+            //const OT::UnsignedInteger X, 
+            //const OT::UnsignedInteger Y,
+            //const OT::Indices &U
+            ) {
         if (kmode_ == KModeTypes::NoCorr) {
             return 0.;
         }
@@ -184,7 +187,9 @@ namespace OTAGRUM {
     double CorrectedMutualInformation::compute2PtCorrectedInformation(const OT::UnsignedInteger X,
                                                                       const OT::UnsignedInteger Y,
                                                                       const OT::Indices &U) {
-        return compute2PtInformation(X, Y, U) - compute2PtPenalty(X, Y, U);
+        // Commented until a better correction is found
+        //return compute2PtInformation(X, Y, U) - compute2PtPenalty(X, Y, U);
+        return compute2PtInformation(X, Y, U) - compute2PtPenalty();
     }
 
     double CorrectedMutualInformation::compute3PtInformation(const OT::UnsignedInteger X,
@@ -214,10 +219,13 @@ namespace OTAGRUM {
         return IXYZ_U;
     }
 
-    double CorrectedMutualInformation::compute3PtPenalty(const OT::UnsignedInteger X,
-                                                         const OT::UnsignedInteger Y,
-                                                         const OT::UnsignedInteger Z,
-                                                         const OT::Indices &U) {
+    double CorrectedMutualInformation::compute3PtPenalty(
+            // Commented until a better correction is found
+            //const OT::UnsignedInteger X,
+            //const OT::UnsignedInteger Y,
+            //const OT::UnsignedInteger Z,
+            //const OT::Indices &U
+            ) {
         if (kmode_ == KModeTypes::NoCorr) {
             return 0.;
         }
@@ -233,7 +241,9 @@ namespace OTAGRUM {
                                                                       const OT::UnsignedInteger Y,
                                                                       const OT::UnsignedInteger Z,
                                                                       const OT::Indices &U) {
-        return compute3PtInformation(X, Y, Z, U) - compute3PtPenalty(X, Y, Z, U);
+        // Commented until a better correction is found
+        //return compute3PtInformation(X, Y, Z, U) - compute3PtPenalty(X, Y, Z, U);
+        return compute3PtInformation(X, Y, Z, U) - compute3PtPenalty();
     }
 
 } // namespace OTAGRUM
