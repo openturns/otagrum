@@ -92,24 +92,24 @@ void testIndepsSeePythonTest()
 
   //  0 et 1 not independent
   double I2 = info.compute2PtCorrectedInformation(0, 1);
-  std::cout << "Two-point corrected information: " << I2 
-            << "\tTest: " << ((I2<0) ? "fail " : "OK ") << std::endl;
+  std::cout << "Two-point corrected information: " << I2
+            << "\tTest: " << ((I2 < 0) ? "fail " : "OK ") << std::endl;
 
   // O et 4 independent
   I2 = info.compute2PtCorrectedInformation(0, 4);
   std::cout << "Two-point corrected information: " << I2
-            << "\tTest: " << ((I2<0) ? "OK " : "fail ") << std::endl;
+            << "\tTest: " << ((I2 < 0) ? "OK " : "fail ") << std::endl;
 
   //OT::Indices U;
   // O et 4 independent if 2,3
   //I2 = info.compute2PtCorrectedInformation(0, 4, U + 2 + 3);
   //std::cout << "Two-point corrected information: " << I2
-            //<< "Test: " << ((I2<0) ? "OK " : "fail ") << std::endl;
+  //<< "Test: " << ((I2<0) ? "OK " : "fail ") << std::endl;
 
   // O et 2 independent if 1.
   //I2 = info.compute2PtCorrectedInformation(1, 2, U + 0);
   //std::cout << "Two-point corrected information: " << I2
-            //<< "Test: " << ((I2<0) ? "OK " : "fail ") << std::endl;
+  //<< "Test: " << ((I2<0) ? "OK " : "fail ") << std::endl;
 }
 
 int main(int /*argc*/, char ** /*argv*/)
