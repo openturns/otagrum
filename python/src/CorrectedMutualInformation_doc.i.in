@@ -63,7 +63,7 @@ description : :class:`~openturns.Description`
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::CorrectedMutualInformation::compute3PtCorrectedInformation
+%feature("docstring") OTAGRUM::CorrectedMutualInformation::compute2PtCorrectedInformation
 "Return the corrected mutual information between variables X and Y conditionally
 to the variable set U (possibly empty).
 
@@ -88,7 +88,7 @@ I(X;Y|U) = H(X,U) + H(Y,U) - H(X,Y,U) - H(U)."
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::CorrectedMutualInformation::compute2PtCorrectedInformation
+%feature("docstring") OTAGRUM::CorrectedMutualInformation::compute3PtCorrectedInformation
 "Return the corrected three-point information between variables X, Y and Z conditionally
 to the variable set U (possibly empty).
 
