@@ -48,7 +48,7 @@ public:
 
   bool exists(const std::string &key) const;
 
-  const OT::Point get(const std::string &key) const;
+  OT::Point get(const std::string &key) const;
 
   void set(OT::UnsignedInteger level, const std::string &key, const OT::Point sample);
 

@@ -757,7 +757,7 @@ double ContinuousPC::getTTest(gum::NodeId x, gum::NodeId y) const
   }
 }
 
-const OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) const
+OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) const
 {
   gum::Edge e(x, y);
   if (pvalues_.exists(e))
@@ -809,7 +809,7 @@ double ContinuousPC::getTTest(const std::string &x,
   return getTTest(idFromName(x), idFromName(y));
 }
 
-const std::vector<std::string>
+std::vector<std::string>
 ContinuousPC::getSepsetNames(const std::string &x, const std::string &y) const
 {
   std::vector<std::string> res;

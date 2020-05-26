@@ -133,9 +133,20 @@ kmode : CorrectedMutualInformation.CModeTypes
 
 // ----------------------------------------------------------------------------
 
+%feature("docstring") OTAGRUM::ContinuousMIIC::setAlpha
+"Set the alpha correction value of mutual information when using
+the naive KMode.
+
+Parameters
+----------
+alpha : float
+    Correction value"
+
+// ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::ContinuousMIIC::getAlpha
 "Returns the alpha correction value of mutual information when using
-the naive KMode..
+the naive KMode.
 
 Returns
 -------
@@ -176,3 +187,12 @@ head : str
     Name of the head node
 tail : str
     Name of the tail node"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousMIIC::getLatentVariables
+"Latent variables accessor.
+
+Returns
+--------
+vars : sequence of :py:class:`pyAgrum.Arc`"

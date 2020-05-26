@@ -1,5 +1,5 @@
 #ifndef OTAGRUM_CONTINUOUSMIIC_HXX
-#define OTAGRUM_CONTINUOUSMICC_HXX
+#define OTAGRUM_CONTINUOUSMIIC_HXX
 
 #include <agrum/tools/graphs/undiGraph.h>
 #include <agrum/tools/graphs/mixedGraph.h>
@@ -58,7 +58,7 @@ public:
   gum::MixedGraph learnPDAG();
   NamedDAG learnDAG();
 
-  const std::vector< gum::Arc > getLatentVariables() const;
+  std::vector< gum::Arc > getLatentVariables() const;
   void addForbiddenArc(gum::Arc arc);
   void addForbiddenArc(std::string head, std::string tail);
   void addForbiddenArc(OT::UnsignedInteger head, OT::UnsignedInteger tail);

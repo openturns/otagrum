@@ -64,13 +64,6 @@ void OTAgrumResourceMap::Initialize()
     perror("ResourceMap::Initialize mutex initialization failed");
     exit(1);
   }
-  // openturns<1.15
-#ifndef OPENTURNS_VERSION
-#define AddAsScalar SetAsScalar
-#define AddAsUnsignedInteger SetAsUnsignedInteger
-#define AddAsBool SetAsBool
-#define AddAsScalar SetAsScalar
-#endif
   // JunctionTreeBernsteinCopulaFactory
   ResourceMap::AddAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha", 0.1);
   ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);

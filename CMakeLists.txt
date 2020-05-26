@@ -19,10 +19,10 @@ string(TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 # set module dir to find custom scripts
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-find_package (aGrUM 0.17.2 NO_MODULE REQUIRED)
+find_package (aGrUM 0.17.2 CONFIG REQUIRED)
 message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
 
-find_package(OpenTURNS 1.14 NO_MODULE REQUIRED)
+find_package(OpenTURNS 1.15 CONFIG REQUIRED)
 message(STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 if (CMAKE_VERSION VERSION_LESS 3)
   include(${OPENTURNS_USE_FILE})

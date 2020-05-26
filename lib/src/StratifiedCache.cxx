@@ -43,7 +43,7 @@ bool StratifiedCache::exists(const std::string &key) const
   return cache_.exists(key);
 }
 
-const OT::Point StratifiedCache::get(const std::string &key) const
+OT::Point StratifiedCache::get(const std::string &key) const
 {
   get_++;
   return cache_[key];

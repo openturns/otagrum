@@ -58,11 +58,11 @@ public:
 
   double getPValue(gum::NodeId x, gum::NodeId y) const;
   double getTTest(gum::NodeId x, gum::NodeId y) const;
-  const OT::Indices getSepset(gum::NodeId x, gum::NodeId y) const;
+  OT::Indices getSepset(gum::NodeId x, gum::NodeId y) const;
 
   double getPValue(const std::string &x, const std::string &y) const;
   double getTTest(const std::string &x, const std::string &y) const;
-  const std::vector<std::string> getSepsetNames(const std::string &x, const std::string &y) const;
+  std::vector<std::string> getSepsetNames(const std::string &x, const std::string &y) const;
 
   gum::NodeId idFromName(const std::string& n) const;
 
