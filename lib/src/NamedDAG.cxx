@@ -107,6 +107,11 @@ Indices NamedDAG::getTopologicalOrder() const
   return topo_order_;
 }
 
+gum::DAG NamedDAG::getDAG() const
+{
+  return dag_;
+}
+
 String NamedDAG::__str__(const String &pref) const
 {
   std::stringstream ss;
