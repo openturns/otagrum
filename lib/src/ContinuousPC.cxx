@@ -75,7 +75,7 @@ public:
     return (((key.x * HashFuncConst::gold + key.y) * HashFuncConst::gold +
              key.z) *
             HashFuncConst::gold) &
-           this->_hash_mask;
+           this->hash_mask_;
   };
 };
 } // namespace gum
