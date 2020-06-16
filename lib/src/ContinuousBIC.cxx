@@ -1,4 +1,13 @@
-#include <agrum/tools/core/list.h>
+#include <agrum/BN/learning/structureUtils/graphChangesGenerator4DiGraph.h>
+#include <agrum/BN/learning/structureUtils/graphChange.h>
+
+#include <agrum/BN/learning/constraints/structuralConstraintSetStatic.h>
+#include <agrum/BN/learning/constraints/structuralConstraintTabuList.h>
+#include <agrum/BN/learning/constraints/structuralConstraintIndegree.h>
+#include <agrum/BN/learning/constraints/structuralConstraintDAG.h>
+#include <agrum/BN/learning/constraints/structuralConstraintForbiddenArcs.h>
+#include <agrum/BN/learning/constraints/structuralConstraintMandatoryArcs.h>
+
 
 #include "otagrum/ContinuousBIC.hxx"
 
@@ -17,11 +26,6 @@ ContinuousBIC::ContinuousBIC(const OT::Sample &data)
 {
 }
 
-//void ContinuousBIC::setCMode(CorrectedMutualInformation::CModeTypes cmode)
-//{
-  //info_.setCMode(cmode);
-//}
-
 void ContinuousBIC::setVerbosity(bool verbose)
 {
   verbose_ = verbose;
@@ -32,78 +36,64 @@ bool ContinuousBIC::getVerbosity() const
   return verbose_;
 }
 
-//void ContinuousBIC::addForbiddenArc(gum::Arc arc)
+//NamedDAG ContinuousBIC::learnDAG()
 //{
-  //addForbiddenArc(arc.head(), arc.tail());
+  //TRACE("\n===== STARTING DAG LEARNING =====" << std::endl);
+
+  //gum::DAG dag;
+
+  //dag_ = NamedDAG(dag, namesFromData());
+
+
+  //TRACE("===== ENDING DAG LEARNING =====" << std::endl);
+  //return dag_;
 //}
 
-//void ContinuousBIC::addForbiddenArc(std::string head, std::string tail)
-//{
-  //addForbiddenArc(idFromName(head), idFromName(tail));
-//}
+double ContinuousBIC::deltaScore(gum::DAG dag) {
+    double delta = 0.;
+    gum::learning::StructuralConstraintSetStatic< gum::learning::StructuralConstraintTabuList,
+                                                  gum::learning::StructuralConstraintDAG >
+        gen_constraint;
+    gum::learning::GraphChangesGenerator4DiGraph< decltype(gen_constraint) > changeGenerator(
+        gen_constraint);
 
-//void ContinuousBIC::addForbiddenArc(OT::UnsignedInteger head, OT::UnsignedInteger tail)
-//{
-  //initial_marks_.insert({head, tail}, '-');
-//}
+    changeGenerator.setGraph(dag);
 
-//void ContinuousBIC::addMandatoryArc(gum::Arc arc)
-//{
-  //addMandatoryArc(arc.head(), arc.tail());
-//}
+    std::cout << "DAG: " << dag << std::endl;
 
-//void ContinuousBIC::addMandatoryArc(std::string head, std::string tail)
-//{
-  //addMandatoryArc(idFromName(head), idFromName(tail));
-//}
+    for(auto it=changeGenerator.begin(); it!=changeGenerator.end(); ++it) {
+        std::cout << "Change: " << *it << std::endl;
+    }
 
-//void ContinuousBIC::addMandatoryArc(OT::UnsignedInteger head, OT::UnsignedInteger tail)
-//{
-  //initial_marks_.insert({head, tail}, '>');
-//}
+    /*
+    auto it = changeGenerator.begin();
+    ++it;
+    ++it;
 
-NamedDAG ContinuousBIC::learnDAG()
-{
-  TRACE("\n===== STARTING DAG LEARNING =====" << std::endl);
+    std::cout << "Chang: " << *it << std::endl;
 
-  gum::DAG dag;
+    auto change = *it;
+    
+    changeGenerator.modifyGraph(change);
 
-  dag_ = NamedDAG(dag, namesFromData());
+    for(auto it=changeGenerator.begin(); it!=changeGenerator.end(); ++it) {
+        std::cout << "Change: " << *it << std::endl;
+    }
+    */
 
-
-  TRACE("===== ENDING DAG LEARNING =====" << std::endl);
-  return dag_;
-}
-
-double ContinuousBIC::deltaScore(newDAG, oldDAG) {
-    delta = 0.;
+    
     return delta;
 }
 
-//gum::NodeId ContinuousBIC::idFromName(const std::string& name) const
-//{
-  //const auto &description = info_.getDataDescription();
-  //for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
-  //{
-    //if (name == description.at(i))
-    //{
-      //return gum::NodeId(i);
-    //}
-  //}
-
-  //throw OT::InvalidArgumentException(HERE) << "Error: name '" << name
-      //<< "' is not a node name.";
-//}
-
-//std::vector< std::string > ContinuousBIC::namesFromData() const
-//{
-  //std::vector< std::string > names;
-  //const auto &description = info_.getDataDescription();
-  //for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
-  //{
-    //names.push_back(description.at(i));
-  //}
-  //return names;
-//}
+std::vector< std::string > ContinuousBIC::namesFromData() const
+{
+  std::vector< std::string > names;
+  const auto &description = info_.getDataDescription();
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
+  {
+    names.push_back(description.at(i));
+  }
+  return names;
+}
 
 } // namespace OTAGRUM

@@ -1,0 +1,50 @@
+%feature("docstring") OTAGRUM::ContinuousBIC
+"ContinuousBIC learner.
+
+Parameters
+----------
+data : 2-d sequence of float
+    The data
+
+Notes
+-----
+MIIC algorithm is a hybrid method between contrained and score based methods.
+It allows to learn the structure of a bayesian network and consists in three steps :
+skeleton learning, V-structure searching and constraint propagation. These steps
+rely on an information theoretic score."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousBIC::learnDAG
+"Learn the DAG from data.
+
+Returns
+-------
+dag : :class:`~otagrum.NamedDAG`
+    the learned DAG
+
+Notes
+-----
+This step starts with the learned PDAG and orient the remaining undirected edges
+by avoiding to add new V-structures unless it implies to create an oriented circle."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousBIC::setVerbosity
+"Change the value of verbosity flag. 
+
+Parameters
+----------
+verbose : bool
+    New verbosity flag value. If True, a lot of details about the learning procedure
+    are printed."
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousBIC::getVerbosity
+"Returns the verbosity flag value.
+
+Returns
+-------
+verbose : bool
+    Verbosity flag value"
