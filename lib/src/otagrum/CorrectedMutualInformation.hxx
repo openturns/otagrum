@@ -42,6 +42,9 @@ public:
   void setKMode(CorrectedMutualInformation::KModeTypes kmode);
   void setCMode(CorrectedMutualInformation::CModeTypes cmode);
 
+  KModeTypes getKMode();
+  CModeTypes getCMode();
+
 private:
   void clearHCache() const;
 

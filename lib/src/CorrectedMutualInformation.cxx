@@ -26,6 +26,16 @@ void CorrectedMutualInformation::setCMode(CModeTypes cmode)
   cmode_ = cmode;
 }
 
+CorrectedMutualInformation::KModeTypes CorrectedMutualInformation::getKMode()
+{
+  return kmode_;
+}
+
+CorrectedMutualInformation::CModeTypes CorrectedMutualInformation::getCMode()
+{
+  return cmode_;
+}
+
 void CorrectedMutualInformation::setAlpha(const double alpha)
 {
   alpha_ = alpha;
@@ -211,7 +221,12 @@ double CorrectedMutualInformation::compute2PtCorrectedInformation(const OT::Unsi
 double CorrectedMutualInformation::compute2PtCorrectedInformation(const OT::Indices &X,
                                                                   const OT::Indices &Y)
 {
-    return compute2PtInformation(X, Y) - compute2PtPenalty();
+    if(X.getSize() == 0 || Y.getSize() == 0){
+        return 0.;
+    }
+    else{
+        return compute2PtInformation(X, Y) - compute2PtPenalty();
+    }
 }
 
 double CorrectedMutualInformation::compute3PtInformation(const OT::UnsignedInteger X,
