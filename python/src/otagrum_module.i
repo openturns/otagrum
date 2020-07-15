@@ -32,6 +32,7 @@
 %include ContinuousPC.i
 %include CorrectedMutualInformation.i
 %include ContinuousMIIC.i
+%include TabuList.i
 %include ContinuousBIC.i
 %include ContinuousBayesianNetwork.i
 %include ContinuousBayesianNetworkFactory.i
