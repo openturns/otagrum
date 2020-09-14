@@ -5,13 +5,20 @@ Parameters
 ----------
 data : 2-d sequence of float
     The data
+initial_dag: :class:`~otagrum.NamedDAG`
+    The Initial DAG for the algorithm
+max_parents : int
+    Maximum parents that a node can have
+restarts : int
+    Number of random restarts
+tabu_list_size : int
+    Size of the TABU list
 
 Notes
 -----
-MIIC algorithm is a hybrid method between contrained and score based methods.
-It allows to learn the structure of a bayesian network and consists in three steps :
-skeleton learning, V-structure searching and constraint propagation. These steps
-rely on an information theoretic score."
+The TABU list algorithm is used with the BIC score and Gaussian copulas to learn the 
+structure of a CBN from data. Moreover, it uses the decomposition of BIC score
+to avoid computing score over the entire graph."
 
 // ----------------------------------------------------------------------------
 
@@ -48,3 +55,43 @@ Returns
 -------
 verbose : bool
     Verbosity flag value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::TabuList::getMaxParents
+"Returns the value of the parameter max_parents.
+
+Returns
+-------
+verbose : int
+    max_parents value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::TabuList::getRestarts
+"Returns the value of the parameter restarts.
+
+Returns
+-------
+verbose : int
+    restarts value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::TabuList::getBestScore
+"Returns the final score value.
+
+Returns
+-------
+verbose : double
+    Final score value"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::TabuList::setCMode
+"Changes the copula model (Bernstein or Gaussian) used for computing the BIC score.
+
+Returns
+-------
+verbose : CorrectedMutualInformation.CModeTypes
+    Copula model (Gaussian or Bernstein)"
