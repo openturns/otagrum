@@ -36,7 +36,7 @@ def testSpecificInstance():
 
 def testAsiaDirichlet():
     data = ot.Sample.ImportFromTextFile(
-        os.path.dirname(__file__)+"/asia_dirichlet_5000.csv", ",")
+        os.path.join(os.path.dirname(__file__), "asia_dirichlet_5000.csv"), ",")
     alpha = 0.1
     binNumber = 3
     learner = otagrum.ContinuousPC(data, binNumber, alpha)

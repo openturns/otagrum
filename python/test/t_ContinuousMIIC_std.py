@@ -34,7 +34,7 @@ def testSpecificInstance():
 
 def testAsiaDirichlet():
     data = ot.Sample.ImportFromTextFile(
-        os.path.dirname(__file__)+"/asia_dirichlet_5000.csv", ",")
+        os.path.join(os.path.dirname(__file__), "asia_dirichlet_5000.csv"), ",")
     learner = otagrum.ContinuousMIIC(data)
     learner.setVerbosity(True)
     pdag = learner.learnPDAG()
