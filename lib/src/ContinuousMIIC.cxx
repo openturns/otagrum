@@ -1,5 +1,5 @@
 #include <agrum/tools/core/list.h>
-#include <chrono>
+//#include <chrono>
 
 #include "otagrum/ContinuousMIIC.hxx"
 
@@ -182,15 +182,15 @@ void ContinuousMIIC::addMandatoryArc(OT::UnsignedInteger head, OT::UnsignedInteg
 void ContinuousMIIC::initiation()
 {
   unsigned int cutted_edges = 0;
-  auto start_initiation = std::chrono::steady_clock::now();
+  //auto start_initiation = std::chrono::steady_clock::now();
   TRACE("\n===== STARTING INITIATION =====" << std::endl);
   OT::UnsignedInteger  X, Y;
   gum::EdgeSet edges = skeleton_.edges();
 
-  std::vector< double > times;
+  //std::vector< double > times;
   for (const auto &edge : edges)
   {
-    auto start = std::chrono::steady_clock::now();
+    //auto start = std::chrono::steady_clock::now();
     X = edge.first();
     Y = edge.second();
     TRACE("\t\n\nEdge: " << edge << std::endl);
@@ -208,25 +208,25 @@ void ContinuousMIIC::initiation()
     {
       findBestContributor(X, Y, OT::Indices());
     }
-    auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> diff = end - start;
-    times.push_back(diff.count());
-    TRACE("\tElapsed time for this edge: " << diff.count() << " s" << std::endl);
+    //auto end = std::chrono::steady_clock::now();
+    //std::chrono::duration<double> diff = end - start;
+    //times.push_back(diff.count());
+    //TRACE("\tElapsed time for this edge: " << diff.count() << " s" << std::endl);
 
   }
   TRACE("===== ENDING INITIATION =====" << std::endl);
-  auto end_initiation = std::chrono::steady_clock::now();
-  std::chrono::duration<double> diff_initiation = end_initiation - start_initiation;
+  //auto end_initiation = std::chrono::steady_clock::now();
+  //std::chrono::duration<double> diff_initiation = end_initiation - start_initiation;
   TRACE("Summary:" << std::endl);
-  TRACE("\tElapsed time for initiation: " << diff_initiation.count()
-                                          << " s" << std::endl);
+  //TRACE("\tElapsed time for initiation: " << diff_initiation.count()
+                                          //<< " s" << std::endl);
   TRACE("\tNumber of cutted edges: " << cutted_edges << std::endl << std::endl);
 }
 
 void ContinuousMIIC::iteration()
 {
   unsigned int cutted_edges = 0;
-  auto start_iteration = std::chrono::steady_clock::now();
+  //auto start_iteration = std::chrono::steady_clock::now();
   TRACE("\n===== STARTING ITERATION =====" << std::endl);
   // if no triples to further examine pass
   std::pair< std::tuple< OT::UnsignedInteger,
@@ -235,12 +235,12 @@ void ContinuousMIIC::iteration()
       OT::Indices >*,
       double > best;
 
-  std::vector< double > times;
+  //std::vector< double > times;
   unsigned int n_iterations = 0;
   while (!rank_.empty() && rank_.top().second > 0.5)
   {
     n_iterations++;
-    auto start = std::chrono::steady_clock::now();
+    //auto start = std::chrono::steady_clock::now();
     best = rank_.pop();
 
     const OT::UnsignedInteger X = std::get< 0 >(*(best.first));
@@ -269,18 +269,18 @@ void ContinuousMIIC::iteration()
     }
 
     delete best.first;
-    auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> diff = end - start;
-    times.push_back(diff.count());
-    TRACE("\tElapsed time for this iteration: " << diff.count() << " s" << std::endl);
+    //auto end = std::chrono::steady_clock::now();
+    //std::chrono::duration<double> diff = end - start;
+    //times.push_back(diff.count());
+    //TRACE("\tElapsed time for this iteration: " << diff.count() << " s" << std::endl);
   }
   TRACE("===== ENDING ITERATION =====" << std::endl);
   TRACE("Summary:" << std::endl);
-  auto end_iteration = std::chrono::steady_clock::now();
-  std::chrono::duration<double> diff_iteration = end_iteration - start_iteration;
+  //auto end_iteration = std::chrono::steady_clock::now();
+  //std::chrono::duration<double> diff_iteration = end_iteration - start_iteration;
   TRACE("\tNumber of iterations: " << n_iterations << std::endl);
-  TRACE("\tElapsed time for iteration: " << diff_iteration.count()
-                                         << " s" << std::endl);
+  //TRACE("\tElapsed time for iteration: " << diff_iteration.count()
+                                         //<< " s" << std::endl);
   TRACE("\tNumber of cutted edges: " << cutted_edges << std::endl << std::endl);
 }
 
