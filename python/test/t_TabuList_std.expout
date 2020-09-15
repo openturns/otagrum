@@ -1,0 +1,50 @@
+digraph {
+    F->G
+    G
+    C->D
+    C->E
+    D->E
+    E
+    A->B
+    B
+}
+
+
+===== STARTING DAG LEARNING =====
+ Initial DAG: {0,1,2,3,4,5,6,7} , {}
+ Initial score: 0
+
+   == RUN 1 ==
+   Best change: (ArcAddition ( 4 , 7 ), 309.331)
+   Best change: (ArcAddition ( 2 , 3 ), 267.754)
+   Best change: (ArcAddition ( 2 , 6 ), 200.346)
+   Best change: (ArcAddition ( 4 , 3 ), 182.039)
+   Best change: (ArcAddition ( 4 , 5 ), 168.942)
+   Best change: (ArcAddition ( 0 , 1 ), 165.487)
+   Best change: (ArcAddition ( 7 , 6 ), 144.435)
+   Best change: (ArcAddition ( 1 , 4 ), 143.843)
+   Best change: (ArcReversal ( 2 , 6 ), 20.8722)
+   Best change: (ArcReversal ( 4 , 7 ), 18.9848)
+   Best change: (ArcAddition ( 6 , 3 ), 4.88929)
+   Best change: (ArcReversal ( 0 , 1 ), 0)
+   Learned DAG: {0,1,2,3,4,5,6,7} , {2->3,4->3,4->5,0->1,6->3,7->6,1->4,6->2,7->4}
+   DAG score: 1626.92
+
+ Final DAG: {0,1,2,3,4,5,6,7} , {2->3,4->3,4->5,0->1,6->3,7->6,1->4,6->2,7->4}
+ Final score: 1626.92
+
+===== ENDING DAG LEARNING =====
+digraph {
+    lung->smoke
+    lung->either
+    smoke->dysp
+    smoke->bronc
+    bronc->dysp
+    asia->tub
+    tub->either
+    either->dysp
+    either->xray
+    xray
+    dysp
+}
+

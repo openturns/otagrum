@@ -91,6 +91,7 @@ ot_check_test ( ContinuousTTest_std )
 ot_check_test ( ContinuousPC_std )
 ot_check_test ( CorrectedMutualInformation_std )
 ot_check_test ( ContinuousMIIC_std )
+ot_check_test ( TabuList_std )
 ot_check_test ( ContinuousBayesianNetwork_std )
 ot_check_test ( OTAgrumResourceMap_std )
 
