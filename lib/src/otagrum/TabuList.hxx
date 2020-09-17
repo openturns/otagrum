@@ -18,13 +18,15 @@ class OTAGRUM_API TabuList : public OT::Object
 {
 public:
   // Constructor
-  explicit TabuList(const OT::Sample &data, const NamedDAG &initial_dag,
-                    const unsigned int max_parents = 4, const unsigned int restarts = 1,
-                    const unsigned int tabu_list_size = 2);
+  TabuList(const OT::Sample &data,
+           const NamedDAG &initial_dag,
+           const OT::UnsignedInteger max_parents = 4,
+           const OT::UnsignedInteger restarts = 1,
+           const OT::UnsignedInteger tabu_list_size = 2);
   explicit TabuList(const OT::Sample &data,
-                    const unsigned int max_parents = 4,
-                    const unsigned int restarts = 1,
-                    const unsigned int tabu_list_size = 2);
+                    const OT::UnsignedInteger max_parents = 4,
+                    const OT::UnsignedInteger restarts = 1,
+                    const OT::UnsignedInteger tabu_list_size = 2);
 
   //NamedDAG learnDAG();
 
@@ -34,8 +36,8 @@ public:
   void setCMode(CorrectedMutualInformation::CModeTypes cmode);
   //CorrectedMutualInformation::CModeTypes getCMode();
 
-  unsigned int getMaxParents() const;
-  unsigned int getRestarts() const;
+  OT::UnsignedInteger getMaxParents() const;
+  OT::UnsignedInteger getRestarts() const;
 
   double getBestScore() const;
 
@@ -57,26 +59,26 @@ private:
   double computeScore(gum::DAG dag);
   void addElementTabuList(gum::learning::GraphChange change);
 
-  gum::DAG randomDAG(unsigned int size,
-                     unsigned int max_parents,
-                     unsigned int steps = 50);
+  gum::DAG randomDAG(OT::UnsignedInteger size,
+                     OT::UnsignedInteger max_parents,
+                     OT::UnsignedInteger steps = 50);
   std::vector< gum::learning::GraphChange >
-  findLegalChanges(const gum::DAG &dag, unsigned int max_parents);
+  findLegalChanges(const gum::DAG &dag, OT::UnsignedInteger max_parents);
   gum::learning::GraphChange
   choseRandomChange(const std::vector< gum::learning::GraphChange > &changes);
 
   std::pair< gum::learning::GraphChange, double > findBestChange(gum::DAG dag);
   void updateBest(const gum::DAG &dag, const double score);
-  double tabuListAlgo(gum::DAG &dag, unsigned int max_parents);
+  double tabuListAlgo(gum::DAG &dag, OT::UnsignedInteger max_parents);
 
 
   CorrectedMutualInformation info_;
   gum::DAG best_dag_;
   double best_score_;
 
-  unsigned int max_parents_;
-  unsigned int restarts_;
-  unsigned int tabu_list_size_;
+  OT::UnsignedInteger max_parents_;
+  OT::UnsignedInteger restarts_;
+  OT::UnsignedInteger tabu_list_size_;
 
   bool verbose_ = false;
   bool dag_done_ = false;

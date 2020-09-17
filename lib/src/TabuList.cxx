@@ -12,9 +12,11 @@
 namespace OTAGRUM
 {
 
-TabuList::TabuList(const OT::Sample &data, const NamedDAG &initial_dag,
-                   const unsigned int max_parents, const unsigned int restarts,
-                   const unsigned int tabu_list_size)
+TabuList::TabuList(const OT::Sample &data,
+                   const NamedDAG &initial_dag,
+                   const OT::UnsignedInteger max_parents,
+                   const OT::UnsignedInteger restarts,
+                   const OT::UnsignedInteger tabu_list_size)
   : OT::Object()
   , info_(data)
   , best_dag_(initial_dag.getDAG())
@@ -29,9 +31,9 @@ TabuList::TabuList(const OT::Sample &data, const NamedDAG &initial_dag,
 }
 
 TabuList::TabuList(const OT::Sample &data,
-                   const unsigned int max_parents,
-                   const unsigned int restarts,
-                   const unsigned int tabu_list_size)
+                   const OT::UnsignedInteger max_parents,
+                   const OT::UnsignedInteger restarts,
+                   const OT::UnsignedInteger tabu_list_size)
   : OT::Object()
   , info_(data)
   , max_parents_(max_parents)
@@ -63,12 +65,12 @@ void TabuList::setCMode(CorrectedMutualInformation::CModeTypes cmode)
   info_.setCMode(cmode);
 }
 
-unsigned int TabuList::getMaxParents() const
+OT::UnsignedInteger TabuList::getMaxParents() const
 {
   return max_parents_;
 }
 
-unsigned int TabuList::getRestarts() const
+OT::UnsignedInteger TabuList::getRestarts() const
 {
   return restarts_;
 }
@@ -119,7 +121,7 @@ NamedDAG TabuList::learnDAG()
   TRACE("   Learned DAG: " << dag << std::endl)
   TRACE("   DAG score: " << score << std::endl)
   updateBest(dag, score);
-  for(unsigned int i = 0; i < restarts_ - 1; ++i)
+  for(OT::UnsignedInteger i = 0; i < restarts_ - 1; ++i)
   {
     TRACE("\n   == RUN " << i + 2 << " ==" << std::endl)
     dag = randomDAG(info_.getDimension(), max_parents_);
@@ -139,7 +141,7 @@ NamedDAG TabuList::learnDAG()
   return NamedDAG(best_dag_, namesFromData());
 }
 
-double TabuList::tabuListAlgo(gum::DAG &dag, unsigned int max_parents)
+double TabuList::tabuListAlgo(gum::DAG &dag, OT::UnsignedInteger max_parents)
 {
   tabu_list_.clear();
   double score = computeScore(dag);
@@ -206,14 +208,14 @@ void TabuList::updateBest(const gum::DAG &dag, const double score)
   }
 }
 
-gum::DAG TabuList::randomDAG(unsigned int size,
-                             unsigned int max_parents,
-                             unsigned int steps)
+gum::DAG TabuList::randomDAG(OT::UnsignedInteger size,
+                             OT::UnsignedInteger max_parents,
+                             OT::UnsignedInteger steps)
 {
   gum::DAG dag;
   dag.addNodes(size);
 
-  for(unsigned int i = 0; i < steps; ++i)
+  for(OT::UnsignedInteger i = 0; i < steps; ++i)
   {
     std::vector< gum::learning::GraphChange > legal_changes;
     legal_changes = findLegalChanges(dag, max_parents);
@@ -245,7 +247,7 @@ gum::DAG TabuList::randomDAG(unsigned int size,
 
 
 std::vector< gum::learning::GraphChange > TabuList::findLegalChanges(
-  const gum::DAG &dag, unsigned int max_parents)
+  const gum::DAG &dag, OT::UnsignedInteger max_parents)
 {
 
   std::vector< gum::learning::GraphChange > changes;
