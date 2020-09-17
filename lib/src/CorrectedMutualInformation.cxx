@@ -175,7 +175,7 @@ double CorrectedMutualInformation::compute2PtInformation(const OT::UnsignedInteg
 }
 
 double CorrectedMutualInformation::compute2PtInformation(const OT::Indices &X,
-                                                         const OT::Indices &Y)
+    const OT::Indices &Y)
 {
   OT::UnsignedInteger K = GetK(data_.getSize(), X.getSize() + Y.getSize());
 
@@ -219,14 +219,16 @@ double CorrectedMutualInformation::compute2PtCorrectedInformation(const OT::Unsi
 }
 
 double CorrectedMutualInformation::compute2PtCorrectedInformation(const OT::Indices &X,
-                                                                  const OT::Indices &Y)
+    const OT::Indices &Y)
 {
-    if(X.getSize() == 0 || Y.getSize() == 0){
-        return 0.;
-    }
-    else{
-        return compute2PtInformation(X, Y) - compute2PtPenalty();
-    }
+  if(X.getSize() == 0 || Y.getSize() == 0)
+  {
+    return 0.;
+  }
+  else
+  {
+    return compute2PtInformation(X, Y) - compute2PtPenalty();
+  }
 }
 
 double CorrectedMutualInformation::compute3PtInformation(const OT::UnsignedInteger X,

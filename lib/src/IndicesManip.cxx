@@ -68,11 +68,12 @@ OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y)
 OT::Indices operator+(const OT::Indices &X, const OT::Indices &Y)
 {
   OT::Indices res(X);
-  for(const auto y: Y) {
-      if (!isIn(res, y))
-      {
-          res.add(y);
-      }
+  for(const auto y : Y)
+  {
+    if (!isIn(res, y))
+    {
+      res.add(y);
+    }
   }
   return res;
 }

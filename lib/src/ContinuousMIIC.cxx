@@ -219,7 +219,7 @@ void ContinuousMIIC::initiation()
   //std::chrono::duration<double> diff_initiation = end_initiation - start_initiation;
   TRACE("Summary:" << std::endl);
   //TRACE("\tElapsed time for initiation: " << diff_initiation.count()
-                                          //<< " s" << std::endl);
+  //<< " s" << std::endl);
   TRACE("\tNumber of cutted edges: " << cutted_edges << std::endl << std::endl);
 }
 
@@ -260,7 +260,7 @@ void ContinuousMIIC::iteration()
       skeleton_.eraseEdge(gum::Edge(X, Y));
       cutted_edges++;
       TRACE("\t\tCutting edge " << gum::Edge(X, Y) << " with " << U
-                                << " as conditional set" << std::endl);
+            << " as conditional set" << std::endl);
       sepset_.insert(gum::Edge(X, Y), std::move(U));
     }
     else
@@ -280,7 +280,7 @@ void ContinuousMIIC::iteration()
   //std::chrono::duration<double> diff_iteration = end_iteration - start_iteration;
   TRACE("\tNumber of iterations: " << n_iterations << std::endl);
   //TRACE("\tElapsed time for iteration: " << diff_iteration.count()
-                                         //<< " s" << std::endl);
+  //<< " s" << std::endl);
   TRACE("\tNumber of cutted edges: " << cutted_edges << std::endl << std::endl);
 }
 
