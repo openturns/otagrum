@@ -69,7 +69,7 @@ private:
 
   std::pair< gum::learning::GraphChange, double > findBestChange(gum::DAG dag);
   void updateBest(const gum::DAG &dag, const double score);
-  double tabuListAlgo(gum::DAG &dag, OT::UnsignedInteger max_parents);
+  double tabuListAlgo(gum::DAG &dag);
 
 
   CorrectedMutualInformation info_;

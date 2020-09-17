@@ -75,36 +75,6 @@ OT::UnsignedInteger TabuList::getRestarts() const
   return restarts_;
 }
 
-//void TabuList::addForbiddenArc(gum::Arc arc)
-//{
-//addForbiddenArc(arc.head(), arc.tail());
-//}
-
-//void TabuList::addForbiddenArc(std::string head, std::string tail)
-//{
-//addForbiddenArc(idFromName(head), idFromName(tail));
-//}
-
-//void TabuList::addForbiddenArc(OT::UnsignedInteger head, OT::UnsignedInteger tail)
-//{
-//initial_marks_.insert({head, tail}, '-');
-//}
-
-//void TabuList::addMandatoryArc(gum::Arc arc)
-//{
-//addMandatoryArc(arc.head(), arc.tail());
-//}
-
-//void TabuList::addMandatoryArc(std::string head, std::string tail)
-//{
-//addMandatoryArc(idFromName(head), idFromName(tail));
-//}
-
-//void TabuList::addMandatoryArc(OT::UnsignedInteger head, OT::UnsignedInteger tail)
-//{
-//initial_marks_.insert({head, tail}, '>');
-//}
-
 NamedDAG TabuList::learnDAG()
 {
   if(dag_done_)
@@ -117,16 +87,17 @@ NamedDAG TabuList::learnDAG()
 
   TRACE("\n   == RUN 1 ==" << std::endl)
   gum::DAG dag = best_dag_;
-  double score = tabuListAlgo(dag, max_parents_);
+  double score = tabuListAlgo(dag);
   TRACE("   Learned DAG: " << dag << std::endl)
   TRACE("   DAG score: " << score << std::endl)
   updateBest(dag, score);
+
   for(OT::UnsignedInteger i = 0; i < restarts_ - 1; ++i)
   {
     TRACE("\n   == RUN " << i + 2 << " ==" << std::endl)
     dag = randomDAG(info_.getDimension(), max_parents_);
     TRACE("   Initial DAG: " << dag << std::endl)
-    score = tabuListAlgo(dag, max_parents_);
+    score = tabuListAlgo(dag);
     TRACE("   Learned DAG: " << dag << std::endl)
     TRACE("   Score: " << score << std::endl)
     updateBest(dag, score);
@@ -141,7 +112,7 @@ NamedDAG TabuList::learnDAG()
   return NamedDAG(best_dag_, namesFromData());
 }
 
-double TabuList::tabuListAlgo(gum::DAG &dag, OT::UnsignedInteger max_parents)
+double TabuList::tabuListAlgo(gum::DAG &dag)
 {
   tabu_list_.clear();
   double score = computeScore(dag);
