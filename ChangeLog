@@ -1,6 +1,7 @@
 = 0.3 release (in-progress)
 
  * Continuous MIIC
+ * TABU list learning algorithm for CBN
 
 = 0.2 release (2020-04-08)
 

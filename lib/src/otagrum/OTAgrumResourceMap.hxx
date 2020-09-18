@@ -29,7 +29,6 @@ namespace OTAGRUM
 
 class OTAGRUM_API OTAgrumResourceMap
 {
-  CLASSNAME;
 
 public:
   static void Initialize();

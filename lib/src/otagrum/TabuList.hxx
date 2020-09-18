@@ -28,8 +28,6 @@ public:
                     const OT::UnsignedInteger restarts = 1,
                     const OT::UnsignedInteger tabu_list_size = 2);
 
-  //NamedDAG learnDAG();
-
   void setVerbosity(bool verbose);
   bool getVerbosity() const;
 
