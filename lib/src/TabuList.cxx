@@ -235,7 +235,7 @@ std::vector< gum::learning::GraphChange > TabuList::findLegalChanges(
         if(dag.existsArc(node1, node2))
         {
           if(!dag_cycle_detector.hasCycleFromReversal(node1, node2)
-              && dag.parents(node1).size() < max_parents_)
+              && dag.parents(node1).size() < max_parents)
           {
             auto reversal = gum::learning::GraphChange(
                               gum::learning::ARC_REVERSAL,
@@ -252,7 +252,7 @@ std::vector< gum::learning::GraphChange > TabuList::findLegalChanges(
         else
         {
           if(!dag_cycle_detector.hasCycleFromAddition(node1, node2)
-              && dag.parents(node2).size() < max_parents_)
+              && dag.parents(node2).size() < max_parents)
           {
             auto addition = gum::learning::GraphChange(
                               gum::learning::ARC_ADDITION,
