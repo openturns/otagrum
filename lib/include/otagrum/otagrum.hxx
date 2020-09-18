@@ -28,6 +28,7 @@
 #include "otagrum/ContinuousPC.hxx"
 #include "otagrum/CorrectedMutualInformation.hxx"
 #include "otagrum/ContinuousMIIC.hxx"
+#include "otagrum/TabuList.hxx"
 
 #endif // OTAGRUM_HXX
 

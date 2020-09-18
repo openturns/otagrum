@@ -8,6 +8,7 @@
 
 """
 
+from .otagrum import *
 import sys
 if sys.platform.startswith('win'):
     # this ensures OT dll is loaded
@@ -15,6 +16,5 @@ if sys.platform.startswith('win'):
     # idem for libagrum.dll
     import pyAgrum
 
-from .otagrum import *
 
 __version__ = '0.2'

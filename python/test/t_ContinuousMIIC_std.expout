@@ -1,11 +1,11 @@
 digraph {
-    "G"->"F"
-    "F"
-    "E"->"C"
-    "D"->"C"
-    "C"
-    "B"->"A"
-    "A"
+    G->F
+    F
+    E->C
+    D->C
+    C
+    B->A
+    A
 }
 
 
@@ -505,9 +505,16 @@ Edge: 2--4
 	I(2,4) = -0.00749124
 	Cutting edge 2--4
 ===== ENDING INITIATION =====
+Summary:
+	Number of cutted edges: 20
+
 
 ===== STARTING ITERATION =====
 ===== ENDING ITERATION =====
+Summary:
+	Number of iterations: 0
+	Number of cutted edges: 0
+
 	Looking for unshielded triples
 		(7, 1, 4, -0.0100961, 1, 1)
 		(4, 2, 3, -0.00840348, 1, 1)
@@ -577,16 +584,16 @@ node [shape = ellipse];
 }
 
 digraph {
-    "lung"->"smoke"
-    "lung"->"either"
-    "smoke"->"bronc"
-    "bronc"->"dysp"
-    "tub"->"either"
-    "tub"->"asia"
-    "asia"
-    "either"->"dysp"
-    "either"->"xray"
-    "xray"
-    "dysp"
+    lung->smoke
+    lung->either
+    smoke->bronc
+    bronc->dysp
+    tub->either
+    tub->asia
+    asia
+    either->dysp
+    either->xray
+    xray
+    dysp
 }
 

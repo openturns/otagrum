@@ -26,6 +26,16 @@ void CorrectedMutualInformation::setCMode(CModeTypes cmode)
   cmode_ = cmode;
 }
 
+CorrectedMutualInformation::KModeTypes CorrectedMutualInformation::getKMode()
+{
+  return kmode_;
+}
+
+CorrectedMutualInformation::CModeTypes CorrectedMutualInformation::getCMode()
+{
+  return cmode_;
+}
+
 void CorrectedMutualInformation::setAlpha(const double alpha)
 {
   alpha_ = alpha;
@@ -164,6 +174,20 @@ double CorrectedMutualInformation::compute2PtInformation(const OT::UnsignedInteg
 
 }
 
+double CorrectedMutualInformation::compute2PtInformation(const OT::Indices &X,
+    const OT::Indices &Y)
+{
+  OT::UnsignedInteger K = GetK(data_.getSize(), X.getSize() + Y.getSize());
+
+  double H_X = computeCrossEntropy(X, K);
+  double H_Y = computeCrossEntropy(Y, K);
+  double H_XY = computeCrossEntropy(X + Y, K);
+
+  double IXY = H_X + H_Y - H_XY;
+
+  return IXY;
+}
+
 double CorrectedMutualInformation::compute2PtPenalty(
   // Commented until a better correction is found
   //const OT::UnsignedInteger X,
@@ -192,6 +216,19 @@ double CorrectedMutualInformation::compute2PtCorrectedInformation(const OT::Unsi
   // Commented until a better correction is found
   //return compute2PtInformation(X, Y, U) - compute2PtPenalty(X, Y, U);
   return compute2PtInformation(X, Y, U) - compute2PtPenalty();
+}
+
+double CorrectedMutualInformation::compute2PtCorrectedInformation(const OT::Indices &X,
+    const OT::Indices &Y)
+{
+  if(X.getSize() == 0 || Y.getSize() == 0)
+  {
+    return 0.;
+  }
+  else
+  {
+    return compute2PtInformation(X, Y) - compute2PtPenalty();
+  }
 }
 
 double CorrectedMutualInformation::compute3PtInformation(const OT::UnsignedInteger X,

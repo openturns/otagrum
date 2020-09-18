@@ -22,7 +22,7 @@ def generateDataForSpecificInstance(size):
 def testSpecificInstance():
     size = 1000
     data = generateDataForSpecificInstance(size)
-    learner = otagrum.ContinuousMIIC(data)
+    learner = otagrum.TabuList(data)
 
     # skel = learner.learnSkeleton()
     # print(skel.toDot())
@@ -35,11 +35,8 @@ def testSpecificInstance():
 def testAsiaDirichlet():
     data = ot.Sample.ImportFromTextFile(
         os.path.join(os.path.dirname(__file__), "asia_dirichlet_5000.csv"), ",")
-    learner = otagrum.ContinuousMIIC(data)
+    learner = otagrum.TabuList(data)
     learner.setVerbosity(True)
-    pdag = learner.learnPDAG()
-    # print(pdag)
-    print(pdag.toDot())
     dag = learner.learnDAG()
     print(dag.toDot())
 

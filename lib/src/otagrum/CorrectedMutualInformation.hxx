@@ -30,6 +30,7 @@ public:
   double compute2PtCorrectedInformation(const OT::UnsignedInteger X,
                                         const OT::UnsignedInteger Y,
                                         const OT::Indices &U = OT::Indices());
+  double compute2PtCorrectedInformation(const OT::Indices &X, const OT::Indices &Y);
   double compute3PtCorrectedInformation(const OT::UnsignedInteger X,
                                         const OT::UnsignedInteger Y,
                                         const OT::UnsignedInteger Z,
@@ -40,6 +41,9 @@ public:
 
   void setKMode(CorrectedMutualInformation::KModeTypes kmode);
   void setCMode(CorrectedMutualInformation::CModeTypes cmode);
+
+  KModeTypes getKMode();
+  CModeTypes getCMode();
 
 private:
   void clearHCache() const;
@@ -55,6 +59,7 @@ private:
   double compute2PtInformation(const OT::UnsignedInteger X,
                                const OT::UnsignedInteger Y,
                                const OT::Indices &U = OT::Indices());
+  double compute2PtInformation(const OT::Indices &X, const OT::Indices &Y);
 
   double compute2PtPenalty(
     // Commented until a better correction is found

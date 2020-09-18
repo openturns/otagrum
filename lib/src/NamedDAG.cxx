@@ -107,6 +107,11 @@ Indices NamedDAG::getTopologicalOrder() const
   return topo_order_;
 }
 
+gum::DAG NamedDAG::getDAG() const
+{
+  return dag_;
+}
+
 String NamedDAG::__str__(const String &pref) const
 {
   std::stringstream ss;
@@ -147,12 +152,12 @@ String NamedDAG::toDot() const
     const Indices children(getChildren(nod));
     if (children.getSize() == 0)
     {
-      ss << "    \"" << map_[nod] << "\"\n";
+      ss << "    " << map_[nod] << "\n";
     }
     else
       for (const auto &chi : children)
       {
-        ss << "    \"" << map_[nod] << "\"->\"" << map_[chi] << "\"\n";
+        ss << "    " << map_[nod] << "->" << map_[chi] << "\n";
       }
   }
   ss << "}\n";

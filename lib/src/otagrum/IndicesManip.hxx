@@ -31,6 +31,7 @@ OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger y);
 bool isIn(const OT::Indices &X, OT::UnsignedInteger y);
 
 OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y);
+OT::Indices operator+(const OT::Indices &X, const OT::Indices &Y);
 OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y);
 
 class IndicesCombinationIterator : public OT::Object

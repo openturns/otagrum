@@ -52,6 +52,8 @@ public:
   OT::Indices getChildren(const OT::UnsignedInteger nod) const;
   OT::Indices getTopologicalOrder() const;
 
+  gum::DAG getDAG() const;
+
   virtual OT::String __str__(const OT::String &offset = "") const;
   OT::String toDot() const;
 

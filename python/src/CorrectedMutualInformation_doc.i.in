@@ -121,7 +121,7 @@ I(X;Y;Z|U) = I(X;Y|U) - I(X;Y|U,Z)."
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::CorrectedMutualInformation::setKMode
-"Change the correction mode for mutual informatiojn.
+"Change the correction mode for mutual information.
 
 Parameters
 ----------
