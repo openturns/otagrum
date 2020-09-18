@@ -4,5 +4,5 @@
 #include "otagrum/TabuList.hxx"
 %}
 
-%include TabuList.i
+%include TabuList_doc.i
 %include "otagrum/TabuList.hxx"
