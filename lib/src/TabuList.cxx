@@ -1,6 +1,8 @@
 #include <agrum/tools/graphs/algorithms/DAGCycleDetector.h>
 #include <agrum/tools/core/priorityQueue.h>
 
+#include <openturns/RandomGenerator.hxx>
+
 #include "otagrum/TabuList.hxx"
 
 #define TRACE(x)                                                               \
@@ -270,10 +272,7 @@ std::vector< gum::learning::GraphChange > TabuList::findLegalChanges(
 gum::learning::GraphChange TabuList::choseRandomChange(
   const std::vector< gum::learning::GraphChange > &changes)
 {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> distribution(0, changes.size() - 1);
-  return changes[distribution(gen)];
+  return changes[OT::RandomGenerator::IntegerGenerate(changes.size())];
 }
 
 double TabuList::computeDeltaScore(gum::DAG dag, gum::learning::GraphChange change)

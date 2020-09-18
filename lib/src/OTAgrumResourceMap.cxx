@@ -36,8 +36,6 @@ using namespace OT;
 namespace OTAGRUM
 {
 
-CLASSNAMEINIT(OTAgrumResourceMap);
-
 static pthread_mutex_t OTAgrumResourceMap_InstanceMutex_;
 
 OTAgrumResourceMap_init::OTAgrumResourceMap_init()

@@ -13,6 +13,7 @@ API
     ContinuousPC
     ContinuousTTest
     ContinuousMIIC
+    TabuList
     CorrectedMutualInformation
     NamedJunctionTree
     NamedDAG
