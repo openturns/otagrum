@@ -45,12 +45,12 @@ public:
       const OT::UnsignedInteger maximumConditioningSetSize = 5);
 
   /** Virtual constructor */
-  virtual JunctionTreeBernsteinCopulaFactory *clone() const;
+  JunctionTreeBernsteinCopulaFactory *clone() const override;
 
   using OT::DistributionFactoryImplementation::build;
 
-  OT::Distribution build(const OT::Sample &sample) const;
-  OT::Distribution build() const;
+  OT::Distribution build(const OT::Sample &sample) const override;
+  OT::Distribution build() const override;
 
   JunctionTreeBernsteinCopula buildAsJunctionTreeBernsteinCopula(const OT::Sample &sample) const;
   JunctionTreeBernsteinCopula buildAsJunctionTreeBernsteinCopula() const;

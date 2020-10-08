@@ -48,12 +48,12 @@ public:
       const OT::Bool workInCopulaSpace = OT::ResourceMap::GetAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace"));
 
   /** Virtual constructor */
-  virtual ContinuousBayesianNetworkFactory *clone() const;
+  ContinuousBayesianNetworkFactory *clone() const override;
 
   using OT::DistributionFactoryImplementation::build;
 
-  OT::Distribution build(const OT::Sample &sample) const;
-  OT::Distribution build() const;
+  OT::Distribution build(const OT::Sample &sample) const override;
+  OT::Distribution build() const override;
 
   ContinuousBayesianNetwork buildAsContinuousBayesianNetwork(const OT::Sample &sample) const;
   ContinuousBayesianNetwork buildAsContinuousBayesianNetwork() const;

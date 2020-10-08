@@ -68,10 +68,6 @@ macro ( ot_pyinstallcheck_test TESTNAME )
     set_tests_properties ( pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}" )
   endif ()
   list ( APPEND PYINSTALLCHECK_TO_BE_RUN ${TESTNAME_SRC} )
-  install ( FILES ${TESTNAME_SRC}
-            DESTINATION ${OTAGRUM_EXAMPLE_PATH}
-            PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-          )
 endmacro ()
 
 ot_pyinstallcheck_test (Utils_std)
