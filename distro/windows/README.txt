@@ -1,8 +1,5 @@
 # otagrum module
 
-Examples
-  Template examples can be found here: C:\Python27\Lib\site-packages\otagrum\examples\otagrum
-
 Installation
   Silent install can be done with the switch /S (e.g. openturns-otagrum-0.0-py27.exe /S).
   To test otagrum module installation, in an OpenTURNS python console type:
