@@ -43,7 +43,7 @@ public:
   explicit NamedDAG(const gum::BayesNet<double> &bn);
   NamedDAG(const gum::DAG &dag, const std::vector<std::string> &names);
 
-  virtual OT::PersistentObject *clone() const;
+  OT::PersistentObject *clone() const override;
 
   OT::UnsignedInteger getSize() const;
   OT::Description getDescription() const;
@@ -54,14 +54,14 @@ public:
 
   gum::DAG getDAG() const;
 
-  virtual OT::String __str__(const OT::String &offset = "") const;
+  OT::String __str__(const OT::String &offset = "") const override;
   OT::String toDot() const;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate &adv) const;
+  void save(OT::Advocate &adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate &adv);
+  void load(OT::Advocate &adv) override;
 
 private:
   void build_OTrepr_();

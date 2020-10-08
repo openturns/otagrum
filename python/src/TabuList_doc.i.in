@@ -63,8 +63,8 @@ verbose : bool
 
 Returns
 -------
-verbose : int
-    max_parents value"
+max_parents : int
+    Maximum number of parents"
 
 // ----------------------------------------------------------------------------
 
@@ -73,8 +73,8 @@ verbose : int
 
 Returns
 -------
-verbose : int
-    restarts value"
+restarts : int
+    Restarts value"
 
 // ----------------------------------------------------------------------------
 
@@ -83,7 +83,7 @@ verbose : int
 
 Returns
 -------
-verbose : double
+score : double
     Final score value"
 
 // ----------------------------------------------------------------------------

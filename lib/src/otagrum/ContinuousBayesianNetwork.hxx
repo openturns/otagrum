@@ -56,26 +56,26 @@ public:
   using OT::ContinuousDistribution::operator ==;
   OT::Bool operator ==(const ContinuousBayesianNetwork & other) const;
 protected:
-  OT::Bool equals(const OT::DistributionImplementation & other) const;
+  OT::Bool equals(const OT::DistributionImplementation & other) const override;
 public:
 
   /** String converter */
-  OT::String __repr__() const;
-  OT::String __str__(const OT::String & offset = "") const;
+  OT::String __repr__() const override;
+  OT::String __str__(const OT::String & offset = "") const override;
 
 
 
   /* Interface inherited from Distribution */
 
   /** Virtual constructor */
-  virtual ContinuousBayesianNetwork * clone() const;
+  ContinuousBayesianNetwork * clone() const override;
 
   /** Get one realization of the distribution */
-  OT::Point getRealization() const;
+  OT::Point getRealization() const override;
 
   /** Get the PDF of the distribution, i.e. P(point < X < point+dx) = PDF(point)dx + o(dx) */
   using OT::ContinuousDistribution::computePDF;
-  OT::Scalar computePDF(const OT::Point & point) const;
+  OT::Scalar computePDF(const OT::Point & point) const override;
 
   /** DAG and DistributionCollection accessor */
   void setDAGAndDistributionCollection(const NamedDAG & dag,
@@ -85,16 +85,16 @@ public:
   DistributionCollection getDistributionCollection() const;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
 protected:
 
 private:
   /** Compute the range */
-  void computeRange();
+  void computeRange() override;
 
   /** The main parameter set of the distribution */
 
