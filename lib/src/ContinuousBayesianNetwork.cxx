@@ -45,21 +45,24 @@ Factory_ContinuousBayesianNetwork;
 ContinuousBayesianNetwork::ContinuousBayesianNetwork()
   : ContinuousDistribution()
   , dag_()
-  , jointDistributions_(0)
+  , marginals_(0)
+  , copulas_(0)
 {
   setName("ContinuousBayesianNetwork");
-  setDAGAndDistributionCollection(dag_, jointDistributions_);
+  setDAGAndMarginalsAndCopulas(dag_, marginals_, copulas_);
 }
 
 /* Parameters constructor */
 ContinuousBayesianNetwork::ContinuousBayesianNetwork(const NamedDAG &dag,
-    const DistributionCollection &jointDistributions)
+    const DistributionCollection & marginals,
+    const DistributionCollection & copulas)
   : ContinuousDistribution()
   , dag_(dag)
-  , jointDistributions_(0)
+  , marginals_(0)
+  , copulas_(0)
 {
   setName("ContinuousBayesianNetwork");
-  setDAGAndDistributionCollection(dag, jointDistributions);
+  setDAGAndMarginalsAndCopulas(dag, marginals, copulas);
 }
 
 /* Comparison operator */
@@ -69,7 +72,8 @@ operator==(const ContinuousBayesianNetwork &other) const
   if (this == &other)
     return true;
   return (dag_ == other.dag_) &&
-         (jointDistributions_ == other.jointDistributions_);
+         (marginals_ == other.marginals_) &&
+         (copulas_ == other.copulas_);
 }
 
 Bool ContinuousBayesianNetwork::equals(
@@ -86,7 +90,7 @@ String ContinuousBayesianNetwork::__repr__() const
   OSS oss(true);
   oss << "class=" << ContinuousBayesianNetwork::GetClassName()
       << " name=" << getName() << " dimension=" << getDimension()
-      << " dag=" << dag_ << " jointDistributions=" << jointDistributions_;
+      << " dag=" << dag_ << " marginals=" << marginals_ << ", copulas=" << copulas_;
   return oss;
 }
 
@@ -94,7 +98,7 @@ String ContinuousBayesianNetwork::__str__(const String &offset) const
 {
   OSS oss(false);
   oss << offset << getClassName() << "(dag=" << dag_
-      << ", joint distributions=" << jointDistributions_ << ")";
+      << ", marginals=" << marginals_ << ", copulas=" << copulas_ << ")";
   return oss;
 }
 
@@ -114,11 +118,10 @@ void ContinuousBayesianNetwork::computeRange()
   Point upper(dimension);
   for (UnsignedInteger i = 0; i < dimension; ++i)
   {
-    const Interval rangeI(jointDistributions_[i].getRange());
-    const UnsignedInteger dimensionI = rangeI.getDimension();
+    const Interval rangeI(marginals_[i].getRange());
     // Check if the current node is a root node
-    lower[i] = rangeI.getLowerBound()[dimensionI - 1];
-    upper[i] = rangeI.getUpperBound()[dimensionI - 1];
+    lower[i] = rangeI.getLowerBound()[0];
+    upper[i] = rangeI.getUpperBound()[0];
   } // i
   setRange(Interval(lower, upper));
 }
@@ -134,29 +137,38 @@ Point ContinuousBayesianNetwork::getRealization() const
   // + go through the nodes according to a topological order wrt the dag
   // + the ith node in this order has a global index order[i]
   // + its parents have global indices parents[i]
-  // + for the ith node, sample the conditional distribution corresponding
-  //   to the multivariate distribution linked to this node.
+  // + for the ith node, sample the conditional copula corresponding
+  //   to the multivariate copula linked to this node.
   //   The convention is that the (d-1) first components of this distribution
   //   is the distribution of the parents of the node IN THE CORRECT ORDER
   //   whild the d-th component is the current node.
+  // + then map the copula realization into the actual realization using marginal
+  //   quantiles
+  // The generation of a copula realization
   for (UnsignedInteger i = 0; i < order.getSize(); ++i)
   {
     const UnsignedInteger globalI = order[i];
-    const Distribution localDistribution(jointDistributions_[globalI]);
     const Indices parents(dag_.getParents(globalI));
     const UnsignedInteger conditioningDimension(parents.getSize());
     if (conditioningDimension == 0)
     {
-      result[globalI] = localDistribution.getRealization()[0];
+      result[globalI] = RandomGenerator::Generate();
     }
     else
     {
+      const Distribution copula(copulas_[globalI]);
       Point y(conditioningDimension);
       for (UnsignedInteger j = 0; j < conditioningDimension; ++j)
         y[j] = result[parents[j]];
-      result[globalI] = localDistribution.computeConditionalQuantile(
+      result[globalI] = copula.computeConditionalQuantile(
                           RandomGenerator::Generate(), y);
     }
+  } // i
+  // The generation of the actual realization
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i)
+  {
+    // No need to follow the topological order here
+    result[i] = marginals_[i].computeScalarQuantile(result[i]);
   } // i
   return result;
 }
@@ -166,44 +178,62 @@ Scalar ContinuousBayesianNetwork::computePDF(const Point &point) const
 {
   const Indices order(dag_.getTopologicalOrder());
   Scalar pdf = 1.0;
+  // First compute the marginal part
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i)
+  {
+    pdf *= marginals_[i].computePDF(point[i]);
+    if (pdf <= 0.0) return 0.0;
+  } // i
+  // Second, compute the copula part
+  // a) map the given point into the copula space
+  Point u(order.getSize());
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i)
+  {
+    u[i] = marginals_[i].computeCDF(point[i]);
+  } // i
+  // b) compute the copula PDF
   for (UnsignedInteger i = 0; i < order.getSize(); ++i)
   {
     const UnsignedInteger globalI = order[i];
     const Indices parents(dag_.getParents(globalI));
     const UnsignedInteger conditioningDimension(parents.getSize());
-    const Scalar x = point[globalI];
-    if (conditioningDimension == 0)
-      pdf *= jointDistributions_[globalI].computePDF(x);
-    else
+    const Scalar x = u[globalI];
+    if (conditioningDimension > 0)
     {
       Point y(conditioningDimension);
       for (UnsignedInteger j = 0; j < conditioningDimension; ++j)
-        y[j] = point[parents[j]];
+        y[j] = u[parents[j]];
       const Scalar conditionalPDF =
-        jointDistributions_[globalI].computeConditionalPDF(x, y);
+        copulas_[globalI].computeConditionalPDF(x, y);
       pdf *= conditionalPDF;
+      if (pdf <= 0.0) return 0.0;
     }
   } // i
   return pdf;
 }
 
-/* DAG and DistributionCollection accessor */
-void ContinuousBayesianNetwork::setDAGAndDistributionCollection(
-  const NamedDAG &dag, const DistributionCollection &jointDistributions)
+/* DAG, marginals and copulas accessor */
+void ContinuousBayesianNetwork::setDAGAndMarginalsAndCopulas(const NamedDAG &dag,
+    const DistributionCollection &marginals,
+    const DistributionCollection & copulas)
 {
   const Indices order(dag.getTopologicalOrder());
+  const UnsignedInteger size = order.getSize();
+  if (marginals.getSize() != size) throw InvalidArgumentException(HERE) << "Error: expected a collection of marginals of size=" << size << ", got size=" << marginals.getSize();
+  if (copulas.getSize() != size) throw InvalidArgumentException(HERE) << "Error: expected a collection of copulas of size=" << size << ", got size=" << copulas.getSize();
   for (UnsignedInteger i = 0; i < order.getSize(); ++i)
   {
     const UnsignedInteger globalIndex = order[i];
-    if (jointDistributions[globalIndex].getDimension() != dag.getParents(globalIndex).getSize() + 1)
+    if (copulas[globalIndex].getDimension() != dag.getParents(globalIndex).getSize() + 1)
       throw InvalidArgumentException(HERE)
-          << "Error: expected a joint distribution of dimension="
+          << "Error: expected a copula of dimension="
           << dag.getParents(globalIndex).getSize() + 1 << " for node=" << globalIndex
           << " and its parents=" << dag.getParents(globalIndex)
-          << ", got dimension=" << jointDistributions[globalIndex].getDimension();
+          << ", got dimension=" << copulas[globalIndex].getDimension();
   }
   dag_ = dag;
-  jointDistributions_ = jointDistributions;
+  marginals_ = marginals;
+  copulas_ = copulas;
   computeRange();
   setDescription(dag.getDescription());
 }
@@ -214,9 +244,15 @@ NamedDAG ContinuousBayesianNetwork::getNamedDAG() const
 }
 
 ContinuousBayesianNetwork::DistributionCollection
-ContinuousBayesianNetwork::getDistributionCollection() const
+ContinuousBayesianNetwork::getMarginals() const
 {
-  return jointDistributions_;
+  return marginals_;
+}
+
+ContinuousBayesianNetwork::DistributionCollection
+ContinuousBayesianNetwork::getCopulas() const
+{
+  return copulas_;
 }
 
 /* Method save() stores the object through the StorageManager */
@@ -224,7 +260,8 @@ void ContinuousBayesianNetwork::save(Advocate &adv) const
 {
   ContinuousDistribution::save(adv);
   adv.saveAttribute("dag_", dag_);
-  adv.saveAttribute("jointDistributions_", jointDistributions_);
+  adv.saveAttribute("marginals_", marginals_);
+  adv.saveAttribute("copulas_", copulas_);
 }
 
 /* Method load() reloads the object from the StorageManager */
@@ -232,7 +269,8 @@ void ContinuousBayesianNetwork::load(Advocate &adv)
 {
   ContinuousDistribution::load(adv);
   adv.loadAttribute("dag_", dag_);
-  adv.loadAttribute("jointDistributions_", jointDistributions_);
+  adv.loadAttribute("marginals_", marginals_);
+  adv.loadAttribute("copulas_", copulas_);
   computeRange();
 }
 

@@ -41,7 +41,8 @@ public:
   ContinuousBayesianNetworkFactory();
 
   /** Parameter constructor */
-  explicit ContinuousBayesianNetworkFactory(const OT::Collection< OT::DistributionFactory > & factories,
+  explicit ContinuousBayesianNetworkFactory(const OT::DistributionFactory & marginalsFactory,
+                                            const OT::DistributionFactory & copulasFactory,
       const NamedDAG & namedDag = NamedDAG(),
       const OT::Scalar alpha = OT::ResourceMap::GetAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha"),
       const OT::UnsignedInteger maximumConditioningSetSize = OT::ResourceMap::GetAsScalar("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize"),
@@ -59,8 +60,11 @@ public:
   ContinuousBayesianNetwork buildAsContinuousBayesianNetwork() const;
 
 private:
-  /* Factories */
-  OT::Collection< OT::DistributionFactory > factories_;
+  /* Marginals factory */
+  OT::DistributionFactory marginalsFactory_;
+
+  /* Copulas factory */
+  OT::DistributionFactory copulasFactory_;
 
   /* Named DAG */
   NamedDAG namedDAG_;

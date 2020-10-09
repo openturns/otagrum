@@ -3,8 +3,11 @@
 
 Parameters
 ----------
-factories : sequence of :class:`~openturns.Distribution`
-    The models to test for each local distribution. Default value is
+marginalsFactory : :class:`~openturns.DistributionFactory`
+    The model used to estimate each univariate marginal distribution. Default value is
+    :class:`~openturns.HistogramFactory`.
+copulasFactory : :class:`~openturns.DistributionFactory`
+    The model used to estimate each local conditional copula. Default value is
     :class:`~openturns.BernsteinCopulaFactory`.
 namedDAG : :class:`~otagrum.NamedDAG`
     The structure of the underlying graphical model. Default value is
@@ -35,22 +38,17 @@ Notes
       estimated distribution should be a copula. Default value is *True*
     - *'ContinuousBayesianNetworkFactory-LearningRatio'* to set the proportion of
       the given sample to be used for the learning phase. Default value is *0.5*.
-
-    If the parameter *factories* contains more than one factory, the given sample
-    is split into a learning sample and a validation sample. At each node,
-    each of these factories is used to build a local model using the learning
-    sample, then the best model is the one maximizing the log-likelihood of the
-    validation sample.
      
 Examples
 --------
 >>> import otagrum
 >>> import openturns as ot
->>> factories = [ot.NormalCopulaFactory(), ot.BernsteinCopulaFactory()]
+>>> marginalsFactory = ot.NormalFactory()
+>>> copulasFactory = ot.NormalCopulaFactory()
 >>> ndag = otagrum.NamedDAG()
 >>> threshold = 0.1
 >>> maxParents = 5
->>> factory = otagrum.ContinuousBayesianNetworkFactory(factories, ndag, threshold, maxParents)"
+>>> factory = otagrum.ContinuousBayesianNetworkFactory(marginalsFactory, copulasFactory, ndag, threshold, maxParents)"
 
 // ----------------------------------------------------------------------------
 

@@ -21,18 +21,22 @@ for nod in ndag.getTopologicalOrder():
     print("children(", nod, ") : ", ndag.getChildren(nod))
 
 if False:
-    jointDistributions = list()
+    marginals = [ot.Uniform(0.0, 1.0) for i in range(order.getSize())]
+    copulas = list()
     for i in range(order.getSize()):
         d = 1 + ndag.getParents(i).getSize()
         print("i=", i, ", d=", d)
-        R = ot.CorrelationMatrix(d)
-        for i in range(d):
-            for j in range(i):
-                R[i, j] = 0.5 / d
-        jointDistributions.append(ot.Student(
-            5.0, [0.0]*d, [1.0]*d, R).getCopula())
+        if d == 1:
+            copulas.append(ot.IndependentCopula(1))
+        else:
+            R = ot.CorrelationMatrix(d)
+            for i in range(d):
+                for j in range(i):
+                    R[i, j] = 0.5 / d
+            copulas.append(ot.Student(
+                5.0, [0.0]*d, [1.0]*d, R).getCopula())
 
-    cbn = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)
+    cbn = otagrum.ContinuousBayesianNetwork(ndag, marginals, copulas)
     print("cbn=", cbn)
     print("cbn pdf=", cbn.computePDF([0.5]*d))
     print("cbn realization=", cbn.getRealization())
