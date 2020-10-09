@@ -1,17 +1,21 @@
 %feature("docstring") OTAGRUM::ContinuousBayesianNetwork
-"ContinuousBayesianNetwork class represents a copula bayesian network (CBN), that is
-a bayesian network parameterized by local conditional copula functions for each
-node. The scope of each copula function is the node and its parents.
+"ContinuousBayesianNetwork class represents a continuous bayesian network (CBN),
+that is a bayesian network parameterized by marginal distributions and local
+copulas for each node from which conditional copulas are
+extracted. The scope of each copula is the node and its parents.
 
 Available constructor:
-    ContinuousBayesianNetwork(*NamedDAG, DistributionCollection*)
+    ContinuousBayesianNetwork(*dag, marginals, copulas*)
 
 Parameters
 ----------
 dag : :class:`~otagrum.NamedDAG`
     The structure of the CBN
-jointDistributions : :py:class:`openturns.DistributionCollection`
-    Collection of local conditional copula functions
+marginals : sequence of :py:class:`openturns.Distribution`
+    Collection of univariate marginal distributions
+copulas : sequence of :py:class:`openturns.Distribution`
+    Collection of local conditional copula functions. The copula is
+    unused for nodes with no parents.
 
 Examples
 --------
@@ -22,15 +26,16 @@ Create a CBN from a DAG structure and a collection of distributions
 >>> import pyAgrum as gum
 >>> bn = gum.BayesNet.fastPrototype('A->C->B;')
 >>> ndag = otagrum.NamedDAG(bn)
->>> jointDistributions = []
+>>> marginals = [ot.Uniform(0.0, 1.0) for i in range(ndag.getSize())]
+>>> copulas = []
 >>> for i in range(ndag.getSize()):
 ...     dim = 1 + ndag.getParents(i).getSize()
 ...     R = ot.CorrelationMatrix(dim)
 ...     for j in range(dim):
 ...         for k in range(j):
 ...             R[j, k] = 0.8
-...     jointDistributions.append(ot.Normal([0.0]*dim, [1.0]*dim, R).getCopula())
->>> cbn = otagrum.ContinuousBayesianNetwork(ndag, jointDistributions)
+...     copulas.append(ot.Normal([0.0]*dim, [1.0]*dim, R).getCopula())
+>>> cbn = otagrum.ContinuousBayesianNetwork(ndag, marginals, copulas)
 
 Draw a sample from the joint distribution encoded by the CBN
 
@@ -48,23 +53,35 @@ dag : :class:`~otagrum.NamedDAG`
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::setDAGAndDistributionCollection
-"Accessor to the DAG and distribution collection.
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::setDAGAndMarginalsAndCopulas
+"Accessor to the DAG, the marginals and the local copulas collections.
 
 Parameters
 ----------
 dag : :class:`~otagrum.NamedDAG`
     The underlying NamedDAG
-jointDistributions : sequence of :py:class:`openturns.DistributionCollection`
+marginals : sequence of :py:class:`openturns.Distribution`
+    The collection of univariate marginal distributions
+copulas : sequence of :py:class:`openturns.Distribution`
     The collection of local conditional copulas"
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getDistributionCollection
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getMarginals
+"The collection of univariate marginal distributions.
+
+Returns
+-------
+marginals : sequence of :py:class:`openturns.Distribution`
+    Collection of univariate marginal distributions
+"
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getCopulas
 "The collection of local conditional copulas.
 
 Returns
 -------
-jointDistributions : sequence of :py:class:`openturns.DistributionCollection`
+copulas : sequence of :py:class:`openturns.Distribution`
     Collection of local conditional copulas
 "

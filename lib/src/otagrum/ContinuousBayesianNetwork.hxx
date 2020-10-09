@@ -49,7 +49,8 @@ public:
 
   /** Parameters constructor */
   ContinuousBayesianNetwork(const NamedDAG & dag,
-                            const DistributionCollection & jointDistributions);
+                            const DistributionCollection & marginals,
+                            const DistributionCollection & copulas);
 
 public:
   /** Comparison operator */
@@ -77,12 +78,16 @@ public:
   using OT::ContinuousDistribution::computePDF;
   OT::Scalar computePDF(const OT::Point & point) const override;
 
-  /** DAG and DistributionCollection accessor */
-  void setDAGAndDistributionCollection(const NamedDAG & dag,
-                                       const DistributionCollection & jointDistributions);
+  /** DAG, marginals and copulas accessor */
+  void setDAGAndMarginalsAndCopulas(const NamedDAG & dag,
+                                    const DistributionCollection & marginals,
+                                    const DistributionCollection & copulas);
 
   NamedDAG getNamedDAG() const;
-  DistributionCollection getDistributionCollection() const;
+  /** One marginal per node */
+  DistributionCollection getMarginals() const;
+  /** One copula per inner node */
+  DistributionCollection getCopulas() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
@@ -101,8 +106,11 @@ private:
   /** Underlying junction tree */
   NamedDAG dag_;
 
-  /** Collection of joint distributions */
-  DistributionPersistentCollection jointDistributions_;
+  /** Collection of marginal distributions */
+  DistributionPersistentCollection marginals_;
+
+  /** Collection of copulas, one per inner node */
+  DistributionPersistentCollection copulas_;
 
 }; /* class ContinuousBayesianNetwork */
 
