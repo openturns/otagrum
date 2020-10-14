@@ -13,6 +13,7 @@ cmake -DCMAKE_INSTALL_PREFIX=~/.local \
 make install
 make tests
 ctest --output-on-failure --timeout 50 ${MAKEFLAGS}
+python /io/python/doc/examples/torque_model.py
 
 if test -n "${uid}" -a -n "${gid}"
 then
