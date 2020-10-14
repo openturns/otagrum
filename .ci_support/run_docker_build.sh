@@ -2,10 +2,13 @@
 
 set -xe
 
+sudo pacman -Sy jupyter-nbconvert --noconfirm
+
 uid=$1
 gid=$2
 
 cd /tmp
+
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local \
       -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror -Wno-missing-field-initializers -D_GLIBCXX_ASSERTIONS" \
