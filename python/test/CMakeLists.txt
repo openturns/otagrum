@@ -1,20 +1,18 @@
 
 
-set ( ADAPT_CHECK_TESTS_EXPONENT )
-set ( REPLACE_EOL " | cat " )
-set ( PATH_SEP ":" )
-if ( MINGW )
+set (REPLACE_EOL " | cat ")
+set (PATH_SEP ":")
+if (WIN32)
   # replace dos eols
-  set ( REPLACE_EOL " | tr -d '\\\\015' " )
-  # By default, Mingw-g++ puts 3 digits to real exponent whereas g++ puts 2.
-  set ( ADAPT_CHECK_TESTS_EXPONENT "PRINTF_EXPONENT_DIGITS=2" )
-  set ( PATH_SEP "\\;" )
+  set (REPLACE_EOL " | tr -d '\\\\015' ")
+
+  set (PATH_SEP "\\;")
 endif ()
 
 
 set ( PYINSTALLCHECK_ENVIRONMENT "OPENTURNS_CONFIG_PATH=${INSTALL_DESTDIR}${SYSCONFIG_PATH}/openturns"
                                  "PYTHONPATH=${AGRUM_PYTHON_MODULE_PATH}${PATH_SEP}${OPENTURNS_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
-                                 ${ADAPT_CHECK_TESTS_EXPONENT}
+                                 "MPLBACKEND=agg"
     )
 
 
@@ -62,11 +60,8 @@ macro ( ot_pyinstallcheck_test TESTNAME )
     set ( COMMAND "${_PRE}${COMMAND}${_POST}" )
   endif (_PRE OR _POST)
 
-  # pyAgrum might not be available when cross-compiling
-  if (NOT CMAKE_CROSSCOMPILING)
-    add_test (pyinstallcheck_${TESTNAME} "sh" "-c" "${COMMAND}")
-    set_tests_properties ( pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}" )
-  endif ()
+  add_test (pyinstallcheck_${TESTNAME} "sh" "-c" "${COMMAND}")
+  set_tests_properties (pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}")
   list ( APPEND PYINSTALLCHECK_TO_BE_RUN ${TESTNAME_SRC} )
 endmacro ()
 
@@ -77,12 +72,20 @@ ot_pyinstallcheck_test (ContinuousMIIC_std)
 ot_pyinstallcheck_test (TabuList_std)
 ot_pyinstallcheck_test (NamedJunctionTree_std)
 ot_pyinstallcheck_test (JunctionTreeBernsteinCopula_std)
-if (NBCONVERT_FOUND)
-  ot_pyinstallcheck_test (notebook IGNOREOUT)
-endif ()
 ot_pyinstallcheck_test (plant_growth)
 ot_pyinstallcheck_test (ContinuousBayesianNetwork_std)
 ot_pyinstallcheck_test (ContinuousBayesianNetworkFactory_std)
+
+if (MATPLOTLIB_FOUND)
+  file (GLOB_RECURSE PYFILES "${CMAKE_SOURCE_DIR}/python/doc/examples/*.py")
+  foreach (PYF ${PYFILES})
+    if (PYF MATCHES example_)
+      get_filename_component (TESTNAME "${PYF}" NAME_WE)
+      add_test (NAME pyinstallcheck_${TESTNAME} COMMAND ${PYTHON_EXECUTABLE} ${PYF})
+      set_tests_properties (pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}")
+    endif ()
+  endforeach ()
+endif ()
 
 add_custom_target ( pyinstallcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^pyinstallcheck_"
                     DEPENDS ${PYINSTALLCHECK_TO_BE_RUN}
