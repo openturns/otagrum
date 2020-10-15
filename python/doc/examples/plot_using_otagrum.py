@@ -6,7 +6,6 @@ Using otagrum
 # %%
 import openturns as ot
 import pyAgrum as gum
-import pyAgrum.lib.notebook as gnb
 from matplotlib import pylab as plt
 import otagrum
 
@@ -41,7 +40,7 @@ structure = otagrum.NamedDAG(dag, list(mapping.keys()))
 
 
 # %%
-gnb.showDot(structure.toDot())
+structure
 
 
 # %%
@@ -59,8 +58,7 @@ for i in range( structure.getSize() ):
     lcc_list.append( ot.Normal([0.0]*dim_lcc, [1.0]*dim_lcc, R).getCopula() )
 
 
-# **Creation of the CBN**
-
+# %%
 # Now that we have a NamedDAG structure and a collection of local conditional copulas, we can construct a CBN.
 
 # %%
@@ -83,7 +81,7 @@ test = sample[-100:]
 # %%
 learner = otagrum.ContinuousPC(sample, maxConditioningSetSize=5, alpha=0.1)
 
-
+# %%
 # We first learn the skeleton, that is the undirected structure.
 
 # %%
@@ -111,7 +109,7 @@ ndag = learner.learnDAG()
 
 
 # %%
-gnb.showDot(ndag.toDot())
+ndag
 
 # %%
 # The true structure has been recovered.
@@ -155,7 +153,7 @@ dag = learner.learnDAG()
 
 
 # %%
-gnb.showDot(dag.toDot())
+dag
 
 # %%
 # Learning parameters

@@ -36,7 +36,6 @@ from __future__ import print_function
 import openturns as ot
 import otagrum
 import pyAgrum as gum
-import pyAgrum.lib.notebook as gnb
 from openturns.viewer import View
 from matplotlib import pylab as plt
 
@@ -51,12 +50,12 @@ moisture = gum.LabelizedVariable("Moisture", "quantity of moisture", 0)
 height = gum.DiscretizedVariable("Height", "plant growth")
 
 # %%
-# Both variables $Light$ and $Moisture$ are categorical variables whith the following attributes:  
+# Both variables **Light** and **Moisture** are categorical variables whith the following attributes:  
 # 
-#  - $Light$ has 2 attributes: $Dim$ which refers to the darkness and $Bright$ which refers to plain light situations,
-#  - $Moisture$ has 2 attributes: $Dry$ which refers to dry air situations and $Wet$ which refers to wet air situations.
+#  - **Light** has 2 attributes: **Dim** which refers to the darkness and **Bright** which refers to plain light situations,
+#  - **Moisture** has 2 attributes: **Dry** which refers to dry air situations and **Wet** which refers to wet air situations.
 # 
-# $Height$ is a continuous variable which has to be discretized for the Bayes Net use.
+# **Height** is a continuous variable which has to be discretized for the Bayes Net use.
 
 # %%
 ## Create labels and ticks
@@ -83,7 +82,7 @@ moisture.addLabel("Wet")
 height.domainSize()
 
 # %%
-# Furthermore, there are several influence links : $Light$ on $Moisture$, $(Light,Moisture)$ on $Height$.
+# Furthermore, there are several influence links : **Light** on **Moisture**, **(Light,Moisture)** on **Height**.
 
 # %%
 ## Create the net
@@ -111,8 +110,8 @@ bn
 # 
 # The variable $Light$ is quantified as follows:
 #     
-#  - $Light=Dim$ with a probability of 0.25,
-#  - $Light=Bright$ with a probability of 0.75.
+#  - **Light=Dim** with a probability of 0.25,
+#  - **Light=Bright** with a probability of 0.75.
 
 # %%
 # Create conditional probability tables
@@ -120,7 +119,7 @@ bn
 
 # %%
 bn.cpt(indexLight)[:]= [0.25, 0.75]
-gnb.showPotential(bn.cpt(indexLight))
+bn.cpt(indexLight)
 
 # %%
 # The influence of $Light$ on $Moisture$ is modelized by:
@@ -134,14 +133,14 @@ gnb.showPotential(bn.cpt(indexLight))
 # %%
 bn.cpt(indexMoisture)[{'Light' : 'Dim'}] = [0.2, 0.8]
 bn.cpt(indexMoisture)[{'Light' : 'Bright'}] = [0.6, 0.4]
-gnb.showPotential(bn.cpt(indexMoisture))
+bn.cpt(indexMoisture)
 
 # %%
-# The influence of $(Light, Moisture)$ on $Height$ is modelized by:
-#  - when $Light=Dim$ and $Moisture=Dry$ then $Height$ follows a $Uniform(min=0, max=20)$ distribution,
-#  - when $Light=Dim$ and $Moisture=Wet$ then $Height$ follows a $Triangular(min=15, mod=30, max=50)$ distribution,
-#  - when $Light=Bright$ and $Moisture=Dry$ then $Height$ follows a $Triangular(min=0, mod=15, max=30)$ distribution,
-#  - when $Light=Bright$ and $Moisture=Wet$ then $Height$ follows a $Normal(\mu=90, \sigma=10)$ distribution.
+# The influence of **(Light, Moisture)** on **Height** is modelized by:
+#  - when **Light=Dim** and **Moisture=Dry** then **Height** follows a **Uniform(min=0, max=20)** distribution,
+#  - when **Light=Dim** and **Moisture=Wet** then **Height** follows a **Triangular(min=15, mod=30, max=50)** distribution,
+#  - when **Light=Bright** and $Moisture=Dry$ then $Height$ follows a **Triangular(min=0, mod=15, max=30)** distribution,
+#  - when **Light=Bright** and $Moisture=Wet$ then $Height$ follows a **Normal(\mu=90, \sigma=10)** distribution.
 
 # %%
 # height has a conditional probability table
@@ -167,7 +166,7 @@ bn.cpt(indexHeight)[{'Light': 'Dim', 'Moisture': 'Dry'}]   = otagrum.Utils.Discr
 bn.cpt(indexHeight)[{'Light': 'Bright', 'Moisture': 'Dry'}] = otagrum.Utils.Discretize(heightWhenBrightAndDry, height)[:]
 bn.cpt(indexHeight)[{'Light': 'Dim', 'Moisture': 'Wet'}]    = otagrum.Utils.Discretize(heightWhenDimAndWet, height)[:]
 bn.cpt(indexHeight)[{'Light': 'Bright', 'Moisture': 'Wet'}] = otagrum.Utils.Discretize(heightWhenBrightAndWet, height)[:]
-gnb.showPotential(bn.cpt(indexHeight))
+bn.cpt(indexHeight)
 
 # %%
 # We can study the plant growth variability in different situations like:
