@@ -36,6 +36,7 @@ from __future__ import print_function
 import openturns as ot
 import otagrum
 import pyAgrum as gum
+import pyAgrum.lib.notebook as gnb
 from openturns.viewer import View
 from matplotlib import pylab as plt
 
@@ -119,7 +120,7 @@ bn
 
 # %%
 bn.cpt(indexLight)[:]= [0.25, 0.75]
-bn.cpt(indexLight)
+gnb.showPotential(bn.cpt(indexLight))
 
 # %%
 # The influence of $Light$ on $Moisture$ is modelized by:
@@ -133,7 +134,7 @@ bn.cpt(indexLight)
 # %%
 bn.cpt(indexMoisture)[{'Light' : 'Dim'}] = [0.2, 0.8]
 bn.cpt(indexMoisture)[{'Light' : 'Bright'}] = [0.6, 0.4]
-bn.cpt(indexMoisture)
+gnb.showPotential(bn.cpt(indexMoisture))
 
 # %%
 # The influence of **(Light, Moisture)** on **Height** is modelized by:
@@ -166,7 +167,7 @@ bn.cpt(indexHeight)[{'Light': 'Dim', 'Moisture': 'Dry'}]   = otagrum.Utils.Discr
 bn.cpt(indexHeight)[{'Light': 'Bright', 'Moisture': 'Dry'}] = otagrum.Utils.Discretize(heightWhenBrightAndDry, height)[:]
 bn.cpt(indexHeight)[{'Light': 'Dim', 'Moisture': 'Wet'}]    = otagrum.Utils.Discretize(heightWhenDimAndWet, height)[:]
 bn.cpt(indexHeight)[{'Light': 'Bright', 'Moisture': 'Wet'}] = otagrum.Utils.Discretize(heightWhenBrightAndWet, height)[:]
-bn.cpt(indexHeight)
+gnb.showPotential(bn.cpt(indexHeight))
 
 # %%
 # We can study the plant growth variability in different situations like:

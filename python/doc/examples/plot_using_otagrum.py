@@ -6,6 +6,7 @@ Using otagrum
 # %%
 import openturns as ot
 import pyAgrum as gum
+import pyAgrum.lib.notebook as gnb
 from matplotlib import pylab as plt
 import otagrum
 
@@ -40,7 +41,7 @@ structure = otagrum.NamedDAG(dag, list(mapping.keys()))
 
 
 # %%
-structure
+gnb.showDot(structure.toDot())
 
 
 # %%
@@ -109,7 +110,7 @@ ndag = learner.learnDAG()
 
 
 # %%
-ndag
+gnb.showDot(ndag.toDot())
 
 # %%
 # The true structure has been recovered.
@@ -153,7 +154,7 @@ dag = learner.learnDAG()
 
 
 # %%
-dag
+gnb.showDot(dag.toDot())
 
 # %%
 # Learning parameters
