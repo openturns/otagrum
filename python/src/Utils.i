@@ -16,4 +16,11 @@
 %ignore OTAGRUM::Utils::FastExp;
 %ignore OTAGRUM::Utils::FasterExp;
 
+%pythonprepend OTAGRUM::Utils::Discretize %{
+        var = args[1]
+%}
+%pythonappend OTAGRUM::Utils::Discretize %{
+        val._list_vars = [var]
+%}
+
 %include otagrum/Utils.hxx

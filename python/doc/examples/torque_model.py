@@ -256,10 +256,8 @@ VibrationKnowingTorqueAndJoint = discretizeFromConditionalDensity(
 # Discretized Parameters for the BN
 
 # %%
-J = bn.variable("J").toDiscretizedVar()
-bn.cpt("J").fillWith(otagrum.Utils.Discretize(Joint, J))
-T = bn.variable("T").toDiscretizedVar()
-bn.cpt("T").fillWith(otagrum.Utils.Discretize(Torque, T))
+bn.cpt("J").fillWith(otagrum.Utils.Discretize(Joint, bn.variable("J").toDiscretizedVar()))
+bn.cpt("T").fillWith(otagrum.Utils.Discretize(Torque, bn.variable("T").toDiscretizedVar()))
 bn.cpt("A").fillWith(list(AngleKnowingTorque)).normalizeAsCPT()
 
 p=gum.Potential().add(bn.variable("J")).add(bn.variable("A")).add(bn.variable("L"))
