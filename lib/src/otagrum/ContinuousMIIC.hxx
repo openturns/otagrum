@@ -88,9 +88,7 @@ private:
       double,
       double > >
       getUnshieldedTriples(const gum::MixedGraph& graph,
-                           gum::HashTable< std::pair< OT::UnsignedInteger,
-                           OT::UnsignedInteger >,
-                           char >& marks);
+                           gum::HashTable< std::pair< gum::NodeId, gum::NodeId >, char >& marks);
 
   std::vector< std::tuple< std::tuple< OT::UnsignedInteger,
       OT::UnsignedInteger,
@@ -123,8 +121,7 @@ private:
 
   CorrectedMutualInformation info_;
 
-  gum::HashTable< std::pair< OT::UnsignedInteger,
-      OT::UnsignedInteger >, char > initial_marks_;
+  gum::HashTable< std::pair< gum::NodeId, gum::NodeId >, char > initial_marks_;
   std::vector< gum::Arc > latent_couples_;
   gum::ArcProperty< double > arc_probas_;
   gum::EdgeProperty< OT::Indices > sepset_;

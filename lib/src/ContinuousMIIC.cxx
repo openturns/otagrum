@@ -401,8 +401,7 @@ gum::MixedGraph ContinuousMIIC::learnPDAG()
 
   // structure to store the orientations marks -, o, or >,
   // Considers the head of the arc/edge first node -* second node
-  gum::HashTable< std::pair< OT::UnsignedInteger,
-      OT::UnsignedInteger >, char > marks = initial_marks_;
+  gum::HashTable< std::pair< gum::NodeId, gum::NodeId >, char > marks = initial_marks_;
 
   // marks always correspond to the head of the arc/edge. - is for a forbidden
   // arc, > for a mandatory arc
@@ -824,6 +823,7 @@ std::vector< std::string > ContinuousMIIC::namesFromData() const
   return names;
 }
 
+
 std::vector< std::tuple< std::tuple< OT::UnsignedInteger,
 OT::UnsignedInteger,
 OT::UnsignedInteger >*,
@@ -832,7 +832,6 @@ ContinuousMIIC::getUnshieldedTriples(
   const gum::MixedGraph& graph,
   gum::HashTable< std::pair< gum::NodeId, gum::NodeId >, char >& marks)
 {
-
   TRACE("\tLooking for unshielded triples" << std::endl);
   std::vector< std::tuple< std::tuple< OT::UnsignedInteger,
       OT::UnsignedInteger,
