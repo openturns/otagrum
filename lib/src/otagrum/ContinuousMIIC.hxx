@@ -15,7 +15,7 @@
 namespace OTAGRUM
 {
 
-class GreaterPairOn2nd
+class OTAGRUM_API GreaterPairOn2nd
 {
 public:
   bool operator()(
@@ -34,7 +34,7 @@ public:
 };
 
 
-class GreaterTupleOnLast
+class OTAGRUM_API GreaterTupleOnLast
 {
 public:
   bool operator()(
