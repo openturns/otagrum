@@ -40,8 +40,10 @@ def testAsiaDirichlet():
     pdag = learner.learnPDAG()
     # print(pdag)
     print(pdag.toDot())
+    sys.stdout.flush()
     dag = learner.learnDAG()
     print(dag.toDot())
+    sys.stdout.flush()
 
 
 testSpecificInstance()

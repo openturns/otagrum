@@ -545,6 +545,20 @@ Summary:
 		5. Removing edge (4,3)
 		5.c Adding arc (4,3)
 	Triple: (7,3,4)
+digraph "no_name" {
+node [shape = ellipse];
+  0;  1;  2;  3;  4;  5;  6;  7;
+  0 -> 1 [dir=none];
+  1 -> 4;
+  2 -> 6 [dir=none];
+  2 -> 3;
+  4 -> 3;
+  4 -> 5;
+  6 -> 7 [dir=none];
+  7 -> 4;
+
+}
+
 
 ===== STARTING DAG LEARNING =====
 	Node: 4
@@ -569,20 +583,6 @@ Summary:
 		1. Adding arc (1,0)
 	Node: 0
 		Neighbours: {}
-digraph "no_name" {
-node [shape = ellipse];
-  0;  1;  2;  3;  4;  5;  6;  7;
-  0 -> 1 [dir=none];
-  1 -> 4;
-  2 -> 6 [dir=none];
-  2 -> 3;
-  4 -> 3;
-  4 -> 5;
-  6 -> 7 [dir=none];
-  7 -> 4;
-
-}
-
 digraph {
     lung->smoke
     lung->either
