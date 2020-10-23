@@ -371,7 +371,7 @@ double TabuList::computeScore(gum::DAG dag)
   {
     temp_dag.addNodeWithId(node);
   }
-  for(const auto arc : dag.arcs())
+  for(const auto & arc : dag.arcs())
   {
     score += computeDeltaScoreAddition(temp_dag, arc.tail(), arc.head());
     temp_dag.addArc(arc.tail(), arc.head());

@@ -105,7 +105,7 @@ std::string StratifiedCache::__str__(const std::string &offset) const
     {
       ss << offset << i << " ";
       char delim = ':';
-      for (const auto key : stratified_keys_[i])
+      for (const auto & key : stratified_keys_[i])
       {
         ss << delim << ' ' << key;
         delim = ',';

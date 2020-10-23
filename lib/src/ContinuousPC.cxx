@@ -683,7 +683,7 @@ std::string ContinuousPC::skeletonToDot(const gum::UndiGraph &skeleton)
     ss << node << "; ";
   }
   ss << std::endl;
-  for (const auto edge : skeleton.edges())
+  for (const auto & edge : skeleton.edges())
   {
     ss << "  " << edge.first() << "->" << edge.second()
        << " [label=\"t=" << std::setprecision(3)
@@ -707,7 +707,7 @@ std::string ContinuousPC::PDAGtoDot(const gum::MixedGraph &pdag)
     ss << node << "; ";
   }
   ss << std::endl;
-  for (const auto edge : pdag.edges())
+  for (const auto & edge : pdag.edges())
   {
     ss << "  " << edge.first() << "->" << edge.second()
        << " [dir=none,label=\"t=" << std::setprecision(3)
@@ -716,7 +716,7 @@ std::string ContinuousPC::PDAGtoDot(const gum::MixedGraph &pdag)
        << getPValue(edge.first(), edge.second()) << "\"]" << std::endl;
   }
   ss << std::endl;
-  for (const auto arc : pdag.arcs())
+  for (const auto & arc : pdag.arcs())
   {
     ss << "  " << arc.first() << "->" << arc.second()
        << " [label=\"t=" << std::setprecision(3)

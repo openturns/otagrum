@@ -289,7 +289,7 @@ void ContinuousMIIC::propagatesHead(gum::MixedGraph& graph, gum::NodeId node)
   const auto neighbours = graph.neighbours(node);
   TRACE("\tNode: " << node << std::endl);
   TRACE("\t\tNeighbours: " << neighbours << std::endl);
-  for (auto& neighbour : neighbours)
+  for (const auto& neighbour : neighbours)
   {
     if (graph.neighbours(neighbour).contains(node))
     {
@@ -372,11 +372,11 @@ gum::MixedGraph ContinuousMIIC::UGtoMG(const gum::UndiGraph& graph) const
   // Should be added in aGrUM as a constructor for MixedGraph alongside
   // another for DAGs.
   auto mixed_graph = gum::MixedGraph();
-  for (const auto nodeID : graph.nodes())
+  for (const auto & nodeID : graph.nodes())
   {
     mixed_graph.addNodeWithId(nodeID);
   }
-  for (const auto edge : graph.edges())
+  for (const auto & edge : graph.edges())
   {
     auto X = edge.first();
     auto Y = edge.second();
@@ -899,7 +899,7 @@ ContinuousMIIC::getUnshieldedTriples(
   }
   triples = updateProbaTriples(graph, triples);
   std::sort(triples.begin(), triples.end(), GreaterTupleOnLast());
-  for (const auto triple : triples)
+  for (const auto & triple : triples)
   {
     OT::UnsignedInteger X, Y, Z;
     X = std::get< 0 >(*std::get< 0 >(triple));
@@ -998,7 +998,7 @@ bool ContinuousMIIC::existsDirectedPath(const gum::MixedGraph& graph,
 
     // check the parents
 
-    for (const auto new_one : graph.parents(current))
+    for (const auto & new_one : graph.parents(current))
     {
       if (!countArc && current == n2 && new_one == n1)  // If countArc is set to false
         continue;                                       // paths of length 1 are ignored
@@ -1035,7 +1035,7 @@ void ContinuousMIIC::findBestContributor(const OT::UnsignedInteger X,
 
   const double IXY_U = info_.compute2PtCorrectedInformation(X, Y, U);
 
-  for (const auto Z : skeleton_.nodes())
+  for (const auto & Z : skeleton_.nodes())
   {
     if (Z != X && Z != Y && std::find(U.begin(), U.end(), Z) == U.end())
     {
