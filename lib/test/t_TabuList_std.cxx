@@ -27,7 +27,7 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size)
   OT::CorrelationMatrix R(dim);
   for (OT::UnsignedInteger i = 0; i < dim; i++)
     for (OT::UnsignedInteger j = 0; j < i; j++)
-      R(i, j) = 0.6;
+      R(i, j) = 0.64;
 
   auto copula1 = OT::FrankCopula(4.0);
   copula1.setDescription(DescrFromStringVect({"A1", "A2"}));
