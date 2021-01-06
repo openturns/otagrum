@@ -152,7 +152,7 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
       for (auto it = m_jt.nodes().beginSafe(); it != m_jt.nodes().endSafe();
            ++it)
       {
-        if (transpose.isSubsetOf(m_jt.clique(*it)))
+        if (transpose.isProperSubsetOf(m_jt.clique(*it)))
         {
           to_be_added = false;
           break;
@@ -165,7 +165,7 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
         for (auto it = m_jt.nodes().beginSafe(); it != m_jt.nodes().endSafe();
              ++it)
         {
-          if (transpose.isSupersetOf(m_jt.clique(*it)))
+          if (transpose.isProperSupersetOf(m_jt.clique(*it)))
           {
             m_jt.eraseNode(*it);
           }

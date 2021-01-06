@@ -33,7 +33,7 @@ Examples
 >>> height = gum.DiscretizedVariable('Height', 'plant growth', [0.0, 10.0, 20.0, 30.0])
 >>> height_dist = ot.Normal(18.0, 8.0)
 >>> str(otagrum.Utils.Discretize(height_dist, height))
-'<Height:[0;10[> :: 0.158997 /<Height:[10;20[> :: 0.477813 /<Height:[20;30]> :: 0.36319'"
+'\n  Height                     |\n[0;10[   |[10;20[  |[20;30]..."
 
 // ---------------------------------------------------------------------
 
