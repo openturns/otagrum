@@ -40,7 +40,7 @@ set(OTAGRUM_DOC_PATH share/${PACKAGE_NAME}/doc)
 
 if (BUILD_PYTHON)
   # follow agrum swig version requirement
-  find_package(SWIG 3.0.11)
+  find_package(SWIG 4.0)
   if (SWIG_FOUND)
     include(${SWIG_USE_FILE})
     include(TargetLinkLibrariesWithDynamicLookup)
