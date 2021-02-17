@@ -5,10 +5,10 @@ services:
   - docker
 
 install:
-  - docker pull openturns/archlinux-agrum
+  - docker pull openturns/archlinux-module
 
 script:
-  - docker run -e MAKEFLAGS='-j2' -v `pwd`:/io openturns/archlinux-agrum /io/.ci_support/run_docker_build.sh `id -u` `id -g`
+  - docker run -e MAKEFLAGS='-j2' -v `pwd`:/io openturns/archlinux-module /io/.ci_support/run_docker_build.sh `id -u` `id -g`
 
 after_success:
   - test "$TRAVIS_PULL_REQUEST" = "false" -a "$TRAVIS_BRANCH" = "master" || exit 0
