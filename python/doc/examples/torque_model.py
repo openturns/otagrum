@@ -2,26 +2,36 @@
 Torque model
 ============
 """
-# 
+#
 # This example studies the causes of leakage of a mechanical model.
-# 
+#
 # It has several parameters: Torque (T), Joint (J), Angle (A), Vibration (V) and Leak (L).
-
-# In[1]:
 
 
 import pyAgrum as gum
-import pyAgrum.lib.notebook as gnb
 import openturns as ot
 import otagrum
 import numpy as np
 from openturns.viewer import View
 from matplotlib import pylab as plt
 
+# %%
+def showInformation(bn):
+    try:
+        # fails outside notebook
+        import pyAgrum.lib.notebook as gnb
+        gnb.showInformation(bn)
+    except ImportError:
+        pass
+def showInference(model, evs=None, size=None):
+    try:
+        # fails outside notebook
+        import pyAgrum.lib.notebook as gnb
+        gnb.showInference(model, evs=evs, size=size)
+    except ImportError:
+        pass
+
 # **Probabilistic model**
-
-# In[2]:
-
 
 # Marginal distributions
 Torque = ot.LogNormal(0.0, 0.25)
@@ -49,9 +59,6 @@ torqueSpread = 2.0
 
 
 # **(Discrete) Graphical model**
-
-# In[3]:
-
 
 n_ticks = 100
 nodes = 16
@@ -100,10 +107,6 @@ bn
 
 
 # **Discretizations**
-
-# In[4]:
-
-
 
 # This function allows to discretize a conditional distribution of X_d knowing X_1,...,X_{d-1} from a joint distribution of (X_1,...,X_d) and a discretization grid.
 def discretizeFromJoint(fullDistribution, ticks):
@@ -274,19 +277,19 @@ s=bn.cpt("V").var_names
 s.reverse()
 p.reorganize(s)
 bn.cpt("V").fillWith(p).normalizeAsCPT()
-gnb.showInformation(bn)
+showInformation(bn)
 
 
 # %%
-gnb.showInference(bn,size="20")
+showInference(bn,size="20")
 
 
 # %%
-gnb.showInference(bn,evs={"L":True},size="20")
+showInference(bn,evs={"L":True},size="20")
 
 
 # %%
-gnb.showInference(bn,evs={"L":False,"A":"0.2"},size="20")
+showInference(bn,evs={"L":False,"A":"0.2"},size="20")
 
 # %%
 ie=gum.LazyPropagation(bn)

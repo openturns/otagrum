@@ -6,9 +6,28 @@ Using otagrum
 # %%
 import openturns as ot
 import pyAgrum as gum
-import pyAgrum.lib.notebook as gnb
 from matplotlib import pylab as plt
 import otagrum
+
+# %%
+def showDot(dotstring):
+    try:
+        # fails outside notebook
+        import pyAgrum.lib.notebook as gnb
+        gnb.showDot(dotstring)
+    except ImportError:
+        import pydotplus as dot
+        from io import BytesIO
+        g = dot.graph_from_dot_data(dotstring)
+        with BytesIO() as f:
+            f.write(g.create_png())
+            f.seek(0)
+            img = plt.imread(f)
+        fig = plt.imshow(img)
+        fig.axes.axis('off')
+        #fig.axes.get_xaxis().set_visible(False)
+        #fig.axes.get_yaxis().set_visible(False)
+        plt.show()
 
 # %%
 # Creating the CBN structure
@@ -41,7 +60,7 @@ structure = otagrum.NamedDAG(dag, list(mapping.keys()))
 
 
 # %%
-gnb.showDot(structure.toDot())
+showDot(structure.toDot())
 
 
 # %%
@@ -110,7 +129,7 @@ ndag = learner.learnDAG()
 
 
 # %%
-gnb.showDot(ndag.toDot())
+showDot(ndag.toDot())
 
 # %%
 # The true structure has been recovered.
@@ -154,7 +173,7 @@ dag = learner.learnDAG()
 
 
 # %%
-gnb.showDot(dag.toDot())
+showDot(dag.toDot())
 
 # %%
 # Learning parameters
