@@ -25,8 +25,6 @@ def showDot(dotstring):
             img = plt.imread(f)
         fig = plt.imshow(img)
         fig.axes.axis('off')
-        #fig.axes.get_xaxis().set_visible(False)
-        #fig.axes.get_yaxis().set_visible(False)
         plt.show()
 
 # %%
