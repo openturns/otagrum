@@ -33,6 +33,17 @@ It offers the ability to:
   - extract marginal distributions of aGrUM Bayesian networks as OpenTURNS distributions
   - define and estimate bayesian networks parameterized by local conditional copula functions for each node (CBN)
 
+How to install it ?
+-------------------
+
+Using conda, you need to run the following command:
+
+.. code-block:: console
+
+   $ conda install -c conda-forge otagrum
+
+To install it manually you can check this `page <http://openturns.github.io/openturns/latest/install.html>`_.
+
 User documentation
 ------------------
 
