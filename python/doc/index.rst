@@ -36,6 +36,16 @@ It offers the ability to:
 How to install it ?
 -------------------
 
+Conda
+^^^^^
+
+Using conda, you need to run the following command:
+
+.. code-block:: console
+
+   $ conda config --add channels conda-forge
+   $ conda install -c conda-forge otagrum
+
 Manually (Linux)
 ^^^^^^^^^^^^^^^^
 
@@ -81,16 +91,6 @@ Finally, you can install otagrum:
     $ cd build
     $ cmake .. -DUSE_SPHINX=NO
     $ make install
-
-Conda
-^^^^^
-
-Using conda, you need to run the following command:
-
-.. code-block:: console
-
-   $ conda config --add channels conda-forge
-   $ conda install -c conda-forge otagrum
 
 
 User documentation
