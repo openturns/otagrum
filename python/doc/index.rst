@@ -33,6 +33,66 @@ It offers the ability to:
   - extract marginal distributions of aGrUM Bayesian networks as OpenTURNS distributions
   - define and estimate bayesian networks parameterized by local conditional copula functions for each node (CBN)
 
+How to install it ?
+-------------------
+
+Conda
+^^^^^
+
+Using conda, you need to run the following command:
+
+.. code-block:: console
+
+   $ conda config --add channels conda-forge
+   $ conda install -c conda-forge otagrum
+
+Manually (Linux)
+^^^^^^^^^^^^^^^^
+
+Create a new directory where you will clone all the necessary repositories:
+
+.. code-block:: console
+
+   $ mkdir git-repos
+   $ cd git-repos
+   $ git clone https://gitlab.com/agrumery/aGrUM.git
+   $ git clone https://github.com/openturns/openturns.git
+   $ git clone https://github.com/openturns/otagrum.git
+
+First, you need to install aGrUM and pyAgrum:
+
+.. code-block:: console
+
+   $ cd aGrUM
+   $ ./act install release aGrUM
+   $ ./act install release pyAgrum
+
+For more details, you can check the `aGrUM installation page <https://agrum.gitlab.io/pages/pyagrum-installation.html>`_.
+
+Next, you need to install OpenTURNS:
+
+.. code-block:: console
+
+   $ cd ../openturns
+   $ mkdir build
+   $ cd build
+   $ cmake .. -DUSE_SPHINX=NO
+   $ make install
+
+You can set *USE_SPHINX* to *YES* if you want to build the documentation.
+For more details, you can check this `page <http://openturns.github.io/openturns/latest/install.html>`_.
+
+Finally, you can install otagrum:
+
+.. code-block:: console
+
+    $ cd ../../otagrum
+    $ mkdir build
+    $ cd build
+    $ cmake .. -DUSE_SPHINX=NO
+    $ make install
+
+
 User documentation
 ------------------
 
