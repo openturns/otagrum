@@ -32,7 +32,7 @@ Examples
 >>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
 >>> ie = gum.LazyPropagation(bn)
 >>> jtagr = ie.junctionTree()
->>> jt = otagrum.NamedJunctionTree(jtagr, bn.names())
+>>> jt = otagrum.NamedJunctionTree(jtagr, list(bn.names()))
 >>> sample = ot.Normal(5).getSample(1000)
 >>> binNumber = 5
 >>> copula = otagrum.JunctionTreeBernsteinCopula(jt, sample, binNumber, False)"
