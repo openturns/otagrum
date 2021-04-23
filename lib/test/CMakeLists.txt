@@ -76,7 +76,9 @@ endmacro ()
 
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
-
+if (NOT CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR)
+  file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/correlated_sample.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/correlated_sample.csv)
+endif ()
 
 ot_check_test ( Utils_std )
 ot_check_test ( NamedJunctionTree_std )

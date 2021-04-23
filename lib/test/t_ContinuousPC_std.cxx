@@ -116,21 +116,9 @@ void tests(void)
   }
 };
 
-std::string dirname()
-{
-  std::string res = __FILE__;
-  const size_t last_slash_idx = res.find_last_of("\\/");
-  if (std::string::npos != last_slash_idx)
-  {
-    res.erase(last_slash_idx + 1);
-  }
-  return res;
-}
-
 void testJulien()
 {
-  const auto data =
-    OT::Sample::ImportFromCSVFile(dirname() + "correlated_sample.csv");
+  const auto data = OT::Sample::ImportFromCSVFile("correlated_sample.csv");
   //const auto n_nodes = data.getDimension();
   const auto desc = data.getDescription();
   std::cout << desc << std::endl;
