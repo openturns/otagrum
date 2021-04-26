@@ -1,19 +1,14 @@
 
-set ( ADAPT_CHECK_TESTS_EXPONENT )
-set ( REPLACE_EOL " | cat " )
-if ( MINGW )
+if (WIN32)
   # replace dos eols
-  set ( REPLACE_EOL " | tr -d '\\\\015' " )
-  # By default, Mingw-g++ puts 3 digits to real exponent whereas g++ puts 2.
-  set ( ADAPT_CHECK_TESTS_EXPONENT "PRINTF_EXPONENT_DIGITS=2" )
+  set (REPLACE_EOL " | tr -d '\\\\015' ")
 
-  add_library ( CRT_fp8 STATIC CRT_fp8.c )
-  set_target_properties ( CRT_fp8 PROPERTIES LINKER_LANGUAGE CXX )
+  if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+    add_library (CRT_fp8 STATIC CRT_fp8.c)
+  endif ()
 endif ()
 
-set ( CHECK_ENVIRONMENT
-      ${ADAPT_CHECK_TESTS_EXPONENT}
-    )
+set (CHECK_ENVIRONMENT)
 
 set ( CHECK_TO_BE_RUN )
 macro ( ot_check_test TESTNAME )
@@ -23,13 +18,13 @@ macro ( ot_check_test TESTNAME )
   add_executable ( ${TESTNAME_TGT} EXCLUDE_FROM_ALL ${TESTNAME_SRCS} )
   add_dependencies ( tests ${TESTNAME_TGT} )
   target_link_libraries ( ${TESTNAME_TGT} otagrum )
-  if ( MINGW )
-    target_link_libraries ( ${TESTNAME_TGT} CRT_fp8 )
+  if (MINGW AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+    target_link_libraries (${TESTNAME_TGT} CRT_fp8)
   endif ()
   set_target_properties ( ${TESTNAME_TGT} PROPERTIES
                                           UNITY_BUILD OFF
                                           INSTALL_RPATH "${CMAKE_BINARY_DIR}/lib/src;${CMAKE_INSTALL_RPATH}" )
-  set ( TESTNAME_LOC ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}${CMAKE_EXECUTABLE_SUFFIX} )
+  set ( TESTNAME_LOC ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}${CMAKE_EXECUTABLE_SUFFIX} ) 
   set ( _CMD )
   set ( _PRE )
   set ( _POST )
@@ -61,7 +56,7 @@ macro ( ot_check_test TESTNAME )
     set ( COMMAND "( ${CMAKE_CROSSCOMPILING_EMULATOR} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
   else (_IGNOREOUT)
     set ( TESTNAME_OUT ${TESTNAME_TGT}.expout )
-    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} )
+    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} ) 
     set ( COMMAND "( ${CMAKE_CROSSCOMPILING_EMULATOR} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
   endif (_IGNOREOUT)
 
@@ -77,7 +72,7 @@ endmacro ()
 include_directories ( ${INTERNAL_INCLUDE_DIRS} )
 
 if (NOT CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR)
-  file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/correlated_sample.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/correlated_sample.csv)
+  file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/correlated_sample.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif ()
 
 ot_check_test ( Utils_std )

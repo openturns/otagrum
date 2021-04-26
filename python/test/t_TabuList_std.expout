@@ -3,8 +3,8 @@ digraph {
     G
     C->D
     C->E
-    D->E
-    E
+    E->D
+    D
     A->B
     B
 }

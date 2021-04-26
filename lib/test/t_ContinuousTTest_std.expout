@@ -12,7 +12,7 @@ Cache :
 alpha :0.1
 ttest value: 0.00229638    pvalue:0.998168    test: OK 
 ttest value: 13.0598    pvalue:5.5858e-39    test: OK 
-ttest value: 136.843     pvalue:0   test: OK
-ttest value: 0.151301     pvalue:0.879738   test: OK 
-ttest value: 0.25851     pvalue:0.796014   test: OK 
-ttest value: 2.88883     pvalue:0.00386677   test: fail 
+ttest value: 131.524     pvalue:0   test: OK
+ttest value: 0.0158153     pvalue:0.987382   test: OK 
+ttest value: 0.222047     pvalue:0.824277   test: OK 
+ttest value: 3.66785     pvalue:0.000244594   test: fail 

@@ -1,11 +1,12 @@
 digraph {
+    G->B
     G->F
     F
     E->C
     D->C
     C
-    B->A
-    A
+    A->B
+    B
 }
 
 

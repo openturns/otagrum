@@ -4,7 +4,7 @@ set (PATH_SEP ":")
 if (WIN32)
   # replace dos eols
   set (REPLACE_EOL " | tr -d '\\\\015' ")
-
+  
   set (PATH_SEP "\\;")
 endif ()
 
@@ -46,12 +46,12 @@ macro ( ot_pyinstallcheck_test TESTNAME )
       set ( _CMD )
     endif ( ${ARG} MATCHES PRE )
   endforeach ( _ARG )
-
+  
   if (_IGNOREOUT)
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} > /dev/null )" )
   else (_IGNOREOUT)
     set ( TESTNAME_OUT ${TESTNAME_TGT}.expout )
-    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} )
+    set ( OUTFILE_LOC ${CMAKE_CURRENT_SOURCE_DIR}/${TESTNAME_OUT} ) 
     set ( COMMAND "( ${PYTHON_EXECUTABLE} ${TESTNAME_LOC} ${_PARAMS} ${REPLACE_EOL} > ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out ) && diff -u ${OUTFILE_LOC} ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME_TGT}.out" )
   endif (_IGNOREOUT)
 
@@ -59,10 +59,11 @@ macro ( ot_pyinstallcheck_test TESTNAME )
     set ( COMMAND "${_PRE}${COMMAND}${_POST}" )
   endif (_PRE OR _POST)
 
-  add_test (pyinstallcheck_${TESTNAME} "sh" "-c" "${COMMAND}")
-  set_tests_properties (pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}")
+  add_test ( pyinstallcheck_${TESTNAME} "sh" "-c" "${COMMAND}" )
+
+  set_tests_properties ( pyinstallcheck_${TESTNAME} PROPERTIES ENVIRONMENT "${PYINSTALLCHECK_ENVIRONMENT}" )
   list ( APPEND PYINSTALLCHECK_TO_BE_RUN ${TESTNAME_SRC} )
-endmacro ()
+endmacro ( ot_pyinstallcheck_test )
 
 ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
