@@ -1,5 +1,5 @@
-.. image:: https://travis-ci.org/openturns/otagrum.svg?branch=master
-    :target: https://travis-ci.org/openturns/otagrum
+.. image:: https://github.com/openturns/otagrum/actions/workflows/build.yml/badge.svg?branch=master
+    :target: https://github.com/openturns/otagrum/actions/workflows/build.yml
 
 otagrum Module
 ==============
