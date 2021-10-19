@@ -67,7 +67,5 @@ void testOK()
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-  //OT::ResourceMap::SetAsUnsignedInteger("TBB-ThreadsNumber", 1);
-  OT::ResourceMap::SetAsBool("Distribution-Parallel", false);
   testOK();
 }
