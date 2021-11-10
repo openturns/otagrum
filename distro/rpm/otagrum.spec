@@ -60,6 +60,7 @@ Development files for otagrum library.
 Summary:        otagrum library
 Group:          Productivity/Scientific/Math
 Requires:       python3-openturns
+Requires:       python3-agrum
 %description -n python3-%{name}
 Python textual interface to otagrum uncertainty library
 
