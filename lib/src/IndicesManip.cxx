@@ -40,25 +40,10 @@ IndicesCombinationIterator::IndicesCombinationIterator(const OT::Indices &base,
   setFirst();
 }
 
-OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger val)
-{
-  for (OT::UnsignedInteger p = 0; p < X.getSize(); ++p)
-  {
-    if (X[p] == val)
-      return p;
-  }
-  return X.getSize();
-}
-
-bool isIn(const OT::Indices &X, OT::UnsignedInteger y)
-{
-  return (pos(X, y) != X.getSize());
-}
-
 OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y)
 {
   OT::Indices res(X);
-  if (!isIn(res, y))
+  if (!res.contains(y))
   {
     res.add(y);
   }
@@ -70,7 +55,7 @@ OT::Indices operator+(const OT::Indices &X, const OT::Indices &Y)
   OT::Indices res(X);
   for(const auto y : Y)
   {
-    if (!isIn(res, y))
+    if (!res.contains(y))
     {
       res.add(y);
     }
@@ -81,7 +66,7 @@ OT::Indices operator+(const OT::Indices &X, const OT::Indices &Y)
 OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y)
 {
   OT::Indices res(X);
-  auto p = pos(X, y);
+  auto p = X.find(y);
   if (p < X.getSize())
   {
     res.__delitem__(p);

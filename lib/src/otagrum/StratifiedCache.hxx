@@ -21,6 +21,8 @@
 #ifndef OTAGRUM_STRATIFIEDCACHE_HXX
 #define OTAGRUM_STRATIFIEDCACHE_HXX
 
+#include "otagrum/otagrumprivate.hxx"
+
 #include <sstream>
 #include <string>
 
@@ -31,7 +33,7 @@
 namespace OTAGRUM
 {
 
-class StratifiedCache : public OT::Object
+class OTAGRUM_API StratifiedCache : public OT::Object
 {
 private:
   gum::HashTable<std::string, OT::Point> cache_;

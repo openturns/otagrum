@@ -22,19 +22,17 @@
 #ifndef OTAGRUM_INDICESMANIP_HXX
 #define OTAGRUM_INDICESMANIP_HXX
 
+#include "otagrum/otagrumprivate.hxx"
 #include <openturns/Indices.hxx>
 
 namespace OTAGRUM
 {
 
-OT::UnsignedInteger pos(const OT::Indices &X, OT::UnsignedInteger y);
-bool isIn(const OT::Indices &X, OT::UnsignedInteger y);
+OTAGRUM_API OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y);
+OTAGRUM_API OT::Indices operator+(const OT::Indices &X, const OT::Indices &Y);
+OTAGRUM_API OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y);
 
-OT::Indices operator+(const OT::Indices &X, OT::UnsignedInteger y);
-OT::Indices operator+(const OT::Indices &X, const OT::Indices &Y);
-OT::Indices operator-(const OT::Indices &X, OT::UnsignedInteger y);
-
-class IndicesCombinationIterator : public OT::Object
+class OTAGRUM_API IndicesCombinationIterator : public OT::Object
 {
 public:
   IndicesCombinationIterator(const OT::Indices & base,
