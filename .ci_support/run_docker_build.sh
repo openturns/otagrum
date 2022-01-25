@@ -5,6 +5,9 @@ set -xe
 uid=$1
 gid=$2
 
+sudo sed -i "/llv/d" /usr/lib/python3.10/site-packages/pyAgrum/lib/proba_histogram.py
+sudo pacman -Sy python-pandas --noconfirm
+
 cd /tmp
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local \

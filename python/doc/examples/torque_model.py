@@ -15,21 +15,9 @@ import numpy as np
 from openturns.viewer import View
 from matplotlib import pylab as plt
 
-# %%
-def showInformation(bn):
-    try:
-        # fails outside notebook
-        import pyAgrum.lib.notebook as gnb
-        gnb.showInformation(bn)
-    except ImportError:
-        pass
-def showInference(model, evs=None, size=None):
-    try:
-        # fails outside notebook
-        import pyAgrum.lib.notebook as gnb
-        gnb.showInference(model, evs=evs, size=size)
-    except ImportError:
-        pass
+from pyAgrum.lib.explain import showInformation
+from pyAgrum.lib.notebook import showInference
+
 
 # **Probabilistic model**
 
