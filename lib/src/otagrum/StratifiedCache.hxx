@@ -2,7 +2,7 @@
 /**
  *  @brief The StratifiedCache is a cache for TTest with level
  *
- *  Copyright 2010-2020 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2022 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,8 @@
 #ifndef OTAGRUM_STRATIFIEDCACHE_HXX
 #define OTAGRUM_STRATIFIEDCACHE_HXX
 
+#include "otagrum/otagrumprivate.hxx"
+
 #include <sstream>
 #include <string>
 
@@ -31,7 +33,7 @@
 namespace OTAGRUM
 {
 
-class StratifiedCache : public OT::Object
+class OTAGRUM_API StratifiedCache : public OT::Object
 {
 private:
   gum::HashTable<std::string, OT::Point> cache_;
