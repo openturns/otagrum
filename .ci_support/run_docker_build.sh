@@ -5,8 +5,7 @@ set -xe
 uid=$1
 gid=$2
 
-sudo sed -i "/llv/d" /usr/lib/python3.10/site-packages/pyAgrum/lib/proba_histogram.py
-sudo pacman -Sy python-pandas --noconfirm
+curl -L https://gitlab.com/agrumery/aGrUM/-/commit/5e98cf9853282492461d38fb87eb88e56ebb93ae.patch | sudo patch -p5 -d /usr/lib/python3.10/site-packages/pyAgrum/lib/
 
 cd /tmp
 mkdir build && cd build
