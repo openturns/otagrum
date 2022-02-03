@@ -5,8 +5,6 @@ set -xe
 uid=$1
 gid=$2
 
-curl -L https://gitlab.com/agrumery/aGrUM/-/commit/5e98cf9853282492461d38fb87eb88e56ebb93ae.patch | sudo patch -p5 -d /usr/lib/python3.10/site-packages/pyAgrum/lib/
-
 cd /tmp
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local \
