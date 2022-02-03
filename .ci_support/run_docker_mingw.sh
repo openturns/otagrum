@@ -17,4 +17,4 @@ ${ARCH}-w64-mingw32-strip --strip-unneeded ${PREFIX}/bin/*.dll ${PREFIX}/Lib/sit
 echo lib/test ${PREFIX}/Lib/site-packages/* | xargs -n 1 cp -v ${PREFIX}/bin/*.dll
 #ctest -R pyinstallcheck --output-on-failure --timeout 100 --schedule-random ${MAKEFLAGS}
 make tests
-ctest -R cppcheck --output-on-failure --timeout 100 --schedule-random ${MAKEFLAGS} -E "Continuous|NamedJunctionTree"
+ctest -R cppcheck --output-on-failure --timeout 100 --schedule-random ${MAKEFLAGS}
