@@ -50,7 +50,7 @@ if (BUILD_PYTHON)
     include(TargetLinkLibrariesWithDynamicLookup)
   endif ()
 
-  find_package (PythonInterp)
+  find_package (PythonInterp 3)
   find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT)
   include (FindPythonModule)
   find_python_module (matplotlib 1.3.1)

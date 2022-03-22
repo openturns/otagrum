@@ -32,7 +32,6 @@ Plant growth
 # 
 
 # %%
-from __future__ import print_function
 import openturns as ot
 import otagrum
 import pyAgrum as gum
