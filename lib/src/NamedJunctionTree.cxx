@@ -212,7 +212,7 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
       {
         auto v = m_jt.undirectedPath(edge.first(), edge.second());
       }
-      catch (gum::NotFound)
+      catch (const gum::NotFound &)
       {
         m_jt.addEdge(edge.first(), edge.second());
       }

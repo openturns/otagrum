@@ -376,7 +376,7 @@ gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const
         cpdag.directedPath(t.y, t.x);
         continue;
       }
-      catch (gum::NotFound)
+      catch (const gum::NotFound &)
       {
       }
       try
@@ -384,7 +384,7 @@ gum::MixedGraph ContinuousPC::inferPDAG(const gum::UndiGraph &g) const
         cpdag.directedPath(t.y, t.z);
         continue;
       }
-      catch (gum::NotFound)
+      catch (const gum::NotFound &)
       {
       }
       cpdag.eraseEdge(gum::Edge(t.x, t.y));
@@ -470,7 +470,7 @@ static bool checkRule1(const gum::MixedGraph &p, gum::DAG &dag,
     {
       dag.addArc(i, j);
     }
-    catch (gum::InvalidDirectedCycle &e)
+    catch (const gum::InvalidDirectedCycle & e)
     {
       dag.addArc(j, i);
     }
@@ -496,7 +496,7 @@ static bool checkRule2(gum::DAG &dag, const gum::NodeId i,
     {
       dag.addArc(i, j);
     }
-    catch (gum::InvalidDirectedCycle &e)
+    catch (const gum::InvalidDirectedCycle & e)
     {
       dag.addArc(j, i);
     }
@@ -525,7 +525,7 @@ static bool checkRule3(const gum::MixedGraph &p, gum::DAG &dag,
       {
         dag.addArc(i, j);
       }
-      catch (gum::InvalidDirectedCycle &e)
+      catch (const gum::InvalidDirectedCycle & e)
       {
         dag.addArc(j, i);
       }
@@ -550,7 +550,7 @@ gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const
     {
       dag.addArc(arc.tail(), arc.head());
     }
-    catch (gum::InvalidDirectedCycle &e)
+    catch (const gum::InvalidDirectedCycle & e)
     {
       GUM_SHOWERROR(e);
     }
@@ -660,7 +660,7 @@ gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const
       {
         dag.addArc(candidate.tail(), candidate.head());
       }
-      catch (gum::InvalidDirectedCycle &e)
+      catch (const gum::InvalidDirectedCycle & e)
       {
       }
       remainings.erase(gum::Edge(candidate.tail(), candidate.head()));

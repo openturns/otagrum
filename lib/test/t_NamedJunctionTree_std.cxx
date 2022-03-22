@@ -64,7 +64,7 @@ void testNotOKForSize()
     auto jt = OTAGRUM::NamedJunctionTree(*jtagr, names);
     std::cout << "testForSize : ERROR\n";
   }
-  catch (OT::InvalidArgumentException &)
+  catch (const OT::InvalidArgumentException &)
   {
     std::cout << "testForSize : OK\n";
   }

@@ -18,7 +18,7 @@ int main(int /*argc*/, char ** /*argv*/)
     check("JunctionTreeBernsteinCopulaFactory-DefaultAlpha");
     check("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize");
   }
-  catch (OT::Exception &e)
+  catch (const OT::Exception &e)
   {
     std::cout << e.__repr__() << std::endl;
     return 1;

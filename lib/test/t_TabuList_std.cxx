@@ -63,11 +63,11 @@ void tests(void)
       std::cout << ndag.toDot() << std::endl;
     }
   }
-  catch (OT::Exception &e)
+  catch (const OT::Exception & e)
   {
     std::cout << e.__repr__() << std::endl;
   }
-  catch (gum::Exception &e)
+  catch (const gum::Exception & e)
   {
     GUM_SHOWERROR(e);
   }
