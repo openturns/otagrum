@@ -249,6 +249,13 @@ ContinuousBayesianNetwork::getMarginals() const
   return marginals_;
 }
 
+Distribution
+ContinuousBayesianNetwork::getMarginal(const UnsignedInteger i) const
+{
+  if (i >= marginals_.getSize()) throw InvalidArgumentException(HERE) << "The index of a marginal distribution must be in the range [0, dim-1]";
+  return marginals_[i];
+}
+
 ContinuousBayesianNetwork::DistributionCollection
 ContinuousBayesianNetwork::getCopulas() const
 {
