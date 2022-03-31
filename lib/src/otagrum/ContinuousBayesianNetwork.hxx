@@ -78,6 +78,10 @@ public:
   using OT::ContinuousDistribution::computePDF;
   OT::Scalar computePDF(const OT::Point & point) const override;
 
+  /** Get the log-PDF of the distribution */
+  using OT::ContinuousDistribution::computeLogPDF;
+  OT::Scalar computeLogPDF(const OT::Point & point) const override;
+
   /** DAG, marginals and copulas accessor */
   void setDAGAndMarginalsAndCopulas(const NamedDAG & dag,
                                     const DistributionCollection & marginals,
@@ -88,6 +92,9 @@ public:
   DistributionCollection getMarginals() const;
   /** One copula per inner node */
   DistributionCollection getCopulas() const;
+
+  using OT::ContinuousDistribution::getMarginal;
+  OT::Distribution getMarginal(const OT::UnsignedInteger i) const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;

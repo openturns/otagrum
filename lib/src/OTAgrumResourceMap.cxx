@@ -67,10 +67,11 @@ void OTAgrumResourceMap::Initialize()
   ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);
   ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize", 5);
   // ContinuousBayesianNetworkFactory
+  ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
+  ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-UseBetaCopula", true);
   ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
   ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
-  ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
-  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-LearningRatio", 0.5);
+  ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-MaximumDiscreteSupport", 10);
 }
 
 } // namespace OTAGRUM
