@@ -21,8 +21,12 @@
 
 #include <openturns/OTprivate.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/UserDefined.hxx>
+#include <openturns/UserDefinedFactory.hxx>
 #include <openturns/HistogramFactory.hxx>
 #include <openturns/IndependentCopula.hxx>
+#include <openturns/BernsteinCopulaFactory.hxx>
+#include <openturns/EmpiricalBernsteinCopula.hxx>
 
 #include "otagrum/ContinuousPC.hxx"
 #include "otagrum/ContinuousBayesianNetworkFactory.hxx"
@@ -107,15 +111,12 @@ ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork(
   }
   else localDAG = namedDAG_;
   // Now, learn the local distributions
+  // First check if the user provided a BernsteinCopulaFactory and if we have
+  // to use the BetaCopula
+  const Bool useBetaCopula = (copulasFactory_.getImplementation()->getClassName() == BernsteinCopulaFactory::GetClassName()) && ResourceMap::GetAsBool("ContinuousBayesianNetworkFactory-UseBetaCopula");
   const Indices order(localDAG.getTopologicalOrder());
   Collection< Distribution > marginals(order.getSize());
   Collection< Distribution > copulas(order.getSize());
-  const Scalar learningRatio = ResourceMap::GetAsScalar("ContinuousBayesianNetworkFactory-LearningRatio");
-  if (!((learningRatio >= 0.0) && (learningRatio <= 1.0)))
-    throw InvalidArgumentException(HERE) << "Error: expected a learning ratio in (0, 1), here learning ratio=" << learningRatio << ". Check \"ContinuousBayesianNetworkFactory-LearningRatio\" in ResourceMap.";
-  UnsignedInteger learningSize = static_cast<UnsignedInteger>(size * learningRatio);
-  if ((learningSize == 0) || (learningSize == size))
-    throw InvalidArgumentException(HERE) << "Error: expected a learning size between 1 and size-1, here learning size=" << learningSize << ". Check \"ContinuousBayesianNetworkFactory-LearningRatio\" in ResourceMap.";
   for (UnsignedInteger i = 0; i < order.getSize(); ++i)
   {
     const UnsignedInteger globalIndex = order[i];
@@ -124,14 +125,26 @@ ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork(
     const UnsignedInteger dimension =  1 + indices.getSize();
     // Build the current marginal distribution
     if (workInCopulaSpace_) marginals[globalIndex] = Uniform(0.0, 1.0);
-    else marginals[globalIndex] = marginalsFactory_.build(sample.getMarginal(globalIndex));
+    else
+      {
+        const Sample marginalSample(sample.getMarginal(globalIndex));
+        UserDefined discreteMarginal(UserDefinedFactory().buildAsUserDefined(marginalSample));
+        // If the support is large enough use a continuous factory
+        if (discreteMarginal.getSupport().getSize() > ResourceMap::GetAsUnsignedInteger("ContinuousBayesianNetworkFactory-MaximumDiscreteSupport"))
+          marginals[globalIndex] = marginalsFactory_.build(marginalSample);
+        else
+          marginals[globalIndex] = discreteMarginal;
+      }
     // Build the local copulas
     if (dimension == 1) copulas[globalIndex] = IndependentCopula(1);
     else
     {
       indices.add(globalIndex);
       const Sample localSample(sample.getMarginal(indices).rank() / size);
-      copulas[globalIndex] = copulasFactory_.build(localSample);
+      if (useBetaCopula)
+        copulas[globalIndex] = EmpiricalBernsteinCopula(localSample, localSample.getSize());
+      else
+        copulas[globalIndex] = copulasFactory_.build(localSample);
     } // d > 1
   } // i (nodes)
   return ContinuousBayesianNetwork(localDAG, marginals, copulas);

@@ -35,10 +35,13 @@ Notes
       to set the maximum dimension of the parents in the Bayesian network.
       Default value is *5*.
     - *'ContinuousBayesianNetworkFactory-WorkInCopulaSpace'* to indicate if the
-      estimated distribution should be a copula. Default value is *True*
-    - *'ContinuousBayesianNetworkFactory-LearningRatio'* to set the proportion of
-      the given sample to be used for the learning phase. Default value is *0.5*.
-     
+      estimated distribution should be a copula. Default value is *True*.
+    - *'ContinuousBayesianNetworkFactory-MaximumDiscreteSupport'* to set the
+      maximum number of different values to consider a marginal distribution as
+      being discrete. Default value is *10*.
+    - *'ContinuousBayesianNetworkFactory-UseBetaFactory'* to indicate if the
+      estimated copula should be a Beta copula if a:class:`openturns.BernsteinCopulaFactory` is provided. Default value is *True*.
+
 Examples
 --------
 >>> import otagrum
