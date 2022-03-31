@@ -189,7 +189,8 @@ Scalar ContinuousBayesianNetwork::computePDF(const Point &point) const
   Point u(order.getSize());
   for (UnsignedInteger i = 0; i < order.getSize(); ++i)
   {
-    u[i] = marginals_[i].computeCDF(point[i]);
+    // To avoid points exactly at the upper boundary of the support
+    u[i] = std::min(1.0 - SpecFunc::ScalarEpsilon, marginals_[i].computeCDF(point[i]));
   } // i
   // b) compute the copula PDF
   for (UnsignedInteger i = 0; i < order.getSize(); ++i)
@@ -206,10 +207,53 @@ Scalar ContinuousBayesianNetwork::computePDF(const Point &point) const
       const Scalar conditionalPDF =
         copulas_[globalI].computeConditionalPDF(x, y);
       pdf *= conditionalPDF;
-      if (pdf <= 0.0) return 0.0;
+      if (!(pdf > 0.0)) return 0.0;
     }
   } // i
   return pdf;
+}
+
+/* Get the log-PDF of the distribution */
+Scalar ContinuousBayesianNetwork::computeLogPDF(const Point &point) const
+{
+  const Indices order(dag_.getTopologicalOrder());
+  Scalar logPDF = 0.0;
+  // First compute the marginal part
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i)
+  {
+    const Scalar marginalLogPDF = marginals_[i].computeLogPDF(point[i]);
+    if (marginalLogPDF == -SpecFunc::MaxScalar)
+        return -SpecFunc::MaxScalar;
+    logPDF += marginalLogPDF;
+  } // i
+  // Second, compute the copula part
+  // a) map the given point into the copula space
+  Point u(order.getSize());
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i)
+  {
+    // To avoid points exactly at the upper boundary of the support
+    u[i] = std::min(1.0 - SpecFunc::ScalarEpsilon, marginals_[i].computeCDF(point[i]));
+  } // i
+  // b) compute the copula PDF
+  for (UnsignedInteger i = 0; i < order.getSize(); ++i)
+  {
+    const UnsignedInteger globalI = order[i];
+    const Indices parents(dag_.getParents(globalI));
+    const UnsignedInteger conditioningDimension(parents.getSize());
+    const Scalar x = u[globalI];
+    if (conditioningDimension > 0)
+    {
+      Point y(conditioningDimension);
+      for (UnsignedInteger j = 0; j < conditioningDimension; ++j)
+        y[j] = u[parents[j]];
+      const Scalar conditionalPDF =
+        copulas_[globalI].computeConditionalPDF(x, y);
+      if (!(conditionalPDF > 0.0))
+        return -SpecFunc::MaxScalar;
+      logPDF += std::log(conditionalPDF);
+    }
+  } // i
+  return logPDF;
 }
 
 /* DAG, marginals and copulas accessor */
