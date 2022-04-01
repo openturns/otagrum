@@ -1,12 +1,12 @@
 digraph {
-    F->G
-    G
-    C->D
-    C->E
-    E->D
-    D
-    A->B
-    B
+    "F"->"G"
+    "G"
+    "C"->"D"
+    "C"->"E"
+    "E"->"D"
+    "D"
+    "A"->"B"
+    "B"
 }
 
 
@@ -35,16 +35,16 @@ digraph {
 
 ===== ENDING DAG LEARNING =====
 digraph {
-    lung->smoke
-    lung->either
-    smoke->dysp
-    smoke->bronc
-    bronc->dysp
-    asia->tub
-    tub->either
-    either->dysp
-    either->xray
-    xray
-    dysp
+    "lung"->"smoke"
+    "lung"->"either"
+    "smoke"->"dysp"
+    "smoke"->"bronc"
+    "bronc"->"dysp"
+    "asia"->"tub"
+    "tub"->"either"
+    "either"->"dysp"
+    "either"->"xray"
+    "xray"
+    "dysp"
 }
 
