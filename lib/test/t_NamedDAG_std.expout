@@ -24,13 +24,13 @@ __str__ | [E->A,E->B,A->C,A->B,C->B,B->D]
 
 
 todo : digraph {
-    E->A
-    E->B
-    A->C
-    A->B
-    C->B
-    B->D
-    D
+    "E"->"A"
+    "E"->"B"
+    "A"->"C"
+    "A"->"B"
+    "C"->"B"
+    "B"->"D"
+    "D"
 }
 
 
@@ -63,13 +63,13 @@ __str__ |[E->A,E->B,A->C,A->B,C->B,B->D]
 
 
 digraph {
-    E->A
-    E->B
-    A->C
-    A->B
-    C->B
-    B->D
-    D
+    "E"->"A"
+    "E"->"B"
+    "A"->"C"
+    "A"->"B"
+    "C"->"B"
+    "B"->"D"
+    "D"
 }
 
 
