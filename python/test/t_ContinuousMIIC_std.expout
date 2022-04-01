@@ -1,12 +1,12 @@
 digraph {
-    G->B
-    G->F
-    F
-    E->C
-    D->C
-    C
-    A->B
-    B
+    "G"->"B"
+    "G"->"F"
+    "F"
+    "E"->"C"
+    "D"->"C"
+    "C"
+    "A"->"B"
+    "B"
 }
 
 
@@ -585,16 +585,16 @@ node [shape = ellipse];
 	Node: 0
 		Neighbours: {}
 digraph {
-    lung->smoke
-    lung->either
-    smoke->bronc
-    bronc->dysp
-    tub->either
-    tub->asia
-    asia
-    either->dysp
-    either->xray
-    xray
-    dysp
+    "lung"->"smoke"
+    "lung"->"either"
+    "smoke"->"bronc"
+    "bronc"->"dysp"
+    "tub"->"either"
+    "tub"->"asia"
+    "asia"
+    "either"->"dysp"
+    "either"->"xray"
+    "xray"
+    "dysp"
 }
 
