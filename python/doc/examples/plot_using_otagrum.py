@@ -16,11 +16,11 @@ def showDot(dotstring):
         import pyAgrum.lib.notebook as gnb
         gnb.showDot(dotstring)
     except ImportError:
-        import pydotplus as dot
+        import pydot
         from io import BytesIO
-        g = dot.graph_from_dot_data(dotstring)
+        graph = pydot.graph_from_dot_data(dotstring)[0]
         with BytesIO() as f:
-            f.write(g.create_png())
+            f.write(graph.create_png())
             f.seek(0)
             img = plt.imread(f)
         fig = plt.imshow(img)
