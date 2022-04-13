@@ -17,7 +17,7 @@ override_dh_auto_configure:
             -DUSE_SPHINX=OFF \
             -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
             -DCMAKE_INSTALL_PREFIX:PATH=/usr \
-            -DCMAKE_INSTALL_LIBDIR:PATH="/usr/lib/$(DEB_HOST_MULTIARCH)" \
+            -DCMAKE_INSTALL_LIBDIR:PATH="lib/$(DEB_HOST_MULTIARCH)" \
             -DINSTALL_DESTDIR:PATH=$(CURDIR)/debian/otagrum \
             -DPYTHON_SITE_PACKAGES:PATH="lib/$(PY3VER)/site-packages"
 
