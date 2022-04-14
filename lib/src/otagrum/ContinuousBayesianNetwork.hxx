@@ -88,6 +88,7 @@ public:
                                     const DistributionCollection & copulas);
 
   NamedDAG getNamedDAG() const;
+  OT::Indices getParents(const OT::UnsignedInteger nodeId) const;
   /** One marginal per node */
   DistributionCollection getMarginals() const;
   /** One copula per inner node */
@@ -95,6 +96,9 @@ public:
 
   using OT::ContinuousDistribution::getMarginal;
   OT::Distribution getMarginal(const OT::UnsignedInteger i) const;
+
+  using OT::ContinuousDistribution::getCopula;
+  OT::Distribution getCopula(const OT::UnsignedInteger i) const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
