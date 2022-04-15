@@ -306,7 +306,7 @@ ContinuousBayesianNetwork::getMarginal(const UnsignedInteger i) const
 }
 
 Distribution
-ContinuousBayesianNetwork::getCopula(const UnsignedInteger i) const
+ContinuousBayesianNetwork::getCopulaAtNode(const UnsignedInteger i) const
 {
   if (i >= copulas_.getSize()) throw InvalidArgumentException(HERE) << "The index of a copula distribution must be in the range [0, dim-1]";
   return copulas_[i];

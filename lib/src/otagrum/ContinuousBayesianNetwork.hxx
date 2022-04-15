@@ -95,10 +95,9 @@ public:
   DistributionCollection getCopulas() const;
 
   using OT::ContinuousDistribution::getMarginal;
-  OT::Distribution getMarginal(const OT::UnsignedInteger i) const;
+  OT::Distribution getMarginal(const OT::UnsignedInteger i) const override;
 
-  using OT::ContinuousDistribution::getCopula;
-  OT::Distribution getCopula(const OT::UnsignedInteger i) const;
+  OT::Distribution getCopulaAtNode(const OT::UnsignedInteger i) const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
