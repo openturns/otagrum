@@ -87,7 +87,7 @@ public:
                                     const DistributionCollection & marginals,
                                     const DistributionCollection & copulas);
 
-  NamedDAG getNamedDAG() const;
+  gum::DAG getDAG() const;
   OT::Indices getParents(const OT::UnsignedInteger nodeId) const;
   /** One marginal per node */
   DistributionCollection getMarginals() const;
