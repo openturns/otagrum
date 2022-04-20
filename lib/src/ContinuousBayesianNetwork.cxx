@@ -282,9 +282,9 @@ void ContinuousBayesianNetwork::setDAGAndMarginalsAndCopulas(const NamedDAG &dag
   setDescription(dag.getDescription());
 }
 
-NamedDAG ContinuousBayesianNetwork::getNamedDAG() const
+gum::DAG ContinuousBayesianNetwork::getDAG() const
 {
-  return dag_;
+  return dag_.getDAG();
 }
 
 Indices ContinuousBayesianNetwork::getParents(const UnsignedInteger nodeId) const
