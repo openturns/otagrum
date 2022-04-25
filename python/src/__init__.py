@@ -8,12 +8,9 @@
 
 """
 
-import sys
-if sys.platform.startswith('win'):
-    # this ensures OT dll is loaded
-    import openturns
-    # idem for libagrum.dll
-    import pyAgrum
+# ensures swig type tables order & dll load
+import openturns as _ot
+import pyAgrum as _gum
 
 from .otagrum import *
 

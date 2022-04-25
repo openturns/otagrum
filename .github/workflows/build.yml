@@ -8,7 +8,7 @@ jobs:
       - name: Build
         run: |
           docker pull openturns/archlinux-module
-          docker run -e MAKEFLAGS='-j2' -e OPENTURNS_NUM_THREADS=2 -v `pwd`:/io openturns/archlinux-module /io/.ci_support/run_docker_build.sh `id -u` `id -g`
+          docker run -e MAKEFLAGS='-j2' -e OPENTURNS_NUM_THREADS=2 -v `pwd`:/io openturns/archlinux-module /io/.ci_support/run_docker_linux.sh `id -u` `id -g`
       - name: Upload
         if: ${{ github.ref == 'refs/heads/master' }}
         run: |
