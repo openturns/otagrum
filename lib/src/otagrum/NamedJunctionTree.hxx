@@ -48,16 +48,16 @@ public:
 
   OT::Description getDescription() const;
 
-  OT::Indices getClique(OT::UnsignedInteger nod) const;
-  OT::Indices getSeparator(OT::UnsignedInteger nod1, OT::UnsignedInteger nod2) const;
+  OT::Indices getClique(const OT::UnsignedInteger nod) const;
+  OT::Indices getSeparator(const OT::UnsignedInteger nod1, const OT::UnsignedInteger nod2) const;
 
-  OT::Indices getNeighbours(OT::UnsignedInteger id) const;
+  OT::Indices getNeighbours(const OT::UnsignedInteger id) const;
   OT::Indices getNodes() const;
 
   IndicesList getCliquesCollection() const;
   IndicesList getSeparatorsCollection() const;
 
-  NamedJunctionTree getMarginal(OT::Indices indices) const;
+  NamedJunctionTree getMarginal(const OT::Indices & indices) const;
 
   OT::String __str__(const OT::String &offset = "") const;
 

@@ -194,5 +194,5 @@ tail : str
 "Latent variables accessor.
 
 Returns
---------
+-------
 vars : sequence of :py:class:`pyAgrum.Arc`"

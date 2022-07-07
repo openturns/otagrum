@@ -83,7 +83,7 @@ OT::Description NamedJunctionTree::getDescription() const
   return map_;
 }
 
-OT::Indices NamedJunctionTree::getClique(OT::UnsignedInteger nod) const
+OT::Indices NamedJunctionTree::getClique(const OT::UnsignedInteger nod) const
 {
   return Utils::FromNodeSet(jt_.clique(gum::NodeId(nod)));
 }
@@ -95,7 +95,7 @@ OT::Indices NamedJunctionTree::getSeparator(OT::UnsignedInteger nod1,
            jt_.separator(gum::Edge(gum::NodeId(nod1), gum::NodeId(nod2))));
 }
 
-OT::Indices NamedJunctionTree::getNeighbours(OT::UnsignedInteger id) const
+OT::Indices NamedJunctionTree::getNeighbours(const OT::UnsignedInteger id) const
 {
   return Utils::FromNodeSet(jt_.neighbours(gum::NodeId(id)));
 }
@@ -121,7 +121,7 @@ NamedJunctionTree::IndicesList NamedJunctionTree::getSeparatorsCollection() cons
   return res;
 }
 
-NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
+NamedJunctionTree NamedJunctionTree::getMarginal(const OT::Indices & indices) const
 {
   // create the names and the mapping between indices and new nodeIds
   std::vector<std::string> m_names;
@@ -170,7 +170,7 @@ NamedJunctionTree NamedJunctionTree::getMarginal(OT::Indices indices) const
             m_jt.eraseNode(*it);
           }
         }
-        m_jt.addNode(cli, transpose);
+        m_jt.addNodeWithId(cli, transpose);
       }
     }
   }
