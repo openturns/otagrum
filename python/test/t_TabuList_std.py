@@ -1,8 +1,7 @@
-import os
-from time import time
+#!/usr/bin/env python
 
+import os
 import openturns as ot
-import pyAgrum as gum
 import otagrum
 import sys
 
@@ -11,8 +10,7 @@ def generateDataForSpecificInstance(size):
     R = ot.CorrelationMatrix(3)
     R[0, 1] = 0.5
     R[0, 2] = 0.45
-    collection = [ot.FrankCopula(3.0), ot.NormalCopula(
-        R), ot.ClaytonCopula(2.0)]
+    collection = [ot.FrankCopula(3.0), ot.NormalCopula(R), ot.ClaytonCopula(2.0)]
     copula = ot.ComposedCopula(collection)
     copula.setDescription("ABCDEFG")
     return copula.getSample(size)
@@ -33,7 +31,8 @@ def testSpecificInstance():
 
 def testAsiaDirichlet():
     data = ot.Sample.ImportFromTextFile(
-        os.path.join(os.path.dirname(__file__), "asia_dirichlet_5000.csv"), ",")
+        os.path.join(os.path.dirname(__file__), "asia_dirichlet_5000.csv"), ","
+    )
     learner = otagrum.TabuList(data)
     learner.setVerbosity(True)
     dag = learner.learnDAG()

@@ -26,7 +26,7 @@ def test_basic():
     try:
         otagrum.Utils.Discretize(ot.Uniform(1, 100), w)
         print("Fail")
-    except:
+    except Exception:
         print("OK")
 
     print("\n** Back to OT::Distribution")
@@ -43,15 +43,23 @@ def test_fromMarginal():
     print(dx)
 
     print("\n** From LabelizedVariable")
-    y = gum.LabelizedVariable("y", "y", 0).addLabel(
-        "True").addLabel("Maybe").addLabel("False")
+    y = (
+        gum.LabelizedVariable("y", "y", 0)
+        .addLabel("True")
+        .addLabel("Maybe")
+        .addLabel("False")
+    )
     py = gum.Potential().add(y).fillWith([2, 8, 4]).normalize()
     print(py)
     print(otagrum.Utils.FromMarginal(py))
 
     print("\n** From LabelizedVariable but numerical")
-    y = gum.LabelizedVariable("y", "y", 0).addLabel(
-        "1").addLabel("1.5").addLabel("3.15")
+    y = (
+        gum.LabelizedVariable("y", "y", 0)
+        .addLabel("1")
+        .addLabel("1.5")
+        .addLabel("3.15")
+    )
     py = gum.Potential().add(y).fillWith([2, 8, 4]).normalize()
     print(py)
     print(otagrum.Utils.FromMarginal(py))

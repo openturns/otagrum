@@ -4,7 +4,7 @@
 import openturns as ot
 import otagrum
 import pyAgrum as gum
-import sys
+import math as m
 
 proto = "A->B->C->D;E->A->C<-E"
 bn = gum.BayesNet.fastPrototype(proto)
@@ -20,6 +20,7 @@ for nod in ndag.getTopologicalOrder():
     print("children(", nod, ") : ", ndag.getChildren(nod))
 
 if False:
+    order = ndag.getTopologicalOrder()
     marginals = [ot.Uniform(0.0, 1.0) for i in range(order.getSize())]
     copulas = list()
     for i in range(order.getSize()):
@@ -32,12 +33,11 @@ if False:
             for i in range(d):
                 for j in range(i):
                     R[i, j] = 0.5 / d
-            copulas.append(ot.Student(
-                5.0, [0.0]*d, [1.0]*d, R).getCopula())
+            copulas.append(ot.Student(5.0, [0.0] * d, [1.0] * d, R).getCopula())
 
     cbn = otagrum.ContinuousBayesianNetwork(ndag, marginals, copulas)
     print("cbn=", cbn)
-    print("cbn pdf=", cbn.computePDF([0.5]*d))
+    print("cbn pdf=", cbn.computePDF([0.5] * d))
     print("cbn realization=", cbn.getRealization())
     size = 300
     sampleLearn = cbn.getSample(size)
@@ -62,6 +62,7 @@ if False:
     pairs.setPointStyle("dot")
     gr.add(pairs)
     import openturns.viewer as otv
+
     view = otv.View(gr, (800, 820), square_axes=True)
     view.save("pairs.png")
     view.close()

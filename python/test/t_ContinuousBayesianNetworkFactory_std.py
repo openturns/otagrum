@@ -4,7 +4,6 @@
 import openturns as ot
 import otagrum
 import pyAgrum as gum
-import sys
 
 # create data
 proto = "A->B->C->D;E->A->C<-E"
@@ -33,7 +32,7 @@ for i in range(order.getSize()):
         for i in range(d):
             for j in range(i):
                 R[i, j] = 0.5 / d
-        copulas.append(ot.Student(5.0, [0.0]*d, [1.0]*d, R).getCopula())
+        copulas.append(ot.Student(5.0, [0.0] * d, [1.0] * d, R).getCopula())
 
 cbn = otagrum.ContinuousBayesianNetwork(ndag, marginals, copulas)
 size = 300
@@ -44,7 +43,7 @@ copulasFactory = ot.BernsteinCopulaFactory()
 threshold = 0.1
 maxParents = 5
 factory = otagrum.ContinuousBayesianNetworkFactory(
-    marginalsFactory, copulasFactory, ndag, threshold, maxParents)
+    marginalsFactory, copulasFactory, ndag, threshold, maxParents
+)
 cbn = factory.build(sample)
-print('cbn=', cbn)
-
+print("cbn=", cbn)

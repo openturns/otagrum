@@ -52,38 +52,47 @@ n_ticks = 100
 nodes = 16
 
 
-def completeTicks(range,ticks):
+def completeTicks(range, ticks):
     if range is None:
-        return [float("-inf")]+ticks+[float("inf")]
+        return [float("-inf")] + ticks + [float("inf")]
     else:
         return [range.getLowerBound()[0]] + ticks + [range.getUpperBound()[0]]
 
 
 torque_ticks = [
-    (n_ticks - i) * Torque.getRange().getLowerBound()[0] / (n_ticks + 1) +
-    (i + 1.0) * Torque.getRange().getUpperBound()[0] / (n_ticks + 1)
+    (n_ticks - i) * Torque.getRange().getLowerBound()[0] / (n_ticks + 1)
+    + (i + 1.0) * Torque.getRange().getUpperBound()[0] / (n_ticks + 1)
     for i in range(n_ticks)
 ]
 
-angle_ticks = [(n_ticks - i) * Angle.getRange().getLowerBound()[0] /
-               (n_ticks + 1) +
-               (i + 1.0) * Angle.getRange().getUpperBound()[0] / (n_ticks + 1)
-               for i in range(n_ticks)]
+angle_ticks = [
+    (n_ticks - i) * Angle.getRange().getLowerBound()[0] / (n_ticks + 1)
+    + (i + 1.0) * Angle.getRange().getUpperBound()[0] / (n_ticks + 1)
+    for i in range(n_ticks)
+]
 
-joint_ticks = [(n_ticks - i) * Joint.getRange().getLowerBound()[0] /
-               (n_ticks + 1) +
-               (i + 1.0) * Joint.getRange().getUpperBound()[0] / (n_ticks + 1)
-               for i in range(n_ticks)]
+joint_ticks = [
+    (n_ticks - i) * Joint.getRange().getLowerBound()[0] / (n_ticks + 1)
+    + (i + 1.0) * Joint.getRange().getUpperBound()[0] / (n_ticks + 1)
+    for i in range(n_ticks)
+]
 
 vibration_ticks = [-1.0, -0.5, 0.0, 0.5, 1.0]
 
 bn = gum.BayesNet()
-bn.add(gum.DiscretizedVariable("T", "Torque", completeTicks(Torque.getRange(),torque_ticks)))
-bn.add(gum.DiscretizedVariable("A", "Angle", completeTicks(Angle.getRange(),angle_ticks)))
-bn.add(gum.DiscretizedVariable("J", "Joint", completeTicks(Joint.getRange(),joint_ticks)))
-
 bn.add(
-    gum.DiscretizedVariable("V", "Vibration", completeTicks(None,vibration_ticks)))
+    gum.DiscretizedVariable(
+        "T", "Torque", completeTicks(Torque.getRange(), torque_ticks)
+    )
+)
+bn.add(
+    gum.DiscretizedVariable("A", "Angle", completeTicks(Angle.getRange(), angle_ticks))
+)
+bn.add(
+    gum.DiscretizedVariable("J", "Joint", completeTicks(Joint.getRange(), joint_ticks))
+)
+
+bn.add(gum.DiscretizedVariable("V", "Vibration", completeTicks(None, vibration_ticks)))
 bn.add(gum.LabelizedVariable("L", "Leak", ["False", "True"]))
 
 bn.addArc("T", "V")
@@ -96,42 +105,61 @@ bn
 
 # **Discretizations**
 
-# This function allows to discretize a conditional distribution of X_d knowing X_1,...,X_{d-1} from a joint distribution of (X_1,...,X_d) and a discretization grid.
+# This function allows to discretize a conditional distribution of X_d
+# knowing X_1,...,X_{d-1} from a joint distribution of (X_1,...,X_d)
+# and a discretization grid.
 def discretizeFromJoint(fullDistribution, ticks):
     fullDimension = fullDistribution.getDimension()
-    conditioningDistribution = fullDistribution.getMarginal([i for i in range(fullDimension-1)])
+    conditioningDistribution = fullDistribution.getMarginal(
+        [i for i in range(fullDimension - 1)]
+    )
     # Add the range bounds to the given ticks
     lower = fullDistribution.getRange().getLowerBound()
     upper = fullDistribution.getRange().getUpperBound()
-    expandedTicks = [0]*len(ticks)
+    expandedTicks = [0] * len(ticks)
     for i in range(fullDimension):
         expandedTicks[i] = [lower[i]] + ticks[i] + [upper[i]]
     # Now perform the full discretization
-    lengths = [(len(t)-1) for t in expandedTicks]
+    lengths = [(len(t) - 1) for t in expandedTicks]
     tuples = ot.Tuples(lengths).generate()
     probabilities = ot.Point(len(tuples))
     for i in range(len(tuples)):
         tuple = tuples[i]
         aFull = [expandedTicks[j][tuple[j]] for j in range(fullDimension)]
-        bFull = [expandedTicks[j][tuple[j]+1] for j in range(fullDimension)]
-        aConditioning = [expandedTicks[j][tuple[j]] for j in range(fullDimension-1)]
-        bConditioning = [expandedTicks[j][tuple[j]+1] for j in range(fullDimension-1)]
-        den = conditioningDistribution.computeProbability(ot.Interval(aConditioning, bConditioning))
+        bFull = [expandedTicks[j][tuple[j] + 1] for j in range(fullDimension)]
+        aConditioning = [expandedTicks[j][tuple[j]] for j in range(fullDimension - 1)]
+        bConditioning = [
+            expandedTicks[j][tuple[j] + 1] for j in range(fullDimension - 1)
+        ]
+        den = conditioningDistribution.computeProbability(
+            ot.Interval(aConditioning, bConditioning)
+        )
         if den > 0.0:
             num = fullDistribution.computeProbability(ot.Interval(aFull, bFull))
             probabilities[i] = num / den
     return probabilities
 
-# This function allows to discretize a conditional distribution knowing its conditional density function given as a Function, its conditioning distribution and a discretization grid.
+
+# This function allows to discretize a conditional distribution knowing its
+# conditional density function given as a Function, its conditioning
+# distribution and a discretization grid.
 # WARNING: The result is NOT normalized
-def discretizeFromConditionalDensity(conditionalDensity, conditioningDistribution, ticks, useSlowIntegration=True, nodesNumber=32):
+def discretizeFromConditionalDensity(
+    conditionalDensity,
+    conditioningDistribution,
+    ticks,
+    useSlowIntegration=True,
+    nodesNumber=32,
+):
     fullDimension = conditioningDistribution.getDimension() + 1
     if useSlowIntegration:
         # Accurate but slow
         integrator = ot.IteratedQuadrature()
     else:
         # Less accurate for non-smooth integrand but fast
-        ot.ResourceMap.SetAsUnsignedInteger("GaussLegendre-DefaultMarginalIntegrationPointsNumber", nodesNumber)
+        ot.ResourceMap.SetAsUnsignedInteger(
+            "GaussLegendre-DefaultMarginalIntegrationPointsNumber", nodesNumber
+        )
         integrator = ot.GaussLegendre(fullDimension)
     # Add the range bounds to the given ticks
     lower = list(conditioningDistribution.getRange().getLowerBound())
@@ -143,35 +171,51 @@ def discretizeFromConditionalDensity(conditionalDensity, conditioningDistributio
     delta = conditionedMax - conditionedMin
     lower = lower + [conditionedMin - delta]
     upper = upper + [conditionedMax + delta]
-    expandedTicks = [0]*fullDimension
+    expandedTicks = [0] * fullDimension
     for i in range(fullDimension):
         expandedTicks[i] = [lower[i]] + ticks[i] + [upper[i]]
     # Now perform the full discretization
-    lengths = [(len(t)-1) for t in expandedTicks]
+    lengths = [(len(t) - 1) for t in expandedTicks]
     tuples = ot.Tuples(lengths).generate()
     probabilities = ot.Point(len(tuples))
 
     def kernel(x):
         x = np.array(x)
-        return conditionalDensity(x) * np.array(conditioningDistribution.computePDF(x[:,0:fullDimension-1]))
+        return conditionalDensity(x) * np.array(
+            conditioningDistribution.computePDF(x[:, 0:fullDimension - 1])
+        )
 
     for i in range(len(tuples)):
         tuple = tuples[i]
         aFull = [expandedTicks[j][tuple[j]] for j in range(fullDimension)]
-        bFull = [expandedTicks[j][tuple[j]+1] for j in range(fullDimension)]
-        num = integrator.integrate(ot.PythonFunction(fullDimension, 1, func_sample=kernel), ot.Interval(aFull, bFull))[0]
+        bFull = [expandedTicks[j][tuple[j] + 1] for j in range(fullDimension)]
+        num = integrator.integrate(
+            ot.PythonFunction(fullDimension, 1, func_sample=kernel),
+            ot.Interval(aFull, bFull),
+        )[0]
         probabilities[i] = num
     return probabilities
 
-# This function allows to discretize a conditional Bernoulli distribution knowing its conditional probability function given as a Function, its conditioning distribution and a conditional discretization grid.
-def discretizeBernoulliFromConditionalProbability(conditionalProbability, conditioningDistribution, ticks, useSlowIntegration=True, nodesNumber=32):
+
+# This function allows to discretize a conditional Bernoulli distribution
+# knowing its conditional probability function given as a Function,
+# its conditioning distribution and a conditional discretization grid.
+def discretizeBernoulliFromConditionalProbability(
+    conditionalProbability,
+    conditioningDistribution,
+    ticks,
+    useSlowIntegration=True,
+    nodesNumber=32,
+):
     conditioningDimension = conditioningDistribution.getDimension()
     if useSlowIntegration:
         # Accurate but slow
         integrator = ot.IteratedQuadrature()
     else:
         # Less accurate for non-smooth integrand but fast
-        ot.ResourceMap.SetAsUnsignedInteger("GaussLegendre-DefaultMarginalIntegrationPointsNumber", nodesNumber)
+        ot.ResourceMap.SetAsUnsignedInteger(
+            "GaussLegendre-DefaultMarginalIntegrationPointsNumber", nodesNumber
+        )
         integrator = ot.GaussLegendre(conditioningDimension)
 
     # Add the range bounds to the given ticks
@@ -180,27 +224,40 @@ def discretizeBernoulliFromConditionalProbability(conditionalProbability, condit
     # Add the range bounds to the given ticks
     lower = conditioningDistribution.getRange().getLowerBound()
     upper = conditioningDistribution.getRange().getUpperBound()
-    expandedTicks = [0]*len(ticks)
+    expandedTicks = [0] * len(ticks)
     for i in range(conditioningDimension):
         expandedTicks[i] = [lower[i]] + ticks[i] + [upper[i]]
     # Now perform the full discretization
-    lengths = [(len(t)-1) for t in expandedTicks]
+    lengths = [(len(t) - 1) for t in expandedTicks]
     tuples = ot.Tuples(lengths).generate()
-    probabilitiesTrue = [0]*len(tuples)
+    probabilitiesTrue = [0] * len(tuples)
 
     def kernel(x):
         x = np.array(x)
-        return conditionalProbability(x) * np.array(conditioningDistribution.computePDF(x[:,0:conditioningDimension]))
+        return conditionalProbability(x) * np.array(
+            conditioningDistribution.computePDF(x[:, 0:conditioningDimension])
+        )
 
     for i in range(len(tuples)):
         tuple = tuples[i]
-        aConditioning = [expandedTicks[j][tuple[j]] for j in range(conditioningDimension)]
-        bConditioning = [expandedTicks[j][tuple[j]+1] for j in range(conditioningDimension)]
-        den = conditioningDistribution.computeProbability(ot.Interval(aConditioning, bConditioning))
+        aConditioning = [
+            expandedTicks[j][tuple[j]] for j in range(conditioningDimension)
+        ]
+        bConditioning = [
+            expandedTicks[j][tuple[j] + 1] for j in range(conditioningDimension)
+        ]
+        den = conditioningDistribution.computeProbability(
+            ot.Interval(aConditioning, bConditioning)
+        )
         if den > 0.0:
-            num = integrator.integrate(ot.PythonFunction(conditioningDimension, 1, func_sample=kernel), ot.Interval(aConditioning, bConditioning))[0]
+            num = integrator.integrate(
+                ot.PythonFunction(conditioningDimension, 1, func_sample=kernel),
+                ot.Interval(aConditioning, bConditioning),
+            )[0]
             probabilitiesTrue[i] = min(1.0, num / den)
-        probabilities = ot.Point([1.0 - p for p in probabilitiesTrue] + probabilitiesTrue)
+        probabilities = ot.Point(
+            [1.0 - p for p in probabilitiesTrue] + probabilitiesTrue
+        )
     return probabilities
 
 
@@ -217,8 +274,10 @@ def P_LeakageKnowingAngleAndJoint(x):
     s = (1, x.shape[0])
     sp = (x.shape[0], 1)
     one = np.ones(s)
-    return (np.minimum(np.abs(angle / angleMax), one) * np.minimum(
-        one, np.exp(-(joint - jointMin) / jointSpread))).reshape(sp)
+    return (
+        np.minimum(np.abs(angle / angleMax), one)
+        * np.minimum(one, np.exp(-(joint - jointMin) / jointSpread))
+    ).reshape(sp)
 
 
 # Compute K.p(Vibration = v | Torque = torque, Joint = joint) where K is unknown
@@ -228,40 +287,51 @@ def f_VibrationKnowingTorqueAndJoint(x):
     torque = x[:, 1]
     jointRed = joint / jointSpread
     torqueRed = torque / torqueSpread
-    return ((1.0 + jointRed**2 + torqueRed**2)**(-4.0)).reshape(x.shape[0], 1)
+    return ((1.0 + jointRed**2 + torqueRed**2) ** (-4.0)).reshape(x.shape[0], 1)
 
 
-AngleKnowingTorque = discretizeFromJoint(TorqueAngle,
-                                         [torque_ticks, angle_ticks])
+AngleKnowingTorque = discretizeFromJoint(TorqueAngle, [torque_ticks, angle_ticks])
 
 LeakageKnowingAngleAndJoint = discretizeBernoulliFromConditionalProbability(
-    P_LeakageKnowingAngleAndJoint, ot.ComposedDistribution([Angle, Joint]),
-    [angle_ticks, joint_ticks], False, nodes)
+    P_LeakageKnowingAngleAndJoint,
+    ot.ComposedDistribution([Angle, Joint]),
+    [angle_ticks, joint_ticks],
+    False,
+    nodes,
+)
 
 VibrationKnowingTorqueAndJoint = discretizeFromConditionalDensity(
-    f_VibrationKnowingTorqueAndJoint, ot.ComposedDistribution([Torque, Joint]),
-    [torque_ticks, joint_ticks, vibration_ticks], False, nodes)
+    f_VibrationKnowingTorqueAndJoint,
+    ot.ComposedDistribution([Torque, Joint]),
+    [torque_ticks, joint_ticks, vibration_ticks],
+    False,
+    nodes,
+)
 
 
 # %%
 # Discretized Parameters for the BN
 
 # %%
-bn.cpt("J").fillWith(otagrum.Utils.Discretize(Joint, bn.variable("J").toDiscretizedVar()))
-bn.cpt("T").fillWith(otagrum.Utils.Discretize(Torque, bn.variable("T").toDiscretizedVar()))
+bn.cpt("J").fillWith(
+    otagrum.Utils.Discretize(Joint, bn.variable("J").toDiscretizedVar())
+)
+bn.cpt("T").fillWith(
+    otagrum.Utils.Discretize(Torque, bn.variable("T").toDiscretizedVar())
+)
 bn.cpt("A").fillWith(list(AngleKnowingTorque)).normalizeAsCPT()
 
-p=gum.Potential().add(bn.variable("J")).add(bn.variable("A")).add(bn.variable("L"))
+p = gum.Potential().add(bn.variable("J")).add(bn.variable("A")).add(bn.variable("L"))
 p.fillWith(list(LeakageKnowingAngleAndJoint))
-s=bn.cpt("L").var_names
+s = bn.cpt("L").var_names
 s.reverse()
 p.reorganize(s)
 bn.cpt("L").fillWith(p)
 
 
-p=gum.Potential().add(bn.variable("J")).add(bn.variable("T")).add(bn.variable("V"))
+p = gum.Potential().add(bn.variable("J")).add(bn.variable("T")).add(bn.variable("V"))
 p.fillWith(list(VibrationKnowingTorqueAndJoint))
-s=bn.cpt("V").var_names
+s = bn.cpt("V").var_names
 s.reverse()
 p.reorganize(s)
 bn.cpt("V").fillWith(p).normalizeAsCPT()
@@ -269,34 +339,34 @@ showInformation(bn)
 
 
 # %%
-showInference(bn,size="20")
+showInference(bn, size="20")
 
 
 # %%
-showInference(bn,evs={"L":True},size="20")
+showInference(bn, evs={"L": True}, size="20")
 
 
 # %%
-showInference(bn,evs={"L":False,"A":"0.2"},size="20")
+showInference(bn, evs={"L": False, "A": "0.2"}, size="20")
 
 # %%
-ie=gum.LazyPropagation(bn)
-ie.addJointTarget(set(["T","J"]))
-ie.setEvidence({"L":True})
+ie = gum.LazyPropagation(bn)
+ie.addJointTarget(set(["T", "J"]))
+ie.setEvidence({"L": True})
 ie.makeInference()
 
 # %%
-distrib=otagrum.Utils.FromPotential(ie.jointPosterior({"T", "J"}))
+distrib = otagrum.Utils.FromPotential(ie.jointPosterior({"T", "J"}))
 distrib.drawPDF()
 View(distrib.drawPDF())
 
 # %%
-ie=gum.LazyPropagation(bn)
-ie.addJointTarget(set(["T","J"]))
-ie.setEvidence({"L":False})
+ie = gum.LazyPropagation(bn)
+ie.addJointTarget(set(["T", "J"]))
+ie.setEvidence({"L": False})
 ie.makeInference()
 
 # %%
-distrib=otagrum.Utils.FromPotential(ie.jointPosterior({"T","J"}))
+distrib = otagrum.Utils.FromPotential(ie.jointPosterior({"T", "J"}))
 View(distrib.drawPDF())
 plt.show()
