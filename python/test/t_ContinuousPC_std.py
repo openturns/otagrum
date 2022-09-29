@@ -6,6 +6,8 @@ import otagrum
 import sys
 
 
+a=4
+
 def generateDataForSpecificInstance(size):
     R = ot.CorrelationMatrix(3)
     R[0, 1] = 0.5

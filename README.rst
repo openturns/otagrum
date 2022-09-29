@@ -1,7 +1,7 @@
 .. image:: https://github.com/openturns/otagrum/actions/workflows/build.yml/badge.svg?branch=master
     :target: https://github.com/openturns/otagrum/actions/workflows/build.yml
 
-otagrum Module
+agrum Module
 ==============
 
 otagrum is a module for mixing OpenTURNS and aGrUM
