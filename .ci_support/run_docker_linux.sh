@@ -5,8 +5,6 @@ set -xe
 uid=$1
 gid=$2
 
-flake8 /io/python/ --max-line-length 100
-
 cd /tmp
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local \
