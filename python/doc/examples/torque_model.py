@@ -15,7 +15,7 @@ import numpy as np
 from openturns.viewer import View
 from matplotlib import pylab as plt
 
-# from pyAgrum.lib.explain import showInformation
+from pyAgrum.lib.explain import showInformation
 from pyAgrum.lib.notebook import showInference
 
 
@@ -333,7 +333,7 @@ p.fillWith(list(VibrationKnowingTorqueAndJoint))
 s = bn.cpt("V").names
 p.reorganize(s)
 bn.cpt("V").fillWith(p).normalizeAsCPT()
-# showInformation(bn)
+showInformation(bn)
 
 
 # %%
