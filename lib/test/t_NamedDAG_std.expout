@@ -2,7 +2,7 @@
 
 ** Checking constructor 
       proto : A->C->B->D;E->A->B<-E
-         BN : BN{nodes: 5, arcs: 6, domainSize: 32, dim: 30}
+         BN : BN{nodes: 5, arcs: 6, domainSize: 32, dim: 15, mem: 240o}
 
        size : 5
        desc : [A,C,B,D,E]
@@ -74,6 +74,6 @@ digraph {
 
 
 ** Checking raised exceptions 
-  - Before removing a node : BN{nodes: 5, arcs: 5, domainSize: 32, dim: 24}
-  - After removing node C : BN{nodes: 4, arcs: 3, domainSize: 16, dim: 16}
+  - Before removing a node : BN{nodes: 5, arcs: 5, domainSize: 32, dim: 12, mem: 192o}
+  - After removing node C : BN{nodes: 4, arcs: 3, domainSize: 16, dim: 8, mem: 128o}
 => Trying to build a dag with non contiguous ids : OK 
