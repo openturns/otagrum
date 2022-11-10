@@ -60,7 +60,7 @@ bn.cpt(indexLight)[:] = [0.25, 0.75]
 
 # moisture conditional probability table
 # We show the antecedents of moisture with the order in which they were declared
-print("moisture Antecedents= ", bn.cpt(indexMoisture).var_names)
+print("moisture Antecedents= ", bn.cpt(indexMoisture).names)
 bn.cpt(indexMoisture)[{"Light": "Dim"}] = [0.2, 0.8]
 bn.cpt(indexMoisture)[{"Light": "Bright"}] = [0.6, 0.4]
 

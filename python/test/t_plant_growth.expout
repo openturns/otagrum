@@ -1,4 +1,4 @@
-moisture Antecedents=  ['Light', 'Moisture']
+moisture Antecedents=  ('Moisture', 'Light')
 Probability (height > 40cm) = 0.328571
 Probability (height > 40cm)|Light=Dim = 0.114286
 Probability (height > 40cm)|Moisture=Wet = 0.657143
