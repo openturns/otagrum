@@ -15,7 +15,7 @@ import numpy as np
 from openturns.viewer import View
 from matplotlib import pylab as plt
 
-from pyAgrum.lib.explain import showInformation
+# from pyAgrum.lib.explain import showInformation
 from pyAgrum.lib.notebook import showInference
 
 
@@ -323,19 +323,17 @@ bn.cpt("A").fillWith(list(AngleKnowingTorque)).normalizeAsCPT()
 
 p = gum.Potential().add(bn.variable("J")).add(bn.variable("A")).add(bn.variable("L"))
 p.fillWith(list(LeakageKnowingAngleAndJoint))
-s = bn.cpt("L").var_names
-s.reverse()
+s = bn.cpt("L").names
 p.reorganize(s)
 bn.cpt("L").fillWith(p)
 
 
 p = gum.Potential().add(bn.variable("J")).add(bn.variable("T")).add(bn.variable("V"))
 p.fillWith(list(VibrationKnowingTorqueAndJoint))
-s = bn.cpt("V").var_names
-s.reverse()
+s = bn.cpt("V").names
 p.reorganize(s)
 bn.cpt("V").fillWith(p).normalizeAsCPT()
-showInformation(bn)
+# showInformation(bn)
 
 
 # %%
