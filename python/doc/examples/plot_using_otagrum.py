@@ -151,7 +151,7 @@ learner = otagrum.ContinuousMIIC(sample)
 # Moreover, due to finite sampling size, the mutual information estimators
 # need to be corrected.
 # Two kind of correction are provided: NoCorr (no correction) or Naive
-# (a fixed correction is substracted from the raw mutual information
+# (a fixed correction is subtracted from the raw mutual information
 # estimators). Those behaviours can be changed as follows:
 
 # %%

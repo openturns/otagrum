@@ -34,7 +34,7 @@ Plant growth
 #
 #    - in plain light, if the air is moist, the plant is very happy: it grows
 #      90cm on average with a variation of $\pm$ 10 cm. If the air is too dry,
-#      it will not grow more than 30 cm but we reasonnably can expect about a
+#      it will not grow more than 30 cm but we reasonably can expect about a
 #      15 cm growth.
 #    - in the darkness, if the air is too dry, the plant suffers: it will not
 #      grow more than 20 cm and might die as well! If the air is moist, it

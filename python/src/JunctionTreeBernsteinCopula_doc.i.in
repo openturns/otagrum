@@ -20,7 +20,7 @@ isCopulaSample : bool
 
 Notes
 -----
-This class allows to build a nonparametric copula from a given sample, a bin
+This class allows one to build a nonparametric copula from a given sample, a bin
 count and a junction tree describing the conditional independencies in the data.
 It is based on a Bernstein estimation of each sub-copulas of the model.
 

@@ -941,7 +941,7 @@ ContinuousMIIC::updateProbaTriples(
     {
       const double expo = std::exp(static_cast<double>(info_.getSize()) * IXYZ);
       const double P0 = (1 + expo) / (1 + 3 * expo);
-      // distinguish betweeen the initialization and the update process
+      // distinguish between the initialization and the update process
       if (PXZ == PYZ && PYZ == 0.5)
       {
         std::get< 2 >(triple) = P0;

@@ -59,7 +59,7 @@ gum::UndiGraph : :py:class:`pyAgrum.UndiGraph`
 Notes
 -----
 This step consists in taking the complete undirected graph on the set of variables
-and to remove an edge if the linked variables are independent conditionnaly to
+and to remove an edge if the linked variables are independent conditionally to
 a subset of their neighbors."
 
 // ----------------------------------------------------------------------------

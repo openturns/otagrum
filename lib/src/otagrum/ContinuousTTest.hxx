@@ -80,7 +80,7 @@ private:
                       const OT::UnsignedInteger k) const;
 
   /// get the log-pdfs of Berstein Copulae fX,fYX,fZX,FUZX
-  /// allows to call getLogPDF_ with the same k for all copulae
+  /// allows one to call getLogPDF_ with the same k for all copulae
   std::tuple<OT::Point, OT::Point, OT::Point, OT::Point, OT::UnsignedInteger>
   getLogPDFs(const OT::UnsignedInteger Y,
              const OT::UnsignedInteger Z,

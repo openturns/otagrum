@@ -1,7 +1,7 @@
 %feature("docstring") OTAGRUM::NamedJunctionTree
 "NamedJunctionTree interface.
 
-Available constuctors:
+Available constructors:
     NamedJunctionTree(*jt, names*)
 
     NamedJunctionTree(*jt, bn*)

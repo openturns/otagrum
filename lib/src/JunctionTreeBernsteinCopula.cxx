@@ -251,7 +251,7 @@ Point JunctionTreeBernsteinCopula::getRealization() const
       }
       else unknownPositions.add(index);
     } // cliqueComponent
-    // If no known positions, no need to buid the conditional copula
+    // If no known positions, no need to build the conditional copula
     UnsignedInteger atomIndex = size;
     if (knownPositions.getSize() == 0) atomIndex = RandomGenerator::IntegerGenerate(size);
     else

@@ -105,7 +105,7 @@ bn
 
 # **Discretizations**
 
-# This function allows to discretize a conditional distribution of X_d
+# This function allows one to discretize a conditional distribution of X_d
 # knowing X_1,...,X_{d-1} from a joint distribution of (X_1,...,X_d)
 # and a discretization grid.
 def discretizeFromJoint(fullDistribution, ticks):
@@ -140,7 +140,7 @@ def discretizeFromJoint(fullDistribution, ticks):
     return probabilities
 
 
-# This function allows to discretize a conditional distribution knowing its
+# This function allows one to discretize a conditional distribution knowing its
 # conditional density function given as a Function, its conditioning
 # distribution and a discretization grid.
 # WARNING: The result is NOT normalized
@@ -197,7 +197,7 @@ def discretizeFromConditionalDensity(
     return probabilities
 
 
-# This function allows to discretize a conditional Bernoulli distribution
+# This function allows one to discretize a conditional Bernoulli distribution
 # knowing its conditional probability function given as a Function,
 # its conditioning distribution and a conditional discretization grid.
 def discretizeBernoulliFromConditionalProbability(
