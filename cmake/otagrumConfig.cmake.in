@@ -9,7 +9,6 @@
 
 # Use the following variables to compile and link against otagr:
 #  OTAGRUM_FOUND          - True if otagr was found on your system
-#  OTAGRUM_USE_FILE       - The file making otagr usable
 #  OTAGRUM_DEFINITIONS    - Definitions needed to build with otagr
 #  OTAGRUM_INCLUDE_DIRS   - List of directories where otagr' header file are
 #  OTAGRUM_LIBRARY        - Library name
@@ -22,7 +21,6 @@
 #  OTAGRUM_VERSION_PATCH  - The patch version of otagr
 
 set ( OTAGRUM_FOUND 1 )
-set ( OTAGRUM_USE_FILE     "@OTAGRUM_USE_FILE@" )
 
 set ( OTAGRUM_DEFINITIONS  "@OTAGRUM_DEFINITIONS@" )
 set ( OTAGRUM_INCLUDE_DIR  "@OTAGRUM_INCLUDE_DIR@" )
@@ -37,11 +35,7 @@ set ( OTAGRUM_VERSION_MAJOR  "@OTAGRUM_VERSION_MAJOR@" )
 set ( OTAGRUM_VERSION_MINOR  "@OTAGRUM_VERSION_MINOR@" )
 set ( OTAGRUM_VERSION_PATCH  "@OTAGRUM_VERSION_PATCH@" )
 
-set (OTAGRUM_PYTHON@PYTHON_VERSION_MAJOR@_MODULE_PATH "@PYTHON_MODULE_PATH@")
+set (OTAGRUM_PYTHON_MODULE_PATH "@PYTHON_MODULE_PATH@")
 
-# CMAKE_CURRENT_LIST_DIR defined since 2.8.3
-if (CMAKE_VERSION VERSION_LESS 2.8.3)
-  get_filename_component (CMAKE_CURRENT_LIST_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
-endif ()
 # Our library dependencies (contains definitions for IMPORTED targets)
-include (${CMAKE_CURRENT_LIST_DIR}/otagr-Targets.cmake)
+include (${CMAKE_CURRENT_LIST_DIR}/otagrum-Targets.cmake)

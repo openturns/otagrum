@@ -24,6 +24,9 @@ message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_S
 
 find_package(OpenTURNS 1.17 CONFIG REQUIRED)
 message(STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
+if (NOT DEFINED OPENTURNS_PYTHON_MODULE_PATH)
+  set (OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON3_MODULE_PATH})
+endif ()
 
 set(OTAGRUM_DEFINITIONS ${OPENTURNS_DEFINITIONS})
 if (NOT BUILD_SHARED_LIBS)
@@ -58,7 +61,7 @@ if (BUILD_PYTHON)
   if (USE_SPHINX)
     find_program(SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
     if (SPHINX_EXECUTABLE)
-      find_python_module (sphinx 1.3)
+      find_python_module (sphinx 1.8)
       find_python_module (numpydoc 0.9)
       find_python_module (sphinx_gallery 0.7)
       if (NOT NUMPYDOC_FOUND OR NOT SPHINX_GALLERY_FOUND OR NOT MATPLOTLIB_FOUND)
@@ -196,7 +199,6 @@ set ( OTAGRUM_VERSION_STRING ${PACKAGE_VERSION} )
 set ( OTAGRUM_VERSION_MAJOR ${CPACK_PACKAGE_VERSION_MAJOR} )
 set ( OTAGRUM_VERSION_MINOR ${CPACK_PACKAGE_VERSION_MINOR} )
 set ( OTAGRUM_VERSION_PATCH ${CPACK_PACKAGE_VERSION_PATCH} )
-set ( OTAGRUM_USE_FILE      ${CONFIG_CMAKE_PATH}/Useotagrum.cmake )
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file (
@@ -204,7 +206,6 @@ configure_package_config_file (
   ${CMAKE_CURRENT_BINARY_DIR}/otagrumConfig.cmake
   INSTALL_DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
   PATH_VARS
-    OTAGRUM_USE_FILE
     OTAGRUM_ROOT_DIR
     OTAGRUM_INCLUDE_DIR
     OTAGRUM_INCLUDE_DIRS
@@ -213,8 +214,7 @@ configure_package_config_file (
 )
 write_basic_package_version_file( otagrumConfigVersion.cmake VERSION ${OTAGRUM_VERSION_STRING} COMPATIBILITY AnyNewerVersion )
 
-install ( FILES cmake/Useotagrum.cmake
-                ${CMAKE_CURRENT_BINARY_DIR}/otagrumConfig.cmake
+install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/otagrumConfig.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/otagrumConfigVersion.cmake
           DESTINATION ${OTAGRUM_CONFIG_CMAKE_PATH}
         )
