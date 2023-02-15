@@ -2,7 +2,7 @@
 "Utility functions"
 
 %feature("docstring") OTAGRUM::Utils::Discretize
-"Discretize a continuous distribution.
+R"RRR(Discretize a continuous distribution.
 
 Compute a probability table according to the domains defined
 in a discretized aGrUM variable and a continuous OpenTURNS distribution.
@@ -33,7 +33,7 @@ Examples
 >>> height = gum.DiscretizedVariable('Height', 'plant growth', [0.0, 10.0, 20.0, 30.0])
 >>> height_dist = ot.Normal(18.0, 8.0)
 >>> str(otagrum.Utils.Discretize(height_dist, height))
-'\n  Height                     |\n[0;10[   |[10;20[  |[20;30]..."
+'\n  Height                     |\n[0;10[   |[10;20[  |[20;30]...)RRR"
 
 // ---------------------------------------------------------------------
 

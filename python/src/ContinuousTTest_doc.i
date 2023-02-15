@@ -37,12 +37,12 @@ dimension : int
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousTTest::setAlpha
-"Change the hypothesis test threshold.
+R"RRR(Change the hypothesis test threshold.
 
 Parameters
 ----------
 alpha : float, :math:`\alpha \in [0, 1]`
-    New value of the hypothesis test threshold."
+    New value of the hypothesis test threshold.)RRR"
 
 // ----------------------------------------------------------------------------
 

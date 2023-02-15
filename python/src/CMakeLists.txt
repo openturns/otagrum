@@ -9,39 +9,20 @@ include_directories ( ${PYTHON_INCLUDE_DIRS} )
 
 include_directories (${AGRUM_INCLUDE_DIRS})
 
-add_custom_target( generate_docstrings )
-
 macro ( ot_add_python_module MODULENAME SOURCEFILE )
   set_source_files_properties ( ${SOURCEFILE} PROPERTIES CPLUSPLUS ON )
   set_source_files_properties ( ${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME} )
   ot_install_swig_file ( ${SOURCEFILE} )
   if (${ARGC} GREATER 2)
     set (SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS ${ARGN})
-    list (APPEND SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS generate_docstrings)
   endif ()
 
-  set ( swig_other_sources )
-  foreach ( it ${ARGN} )
-    if ( ${it} MATCHES ".*\\.i$" )
+  set (swig_other_sources)
+  foreach (it ${ARGN})
+    if (${it} MATCHES ".*\\.i$")
       ot_install_swig_file ( ${it} )
-    elseif(${it} MATCHES ".*_doc\\.i\\.in$")
-      # handle docstring generation
-      set (DOCSTRING_IN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${it})
-      get_filename_component (DOCSTRING_FILE_BASENAME ${DOCSTRING_IN_FILE} NAME_WE)
-      # https://github.com/swig/swig/issues/1273
-      option (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH "Force double escaping of backslashes" OFF)
-      mark_as_advanced (SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-      set (TIMES x1)
-      if ((SWIG_VERSION VERSION_LESS 4) OR SWIG_FORCE_DOUBLE_ESCAPE_BACKSLASH)
-        set (TIMES x2)
-      endif ()
-      add_custom_target (generate_${DOCSTRING_FILE_BASENAME}
-                          COMMAND ${CMAKE_COMMAND} -DDOCSTRING_IN_FILE=${DOCSTRING_IN_FILE} -DDOCSTRING_FILE=${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i -DTIMES=${TIMES} -P ${CMAKE_SOURCE_DIR}/cmake/escape_backslash.cmake
-                          DEPENDS ${DOCSTRING_IN_FILE})
-      add_dependencies ( generate_docstrings generate_${DOCSTRING_FILE_BASENAME})
-      list (APPEND SWIGFILES ${CMAKE_CURRENT_BINARY_DIR}/${DOCSTRING_FILE_BASENAME}.i)
     else ()
-      set (swig_other_sources ${swig_other_sources} "${it}")
+      list (APPEND swig_other_sources ${it})
     endif ()
   endforeach ()
 
@@ -80,18 +61,18 @@ endmacro ()
 
 
 ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
-                      ContinuousPC.i ContinuousPC_doc.i.in
-                      ContinuousMIIC.i ContinuousMIIC_doc.i.in
-                      TabuList.i TabuList_doc.i.in
-                      ContinuousTTest.i ContinuousTTest_doc.i.in
-                      CorrectedMutualInformation.i CorrectedMutualInformation_doc.i.in
-                      NamedJunctionTree.i NamedJunctionTree_doc.i.in
-                      NamedDAG.i NamedDAG_doc.i.in
-                      Utils.i Utils_doc.i.in
-                      JunctionTreeBernsteinCopula.i JunctionTreeBernsteinCopula_doc.i.in
-                      JunctionTreeBernsteinCopulaFactory.i JunctionTreeBernsteinCopulaFactory_doc.i.in
-                      ContinuousBayesianNetwork.i ContinuousBayesianNetwork_doc.i.in
-                      ContinuousBayesianNetworkFactory.i ContinuousBayesianNetworkFactory_doc.i.in
+                      ContinuousPC.i ContinuousPC_doc.i
+                      ContinuousMIIC.i ContinuousMIIC_doc.i
+                      TabuList.i TabuList_doc.i
+                      ContinuousTTest.i ContinuousTTest_doc.i
+                      CorrectedMutualInformation.i CorrectedMutualInformation_doc.i
+                      NamedJunctionTree.i NamedJunctionTree_doc.i
+                      NamedDAG.i NamedDAG_doc.i
+                      Utils.i Utils_doc.i
+                      JunctionTreeBernsteinCopula.i JunctionTreeBernsteinCopula_doc.i
+                      JunctionTreeBernsteinCopulaFactory.i JunctionTreeBernsteinCopulaFactory_doc.i
+                      ContinuousBayesianNetwork.i ContinuousBayesianNetwork_doc.i
+                      ContinuousBayesianNetworkFactory.i ContinuousBayesianNetworkFactory_doc.i
                      )
 
 
