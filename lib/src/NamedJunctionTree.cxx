@@ -268,7 +268,7 @@ OT::String NamedJunctionTree::__str__(const OT::String &pref) const
 OT::Indices NamedJunctionTree::getOrderMaxFirst() const
 {
   OT::Indices res;
-  gum::NodeId root;
+  gum::NodeId root = 0;
   gum::NodeSet marked;
   int max;
 

@@ -166,7 +166,7 @@ add_custom_target(installcheck COMMENT "Run post-installation tests")
 add_subdirectory(lib)
 add_dependencies(check cppcheck)
 
-if (PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND AND SWIG_FOUND)
+if (Python_FOUND)
   add_subdirectory(python)
   add_dependencies(installcheck pyinstallcheck)
 endif ()
