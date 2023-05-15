@@ -4,9 +4,6 @@ option(BUILD_PYTHON "Build the python module for the library" ON)
 option(USE_SPHINX "Use sphinx for documentation" ON)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
-set(CMAKE_CXX_STANDARD 20)
-
-
 # By default, build in Release mode. Must appear before project() command
 set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
@@ -17,7 +14,7 @@ string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 # set module dir to find custom scripts
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-find_package (aGrUM 1.2 CONFIG REQUIRED)
+find_package (aGrUM 1.8 CONFIG REQUIRED)
 message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
 
 find_package(OpenTURNS 1.17 CONFIG REQUIRED)
