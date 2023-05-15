@@ -26,7 +26,6 @@
 #include <openturns/Log.hxx>
 #include <openturns/OSS.hxx>
 #include <openturns/OTconfig.hxx>
-#include <openturns/OTthread.hxx>
 #include <openturns/ResourceMap.hxx>
 
 #include "otagrum/OTAgrumResourceMap.hxx"

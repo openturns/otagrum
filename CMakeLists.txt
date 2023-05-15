@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.13)
 
 option(BUILD_PYTHON "Build the python module for the library" ON)
 option(USE_SPHINX "Use sphinx for documentation" ON)
@@ -8,16 +8,14 @@ set(CMAKE_CXX_STANDARD 20)
 
 
 # By default, build in Release mode. Must appear before project() command
-if (NOT DEFINED CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
-endif ()
+set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project(otagrum)
 
-string(TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
+string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 
 # set module dir to find custom scripts
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 find_package (aGrUM 1.2 CONFIG REQUIRED)
 message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
@@ -53,25 +51,29 @@ if (BUILD_PYTHON)
     include(TargetLinkLibrariesWithDynamicLookup)
   endif ()
 
-  find_package (PythonInterp 3)
-  find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT)
-  include (FindPythonModule)
-  find_python_module (matplotlib 1.3.1)
-
-  if (USE_SPHINX)
-    find_program(SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
-    if (SPHINX_EXECUTABLE)
-      find_python_module (sphinx 1.8)
-      find_python_module (numpydoc 0.9)
-      find_python_module (sphinx_gallery 0.7)
-      if (NOT NUMPYDOC_FOUND OR NOT SPHINX_GALLERY_FOUND OR NOT MATPLOTLIB_FOUND)
-        set (SPHINX_FOUND FALSE)
-        message(STATUS "Disabling documentation (need numpydoc/sphinx-gallery/matplotlib)")
-      endif ()
-    endif ()
+  if (CMAKE_VERSION VERSION_LESS 3.24)
+    find_package (Python 3.5 COMPONENTS Interpreter Development)
+  else ()
+    find_package (Python 3.5 COMPONENTS Interpreter Development.Module)
   endif ()
 
-  if (PYTHONINTERP_FOUND)
+  if (Python_FOUND)
+    include (FindPythonModule)
+    if (NOT TARGET Python::Module)
+      include (TargetLinkLibrariesWithDynamicLookup)
+    endif ()
+
+    if (USE_SPHINX)
+      find_program (SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
+      find_python_module (numpydoc)
+      if (SPHINX_EXECUTABLE AND NUMPYDOC_FOUND)
+        find_python_module (sphinx 1.1)
+      endif ()
+      if (NOT SPHINX_FOUND)
+        message (STATUS "Disabling documentation (need sphinx/pandoc/numpydoc)")
+      endif ()
+    endif ()
+
     if (DEFINED PYTHON_SITE_PACKAGES)
       set (OTAGRUM_PYTHON_MODULE_PATH "${PYTHON_SITE_PACKAGES}")
     else ()
@@ -81,9 +83,7 @@ if (BUILD_PYTHON)
        set (OTAGRUM_PYTHON_MODULE_PATH ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages)
       endif ()
     endif ()
-
-    set(OTAGRUM_PYTHON${PYTHON_VERSION_MAJOR}_MODULE_PATH ${OTAGRUM_PYTHON_MODULE_PATH})
-  endif (PYTHONINTERP_FOUND)
+  endif ()
 endif ()
 
 # Guess agrum python module path
