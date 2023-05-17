@@ -71,7 +71,6 @@ extensions.append('sphinx_gallery.gen_gallery')
 sphinx_gallery_conf = {
      'examples_dirs': ['examples'], # path to example scripts
      'gallery_dirs': ['auto_examples'], # path to where to save gallery gen. output
-     'filename_pattern': '/plot_',
      'ignore_pattern': '/(torque_model)|(__init__.py)',
 }
 

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "otagrum/OTAgrumResourceMap.hxx"
+#include <openturns/OT.hxx>
 
 void check(const std::string &key)
 {

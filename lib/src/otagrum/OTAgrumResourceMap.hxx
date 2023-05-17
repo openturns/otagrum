@@ -22,17 +22,9 @@
 #define OTAGRUM_RESOURCEMAP
 
 #include "otagrum/otagrumprivate.hxx"
-#include <openturns/OT.hxx>
 
 namespace OTAGRUM
 {
-
-class OTAGRUM_API OTAgrumResourceMap
-{
-
-public:
-  static void Initialize();
-};
 
 struct OTAGRUM_API OTAgrumResourceMap_init
 {

@@ -19,58 +19,31 @@
  *
  */
 
-#include <string.h>
-#include <unistd.h>
-
-#include <openturns/Exception.hxx>
-#include <openturns/Log.hxx>
-#include <openturns/OSS.hxx>
-#include <openturns/OTconfig.hxx>
-#include <openturns/ResourceMap.hxx>
-
 #include "otagrum/OTAgrumResourceMap.hxx"
+#include <openturns/ResourceMap.hxx>
+#include <mutex>
 
 using namespace OT;
 
 namespace OTAGRUM
 {
 
-static pthread_mutex_t OTAgrumResourceMap_InstanceMutex_;
-
 OTAgrumResourceMap_init::OTAgrumResourceMap_init()
 {
-  static pthread_once_t OTAgrumResourceMap_InstanceMutex_once = PTHREAD_ONCE_INIT;
-  int rc = pthread_once(&OTAgrumResourceMap_InstanceMutex_once,
-                        OTAgrumResourceMap::Initialize);
-  if (rc != 0)
+  static std::once_flag flag;
+  std::call_once(flag, [&]()
   {
-    perror("OTAgrumResourceMap_init::OTAgrumResourceMap_init once "
-           "Initialization failed");
-    exit(1);
-  }
-}
-
-void OTAgrumResourceMap::Initialize()
-{
-  pthread_mutexattr_t attr;
-  pthread_mutexattr_init(&attr);
-  pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-  int rc = pthread_mutex_init(&OTAgrumResourceMap_InstanceMutex_, &attr);
-  if (rc != 0)
-  {
-    perror("ResourceMap::Initialize mutex initialization failed");
-    exit(1);
-  }
-  // JunctionTreeBernsteinCopulaFactory
-  ResourceMap::AddAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha", 0.1);
-  ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);
-  ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize", 5);
-  // ContinuousBayesianNetworkFactory
-  ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
-  ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-UseBetaCopula", true);
-  ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
-  ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
-  ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-MaximumDiscreteSupport", 10);
+    // JunctionTreeBernsteinCopulaFactory
+    ResourceMap::AddAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha", 0.1);
+    ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);
+    ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize", 5);
+    // ContinuousBayesianNetworkFactory
+    ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
+    ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-UseBetaCopula", true);
+    ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
+    ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
+    ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-MaximumDiscreteSupport", 10);
+  });
 }
 
 } // namespace OTAGRUM
