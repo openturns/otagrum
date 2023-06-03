@@ -6,7 +6,7 @@
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/RandomGenerator.hxx>
 
-#include "otagrum/CorrectedMutualInformation.hxx"
+#include "otagrum/otagrum.hxx"
 
 using namespace OTAGRUM;
 

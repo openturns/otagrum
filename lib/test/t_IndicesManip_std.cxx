@@ -1,7 +1,7 @@
 #include <iostream>
 #include <openturns/Indices.hxx>
 
-#include "otagrum/IndicesManip.hxx"
+#include "otagrum/otagrum.hxx"
 
 using namespace OTAGRUM;
 

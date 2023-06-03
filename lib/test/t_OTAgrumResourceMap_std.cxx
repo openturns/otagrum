@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <openturns/OT.hxx>
+#include "otagrum/otagrum.hxx"
 
 void check(const std::string &key)
 {

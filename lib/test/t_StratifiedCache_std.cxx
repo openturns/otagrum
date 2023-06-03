@@ -4,7 +4,7 @@
 #include <openturns/Poisson.hxx>
 #include <openturns/Uniform.hxx>
 
-#include "otagrum/StratifiedCache.hxx"
+#include "otagrum/otagrum.hxx"
 
 using namespace OTAGRUM;
 
