@@ -6,7 +6,7 @@
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/RandomGenerator.hxx>
 
-#include "otagrum/ContinuousPC.hxx"
+#include "otagrum/otagrum.hxx"
 
 OT::Description DescrFromStringVect(const std::vector<std::string> &v)
 {

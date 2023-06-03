@@ -2,8 +2,7 @@
 
 #include <openturns/OT.hxx>
 
-#include "otagrum/ContinuousBayesianNetwork.hxx"
-#include "otagrum/NamedDAG.hxx"
+#include "otagrum/otagrum.hxx"
 
 void testConstructor()
 {

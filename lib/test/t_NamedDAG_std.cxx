@@ -1,6 +1,6 @@
 #include <openturns/OT.hxx>
 
-#include "otagrum/NamedDAG.hxx"
+#include "otagrum/otagrum.hxx"
 #include <iostream>
 
 void testConstructor()

@@ -5,7 +5,7 @@
 #include <openturns/FrankCopulaFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 
-#include "otagrum/ContinuousTTest.hxx"
+#include "otagrum/otagrum.hxx"
 
 using namespace OTAGRUM;
 

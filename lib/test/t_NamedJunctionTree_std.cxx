@@ -7,7 +7,6 @@
 #include <openturns/Exception.hxx>
 #include <openturns/Indices.hxx>
 
-#include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/otagrum.hxx"
 
 void testOK()

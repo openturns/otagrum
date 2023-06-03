@@ -4,9 +4,6 @@
 #include <agrum/BN/inference/lazyPropagation.h>
 
 #include <openturns/OT.hxx>
-
-#include "otagrum/JunctionTreeBernsteinCopula.hxx"
-#include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/otagrum.hxx"
 
 void testOK()

@@ -23,12 +23,19 @@
 #define OTAGRUM_HXX
 
 #include "otagrum/Utils.hxx"
+#include "otagrum/NamedDAG.hxx"
 #include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/ContinuousTTest.hxx"
 #include "otagrum/ContinuousPC.hxx"
 #include "otagrum/CorrectedMutualInformation.hxx"
 #include "otagrum/ContinuousMIIC.hxx"
 #include "otagrum/TabuList.hxx"
+#include "otagrum/OTAgrumResourceMap.hxx"
+#include "otagrum/JunctionTreeBernsteinCopula.hxx"
+#include "otagrum/JunctionTreeBernsteinCopulaFactory.hxx"
+#include "otagrum/ContinuousBayesianNetwork.hxx"
+#include "otagrum/ContinuousBayesianNetworkFactory.hxx"
+#include "otagrum/StratifiedCache.hxx"
 
 #endif // OTAGRUM_HXX
 

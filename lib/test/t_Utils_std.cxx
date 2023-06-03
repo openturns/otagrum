@@ -7,11 +7,9 @@
 #include <agrum/tools/variables/labelizedVariable.h>
 #include <agrum/tools/variables/rangeVariable.h>
 
-#include <openturns/Exception.hxx>
-#include <openturns/Point.hxx>
 #include <openturns/Uniform.hxx>
 
-#include "otagrum/Utils.hxx"
+#include "otagrum/otagrum.hxx"
 
 using namespace OTAGRUM;
 
