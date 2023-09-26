@@ -33,7 +33,7 @@ Plant growth
 #  - Some remembrance of biology trainings:
 #
 #    - in plain light, if the air is moist, the plant is very happy: it grows
-#      90cm on average with a variation of $\pm$ 10 cm. If the air is too dry,
+#      90cm on average with a variation of :math:`\pm` 10 cm. If the air is too dry,
 #      it will not grow more than 30 cm but we reasonably can expect about a
 #      15 cm growth.
 #    - in the darkness, if the air is too dry, the plant suffers: it will not
@@ -63,7 +63,7 @@ def showPotential(pot):
 
 
 # We have to build the Bayes Net now. There are 3 variables that will be named:
-# $Light$, $Moisture$ and $Height$.
+# **Light**, **Moisture** and **Height**.
 
 # %%
 # Create variables
@@ -136,7 +136,7 @@ bn
 # %%
 # The next step is the quantification of the Bayes net.
 #
-# The variable $Light$ is quantified as follows:
+# The variable **Light** is quantified as follows:
 #
 #  - **Light=Dim** with a probability of 0.25,
 #  - **Light=Bright** with a probability of 0.75.
@@ -150,11 +150,11 @@ bn.cpt(indexLight)[:] = [0.25, 0.75]
 showPotential(bn.cpt(indexLight))
 
 # %%
-# The influence of $Light$ on $Moisture$ is modelized by:
-#  - when $Light=Dim$ then $Moisture=Dry$ with a probability of 0.2
-#    and $Moisture=Wet$ with a probability of 0.8,
-#  - when $Light=Bright$ then $Moisture=Dry$ with a probability of 0.6
-#    and $Moisture=Wet$ with a probability of 0.4.
+# The influence of **Light** on **Moisture** is modelized by:
+#  - when **Light=Dim** then **Moisture=Dry** with a probability of 0.2
+#    and *Moisture=Wet* with a probability of 0.8,
+#  - when **Light=Bright** then **Moisture=Dry** with a probability of 0.6
+#    and *Moisture=Wet* with a probability of 0.4.
 
 # %%
 # moisture conditional probability table
@@ -172,9 +172,9 @@ showPotential(bn.cpt(indexMoisture))
 #    a **Uniform(min=0, max=20)** distribution,
 #  - when **Light=Dim** and **Moisture=Wet** then **Height** follows
 #    a **Triangular(min=15, mod=30, max=50)** distribution,
-#  - when **Light=Bright** and $Moisture=Dry$ then $Height$ follows
+#  - when **Light=Bright** and **Moisture=Dry* then **Height** follows
 #    a **Triangular(min=0, mod=15, max=30)** distribution,
-#  - when **Light=Bright** and $Moisture=Wet$ then $Height$ follows
+#  - when **Light=Bright** and **Moisture=Wet** then **Height** follows
 #    a **Normal(\mu=90, \sigma=10)** distribution.
 
 # %%
@@ -218,9 +218,9 @@ showPotential(bn.cpt(indexHeight))
 #  - I put my plant on my balcony; in that situation, I set none evidence
 #    inside the Bayes net.
 #  - I put my plant in a  place where it is dark all time (in my cellar?);
-#    in that situation, I set one evidence inside the Bayes net: $Light=Dim$.
+#    in that situation, I set one evidence inside the Bayes net: **Light=Dim**.
 #  - I put my plant in a  place where it is moist all time (in my bathroom?);
-#    in that situation, I set one evidence inside the Bayes net: $Moisture=Wet$.
+#    in that situation, I set one evidence inside the Bayes net: **Moisture=Wet**.
 
 # %%
 # Variability of the plant growth on my balcony
