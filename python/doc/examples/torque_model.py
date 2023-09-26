@@ -314,10 +314,10 @@ VibrationKnowingTorqueAndJoint = discretizeFromConditionalDensity(
 
 # %%
 bn.cpt("J").fillWith(
-    otagrum.Utils.Discretize(Joint, bn.variable("J").toDiscretizedVar())
+    otagrum.Utils.Discretize(Joint, bn.variable("J").asDiscretizedVar())
 )
 bn.cpt("T").fillWith(
-    otagrum.Utils.Discretize(Torque, bn.variable("T").toDiscretizedVar())
+    otagrum.Utils.Discretize(Torque, bn.variable("T").asDiscretizedVar())
 )
 bn.cpt("A").fillWith(list(AngleKnowingTorque)).normalizeAsCPT()
 
