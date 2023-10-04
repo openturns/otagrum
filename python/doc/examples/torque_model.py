@@ -18,6 +18,7 @@ from matplotlib import pylab as plt
 from pyAgrum.lib.explain import showInformation
 from pyAgrum.lib.notebook import showInference
 
+gum.config["notebook", "histogram_discretized_visualisation"] = "bar"
 
 # **Probabilistic model**
 
