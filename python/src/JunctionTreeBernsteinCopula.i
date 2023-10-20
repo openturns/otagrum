@@ -21,6 +21,5 @@
   }
 }
 
-
+%copyctor OTAGRUM::JunctionTreeBernsteinCopula;
 %include otagrum/JunctionTreeBernsteinCopula.hxx
-namespace OTAGRUM { %extend JunctionTreeBernsteinCopula { JunctionTreeBernsteinCopula(const JunctionTreeBernsteinCopula & other) { return new OTAGRUM::JunctionTreeBernsteinCopula(other); } } }

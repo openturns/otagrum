@@ -13,4 +13,6 @@
 }
 
 %include ContinuousTTest_doc.i
+
+%copyctor OTAGRUM::ContinuousTTest;
 %include "otagrum/ContinuousTTest.hxx"

@@ -51,6 +51,5 @@ namespace OT {
 
 %include ContinuousBayesianNetwork_doc.i
 
+%copyctor OTAGRUM::ContinuousBayesianNetwork;
 %include otagrum/ContinuousBayesianNetwork.hxx
-
-namespace OTAGRUM { %extend ContinuousBayesianNetwork { ContinuousBayesianNetwork(const ContinuousBayesianNetwork& other) { return new OTAGRUM::ContinuousBayesianNetwork(other); } } }

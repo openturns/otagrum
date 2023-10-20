@@ -5,4 +5,6 @@
 %}
 
 %include ContinuousPC_doc.i
+
+%copyctor OTAGRUM::ContinuousPC;
 %include "otagrum/ContinuousPC.hxx"

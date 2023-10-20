@@ -6,4 +6,6 @@
 
 
 %include CorrectedMutualInformation_doc.i
+
+%copyctor OTAGRUM::CorrectedMutualInformation;
 %include "otagrum/CorrectedMutualInformation.hxx"

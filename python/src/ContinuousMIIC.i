@@ -5,4 +5,6 @@
 %}
 
 %include ContinuousMIIC_doc.i
-%include "otagrum/ContinuousMIIC.hxx"
+
+%copyctor OTAGRUM::ContinuousMIIC;
+%include otagrum/ContinuousMIIC.hxx

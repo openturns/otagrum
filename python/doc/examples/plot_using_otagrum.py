@@ -103,7 +103,7 @@ test = sample[-100:]
 # Now that we have data, we can use it to learn the structure with the continuous PC algorithm.
 
 # %%
-learner = otagrum.ContinuousPC(sample, maxConditioningSetSize=5, alpha=0.1)
+learner = otagrum.ContinuousPC(sample, 5, 0.1)
 
 # %%
 # We first learn the skeleton, that is the undirected structure.
