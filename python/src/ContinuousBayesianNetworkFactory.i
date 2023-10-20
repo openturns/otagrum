@@ -51,5 +51,5 @@ namespace OT {
 
 %include ContinuousBayesianNetworkFactory_doc.i
 
+%copyctor OTAGRUM::ContinuousBayesianNetworkFactory;
 %include otagrum/ContinuousBayesianNetworkFactory.hxx
-namespace OTAGRUM { %extend ContinuousBayesianNetworkFactory { ContinuousBayesianNetworkFactory(const ContinuousBayesianNetworkFactory & other) { return new OTAGRUM::ContinuousBayesianNetworkFactory(other); } } }

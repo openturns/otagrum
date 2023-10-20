@@ -5,4 +5,6 @@
 %}
 
 %include TabuList_doc.i
+
+%copyctor OTAGRUM::TabuList;
 %include "otagrum/TabuList.hxx"

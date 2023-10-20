@@ -26,6 +26,6 @@ namespace OT {
 %}
 
 %include NamedJunctionTree_doc.i
-%include otagrum/NamedJunctionTree.hxx
 
-namespace OTAGRUM { %extend NamedJunctionTree { NamedJunctionTree(const NamedJunctionTree& other) { return new OTAGRUM::NamedJunctionTree(other); } } }
+%copyctor OTAGRUM::NamedJunctionTree;
+%include otagrum/NamedJunctionTree.hxx

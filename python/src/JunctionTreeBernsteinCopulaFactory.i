@@ -6,5 +6,5 @@
 
 %include JunctionTreeBernsteinCopulaFactory_doc.i
 
+%copyctor OTAGRUM::JunctionTreeBernsteinCopulaFactory;
 %include otagrum/JunctionTreeBernsteinCopulaFactory.hxx
-namespace OTAGRUM { %extend JunctionTreeBernsteinCopulaFactory { JunctionTreeBernsteinCopulaFactory(const JunctionTreeBernsteinCopulaFactory & other) { return new OTAGRUM::JunctionTreeBernsteinCopulaFactory(other); } } }
