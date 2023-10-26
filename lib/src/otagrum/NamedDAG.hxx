@@ -36,7 +36,7 @@ namespace OTAGRUM
 {
 class OTAGRUM_API NamedDAG : public OT::PersistentObject
 {
-  CLASSNAME;
+  CLASSNAME
 
 public:
   NamedDAG();

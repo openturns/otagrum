@@ -39,7 +39,7 @@ namespace OTAGRUM
 class OTAGRUM_API JunctionTreeBernsteinCopula
   : public OT::ContinuousDistribution
 {
-  CLASSNAME;
+  CLASSNAME
 public:
 
   typedef OT::Collection< OT::Indices > IndicesCollection;

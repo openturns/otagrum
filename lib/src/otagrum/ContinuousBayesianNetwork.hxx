@@ -38,7 +38,7 @@ namespace OTAGRUM
 class OTAGRUM_API ContinuousBayesianNetwork
   : public OT::ContinuousDistribution
 {
-  CLASSNAME;
+  CLASSNAME
 public:
 
   typedef OT::Collection< OT::Distribution >           DistributionCollection;
