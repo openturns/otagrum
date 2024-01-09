@@ -133,7 +133,7 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
       kind.add(OT::MixedHistogramUserDefined::CONTINUOUS);
 
       for (const auto tick :
-           dynamic_cast<const gum::IDiscretizedVariable &>(var)
+           dynamic_cast<const gum::DiscretizedVariable<double> &>(var)
            .ticksAsDoubles())
       {
         p.add(tick);

@@ -22,7 +22,7 @@ v : :py:class:`pyAgrum.DiscretizedVariable`
 
 Returns
 -------
-p : :py:class:`pyAgrum.Potential`
+pot : :py:class:`pyAgrum.Potential`
     The resulting potential.
 
 Examples
@@ -32,8 +32,8 @@ Examples
 >>> import otagrum
 >>> height = gum.DiscretizedVariable('Height', 'plant growth', [0.0, 10.0, 20.0, 30.0])
 >>> height_dist = ot.Normal(18.0, 8.0)
->>> str(otagrum.Utils.Discretize(height_dist, height))
-'\n  Height                     |\n[0;10[   |[10;20[  |[20;30]...)RAW"
+>>> pot = otagrum.Utils.Discretize(height_dist, height)
+)RAW"
 
 // ---------------------------------------------------------------------
 
@@ -92,5 +92,4 @@ Examples
 >>> pot[{'Light': 'Dim',    'Moisture': 'Wet'}] = 0.2
 >>> pot[{'Light': 'Bright', 'Moisture': 'Dry'}] = 0.1
 >>> pot[{'Light': 'Bright', 'Moisture': 'Wet'}] = 0.4
->>> str(otagrum.Utils.FromPotential(pot))
-'MixedHistogramUserDefined(ticksCollection = [[0,1],[0,1]], kind = [0,0], probabilityTable = [0.3,0.1,0.2,0.4])'"
+>>> dist = otagrum.Utils.FromPotential(pot)"
