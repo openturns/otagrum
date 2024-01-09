@@ -3,7 +3,7 @@
  *  @brief The ContinuousBayesianNetwork distribution
  *
  *
- *  Copyright 2010-2022 Airbus-LIP6-Phimeca
+ *  Copyright 2010-2024 Airbus-LIP6-Phimeca
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
