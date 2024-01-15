@@ -14,8 +14,8 @@
 
 namespace OTAGRUM
 {
-
-class OTAGRUM_API GreaterPairOn2nd
+#ifndef SWIG
+class GreaterPairOn2nd
 {
 public:
   bool operator()(
@@ -32,21 +32,7 @@ public:
     OT::Indices >*,
     double > & e2) const;
 };
-
-
-class OTAGRUM_API GreaterTupleOnLast
-{
-public:
-  bool operator()(
-    const std::tuple< std::tuple< OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::UnsignedInteger >*,
-    double, double, double >& e1,
-    const std::tuple< std::tuple< OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::UnsignedInteger >*,
-    double, double, double >& e2) const;
-};
+#endif
 
 class OTAGRUM_API ContinuousMIIC : public OT::Object
 {

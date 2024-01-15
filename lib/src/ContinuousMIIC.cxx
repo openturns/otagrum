@@ -61,6 +61,20 @@ bool GreaterPairOn2nd::operator()(
   return e1.second > e2.second;
 }
 
+class GreaterTupleOnLast
+{
+public:
+  bool operator()(
+    const std::tuple< std::tuple< OT::UnsignedInteger,
+    OT::UnsignedInteger,
+    OT::UnsignedInteger >*,
+    double, double, double >& e1,
+    const std::tuple< std::tuple< OT::UnsignedInteger,
+    OT::UnsignedInteger,
+    OT::UnsignedInteger >*,
+    double, double, double >& e2) const;
+};
+
 bool GreaterTupleOnLast::operator()(
   const std::tuple< std::tuple< OT::UnsignedInteger,
   OT::UnsignedInteger,

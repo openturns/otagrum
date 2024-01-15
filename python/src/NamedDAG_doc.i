@@ -5,7 +5,7 @@ associated name.
 Available constructors:
     NamedDAG(*bn*)
 
-    NamedDAG(*dag,names*)
+    NamedDAG(*dag, names*)
 
 Parameters
 ----------
@@ -102,3 +102,12 @@ dot : str
 "
 
 // ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::NamedDAG::getDAG
+"Accessor to the DAG.
+
+Returns
+-------
+dag : :py:class:`pyAgrum.DAG`
+    The underlying DAG
+"

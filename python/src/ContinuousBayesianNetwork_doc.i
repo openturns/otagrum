@@ -14,8 +14,8 @@ dag : :class:`~otagrum.NamedDAG`
 marginals : sequence of :py:class:`openturns.Distribution`
     Collection of univariate marginal distributions
 copulas : sequence of :py:class:`openturns.Distribution`
-    Collection of local conditional copula functions. The copula is
-    unused for nodes with no parents.
+    Collection of local conditional copula functions.
+    The copula is unused for nodes with no parents.
 
 Examples
 --------
@@ -43,13 +43,13 @@ Draw a sample from the joint distribution encoded by the CBN
 
 // ----------------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getNamedDAG
-"The CBN structure.
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getDAG
+"Accessor to the CBN structure.
 
 Returns
 -------
-dag : :class:`~otagrum.NamedDAG`
-    The underlying NamedDAG"
+dag : :py:class:`pyAgrum.DAG`
+    The underlying DAG"
 
 // ----------------------------------------------------------------------------
 
@@ -75,6 +75,7 @@ Returns
 marginals : sequence of :py:class:`openturns.Distribution`
     Collection of univariate marginal distributions
 "
+
 // ----------------------------------------------------------------------------
 
 %feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getCopulas
@@ -84,4 +85,36 @@ Returns
 -------
 copulas : sequence of :py:class:`openturns.Distribution`
     Collection of local conditional copulas
+"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getCopulaAtNode
+"Accessor to the local conditional copulas.
+
+Parameters
+----------
+index : int
+    Collection index
+
+Returns
+-------
+copula : `py:class:`openturns.Distribution`
+    Local conditional copulas
+"
+
+// ----------------------------------------------------------------------------
+
+%feature("docstring") OTAGRUM::ContinuousBayesianNetwork::getParents
+"Get node parents.
+
+Parameters
+----------
+nodeId : int
+    Node index
+
+Returns
+-------
+parents : :py:class:`openturns.Indices`
+    Parent nodes
 "
