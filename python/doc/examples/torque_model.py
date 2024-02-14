@@ -14,6 +14,7 @@ import otagrum
 import numpy as np
 from openturns.viewer import View
 from matplotlib import pylab as plt
+import sys
 
 from pyAgrum.lib.explain import showInformation
 from pyAgrum.lib.notebook import showInference
@@ -53,11 +54,11 @@ n_ticks = 100
 nodes = 16
 
 
-def completeTicks(range, ticks):
-    if range is None:
-        return [float("-inf")] + ticks + [float("inf")]
+def completeTicks(rnge, ticks):
+    if rnge is None:
+        return [-sys.float_info.max] + ticks + [sys.float_info.max]
     else:
-        return [range.getLowerBound()[0]] + ticks + [range.getUpperBound()[0]]
+        return [rnge.getLowerBound()[0]] + ticks + [rnge.getUpperBound()[0]]
 
 
 torque_ticks = [
