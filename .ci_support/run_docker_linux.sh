@@ -2,6 +2,8 @@
 
 set -xe
 
+pip install "sphinx>7.3" --user --break-system-packages
+
 cd /tmp
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local \
