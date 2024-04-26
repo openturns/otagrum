@@ -43,16 +43,12 @@ void testOK()
   {
     OT::RandomGenerator::SetSeed(33);
     OTAGRUM::JunctionTreeBernsteinCopula copula(jt, copulaSample, 5, false);
-    OT::Sample sample = copula.getSample(1000);
-    OT::Sample pdf = copula.computePDF(sample);
     entropyMC1 = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
   }
   {
     OT::RandomGenerator::SetSeed(33);
     OTAGRUM::JunctionTreeBernsteinCopula copula(jt, jt.getOrderMaxFirst(),
         copulaSample, 5, false);
-    OT::Sample sample = copula.getSample(1000);
-    OT::Sample pdf = copula.computePDF(sample);
     entropyMC2 = -copula.computeLogPDF(copula.getSample(1000)).computeMean()[0];
   }
   std::cout << "Same entropy : ";

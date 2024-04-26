@@ -129,10 +129,6 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
 
   OT::UnsignedInteger k = 0;  // Bandwidth parameter
 
-  const auto dY = data_.getMarginal(Y);
-  const auto dZ = data_.getMarginal(Z);
-  const auto dX = data_.getMarginal(X);
-
   OT::Point logFX, logFYX, logFZX, logFYZX;
   std::tie(logFX, logFYX, logFZX, logFYZX, k) = getLogPDFs(Y, Z, X);
 
@@ -301,10 +297,6 @@ double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y,
     const OT::Indices &X) const
 {
   OT::UnsignedInteger k = 0;
-
-  const auto dY = data_.getMarginal(Y);
-  const auto dZ = data_.getMarginal(Z);
-  const auto dX = data_.getMarginal(X);
 
   OT::Point logFX, logFYX, logFZX, logFYZX;
   std::tie(logFX, logFYX, logFZX, logFYZX, k) = getLogPDFs(Y, Z, X);
