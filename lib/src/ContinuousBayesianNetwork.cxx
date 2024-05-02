@@ -223,7 +223,7 @@ Scalar ContinuousBayesianNetwork::computeLogPDF(const Point &point) const
   {
     const Scalar marginalLogPDF = marginals_[i].computeLogPDF(point[i]);
     if (marginalLogPDF == -SpecFunc::MaxScalar)
-        return -SpecFunc::MaxScalar;
+      return -SpecFunc::MaxScalar;
     logPDF += marginalLogPDF;
   } // i
   // Second, compute the copula part
@@ -289,7 +289,7 @@ gum::DAG ContinuousBayesianNetwork::getDAG() const
 
 Indices ContinuousBayesianNetwork::getParents(const UnsignedInteger nodeId) const
 {
-    return dag_.getParents(nodeId);
+  return dag_.getParents(nodeId);
 }
 
 ContinuousBayesianNetwork::DistributionCollection

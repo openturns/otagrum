@@ -126,21 +126,21 @@ ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork(
     // Build the current marginal distribution
     if (workInCopulaSpace_) marginals[globalIndex] = Uniform(0.0, 1.0);
     else
+    {
+      const Sample marginalSample(sample.getMarginal(globalIndex));
+      UserDefined discreteMarginal(UserDefinedFactory().buildAsUserDefined(marginalSample));
+      // If the support is large enough use a continuous factory
+      if (discreteMarginal.getSupport().getSize() > ResourceMap::GetAsUnsignedInteger("ContinuousBayesianNetworkFactory-MaximumDiscreteSupport"))
       {
-        const Sample marginalSample(sample.getMarginal(globalIndex));
-        UserDefined discreteMarginal(UserDefinedFactory().buildAsUserDefined(marginalSample));
-        // If the support is large enough use a continuous factory
-        if (discreteMarginal.getSupport().getSize() > ResourceMap::GetAsUnsignedInteger("ContinuousBayesianNetworkFactory-MaximumDiscreteSupport"))
-          {
-            LOGINFO(OSS() << "  Learn marginal=" << globalIndex << " as a continuous distribution");
-            marginals[globalIndex] = marginalsFactory_.build(marginalSample);
-          }
-        else
-          {
-            LOGINFO(OSS() << "  Learn marginal=" << globalIndex << " as a discrete distribution");
-            marginals[globalIndex] = discreteMarginal;
-          }
+        LOGINFO(OSS() << "  Learn marginal=" << globalIndex << " as a continuous distribution");
+        marginals[globalIndex] = marginalsFactory_.build(marginalSample);
       }
+      else
+      {
+        LOGINFO(OSS() << "  Learn marginal=" << globalIndex << " as a discrete distribution");
+        marginals[globalIndex] = discreteMarginal;
+      }
+    }
     // Build the local copulas
     if (dimension == 1) copulas[globalIndex] = IndependentCopula(1);
     else
@@ -148,15 +148,15 @@ ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork(
       indices.add(globalIndex);
       const Sample localSample(sample.getMarginal(indices).rank() / size);
       if (useBetaCopula)
-        {
-          LOGINFO(OSS() << "  Learn copula=" << indices << " using a beta copula");
-          copulas[globalIndex] = EmpiricalBernsteinCopula(localSample, localSample.getSize());
-        }
+      {
+        LOGINFO(OSS() << "  Learn copula=" << indices << " using a beta copula");
+        copulas[globalIndex] = EmpiricalBernsteinCopula(localSample, localSample.getSize());
+      }
       else
-        {
-          LOGINFO(OSS() << "  Learn copula=" << indices << " using the given factory");
-          copulas[globalIndex] = copulasFactory_.build(localSample);
-        }
+      {
+        LOGINFO(OSS() << "  Learn copula=" << indices << " using the given factory");
+        copulas[globalIndex] = copulasFactory_.build(localSample);
+      }
     } // d > 1
   } // i (nodes)
   return ContinuousBayesianNetwork(localDAG, marginals, copulas);

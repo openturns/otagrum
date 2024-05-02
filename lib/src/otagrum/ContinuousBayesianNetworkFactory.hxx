@@ -42,7 +42,7 @@ public:
 
   /** Parameter constructor */
   explicit ContinuousBayesianNetworkFactory(const OT::DistributionFactory & marginalsFactory,
-                                            const OT::DistributionFactory & copulasFactory,
+      const OT::DistributionFactory & copulasFactory,
       const NamedDAG & namedDag = NamedDAG(),
       const OT::Scalar alpha = OT::ResourceMap::GetAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha"),
       const OT::UnsignedInteger maximumConditioningSetSize = OT::ResourceMap::GetAsScalar("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize"),

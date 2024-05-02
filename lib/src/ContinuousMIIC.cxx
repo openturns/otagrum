@@ -839,12 +839,12 @@ std::vector< std::string > ContinuousMIIC::namesFromData() const
 
 
 std::vector< std::tuple< std::tuple< OT::UnsignedInteger,
-OT::UnsignedInteger,
-OT::UnsignedInteger >*,
-double, double, double > >
-ContinuousMIIC::getUnshieldedTriples(
-  const gum::MixedGraph& graph,
-  gum::HashTable< std::pair< gum::NodeId, gum::NodeId >, char >& marks)
+    OT::UnsignedInteger,
+    OT::UnsignedInteger >*,
+    double, double, double > >
+    ContinuousMIIC::getUnshieldedTriples(
+      const gum::MixedGraph& graph,
+      gum::HashTable< std::pair< gum::NodeId, gum::NodeId >, char >& marks)
 {
   TRACE("\tLooking for unshielded triples" << std::endl);
   std::vector< std::tuple< std::tuple< OT::UnsignedInteger,

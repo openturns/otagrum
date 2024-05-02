@@ -2,6 +2,7 @@
 Torque model
 ============
 """
+
 #
 # This example studies the causes of leakage of a mechanical model.
 #
@@ -107,6 +108,7 @@ bn
 
 # **Discretizations**
 
+
 # This function allows one to discretize a conditional distribution of X_d
 # knowing X_1,...,X_{d-1} from a joint distribution of (X_1,...,X_d)
 # and a discretization grid.
@@ -184,7 +186,7 @@ def discretizeFromConditionalDensity(
     def kernel(x):
         x = np.array(x)
         return conditionalDensity(x) * np.array(
-            conditioningDistribution.computePDF(x[:, 0:fullDimension - 1])
+            conditioningDistribution.computePDF(x[:, 0: fullDimension - 1])
         )
 
     for i in range(len(tuples)):
@@ -267,6 +269,7 @@ def discretizeBernoulliFromConditionalProbability(
 
 
 # Discretization of everything
+
 
 # Compute P(Leakage = True | Angle = angle, Joint = joint)
 def P_LeakageKnowingAngleAndJoint(x):

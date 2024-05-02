@@ -34,14 +34,14 @@ void testConstructor()
     std::cout << "i=" << i2 << ", d=" << d << std::endl;
     if (d == 1) copulas[i2] = OT::IndependentCopula(1);
     else
-      {
-        OT::CorrelationMatrix R(d);
-        for (OT::UnsignedInteger i = 0; i < d; ++i)
-          for (OT::UnsignedInteger j = 0; j < i; ++j)
-            R(i, j) = 0.5 / d;
-        copulas[i2] =
-          OT::Student(5.0, OT::Point(d), OT::Point(d, 1.0), R).getCopula();
-      }
+    {
+      OT::CorrelationMatrix R(d);
+      for (OT::UnsignedInteger i = 0; i < d; ++i)
+        for (OT::UnsignedInteger j = 0; j < i; ++j)
+          R(i, j) = 0.5 / d;
+      copulas[i2] =
+        OT::Student(5.0, OT::Point(d), OT::Point(d, 1.0), R).getCopula();
+    }
   }
 
   OTAGRUM::ContinuousBayesianNetwork cbn(ndag, marginals, copulas);
@@ -65,14 +65,14 @@ void genereData()
     std::cout << "i=" << i2 << ", d=" << d << std::endl;
     if (d == 1) copulas[i2] = OT::IndependentCopula(1);
     else
-      {
-        OT::CorrelationMatrix R(d);
-        for (OT::UnsignedInteger i = 0; i < d; ++i)
-          for (OT::UnsignedInteger j = 0; j < i; ++j)
-            R(i, j) = 0.5 / d;
-        copulas[i2] =
-          OT::Student(5.0, OT::Point(d), OT::Point(d, 1.0), R).getCopula();
-      }
+    {
+      OT::CorrelationMatrix R(d);
+      for (OT::UnsignedInteger i = 0; i < d; ++i)
+        for (OT::UnsignedInteger j = 0; j < i; ++j)
+          R(i, j) = 0.5 / d;
+      copulas[i2] =
+        OT::Student(5.0, OT::Point(d), OT::Point(d, 1.0), R).getCopula();
+    }
   }
 
   OTAGRUM::ContinuousBayesianNetwork cbn(ndag, marginals, copulas);
