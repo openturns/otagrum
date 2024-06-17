@@ -38,7 +38,7 @@ todo : digraph {
 Before saving, NamedDAG, ndagFromTest
 
 ------------------
-Labels=ndag
+Labels=[ndag]
 
 ------------------
 Before fill, NamedDAG, Unnamed

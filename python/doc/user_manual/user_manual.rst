@@ -19,3 +19,4 @@ API
     NamedDAG
     ContinuousBayesianNetwork
     ContinuousBayesianNetworkFactory
+    DistributionBayesianNetwork

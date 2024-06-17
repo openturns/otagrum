@@ -53,7 +53,7 @@ void testSerialisation()
   std::cout << "\n------------------\n";
   OT::Study study2("tmp.xml");
   study2.load();
-  std::cout << "Labels=" << study2.printLabels() << std::endl;
+  std::cout << "Labels=" << study2.getLabels() << std::endl;
   std::cout << "\n------------------\n";
 
   OTAGRUM::NamedDAG dag;
