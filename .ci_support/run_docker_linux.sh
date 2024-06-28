@@ -2,8 +2,6 @@
 
 set -xe
 
-aurman -Syu agrum --noconfirm
-
 cd /tmp
 mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local \
