@@ -80,7 +80,7 @@ def test_fromPotential():
     distrib = otagrum.Utils.FromPotential(p)
     print(distrib)
 
-    print(p.margSumIn(["y"]))
+    print(p.sumIn(["y"]))
     print(distrib.getMarginal(1))
 
 

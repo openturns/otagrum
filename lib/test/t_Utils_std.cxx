@@ -112,10 +112,10 @@ void test_fromPotential()
   auto distribution = Utils::FromPotential(p);
 
   std::cout << "Marginal 0 " << distribution.getMarginal(0) << std::endl;
-  std::cout << "MarginalPotential 0 " << p.margSumIn({&y}) << std::endl;
+  std::cout << "MarginalPotential 0 " << p.sumIn({&y}) << std::endl;
 
   std::cout << "Marginal 1 " << distribution.getMarginal(1) << std::endl;
-  std::cout << "MarginalPotential 1 " << p.margSumIn({&z}) << std::endl;
+  std::cout << "MarginalPotential 1 " << p.sumIn({&z}) << std::endl;
 }
 
 void test_fromInference()
