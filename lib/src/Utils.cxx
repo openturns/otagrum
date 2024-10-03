@@ -128,7 +128,7 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
     const auto &var = pot.variable(dim);
     description[dim] = var.name();
     OT::Point p;
-    if (var.varType() == gum::VarType::Discretized)
+    if (var.varType() == gum::VarType::DISCRETIZED)
     {
       kind.add(OT::MixedHistogramUserDefined::CONTINUOUS);
 
@@ -189,7 +189,7 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot)
 
   switch (v.varType())
   {
-    case gum::VarType::Discretized:
+    case gum::VarType::DISCRETIZED:
     {
       // we use the ticks to create a Histogram distribution
       auto vv = static_cast<const gum::DiscretizedVariable<double> &>(v);
@@ -203,7 +203,7 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot)
       res = OT::Histogram(vv.tick(0), ws, probas);
       break;
     }
-    case gum::VarType::Range:
+    case gum::VarType::RANGE:
     {
       // we use the range to create a meaningful UserDefined distribution
       auto vv = static_cast<const gum::RangeVariable &>(v);
@@ -214,7 +214,7 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot)
       res = OT::UserDefined(val, probas);
       break;
     }
-    case gum::VarType::Labelized:
+    case gum::VarType::LABELIZED:
     {
       // if at least one label can not be parser as double,
       // we can just use the index to create a UserDefined distribution

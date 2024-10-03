@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <openturns/ClaytonCopulaFactory.hxx>
-#include <openturns/ComposedCopula.hxx>
+#include <openturns/BlockIndependentCopula.hxx>
 #include <openturns/FrankCopulaFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -55,7 +55,7 @@ OT::Sample getSpecificInstanceSeePythonTest(OT::UnsignedInteger size)
   copulas.add(copula2);
   copulas.add(copula3);
 
-  auto copula = OT::ComposedCopula(copulas);
+  auto copula = OT::BlockIndependentCopula(copulas);
 
   auto sample = copula.getSample(size);
   return sample;

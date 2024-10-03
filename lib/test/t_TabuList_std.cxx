@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <openturns/ClaytonCopulaFactory.hxx>
-#include <openturns/ComposedCopula.hxx>
+#include <openturns/BlockIndependentCopula.hxx>
 #include <openturns/FrankCopulaFactory.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/RandomGenerator.hxx>
@@ -38,7 +38,7 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size)
   copulas.add(copula2);
   copulas.add(OT::NormalCopula(R));
 
-  auto copula = OT::ComposedCopula(copulas);
+  auto copula = OT::BlockIndependentCopula(copulas);
   return copula.getSample(size);
 }
 
