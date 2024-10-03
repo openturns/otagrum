@@ -11,7 +11,7 @@ def generateDataForSpecificInstance(size):
     R[0, 1] = 0.5
     R[0, 2] = 0.45
     collection = [ot.FrankCopula(3.0), ot.NormalCopula(R), ot.ClaytonCopula(2.0)]
-    copula = ot.ComposedCopula(collection)
+    copula = ot.BlockIndependentCopula(collection)
     copula.setDescription("ABCDEFG")
     return copula.getSample(size)
 

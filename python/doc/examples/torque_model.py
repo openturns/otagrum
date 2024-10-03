@@ -32,7 +32,7 @@ Joint = ot.Uniform(1.8, 2.2)
 # Dependence
 rho = 0.5
 TorqueAngleCopula = ot.NormalCopula(ot.CorrelationMatrix(2, [1.0, rho, rho, 1.0]))
-copula = ot.ComposedCopula([TorqueAngleCopula, ot.IndependentCopula(1)])
+copula = ot.BlockIndependentCopula([TorqueAngleCopula, ot.IndependentCopula(1)])
 
 # Joint distribution if needed
 TorqueAngle = ot.ComposedDistribution([Torque, Angle], TorqueAngleCopula)
