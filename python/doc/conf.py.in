@@ -66,11 +66,14 @@ imgmath_embed = True
 
 extensions.append('matplotlib.sphinxext.plot_directive')
 
+extensions.append('sphinx_copybutton')
+copybutton_prompt_text = ">>> "
 
 extensions.append('sphinx_gallery.gen_gallery')
 sphinx_gallery_conf = {
      'examples_dirs': ['examples'], # path to example scripts
      'gallery_dirs': ['auto_examples'], # path to where to save gallery gen. output
+     'show_signature': False,
      'ignore_pattern': '/(torque_model)|(__init__.py)',
 }
 
@@ -78,7 +81,7 @@ sphinx_gallery_conf = {
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = {'.rst': 'restructuredtext'}
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
@@ -88,7 +91,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'otagrum'
-copyright = u'2022, Airbus-EDF-IMACS-Phimeca'
+copyright = u'2024, Airbus-EDF-IMACS-Phimeca'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -287,3 +290,6 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+# If true, Sphinx will warn about all references where the target cannot be found.
+nitpicky = True
