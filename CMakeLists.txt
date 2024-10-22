@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 option(BUILD_PYTHON "Build the python module for the library" ON)
-option(USE_SPHINX "Use sphinx for documentation" ON)
+option(USE_SPHINX "Use sphinx for documentation" OFF)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 # By default, build in Release mode. Must appear before project() command
@@ -32,9 +32,6 @@ message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_S
 
 find_package(OpenTURNS 1.23 CONFIG REQUIRED)
 message(STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
-if (NOT DEFINED OPENTURNS_PYTHON_MODULE_PATH)
-  set (OPENTURNS_PYTHON_MODULE_PATH ${OPENTURNS_PYTHON3_MODULE_PATH})
-endif ()
 
 set(OTAGRUM_DEFINITIONS ${OPENTURNS_DEFINITIONS})
 if (NOT BUILD_SHARED_LIBS)
@@ -75,7 +72,8 @@ if (BUILD_PYTHON)
     if (USE_SPHINX)
       find_program (SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
       find_python_module (numpydoc)
-      if (SPHINX_EXECUTABLE AND NUMPYDOC_FOUND AND MATPLOTLIB_FOUND)
+      find_python_module (sphinx_copybutton)
+      if (SPHINX_EXECUTABLE AND NUMPYDOC_FOUND AND SPHINX_COPYBUTTON_FOUND AND MATPLOTLIB_FOUND)
         find_python_module (sphinx 1.1)
       endif ()
       if (NOT SPHINX_FOUND)
@@ -92,7 +90,15 @@ if (BUILD_PYTHON)
 endif ()
 
 # Guess agrum python module path
-set(AGRUM_PYTHON_MODULE_PATH ${AGRUM_ROOTDIR}/${OTAGRUM_PYTHON_MODULE_PATH})
+if (EXISTS ${AGRUM_ROOTDIR}/${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+  set(AGRUM_PYTHON_MODULE_PATH ${AGRUM_ROOTDIR}/${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/dist-packages)
+else ()
+  if (WIN32)
+    set(AGRUM_PYTHON_MODULE_PATH ${AGRUM_ROOTDIR}/Lib/site-packages)
+  else ()
+    set(AGRUM_PYTHON_MODULE_PATH ${AGRUM_ROOTDIR}/${CMAKE_INSTALL_LIBDIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+  endif ()
+endif ()
 
 # Define variables without OTAGRUM_ prefix with absolute paths
 foreach (_var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
@@ -107,19 +113,8 @@ foreach (_var PYTHON_MODULE_PATH LIBRARY_PATH INCLUDE_PATH CONFIG_CMAKE_PATH)
 endforeach ()
 
 # RPATH settings
-set(CMAKE_INSTALL_RPATH ${LIBRARY_PATH})
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-if (POLICY CMP0042)
-  # Set MACOSX_RPATH to ON
-  cmake_policy(SET CMP0042 NEW)
-endif ()
-if (POLICY CMP0078)
-  # Set MACOSX_RPATH to ON
-  cmake_policy(SET CMP0078 NEW)
-endif()
-if (POLICY CMP0086)
-  cmake_policy (SET CMP0086 NEW)
-endif()
+set (CMAKE_INSTALL_RPATH ${LIBRARY_PATH})
+set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Some useful macros to ease CMakeLists.txt file writing
 set (SOURCEFILES "" CACHE INTERNAL "List of source files to compile")
@@ -162,30 +157,30 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION})
 
 
 # The tests can't be run if this function is absent
-enable_testing()
-add_custom_target(tests COMMENT "Build tests")
-add_custom_target(check COMMENT "Run pre-installation tests")
-add_custom_target(installcheck COMMENT "Run post-installation tests")
+enable_testing ()
+add_custom_target (tests COMMENT "Build tests")
+add_custom_target (check COMMENT "Run pre-installation tests")
+add_custom_target (installcheck COMMENT "Run post-installation tests")
 
-add_subdirectory(lib)
-add_dependencies(check cppcheck)
+add_subdirectory (lib)
+add_dependencies (check cppcheck)
 
-if (Python_FOUND)
-  add_subdirectory(python)
-  add_dependencies(installcheck pyinstallcheck)
+if (Python_FOUND AND SWIG_FOUND)
+  add_subdirectory (python)
+  add_dependencies (installcheck pyinstallcheck)
 endif ()
 
 
 # uninstall target
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-    IMMEDIATE @ONLY
+configure_file (
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+  IMMEDIATE @ONLY
 )
 
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-    )
+add_custom_target ( uninstall
+  COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
+)
 
 set ( OTAGRUM_LIBRARY                 otagrum )
 set ( OTAGRUM_LIBRARIES ${OPENTURNS_LIBRARIES} )
