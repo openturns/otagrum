@@ -21,9 +21,14 @@
 #ifndef OTAGRUM_JUNCTIONTREEBERNSTEINCOPULA_HXX
 #define OTAGRUM_JUNCTIONTREEBERNSTEINCOPULA_HXX
 
-#include <openturns/ContinuousDistribution.hxx>
 #include <openturns/Distribution.hxx>
 #include <openturns/Sample.hxx>
+
+#if OPENTURNS_VERSION < 102400
+#include <openturns/ContinuousDistribution.hxx>
+#else
+#define ContinuousDistribution DistributionImplementation
+#endif
 
 #include "NamedJunctionTree.hxx"
 #include "otagrum/otagrumprivate.hxx"

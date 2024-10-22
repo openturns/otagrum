@@ -21,8 +21,13 @@
 #ifndef OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX
 #define OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX
 
-#include <openturns/ContinuousDistribution.hxx>
 #include <openturns/Distribution.hxx>
+
+#if OPENTURNS_VERSION < 102400
+#include <openturns/ContinuousDistribution.hxx>
+#else
+#define ContinuousDistribution DistributionImplementation
+#endif
 
 #include "otagrum/NamedDAG.hxx"
 #include "otagrum/otagrumprivate.hxx"

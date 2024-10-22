@@ -7,7 +7,7 @@ mkdir build && cd build
 cmake -DCMAKE_INSTALL_PREFIX=~/.local \
       -DCMAKE_UNITY_BUILD=ON \
       -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror -Wno-unused-parameter -D_GLIBCXX_ASSERTIONS" \
-      -DSPHINX_FLAGS="-W -T -j4" \
+      -DUSE_SPHINX=ON -DSPHINX_FLAGS="-W -T -j4" \
       /io
 make install
 make tests
