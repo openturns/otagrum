@@ -18,7 +18,7 @@ override_dh_auto_configure:
             -DCMAKE_INSTALL_PREFIX:PATH=/usr \
             -DCMAKE_INSTALL_LIBDIR:PATH=lib/$(DEB_HOST_MULTIARCH) \
             -DINSTALL_DESTDIR:PATH=$(CURDIR)/debian/otagrum \
-            -DPYTHON_SITE_PACKAGES:PATH=lib/python3/dist-packages \
+            -DOTAGRUM_PYTHON_MODULE_PATH=lib/python3/dist-packages \
             -DCMAKE_UNITY_BUILD=ON
 
 override_dh_auto_build:
