@@ -20,7 +20,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 -DBUILD_SHARED_LIBS:BOOL=ON
 
 Name:           otagrum
-Version:        0.10
+Version:        0.11
 Release:        0%{?dist}
 Summary:        OpenTURNS module
 Group:          System Environment/Libraries
@@ -28,6 +28,9 @@ License:        LGPLv3+
 URL:            http://www.openturns.org/
 Source0:        http://downloads.sourceforge.net/openturns-modules/otagrum/otagrum-%{version}.tar.bz2
 BuildRequires:  gcc-c++, cmake, swig >= 4
+%if 0%{?suse_version}
+BuildRequires:  gcc11-c++
+%endif
 BuildRequires:  openturns-devel
 BuildRequires:  python3-openturns
 BuildRequires:  python3-devel
@@ -67,9 +70,12 @@ Python textual interface to otagrum uncertainty library
 %setup -q
 
 %build
+%if 0%{?suse_version}
+export CXX=/usr/bin/g++-11
+%endif
 %cmake -DINSTALL_DESTDIR:PATH=%{buildroot} \
        -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
-       -DUSE_SPHINX=OFF .
+       -DCMAKE_UNITY_BUILD=ON .
 make %{?_smp_mflags}
 
 %install
