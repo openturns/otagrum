@@ -38,12 +38,11 @@ namespace OTAGRUM
 
 CLASSNAMEINIT(ContinuousBayesianNetwork)
 
-static const Factory<ContinuousBayesianNetwork>
-Factory_ContinuousBayesianNetwork;
+static const Factory<ContinuousBayesianNetwork> Factory_ContinuousBayesianNetwork;
 
 /* Default constructor */
 ContinuousBayesianNetwork::ContinuousBayesianNetwork()
-  : ContinuousDistribution()
+  : DistributionImplementation()
   , dag_()
   , marginals_(0)
   , copulas_(0)
@@ -56,7 +55,7 @@ ContinuousBayesianNetwork::ContinuousBayesianNetwork()
 ContinuousBayesianNetwork::ContinuousBayesianNetwork(const NamedDAG &dag,
     const DistributionCollection & marginals,
     const DistributionCollection & copulas)
-  : ContinuousDistribution()
+  : DistributionImplementation()
   , dag_(dag)
   , marginals_(0)
   , copulas_(0)
@@ -321,7 +320,7 @@ ContinuousBayesianNetwork::getCopulas() const
 /* Method save() stores the object through the StorageManager */
 void ContinuousBayesianNetwork::save(Advocate &adv) const
 {
-  ContinuousDistribution::save(adv);
+  DistributionImplementation::save(adv);
   adv.saveAttribute("dag_", dag_);
   adv.saveAttribute("marginals_", marginals_);
   adv.saveAttribute("copulas_", copulas_);
@@ -330,7 +329,7 @@ void ContinuousBayesianNetwork::save(Advocate &adv) const
 /* Method load() reloads the object from the StorageManager */
 void ContinuousBayesianNetwork::load(Advocate &adv)
 {
-  ContinuousDistribution::load(adv);
+  DistributionImplementation::load(adv);
   adv.loadAttribute("dag_", dag_);
   adv.loadAttribute("marginals_", marginals_);
   adv.loadAttribute("copulas_", copulas_);

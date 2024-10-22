@@ -42,7 +42,7 @@ static const Factory<JunctionTreeBernsteinCopula> Factory_JunctionTreeBernsteinC
 
 /* Default constructor */
 JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula()
-  : ContinuousDistribution()
+  : DistributionImplementation()
   , junctionTree_()
   , cliquesCollection_(0)
   , separatorsCollection_(0)
@@ -60,7 +60,7 @@ JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const NamedJunctionTree
     const Sample & copulaSample,
     const UnsignedInteger binNumber,
     const Bool isCopulaSample)
-  : ContinuousDistribution()
+  : DistributionImplementation()
   , junctionTree_(junctionTree)
   , cliquesCollection_(0)
   , separatorsCollection_(junctionTree.getSeparatorsCollection())
@@ -80,7 +80,7 @@ JunctionTreeBernsteinCopula::JunctionTreeBernsteinCopula(const NamedJunctionTree
     const Sample & copulaSample,
     const UnsignedInteger binNumber,
     const Bool isCopulaSample)
-  : ContinuousDistribution()
+  : DistributionImplementation()
   , junctionTree_(junctionTree)
   , cliquesCollection_(0)
   , separatorsCollection_(junctionTree.getSeparatorsCollection())
@@ -375,7 +375,7 @@ Distribution JunctionTreeBernsteinCopula::getMarginal(const Indices & indices) c
 /* Method save() stores the object through the StorageManager */
 void JunctionTreeBernsteinCopula::save(Advocate & adv) const
 {
-  ContinuousDistribution::save(adv);
+  DistributionImplementation::save(adv);
   adv.saveAttribute( "cliquesCollection_", cliquesCollection_ );
   adv.saveAttribute( "separatorsCollection_", separatorsCollection_ );
   adv.saveAttribute( "copulaSample_", copulaSample_ );
@@ -387,7 +387,7 @@ void JunctionTreeBernsteinCopula::save(Advocate & adv) const
 /* Method load() reloads the object from the StorageManager */
 void JunctionTreeBernsteinCopula::load(Advocate & adv)
 {
-  ContinuousDistribution::load(adv);
+  DistributionImplementation::load(adv);
   adv.loadAttribute( "cliquesCollection_", cliquesCollection_ );
   adv.loadAttribute( "separatorsCollection_", separatorsCollection_ );
   adv.loadAttribute( "copulaSample_", copulaSample_ );

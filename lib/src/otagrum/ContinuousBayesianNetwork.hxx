@@ -22,12 +22,7 @@
 #define OTAGRUM_CONTINUOUSBAYESIANNETWORK_HXX
 
 #include <openturns/Distribution.hxx>
-
-#if OPENTURNS_VERSION < 102400
-#include <openturns/ContinuousDistribution.hxx>
-#else
-#define ContinuousDistribution DistributionImplementation
-#endif
+#include <openturns/DistributionImplementation.hxx>
 
 #include "otagrum/NamedDAG.hxx"
 #include "otagrum/otagrumprivate.hxx"
@@ -41,7 +36,7 @@ namespace OTAGRUM
  * The ContinuousBayesianNetwork distribution.
  */
 class OTAGRUM_API ContinuousBayesianNetwork
-  : public OT::ContinuousDistribution
+  : public OT::DistributionImplementation
 {
   CLASSNAME
 public:
@@ -59,7 +54,7 @@ public:
 
 public:
   /** Comparison operator */
-  using OT::ContinuousDistribution::operator ==;
+  using OT::DistributionImplementation::operator ==;
   OT::Bool operator ==(const ContinuousBayesianNetwork & other) const;
 protected:
   OT::Bool equals(const OT::DistributionImplementation & other) const override;
@@ -80,11 +75,11 @@ public:
   OT::Point getRealization() const override;
 
   /** Get the PDF of the distribution, i.e. P(point < X < point+dx) = PDF(point)dx + o(dx) */
-  using OT::ContinuousDistribution::computePDF;
+  using OT::DistributionImplementation::computePDF;
   OT::Scalar computePDF(const OT::Point & point) const override;
 
   /** Get the log-PDF of the distribution */
-  using OT::ContinuousDistribution::computeLogPDF;
+  using OT::DistributionImplementation::computeLogPDF;
   OT::Scalar computeLogPDF(const OT::Point & point) const override;
 
   /** DAG, marginals and copulas accessor */
@@ -99,7 +94,7 @@ public:
   /** One copula per inner node */
   DistributionCollection getCopulas() const;
 
-  using OT::ContinuousDistribution::getMarginal;
+  using OT::DistributionImplementation::getMarginal;
   OT::Distribution getMarginal(const OT::UnsignedInteger i) const override;
 
   OT::Distribution getCopulaAtNode(const OT::UnsignedInteger i) const;

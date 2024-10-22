@@ -23,12 +23,7 @@
 
 #include <openturns/Distribution.hxx>
 #include <openturns/Sample.hxx>
-
-#if OPENTURNS_VERSION < 102400
-#include <openturns/ContinuousDistribution.hxx>
-#else
-#define ContinuousDistribution DistributionImplementation
-#endif
+#include <openturns/DistributionImplementation.hxx>
 
 #include "NamedJunctionTree.hxx"
 #include "otagrum/otagrumprivate.hxx"
@@ -42,7 +37,7 @@ namespace OTAGRUM
  * The JunctionTreeBernsteinCopula distribution.
  */
 class OTAGRUM_API JunctionTreeBernsteinCopula
-  : public OT::ContinuousDistribution
+  : public OT::DistributionImplementation
 {
   CLASSNAME
 public:
@@ -67,7 +62,7 @@ public:
 
 public:
   /** Comparison operator */
-  using OT::ContinuousDistribution::operator ==;
+  using OT::DistributionImplementation::operator ==;
   OT::Bool operator ==(const JunctionTreeBernsteinCopula & other) const;
 protected:
   OT::Bool equals(const OT::DistributionImplementation & other) const override;
@@ -88,7 +83,7 @@ public:
   OT::Point getRealization() const override;
 
   /** Get the PDF of the distribution, i.e. P(point < X < point+dx) = PDF(point)dx + o(dx) */
-  using OT::ContinuousDistribution::computePDF;
+  using OT::DistributionImplementation::computePDF;
   OT::Scalar computePDF(const OT::Point & point) const override;
 
   /** Copula sample accessor */
