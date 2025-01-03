@@ -39,11 +39,10 @@ How to install it ?
 Conda
 ^^^^^
 
-Using conda, you need to run the following command:
+Using miniforge, you need to run the following command:
 
 .. code-block:: console
 
-   $ conda config --add channels conda-forge
    $ conda install -c conda-forge otagrum
 
 Manually (Linux)
@@ -74,23 +73,18 @@ Next, you need to install OpenTURNS:
 .. code-block:: console
 
    $ cd ../openturns
-   $ mkdir build
-   $ cd build
-   $ cmake .. -DUSE_SPHINX=NO
-   $ make install
+   $ cmake -B build .
+   $ cmake --build build
 
-You can set *USE_SPHINX* to *YES* if you want to build the documentation.
 For more details, you can check this `page <http://openturns.github.io/openturns/latest/install.html>`_.
 
 Finally, you can install otagrum:
 
 .. code-block:: console
 
-    $ cd ../../otagrum
-    $ mkdir build
-    $ cd build
-    $ cmake .. -DUSE_SPHINX=NO
-    $ make install
+    $ cd ../otagrum
+    $ cmake -B build .
+    $ cmake --build build
 
 
 User documentation
