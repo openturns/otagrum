@@ -114,7 +114,7 @@ release = '@PACKAGE_VERSION@'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build', 'themes', 'sphinxext', '**.ipynb_checkpoints']
+exclude_patterns = ['_build', 'themes', 'sphinxext']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -141,7 +141,14 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'classic'
+html_theme = 'openturns'
+
+# Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+# html_theme_options = {}
+# import alabaster
+html_theme_path = ["themes"]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
