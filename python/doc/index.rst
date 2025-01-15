@@ -43,7 +43,7 @@ Using miniforge, you need to run the following command:
 
 .. code-block:: console
 
-   $ conda install -c conda-forge otagrum
+   $ conda install otagrum
 
 Manually (Linux)
 ^^^^^^^^^^^^^^^^
