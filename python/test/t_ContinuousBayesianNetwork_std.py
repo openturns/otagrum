@@ -3,7 +3,7 @@
 
 import openturns as ot
 import otagrum
-import pyAgrum as gum
+import pyagrum as gum
 import math as m
 
 proto = "A->B->C->D;E->A->C<-E"

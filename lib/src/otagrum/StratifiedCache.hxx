@@ -26,7 +26,7 @@
 #include <sstream>
 #include <string>
 
-#include <agrum/tools/core/hashTable.h>
+#include <agrum/base/core/hashTable.h>
 
 #include <openturns/Sample.hxx>
 

@@ -8,9 +8,9 @@ Available constructors:
 
 Parameters
 ----------
-jt : :py:class:`pyAgrum.CliqueGraph`
+jt : :py:class:`pyagrum.CliqueGraph`
     A junction tree.
-bn : :py:class:`pyAgrum.BayesNet`
+bn : :py:class:`pyagrum.BayesNet`
     A bayesian network.
 names : list
     A list of node names.
@@ -18,7 +18,7 @@ names : list
 Examples
 --------
 >>> import otagrum
->>> import pyAgrum as gum
+>>> import pyagrum as gum
 >>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
 >>> ie = gum.LazyPropagation(bn)
 >>> jtagr = ie.junctionTree()

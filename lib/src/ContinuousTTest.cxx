@@ -22,7 +22,7 @@
 #include <cmath>
 #include <tuple>
 
-#include <agrum/tools/core/timer.h>
+#include <agrum/base/core/timer.h>
 #include <openturns/DistFunc.hxx>
 #include <openturns/EmpiricalBernsteinCopula.hxx>
 #include <openturns/Log.hxx>

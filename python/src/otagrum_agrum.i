@@ -1,18 +1,18 @@
 %{
-#include <agrum/tools/graphs/diGraph.h>
-#include <agrum/tools/graphs/DAG.h>
-#include <agrum/tools/graphs/undiGraph.h>
-#include <agrum/tools/graphs/mixedGraph.h>
-#include <agrum/tools/graphs/cliqueGraph.h>
+#include <agrum/base/graphs/diGraph.h>
+#include <agrum/base/graphs/DAG.h>
+#include <agrum/base/graphs/undiGraph.h>
+#include <agrum/base/graphs/mixedGraph.h>
+#include <agrum/base/graphs/cliqueGraph.h>
 
-#include <agrum/tools/graphs/graphElements.h>
-#include <agrum/tools/multidim/potential.h>
+#include <agrum/base/graphs/graphElements.h>
+#include <agrum/base/multidim/tensor.h>
 
 using namespace gum;
 %}
 
 %pythoncode %{
-  import pyAgrum as gum
+  import pyagrum as gum
 %}
 
 // minimal insertion of aGrUM classes
@@ -20,11 +20,11 @@ using namespace gum;
 %ignore *::operator++;
 #pragma SWIG nowarn=320,317,401
 
-%import (module="pyAgrum") <agrum/tools/core/set.h>
-%import (module="pyAgrum") <agrum/tools/core/types.h>
-%import (module="pyAgrum") <agrum/tools/graphs/graphElements.h>
-%import (module="pyAgrum") <agrum/tools/graphs/diGraph.h>
-%import (module="pyAgrum") <agrum/tools/graphs/undiGraph.h>
-%import (module="pyAgrum") <agrum/tools/graphs/mixedGraph.h>
+%import (module="pyagrum") <agrum/base/core/set.h>
+%import (module="pyagrum") <agrum/base/core/types.h>
+%import (module="pyagrum") <agrum/base/graphs/graphElements.h>
+%import (module="pyagrum") <agrum/base/graphs/diGraph.h>
+%import (module="pyagrum") <agrum/base/graphs/undiGraph.h>
+%import (module="pyagrum") <agrum/base/graphs/mixedGraph.h>
 
 

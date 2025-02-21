@@ -12,7 +12,7 @@
 
 # ensures swig type tables order & dll load
 import openturns as _ot
-import pyAgrum as _gum
+import pyagrum as _gum
 
 from .otagrum import *
 

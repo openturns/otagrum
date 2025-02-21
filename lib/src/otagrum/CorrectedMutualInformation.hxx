@@ -1,7 +1,7 @@
 #ifndef OTAGRUM_CORRECTEDMUTUALINFORMATION_HXX
 #define OTAGRUM_CORRECTEDMUTUALINFORMATION_HXX
 
-#include <agrum/tools/core/hashTable.h>
+#include <agrum/base/core/hashTable.h>
 
 #include <openturns/Sample.hxx>
 #include <openturns/NormalCopula.hxx>

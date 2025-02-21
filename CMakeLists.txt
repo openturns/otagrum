@@ -27,7 +27,7 @@ if (POLICY CMP0086)
   cmake_policy(SET CMP0086 NEW)
 endif()
 
-find_package (aGrUM 1.16 CONFIG REQUIRED)
+find_package (aGrUM 2 CONFIG REQUIRED)
 message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
 
 find_package(OpenTURNS 1.23 CONFIG REQUIRED)

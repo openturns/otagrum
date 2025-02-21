@@ -9,7 +9,7 @@ Torque model
 # It has several parameters: Torque (T), Joint (J), Angle (A), Vibration (V) and Leak (L).
 
 
-import pyAgrum as gum
+import pyagrum as gum
 import openturns as ot
 import otagrum
 import numpy as np
@@ -17,8 +17,8 @@ from openturns.viewer import View
 from matplotlib import pylab as plt
 import sys
 
-from pyAgrum.lib.explain import showInformation
-from pyAgrum.lib.notebook import showInference
+from pyagrum.lib.explain import showInformation
+from pyagrum.lib.notebook import showInference
 
 gum.config["notebook", "histogram_discretized_visualisation"] = "bar"
 
@@ -326,14 +326,14 @@ bn.cpt("T").fillWith(
 )
 bn.cpt("A").fillWith(list(AngleKnowingTorque)).normalizeAsCPT()
 
-p = gum.Potential().add(bn.variable("J")).add(bn.variable("A")).add(bn.variable("L"))
+p = gum.Tensor().add(bn.variable("J")).add(bn.variable("A")).add(bn.variable("L"))
 p.fillWith(list(LeakageKnowingAngleAndJoint))
 s = bn.cpt("L").names
 p.reorganize(s)
 bn.cpt("L").fillWith(p)
 
 
-p = gum.Potential().add(bn.variable("J")).add(bn.variable("T")).add(bn.variable("V"))
+p = gum.Tensor().add(bn.variable("J")).add(bn.variable("T")).add(bn.variable("V"))
 p.fillWith(list(VibrationKnowingTorqueAndJoint))
 s = bn.cpt("V").names
 p.reorganize(s)
@@ -359,7 +359,7 @@ ie.setEvidence({"L": True})
 ie.makeInference()
 
 # %%
-distrib = otagrum.Utils.FromPotential(ie.jointPosterior({"T", "J"}))
+distrib = otagrum.Utils.FromTensor(ie.jointPosterior({"T", "J"}))
 distrib.drawPDF()
 View(distrib.drawPDF())
 
@@ -370,6 +370,6 @@ ie.setEvidence({"L": False})
 ie.makeInference()
 
 # %%
-distrib = otagrum.Utils.FromPotential(ie.jointPosterior({"T", "J"}))
+distrib = otagrum.Utils.FromTensor(ie.jointPosterior({"T", "J"}))
 View(distrib.drawPDF())
 plt.show()

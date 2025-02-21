@@ -1,10 +1,10 @@
 #ifndef OTAGRUM_CONTINUOUSMIIC_HXX
 #define OTAGRUM_CONTINUOUSMIIC_HXX
 
-#include <agrum/tools/graphs/undiGraph.h>
-#include <agrum/tools/graphs/mixedGraph.h>
-#include <agrum/tools/core/heap.h>
-#include <agrum/tools/core/hashTable.h>
+#include <agrum/base/graphs/undiGraph.h>
+#include <agrum/base/graphs/mixedGraph.h>
+#include <agrum/base/core/heap.h>
+#include <agrum/base/core/hashTable.h>
 
 #include <openturns/Sample.hxx>
 

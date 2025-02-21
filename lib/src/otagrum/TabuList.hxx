@@ -1,8 +1,8 @@
 #ifndef OTAGRUM_TABULIST_HXX
 #define OTAGRUM_TABULIST_HXX
 
-#include <agrum/tools/graphs/DAG.h>
-#include <agrum/tools/core/list.h>
+#include <agrum/base/graphs/DAG.h>
+#include <agrum/base/core/list.h>
 #include <agrum/BN/learning/structureUtils/graphChange.h>
 
 #include <openturns/Sample.hxx>

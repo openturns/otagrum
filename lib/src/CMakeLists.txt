@@ -52,7 +52,7 @@ set_target_properties ( otagrum PROPERTIES VERSION ${LIB_VERSION} )
 set_target_properties ( otagrum PROPERTIES SOVERSION ${LIB_SOVERSION} )
 
 target_link_libraries (otagrum ${OPENTURNS_LIBRARY})
-target_link_libraries (otagrum agrum)
+target_link_libraries (otagrum agrumBN)
 
 # Add targets to the build-tree export set
 export (TARGETS otagrum FILE ${PROJECT_BINARY_DIR}/otagrum-Targets.cmake)

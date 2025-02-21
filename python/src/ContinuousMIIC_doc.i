@@ -20,7 +20,7 @@ rely on an information theoretic score."
 
 Parameters
 ----------
-pdag : :py:class:`pyAgrum.MixedGraph`
+pdag : :py:class:`pyagrum.MixedGraph`
     dag
 
 Returns
@@ -35,7 +35,7 @@ dot : str
 
 Parameters
 ----------
-pdag : :py:class:`pyAgrum.UndiGraph`
+pdag : :py:class:`pyagrum.UndiGraph`
     dag
 
 Returns
@@ -50,7 +50,7 @@ dot : str
 
 Returns
 -------
-gum::UndiGraph : :py:class:`pyAgrum.UndiGraph`
+gum::UndiGraph : :py:class:`pyagrum.UndiGraph`
     The learned skeleton
 
 Notes
@@ -65,7 +65,7 @@ and removing edges which (corrected) conditional mutual information is negative.
 
 Returns
 -------
-gum::MixedGraph : :py:class:`pyAgrum.MixedGraph`
+gum::MixedGraph : :py:class:`pyagrum.MixedGraph`
     the learned PDAG
 
 Notes
@@ -160,7 +160,7 @@ alpha : float
 
 Parameters
 ----------
-arc : :py:class:`pyAgrum.Arc`
+arc : :py:class:`pyagrum.Arc`
 head : int
     Head node id
 tail : int
@@ -178,7 +178,7 @@ knowledge.
 
 Parameters
 ----------
-arc : :py:class:`pyAgrum.Arc`
+arc : :py:class:`pyagrum.Arc`
 head : int
     Head node id
 tail : int
@@ -195,4 +195,4 @@ tail : str
 
 Returns
 -------
-vars : sequence of :py:class:`pyAgrum.Arc`"
+vars : sequence of :py:class:`pyagrum.Arc`"
