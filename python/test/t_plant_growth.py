@@ -3,7 +3,7 @@
 
 import openturns as ot
 import otagrum
-import pyAgrum as gum
+import pyagrum as gum
 
 # Create variables
 light = gum.LabelizedVariable("Light", "quality of light", 0)
@@ -115,7 +115,7 @@ h_dist_wet.drawPDF()
 
 
 # Get the distribution of the variable "Light"
-l_dist_wet = otagrum.Utils.FromPotential(ie.posterior("Light"))
+l_dist_wet = otagrum.Utils.FromTensor(ie.posterior("Light"))
 print(l_dist_wet)
 l_dist_wet.drawPDF()
 
@@ -125,6 +125,6 @@ ie = gum.LazyPropagation(bn)
 targets = set(["Height", "Moisture"])
 ie.addJointTarget(targets)
 ie.makeInference()
-h_m_dist = otagrum.Utils.FromPotential(ie.jointPosterior(targets))
+h_m_dist = otagrum.Utils.FromTensor(ie.jointPosterior(targets))
 print(h_m_dist.getDescription())
 print(h_m_dist.getMarginal(0))

@@ -28,7 +28,7 @@ Examples
 --------
 >>> import otagrum
 >>> import openturns as ot
->>> import pyAgrum as gum
+>>> import pyagrum as gum
 >>> bn = gum.BayesNet.fastPrototype('0->1->2->3;1->4->3;4->5;6->5;7->5')
 >>> ie = gum.LazyPropagation(bn)
 >>> jtagr = ie.junctionTree()

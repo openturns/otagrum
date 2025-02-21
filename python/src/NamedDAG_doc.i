@@ -9,9 +9,9 @@ Available constructors:
 
 Parameters
 ----------
-bn : :py:class:`pyAgrum.BayesNet`
+bn : :py:class:`pyagrum.BayesNet`
     Bayesian network
-dag : :py:class:`pyAgrum.DAG`
+dag : :py:class:`pyagrum.DAG`
     Directed Acyclic Graph
 names : sequence of str
     Node names"
@@ -108,6 +108,6 @@ dot : str
 
 Returns
 -------
-dag : :py:class:`pyAgrum.DAG`
+dag : :py:class:`pyagrum.DAG`
     The underlying DAG
 "

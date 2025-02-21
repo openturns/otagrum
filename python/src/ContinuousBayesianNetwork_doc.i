@@ -23,7 +23,7 @@ Create a CBN from a DAG structure and a collection of distributions
 
 >>> import otagrum
 >>> import openturns as ot
->>> import pyAgrum as gum
+>>> import pyagrum as gum
 >>> bn = gum.BayesNet.fastPrototype('A->C->B;')
 >>> ndag = otagrum.NamedDAG(bn)
 >>> marginals = [ot.Uniform(0.0, 1.0) for i in range(ndag.getSize())]
@@ -48,7 +48,7 @@ Draw a sample from the joint distribution encoded by the CBN
 
 Returns
 -------
-dag : :py:class:`pyAgrum.DAG`
+dag : :py:class:`pyagrum.DAG`
     The underlying DAG"
 
 // ----------------------------------------------------------------------------

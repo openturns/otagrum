@@ -45,19 +45,19 @@ Plant growth
 # %%
 import openturns as ot
 import otagrum
-import pyAgrum as gum
+import pyagrum as gum
 from openturns.viewer import View
 from matplotlib import pylab as plt
 
 # %%
 
 
-def showPotential(pot):
+def showTensor(pot):
     try:
         # fails outside notebook
         import pyAgrum.lib.notebook as gnb
 
-        gnb.showPotential(pot)
+        gnb.showTensor(pot)
     except ImportError:
         pass
 
@@ -147,7 +147,7 @@ bn
 
 # %%
 bn.cpt(indexLight)[:] = [0.25, 0.75]
-showPotential(bn.cpt(indexLight))
+showTensor(bn.cpt(indexLight))
 
 # %%
 # The influence of **Light** on **Moisture** is modelized by:
@@ -163,7 +163,7 @@ showPotential(bn.cpt(indexLight))
 # %%
 bn.cpt(indexMoisture)[{"Light": "Dim"}] = [0.2, 0.8]
 bn.cpt(indexMoisture)[{"Light": "Bright"}] = [0.6, 0.4]
-showPotential(bn.cpt(indexMoisture))
+showTensor(bn.cpt(indexMoisture))
 
 # %%
 # The influence of **(Light, Moisture)** on **Height** is modelized by:
@@ -210,7 +210,7 @@ bn.cpt(indexHeight)[{"Light": "Dim", "Moisture": "Wet"}] = otagrum.Utils.Discret
 bn.cpt(indexHeight)[{"Light": "Bright", "Moisture": "Wet"}] = otagrum.Utils.Discretize(
     heightWhenBrightAndWet, height
 )[:]
-showPotential(bn.cpt(indexHeight))
+showTensor(bn.cpt(indexHeight))
 
 # %%
 # We can study the plant growth variability in different situations like:
@@ -263,7 +263,7 @@ View(h_dist_wet.drawPDF())
 # Get the distribution of the variable "Light"
 
 # %%
-l_dist_wet = otagrum.Utils.FromPotential(ie.posterior("Light"))
+l_dist_wet = otagrum.Utils.FromTensor(ie.posterior("Light"))
 print(l_dist_wet)
 View(l_dist_wet.drawPDF())
 
@@ -272,7 +272,7 @@ View(l_dist_wet.drawPDF())
 ie = gum.LazyPropagation(bn)
 ie.addJointTarget({"Height", "Moisture"})
 ie.makeInference()
-h_m_dist = otagrum.Utils.FromPotential(ie.jointPosterior({"Height", "Moisture"}))
+h_m_dist = otagrum.Utils.FromTensor(ie.jointPosterior({"Height", "Moisture"}))
 print(h_m_dist.getDescription())
 print(h_m_dist.getMarginal(0))
 plt.show()

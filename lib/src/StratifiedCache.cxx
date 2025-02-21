@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include <agrum/tools/core/hashTable.h>
+#include <agrum/base/core/hashTable.h>
 
 #include "otagrum/StratifiedCache.hxx"
 

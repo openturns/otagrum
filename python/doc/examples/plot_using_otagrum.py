@@ -5,7 +5,7 @@ Using otagrum
 
 # %%
 import openturns as ot
-import pyAgrum as gum
+import pyagrum as gum
 from matplotlib import pylab as plt
 import otagrum
 

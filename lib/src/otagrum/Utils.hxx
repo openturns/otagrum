@@ -29,8 +29,8 @@
 #include <openturns/StorageManager.hxx>
 #include <openturns/UserDefined.hxx>
 
-#include <agrum/tools/multidim/potential.h>
-#include <agrum/tools/variables/discretizedVariable.h>
+#include <agrum/base/multidim/tensor.h>
+#include <agrum/base/variables/discretizedVariable.h>
 
 #include "otagrum/otagrumprivate.hxx"
 
@@ -41,17 +41,17 @@ class OTAGRUM_API Utils
 {
 public:
 
-  static gum::Potential<double> Discretize(const OT::DistributionImplementation &distribution,
+  static gum::Tensor<double> Discretize(const OT::DistributionImplementation &distribution,
       const gum::DiscretizedVariable<double> &v);
 
   /* Helper function to discretize a continuous distribution */
-  static gum::Potential<double> Discretize(const OT::Distribution &distribution,
+  static gum::Tensor<double> Discretize(const OT::Distribution &distribution,
       const gum::DiscretizedVariable<double> &v,
       bool isTruncated = true);
 
-  static OT::Distribution FromMarginal(const gum::Potential<double> &pot);
+  static OT::Distribution FromMarginal(const gum::Tensor<double> &pot);
 
-  static OT::Distribution FromPotential(const gum::Potential<double> &pot);
+  static OT::Distribution FromTensor(const gum::Tensor<double> &pot);
 
   static OT::Indices FromNodeSet(const gum::NodeSet &clique);
 

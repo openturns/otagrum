@@ -13,7 +13,7 @@ data : 2-d sequence of float
 
 Parameters
 ----------
-pdag : :py:class:`pyAgrum.UndiGraph`
+pdag : :py:class:`pyagrum.UndiGraph`
     dag
 
 Returns

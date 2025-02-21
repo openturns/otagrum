@@ -22,11 +22,11 @@
 #ifndef OTAGRUM_CONTINUOUSPC_HXX
 #define OTAGRUM_CONTINUOUSPC_HXX
 
-#include <agrum/tools/graphs/algorithms/triangulations/defaultTriangulation.h>
-#include <agrum/tools/graphs/algorithms/triangulations/junctionTreeStrategies/defaultJunctionTreeStrategy.h>
-#include <agrum/tools/graphs/cliqueGraph.h>
-#include <agrum/tools/graphs/mixedGraph.h>
-#include <agrum/tools/graphs/undiGraph.h>
+#include <agrum/base/graphs/algorithms/triangulations/defaultTriangulation.h>
+#include <agrum/base/graphs/algorithms/triangulations/junctionTreeStrategies/defaultJunctionTreeStrategy.h>
+#include <agrum/base/graphs/cliqueGraph.h>
+#include <agrum/base/graphs/mixedGraph.h>
+#include <agrum/base/graphs/undiGraph.h>
 
 #include <openturns/Sample.hxx>
 

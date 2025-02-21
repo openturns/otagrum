@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <agrum/BN/BayesNet.h>
-#include <agrum/tools/graphs/DAG.h>
+#include <agrum/base/graphs/DAG.h>
 
 #include <openturns/Description.hxx>
 #include <openturns/Indices.hxx>

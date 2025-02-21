@@ -23,7 +23,7 @@ and constraint propagation."
 
 Parameters
 ----------
-pdag : :py:class:`pyAgrum.MixedGraph`
+pdag : :py:class:`pyagrum.MixedGraph`
     dag
 
 Returns
@@ -38,7 +38,7 @@ dot : str
 
 Parameters
 ----------
-pdag : :py:class:`pyAgrum.UndiGraph`
+pdag : :py:class:`pyagrum.UndiGraph`
     dag
 
 Returns
@@ -53,7 +53,7 @@ dot : str
 
 Returns
 -------
-gum::UndiGraph : :py:class:`pyAgrum.UndiGraph`
+gum::UndiGraph : :py:class:`pyagrum.UndiGraph`
     The learned skeleton
 
 Notes
@@ -69,7 +69,7 @@ a subset of their neighbors."
 
 Returns
 -------
-gum::MixedGraph : :py:class:`pyAgrum.MixedGraph`
+gum::MixedGraph : :py:class:`pyagrum.MixedGraph`
     the learned PDAG
 
 Notes

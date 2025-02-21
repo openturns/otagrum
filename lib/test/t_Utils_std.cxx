@@ -2,10 +2,10 @@
 
 #include <agrum/BN/BayesNet.h>
 #include <agrum/BN/inference/lazyPropagation.h>
-#include <agrum/tools/multidim/potential.h>
-#include <agrum/tools/variables/discretizedVariable.h>
-#include <agrum/tools/variables/labelizedVariable.h>
-#include <agrum/tools/variables/rangeVariable.h>
+#include <agrum/base/multidim/tensor.h>
+#include <agrum/base/variables/discretizedVariable.h>
+#include <agrum/base/variables/labelizedVariable.h>
+#include <agrum/base/variables/rangeVariable.h>
 
 #include <openturns/Uniform.hxx>
 
@@ -20,11 +20,11 @@ void test_basics()
   gum::DiscretizedVariable<double> w("w", "w",
                                      std::vector<double> {-1, 4, 10, 30, 40});
 
-  std::cout << "\n** From OT::Distribution to gum::Potential:\n";
+  std::cout << "\n** From OT::Distribution to gum::Tensor:\n";
 
   auto unifDistrib = OT::Uniform(0.0, 40.0);
-  gum::Potential<double> pv = Utils::Discretize(unifDistrib, v);
-  gum::Potential<double> pw = Utils::Discretize(unifDistrib, w);
+  gum::Tensor<double> pv = Utils::Discretize(unifDistrib, v);
+  gum::Tensor<double> pw = Utils::Discretize(unifDistrib, w);
   std::cout << pv << std::endl;
   std::cout << pw << std::endl;
 
@@ -45,7 +45,7 @@ void test_basics()
 
   std::cout << "\n** From RangeVariable\n";
   gum::RangeVariable x("x", "x", 3, 10);
-  gum::Potential<double> px;
+  gum::Tensor<double> px;
   px.add(x);
   px.fillWith({1, 2, 3, 4, 5, 6, 7, 8}).normalize();
   std::cout << px << std::endl;
@@ -58,7 +58,7 @@ void test_fromMarginal()
     std::cout << "\n** From LabelizedVariable\n";
     gum::LabelizedVariable y("y", "y", 0);
     y.addLabel("True").addLabel("Maybe").addLabel("False");
-    gum::Potential<double> py;
+    gum::Tensor<double> py;
     py.add(y);
     py.fillWith({2, 8, 4}).normalize();
     std::cout << py << std::endl;
@@ -68,7 +68,7 @@ void test_fromMarginal()
     std::cout << "\n** From LabelizedVariable but numerical\n";
     gum::LabelizedVariable y("y", "y", 0);
     y.addLabel("1").addLabel("1.5").addLabel("3.15");
-    gum::Potential<double> py;
+    gum::Tensor<double> py;
     py.add(y);
     py.fillWith({2, 8, 4}).normalize();
     std::cout << py << std::endl;
@@ -78,7 +78,7 @@ void test_fromMarginal()
     std::cout << "\n** From LabelizedVariable but partially numerical\n";
     gum::LabelizedVariable y("y", "y", 0);
     y.addLabel("1").addLabel("foo").addLabel("3.15");
-    gum::Potential<double> py;
+    gum::Tensor<double> py;
     py.add(y);
     py.fillWith({2, 8, 4}).normalize();
     std::cout << py << std::endl;
@@ -87,7 +87,7 @@ void test_fromMarginal()
   {
     std::cout << "\n** From Discretized\n";
     gum::DiscretizedVariable<double> y("y", "y", {0, 0.5, 1.5, 2, 2.3, 10});
-    gum::Potential<double> py;
+    gum::Tensor<double> py;
     py.add(y);
     py.fillWith({2, 8, 4}).normalize();
     std::cout << py << std::endl;
@@ -95,27 +95,27 @@ void test_fromMarginal()
   }
 }
 
-void test_fromPotential()
+void test_fromTensor()
 {
   gum::LabelizedVariable y("y", "y", 0);
   y.addLabel("True").addLabel("Maybe").addLabel("False");
 
   gum::DiscretizedVariable<double> z("z", "z", {0, 0.5, 1.5});
 
-  gum::Potential<double> p;
+  gum::Tensor<double> p;
   p.add(y);
   p.add(z);
   p.fillWith({1, 2, 3, 4, 5, 6}).normalize();
 
   std::cout << p << std::endl;
 
-  auto distribution = Utils::FromPotential(p);
+  auto distribution = Utils::FromTensor(p);
 
   std::cout << "Marginal 0 " << distribution.getMarginal(0) << std::endl;
-  std::cout << "MarginalPotential 0 " << p.sumIn({&y}) << std::endl;
+  std::cout << "MarginalTensor 0 " << p.sumIn({&y}) << std::endl;
 
   std::cout << "Marginal 1 " << distribution.getMarginal(1) << std::endl;
-  std::cout << "MarginalPotential 1 " << p.sumIn({&z}) << std::endl;
+  std::cout << "MarginalTensor 1 " << p.sumIn({&z}) << std::endl;
 }
 
 void test_fromInference()
@@ -137,16 +137,16 @@ void test_fromInference()
   ie.makeInference();
 
   std::cout << ie.jointPosterior({0, 2}).putFirst(&bn.variable("A")) << std::endl;
-  std::cout << Utils::FromPotential(ie.jointPosterior({0, 2}).putFirst(&bn.variable("A"))) << std::endl;
+  std::cout << Utils::FromTensor(ie.jointPosterior({0, 2}).putFirst(&bn.variable("A"))) << std::endl;
 
   std::cout << ie.posterior(0) << std::endl;
-  std::cout << Utils::FromPotential(ie.posterior(0)) << std::endl;
+  std::cout << Utils::FromTensor(ie.posterior(0)) << std::endl;
 
   std::cout << ie.posterior(1) << std::endl;
-  std::cout << Utils::FromPotential(ie.posterior(1)) << std::endl;
+  std::cout << Utils::FromTensor(ie.posterior(1)) << std::endl;
 
   std::cout << ie.posterior(2) << std::endl;
-  std::cout << Utils::FromPotential(ie.posterior(2)) << std::endl;
+  std::cout << Utils::FromTensor(ie.posterior(2)) << std::endl;
 
 }
 
@@ -154,7 +154,7 @@ int main(int /*argc*/, char ** /*argv*/)
 {
   //test_basics();
   //test_fromMarginal();
-  //test_fromPotential();
+  //test_fromTensor();
   test_fromInference();
   return 0;
 }

@@ -33,18 +33,18 @@
 #include <agrum/BN/io/BIF/BIFReader.h>
 #include <agrum/BN/io/BIF/BIFWriter.h>
 
-#include <agrum/tools/core/exceptions.h>
+#include <agrum/base/core/exceptions.h>
 
-#include <agrum/tools/multidim/instantiation.h>
-#include <agrum/tools/multidim/potential.h>
-#include <agrum/tools/variables/IDiscretizedVariable.h>
-#include <agrum/tools/variables/discretizedVariable.h>
-#include <agrum/tools/variables/rangeVariable.h>
+#include <agrum/base/multidim/instantiation.h>
+#include <agrum/base/multidim/tensor.h>
+#include <agrum/base/variables/IDiscretizedVariable.h>
+#include <agrum/base/variables/discretizedVariable.h>
+#include <agrum/base/variables/rangeVariable.h>
 
 namespace OTAGRUM
 {
 
-gum::Potential<double>
+gum::Tensor<double>
 Utils::Discretize(const OT::DistributionImplementation &distribution,
                   const gum::DiscretizedVariable<double> &v)
 {
@@ -53,7 +53,7 @@ Utils::Discretize(const OT::DistributionImplementation &distribution,
 
 
 /* Helper function to discretize a continuous distribution */
-gum::Potential<double>
+gum::Tensor<double>
 Utils::Discretize(const OT::Distribution &distribution,
                   const gum::DiscretizedVariable<double> &v,
                   bool isTruncated)
@@ -98,7 +98,7 @@ Utils::Discretize(const OT::Distribution &distribution,
   for (gum::Size i = 0; i < v.domainSize(); ++i)
     result[i] /= sum;
 
-  gum::Potential<double> p;
+  gum::Tensor<double> p;
   p.add(v);
   p.fillWith(result);
 
@@ -106,7 +106,7 @@ Utils::Discretize(const OT::Distribution &distribution,
 }
 
 
-OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
+OT::Distribution Utils::FromTensor(const gum::Tensor<double> &pot)
 {
   if (pot.nbrDim() < 1)
   {
@@ -165,7 +165,7 @@ OT::Distribution Utils::FromPotential(const gum::Potential<double> &pot)
 }
 
 
-OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot)
+OT::Distribution Utils::FromMarginal(const gum::Tensor<double> &pot)
 {
   if (pot.nbrDim() != 1)
   {
@@ -178,7 +178,7 @@ OT::Distribution Utils::FromMarginal(const gum::Potential<double> &pot)
   gum::Instantiation inst(pot);
   OT::UnsignedInteger collectionSize = v.domainSize();
 
-  // the probas of the Potential in a Point collection
+  // the probas of the Tensor in a Point collection
   OT::Point probas(collectionSize);
   for (inst.setFirst(); !inst.end(); ++inst)
   {

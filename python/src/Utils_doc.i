@@ -17,17 +17,17 @@ Parameters
 ----------
 distribution : :py:class:`openturns.Distribution`
     An continuous 1-d distribution.
-v : :py:class:`pyAgrum.DiscretizedVariable`
+v : :py:class:`pyagrum.DiscretizedVariable`
     A discrete variable.
 
 Returns
 -------
-pot : :py:class:`pyAgrum.Potential`
+pot : :py:class:`pyagrum.Tensor`
     The resulting potential.
 
 Examples
 --------
->>> import pyAgrum as gum
+>>> import pyagrum as gum
 >>> import openturns as ot
 >>> import otagrum
 >>> height = gum.DiscretizedVariable('Height', 'plant growth', [0.0, 10.0, 20.0, 30.0])
@@ -45,7 +45,7 @@ either :py:class:`openturns.Histogram` or :py:class:`openturns.UserDefined`.
 
 Parameters
 ----------
-p : :py:class:`pyAgrum.Potential`
+p : :py:class:`pyagrum.Tensor`
     A potential with one variable.
 
 Returns
@@ -55,17 +55,17 @@ distribution : :py:class:`openturns.Distribution`
 
 Examples
 --------
->>> import pyAgrum as gum
+>>> import pyagrum as gum
 >>> import otagrum
 >>> light = gum.LabelizedVariable('Light', 'quality of light', 0).addLabel('Dim').addLabel('Bright')
->>> pot = gum.Potential().add(light)
+>>> pot = gum.Tensor().add(light)
 >>> pot[:]= [0.25, 0.75]
 >>> str(otagrum.Utils.FromMarginal(pot))
 'UserDefined({x = [0], p = 0.25}, {x = [1], p = 0.75})'"
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") OTAGRUM::Utils::FromPotential
+%feature("docstring") OTAGRUM::Utils::FromTensor
 "Convert an n-d probability table to a distribution.
 
 Converts a multivariate aGrUM probability table to an OpenTURNS distribution,
@@ -73,7 +73,7 @@ using :py:class:`openturns.MixedHistogramUserDefined`
 
 Parameters
 ----------
-p : :py:class:`pyAgrum.Potential`
+p : :py:class:`pyagrum.Tensor`
     The potential.
 
 Returns
@@ -83,13 +83,13 @@ distribution : :py:class:`openturns.Distribution`
 
 Examples
 --------
->>> import pyAgrum as gum
+>>> import pyagrum as gum
 >>> import otagrum
 >>> light = gum.LabelizedVariable('Light', 'light', 0).addLabel('Dim').addLabel('Bright')
 >>> moisture = gum.LabelizedVariable('Moisture', 'moisture', 0).addLabel('Dry').addLabel('Wet')
->>> pot = gum.Potential().add(light).add(moisture)
+>>> pot = gum.Tensor().add(light).add(moisture)
 >>> pot[{'Light': 'Dim',    'Moisture': 'Dry'}] = 0.3
 >>> pot[{'Light': 'Dim',    'Moisture': 'Wet'}] = 0.2
 >>> pot[{'Light': 'Bright', 'Moisture': 'Dry'}] = 0.1
 >>> pot[{'Light': 'Bright', 'Moisture': 'Wet'}] = 0.4
->>> dist = otagrum.Utils.FromPotential(pot)"
+>>> dist = otagrum.Utils.FromTensor(pot)"
