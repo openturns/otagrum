@@ -17,7 +17,7 @@ ctest --output-on-failure --timeout 100 ${MAKEFLAGS}
 # coverage
 gcov `find lib/src/ -name "*.gcno"`
 lcov --capture --directory . --output-file coverage.info --include "*.cxx"
-genhtml --output-directory --ignore-errors corrupt coverage coverage.info
+genhtml --ignore-errors inconsistent --output-directory coverage coverage.info
 cp -v coverage.info coverage
 
 uid=$1
