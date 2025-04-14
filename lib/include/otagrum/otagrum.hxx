@@ -35,6 +35,7 @@
 #include "otagrum/JunctionTreeBernsteinCopulaFactory.hxx"
 #include "otagrum/ContinuousBayesianNetwork.hxx"
 #include "otagrum/ContinuousBayesianNetworkFactory.hxx"
+#include "otagrum/DistributionBayesianNetwork.hxx"
 #include "otagrum/StratifiedCache.hxx"
 
 #endif // OTAGRUM_HXX
