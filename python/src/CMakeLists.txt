@@ -1,8 +1,5 @@
 
-include_directories (${OPENTURNS_INCLUDE_DIRS})
-include_directories (${OPENTURNS_SWIG_INCLUDE_DIRS})
 add_definitions (${OPENTURNS_SWIG_DEFINITIONS})
-include_directories (${INTERNAL_INCLUDE_DIRS})
 
 include_directories (${AGRUM_INCLUDE_DIRS})
 
@@ -12,13 +9,14 @@ set (SWIG_COMPILE_FLAGS "" CACHE STRING "C++ compiler flags used for wrapper cod
 macro (ot_add_python_module MODULENAME SOURCEFILE)
   set_source_files_properties (${SOURCEFILE} PROPERTIES CPLUSPLUS ON)
   set_source_files_properties (${SOURCEFILE} PROPERTIES SWIG_MODULE_NAME ${MODULENAME})
+  set_source_files_properties (${SOURCEFILE} PROPERTIES INCLUDE_DIRECTORIES "${INTERNAL_INCLUDE_DIRS};${OPENTURNS_INCLUDE_DIRS};${OPENTURNS_SWIG_INCLUDE_DIRS}")
+
   ot_install_swig_file (${SOURCEFILE})
   if (${ARGC} GREATER 2)
     set (SWIG_MODULE_${MODULENAME}_python_EXTRA_DEPS ${ARGN})
   endif ()
 
   set (swig_other_sources)
-  set (docstring_sources)
   foreach (it ${ARGN})
     if (${it} MATCHES ".*\\.i$")
       ot_install_swig_file (${it})
@@ -27,25 +25,17 @@ macro (ot_add_python_module MODULENAME SOURCEFILE)
     endif ()
   endforeach ()
 
-  # swig_add_module is deprecated
-  swig_add_library (${MODULENAME}_python LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
-
-  # UseSWIG generates now standard target names
   set (module_target ${MODULENAME}_python)
 
-  swig_link_libraries (${MODULENAME}_python otagrum)
-  target_include_directories (${MODULENAME}_python PRIVATE ${Python_INCLUDE_DIRS})
+  swig_add_library (${module_target} LANGUAGE python SOURCES ${SOURCEFILE} ${swig_other_sources})
 
-  if (TARGET Python::Module)
-    target_link_libraries (${module_target} Python::Module)
-  else ()
-    target_link_libraries_with_dynamic_lookup (${module_target} ${Python_LIBRARIES})
-  endif ()
+  target_include_directories(${module_target} PRIVATE ${INTERNAL_INCLUDE_DIRS})
+
+  target_link_libraries (${module_target} otagrum)
+  target_link_libraries (${module_target} Python::Module)
 
   set_target_properties (${module_target} PROPERTIES OUTPUT_NAME ${MODULENAME})
-
   set_target_properties (${module_target} PROPERTIES COMPILE_FLAGS "${SWIG_COMPILE_FLAGS}")
-
   set_target_properties (${module_target} PROPERTIES UNITY_BUILD OFF)
 
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULENAME}.py
