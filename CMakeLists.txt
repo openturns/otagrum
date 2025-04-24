@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required (VERSION 3.18)
 
-option(BUILD_PYTHON "Build the python module for the library" ON)
-option(USE_SPHINX "Use sphinx for documentation" OFF)
-option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option (BUILD_PYTHON                 "Build the python module for the library"                               ON)
+option (USE_SPHINX                   "Use sphinx for documentation"                                          OFF)
+option (BUILD_SHARED_LIBS            "Build shared libraries"                                                ON)
 
 # By default, build in Release mode. Must appear before project() command
 set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
@@ -49,25 +49,20 @@ set(OTAGRUM_CONFIG_CMAKE_PATH ${CMAKE_INSTALL_LIBDIR}/cmake/otagrum)
 set(OTAGRUM_DOC_PATH ${CMAKE_INSTALL_DOCDIR})
 
 if (BUILD_PYTHON)
-  # follow agrum swig version requirement
-  find_package(SWIG 4.0)
-  if (SWIG_FOUND)
-    include(${SWIG_USE_FILE})
-    include(TargetLinkLibrariesWithDynamicLookup)
-  endif ()
+  find_package (SWIG 4)
+  include (${SWIG_USE_FILE})
 
-  if (CMAKE_VERSION VERSION_LESS 3.28)
-    find_package (Python 3.6 COMPONENTS Interpreter Development)
+  option (USE_PYTHON_SABI "Use Python stable ABI" OFF)
+  if (USE_PYTHON_SABI AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.26)
+    find_package (Python 3.6 COMPONENTS Interpreter Development.SABIModule)
+    add_library (Python::Module ALIAS Python::SABIModule)
   else ()
-    find_package (Python 3.6 COMPONENTS Interpreter Development.Module Development.SABIModule)
+    find_package (Python 3.6 COMPONENTS Interpreter Development.Module)
   endif ()
 
   if (Python_FOUND)
     include (FindPythonModule)
     find_python_module (matplotlib)
-    if (NOT TARGET Python::Module)
-      include (TargetLinkLibrariesWithDynamicLookup)
-    endif ()
 
     if (USE_SPHINX)
       find_program (SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
