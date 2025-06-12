@@ -14,7 +14,7 @@ FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
 %__cmake -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}
 
 Name:           otagrum
-Version:        0.11
+Version:        0.12
 Release:        0%{?dist}
 Summary:        OpenTURNS module
 Group:          System Environment/Libraries
