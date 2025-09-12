@@ -41,7 +41,7 @@ public:
   bool isLast() const;
   void next();
   const OT::Indices &current() const;
-  std::string __str__(const std::string &delim = "") const;
+  std::string __str__(const std::string &delim = "") const override;
 
 private:
   void set(OT::UnsignedInteger pos, int val);

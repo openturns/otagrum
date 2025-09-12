@@ -57,7 +57,7 @@ public:
       const OT::UnsignedInteger Z,
       const OT::Indices & X) const;
 
-  std::string __str__(const std::string &offset = "") const;
+  std::string __str__(const std::string &offset = "") const override;
 
   void clearCache() const;
   void clearCacheLevel(const OT::UnsignedInteger level) const;

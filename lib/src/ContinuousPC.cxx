@@ -70,7 +70,7 @@ template <> class HashFunc<Triplet> : public HashFuncBase<Triplet>
 {
 public:
   /// computes the hashed value of a key
-  Size operator()(const Triplet &key) const
+  Size operator()(const Triplet &key) const override
   {
     return (((key.x * HashFuncConst::gold + key.y) * HashFuncConst::gold +
              key.z) *

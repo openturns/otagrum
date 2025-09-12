@@ -59,7 +59,7 @@ public:
 
   NamedJunctionTree getMarginal(const OT::Indices & indices) const;
 
-  OT::String __str__(const OT::String &offset = "") const;
+  OT::String __str__(const OT::String &offset = "") const override;
 
   OT::Indices getOrderMaxFirst() const;
 

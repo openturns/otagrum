@@ -63,7 +63,7 @@ public:
 
   int maxLevel() const;
 
-  std::string __str__(const std::string& offset = "") const;
+  std::string __str__(const std::string& offset = "") const override;
 };
 } // OTAGRUM
 #endif // OTAGRUM_STRATIFIEDCACHE_H
