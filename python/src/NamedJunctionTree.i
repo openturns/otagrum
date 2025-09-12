@@ -1,8 +1,5 @@
 // SWIG file NamedJunctionTree.i
 
-
-%template(IndicesList) OT::Collection<OT::Indices>;
-
 %{
 #include "otagrum/NamedJunctionTree.hxx"
 
