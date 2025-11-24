@@ -1,30 +1,15 @@
 # norootforbuild
-%{?__python3: %global __python %{__python3}}
-%if 0%{?suse_version}
-%global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
-%else
-%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%endif
-
-%define __cmake %{_bindir}/cmake
-%define cmake \
-CFLAGS="${CFLAGS:-%optflags}" ; export CFLAGS ; \
-CXXFLAGS="${CXXFLAGS:-%optflags}" ; export CXXFLAGS ; \
-FFLAGS="${FFLAGS:-%optflags}" ; export FFLAGS ; \
-%__cmake -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix}
+%global python_sitearch %{_libdir}/python%(python3 -c "import sysconfig; print(sysconfig.get_python_version())")/site-packages
 
 Name:           otagrum
-Version:        0.12
+Version:        0.13
 Release:        0%{?dist}
 Summary:        OpenTURNS module
 Group:          System Environment/Libraries
 License:        LGPLv3+
 URL:            http://www.openturns.org/
 Source0:        http://downloads.sourceforge.net/openturns-modules/otagrum/otagrum-%{version}.tar.bz2
-BuildRequires:  gcc-c++, cmake, swig >= 4
-%if 0%{?suse_version}
-BuildRequires:  gcc11-c++
-%endif
+BuildRequires:  gcc-c++, cmake, swig
 BuildRequires:  openturns-devel
 BuildRequires:  python3-openturns
 BuildRequires:  python3-devel
@@ -64,19 +49,17 @@ Python textual interface to otagrum uncertainty library
 %setup -q
 
 %build
-%if 0%{?suse_version}
-export CXX=/usr/bin/g++-11
-%endif
 %cmake -DINSTALL_DESTDIR:PATH=%{buildroot} \
        -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
        -DCMAKE_UNITY_BUILD=ON .
-make %{?_smp_mflags}
+%cmake_build
 
 %install
-make install DESTDIR=%{buildroot}
+%cmake_install
 
 %check
-LD_LIBRARY_PATH=%{buildroot}%{_libdir} ctest %{?_smp_mflags} --output-on-failure -R pyinstallcheck
+export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
+%ctest --tests-regex pyinstallcheck
 
 %post -n libotagrum0 -p /sbin/ldconfig 
 %postun -n libotagrum0 -p /sbin/ldconfig 

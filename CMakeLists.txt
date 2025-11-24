@@ -14,19 +14,6 @@ string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 # set module dir to find custom scripts
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-if (POLICY CMP0042)
-  # MACOSX_RPATH is enabled by default
-  cmake_policy(SET CMP0042 NEW)
-endif()
-if (POLICY CMP0078)
-  # UseSWIG generates standard target names
-  cmake_policy(SET CMP0078 NEW)
-endif()
-if (POLICY CMP0086)
-  # UseSWIG honors SWIG_MODULE_NAME via -module flag
-  cmake_policy(SET CMP0086 NEW)
-endif()
-
 find_package (aGrUM 2 CONFIG REQUIRED)
 message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
 
@@ -135,7 +122,7 @@ endmacro ( ot_add_current_dir_to_include_dirs )
 
 set(CPACK_PACKAGE_NAME ${PACKAGE_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
-set(CPACK_PACKAGE_VERSION_MINOR 12)
+set(CPACK_PACKAGE_VERSION_MINOR 13)
 set(CPACK_PACKAGE_VERSION_PATCH)
 set(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
 set(CPACK_BINARY_STGZ OFF CACHE BOOL "STGZ")
