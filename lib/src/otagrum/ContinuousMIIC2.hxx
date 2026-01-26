@@ -1,5 +1,5 @@
-#ifndef OTAGRUM_CONTINUOUSMIIC_HXX
-#define OTAGRUM_CONTINUOUSMIIC_HXX
+#ifndef OTAGRUM_CONTINUOUSMIIC2_HXX
+#define OTAGRUM_CONTINUOUSMIIC2_HXX
 
 #include <agrum/base/graphs/undiGraph.h>
 #include <agrum/base/graphs/mixedGraph.h>
@@ -16,11 +16,11 @@
 
 namespace OTAGRUM
 {
-class OTAGRUM_API ContinuousMIIC : public OT::Object
+class OTAGRUM_API ContinuousMIIC2 : public OT::Object
 {
 public:
   // Constructor
-  explicit ContinuousMIIC(const OT::Sample &data);
+  explicit ContinuousMIIC2(const OT::Sample &data);
 
   gum::UndiGraph learnSkeleton();
   gum::MixedGraph learnPDAG();
@@ -107,4 +107,4 @@ private:
 
 }
 
-#endif // OTAGRUM_CONTINUOUSMIIC_HXX
+#endif // OTAGRUM_CONTINUOUSMIIC2_HXX

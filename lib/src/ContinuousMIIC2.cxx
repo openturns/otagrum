@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief ContinuousMIIC
+ *  @brief ContinuousMIIC2
  *
  *  Copyright 2010-2025 Airbus-LIP6-Phimeca
  *
@@ -22,7 +22,7 @@
 #include <agrum/base/core/list.h>
 //#include <chrono>
 
-#include "otagrum/ContinuousMIIC.hxx"
+#include "otagrum/ContinuousMIIC2.hxx"
 #include "otagrum/Greater.hxx"
 
 #define TRACE(x)                                                               \
@@ -51,7 +51,7 @@ namespace gum {
 namespace OTAGRUM
 {
 
-ContinuousMIIC::ContinuousMIIC(const OT::Sample &data)
+ContinuousMIIC2::ContinuousMIIC2(const OT::Sample &data)
   : OT::Object()
   , info_(data)
 {
@@ -66,7 +66,7 @@ ContinuousMIIC::ContinuousMIIC(const OT::Sample &data)
   }
 }
 
-gum::UndiGraph ContinuousMIIC::learnSkeleton()
+gum::UndiGraph ContinuousMIIC2::learnSkeleton()
 {
   // clear the vector of latents arcs to be sure
   latent_couples_.clear();
@@ -79,37 +79,37 @@ gum::UndiGraph ContinuousMIIC::learnSkeleton()
   return skeleton_;
 }
 
-void ContinuousMIIC::setCMode(CorrectedMutualInformation::CModeTypes cmode)
+void ContinuousMIIC2::setCMode(CorrectedMutualInformation::CModeTypes cmode)
 {
   info_.setCMode(cmode);
 }
 
-void ContinuousMIIC::setKMode(CorrectedMutualInformation::KModeTypes kmode)
+void ContinuousMIIC2::setKMode(CorrectedMutualInformation::KModeTypes kmode)
 {
   info_.setKMode(kmode);
 }
 
-void ContinuousMIIC::setVerbosity(bool verbose)
+void ContinuousMIIC2::setVerbosity(bool verbose)
 {
   verbose_ = verbose;
 }
 
-bool ContinuousMIIC::getVerbosity() const
+bool ContinuousMIIC2::getVerbosity() const
 {
   return verbose_;
 }
 
-void ContinuousMIIC::setAlpha(double alpha)
+void ContinuousMIIC2::setAlpha(double alpha)
 {
   info_.setAlpha(alpha);
 }
 
-double ContinuousMIIC::getAlpha() const
+double ContinuousMIIC2::getAlpha() const
 {
   return info_.getAlpha();
 }
 
-std::vector< gum::Arc > ContinuousMIIC::getLatentVariables() const
+std::vector< gum::Arc > ContinuousMIIC2::getLatentVariables() const
 {
   return latent_couples_;
 }
@@ -118,37 +118,37 @@ std::vector< gum::Arc > ContinuousMIIC::getLatentVariables() const
 //gum::HashTable< std::pair< gum::NodeId, gum::NodeId >, char > constraints) {
 //this->initial_marks_ = constraints;
 //}
-void ContinuousMIIC::addForbiddenArc(gum::Arc arc)
+void ContinuousMIIC2::addForbiddenArc(gum::Arc arc)
 {
   addForbiddenArc(arc.head(), arc.tail());
 }
 
-void ContinuousMIIC::addForbiddenArc(std::string head, std::string tail)
+void ContinuousMIIC2::addForbiddenArc(std::string head, std::string tail)
 {
   addForbiddenArc(idFromName(head), idFromName(tail));
 }
 
-void ContinuousMIIC::addForbiddenArc(OT::UnsignedInteger head, OT::UnsignedInteger tail)
+void ContinuousMIIC2::addForbiddenArc(OT::UnsignedInteger head, OT::UnsignedInteger tail)
 {
   initial_marks_.insert({head, tail}, '-');
 }
 
-void ContinuousMIIC::addMandatoryArc(gum::Arc arc)
+void ContinuousMIIC2::addMandatoryArc(gum::Arc arc)
 {
   addMandatoryArc(arc.head(), arc.tail());
 }
 
-void ContinuousMIIC::addMandatoryArc(std::string head, std::string tail)
+void ContinuousMIIC2::addMandatoryArc(std::string head, std::string tail)
 {
   addMandatoryArc(idFromName(head), idFromName(tail));
 }
 
-void ContinuousMIIC::addMandatoryArc(OT::UnsignedInteger head, OT::UnsignedInteger tail)
+void ContinuousMIIC2::addMandatoryArc(OT::UnsignedInteger head, OT::UnsignedInteger tail)
 {
   initial_marks_.insert({head, tail}, '>');
 }
 
-void ContinuousMIIC::initiation()
+void ContinuousMIIC2::initiation()
 {
   unsigned int cutted_edges = 0;
   //auto start_initiation = std::chrono::steady_clock::now();
@@ -192,7 +192,7 @@ void ContinuousMIIC::initiation()
   TRACE("\tNumber of cutted edges: " << cutted_edges << std::endl << std::endl);
 }
 
-void ContinuousMIIC::iteration()
+void ContinuousMIIC2::iteration()
 {
   unsigned int cutted_edges = 0;
   //auto start_iteration = std::chrono::steady_clock::now();
@@ -253,7 +253,7 @@ void ContinuousMIIC::iteration()
   TRACE("\tNumber of cutted edges: " << cutted_edges << std::endl << std::endl);
 }
 
-void ContinuousMIIC::propagatesHead(gum::MixedGraph& graph, gum::NodeId node)
+void ContinuousMIIC2::propagatesHead(gum::MixedGraph& graph, gum::NodeId node)
 {
   const auto neighbours = graph.neighbours(node);
   TRACE("\tNode: " << node << std::endl);
@@ -336,7 +336,7 @@ void ContinuousMIIC::propagatesHead(gum::MixedGraph& graph, gum::NodeId node)
   }
 }
 
-gum::MixedGraph ContinuousMIIC::UGtoMG(const gum::UndiGraph& graph) const
+gum::MixedGraph ContinuousMIIC2::UGtoMG(const gum::UndiGraph& graph) const
 {
   // Should be added in aGrUM as a constructor for MixedGraph alongside
   // another for DAGs.
@@ -355,7 +355,7 @@ gum::MixedGraph ContinuousMIIC::UGtoMG(const gum::UndiGraph& graph) const
 }
 
 
-gum::MixedGraph ContinuousMIIC::learnPDAG()
+gum::MixedGraph ContinuousMIIC2::learnPDAG()
 {
   TRACE("\n===== STARTING PDAG LEARNING =====" << std::endl);
   if (pdag_done_)
@@ -718,7 +718,7 @@ gum::MixedGraph ContinuousMIIC::learnPDAG()
   TRACE("===== ENDING PDAG LEARNING =====" << std::endl);
 }
 
-NamedDAG ContinuousMIIC::learnDAG()
+NamedDAG ContinuousMIIC2::learnDAG()
 {
   TRACE("\n===== STARTING DAG LEARNING =====" << std::endl);
   if (dag_done_)
@@ -766,7 +766,7 @@ NamedDAG ContinuousMIIC::learnDAG()
   TRACE("===== ENDING DAG LEARNING =====" << std::endl);
 }
 
-gum::NodeId ContinuousMIIC::idFromName(const std::string& name) const
+gum::NodeId ContinuousMIIC2::idFromName(const std::string& name) const
 {
   const auto &description = info_.getDataDescription();
   for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
@@ -781,7 +781,7 @@ gum::NodeId ContinuousMIIC::idFromName(const std::string& name) const
       << "' is not a node name.";
 }
 
-std::vector< std::string > ContinuousMIIC::namesFromData() const
+std::vector< std::string > ContinuousMIIC2::namesFromData() const
 {
   std::vector< std::string > names;
   const auto &description = info_.getDataDescription();
@@ -797,7 +797,7 @@ std::vector< std::tuple< std::tuple< OT::UnsignedInteger,
     OT::UnsignedInteger,
     OT::UnsignedInteger >*,
     double, double, double > >
-    ContinuousMIIC::getUnshieldedTriples(
+    ContinuousMIIC2::getUnshieldedTriples(
       const gum::MixedGraph& graph,
       gum::HashTable< std::pair< gum::NodeId, gum::NodeId >, char >& marks)
 {
@@ -889,7 +889,7 @@ std::vector< std::tuple< std::tuple< OT::UnsignedInteger,
 OT::UnsignedInteger,
 OT::UnsignedInteger >*,
 double, double, double > >
-ContinuousMIIC::updateProbaTriples(
+ContinuousMIIC2::updateProbaTriples(
   const gum::MixedGraph& graph,
   std::vector< std::tuple< std::tuple< OT::UnsignedInteger,
   OT::UnsignedInteger,
@@ -945,7 +945,7 @@ ContinuousMIIC::updateProbaTriples(
   return proba_triples;
 }
 
-bool ContinuousMIIC::existsDirectedPath(const gum::MixedGraph& graph,
+bool ContinuousMIIC2::existsDirectedPath(const gum::MixedGraph& graph,
                                         const OT::UnsignedInteger n1,
                                         const OT::UnsignedInteger n2,
                                         const bool countArc) const
@@ -994,7 +994,7 @@ bool ContinuousMIIC::existsDirectedPath(const gum::MixedGraph& graph,
 }
 
 
-void ContinuousMIIC::findBestContributor(const OT::UnsignedInteger X,
+void ContinuousMIIC2::findBestContributor(const OT::UnsignedInteger X,
     const OT::UnsignedInteger Y,
     const OT::Indices &U)
 {
