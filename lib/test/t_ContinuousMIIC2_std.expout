@@ -30,7 +30,7 @@ node [shape = ellipse];
 
 
 ****
-CPDAG
+PDAG
 ****
 digraph "no_name" {
 node [shape = ellipse];
@@ -48,13 +48,13 @@ node [shape = ellipse];
 Named DAG
 ****
 [A1,A2,B1,B2,X0,X1,X2]
-[X2->X0,X2->X1,X0->X1,B2->B1,A2->A1]
+[X1->X2,X1->X0,X2->X0,B2->B1,A2->A1]
 
 digraph {
+    "X1"->"X2"
+    "X1"->"X0"
     "X2"->"X0"
-    "X2"->"X1"
-    "X0"->"X1"
-    "X1"
+    "X0"
     "B2"->"B1"
     "B1"
     "A2"->"A1"

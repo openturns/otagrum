@@ -1,11 +1,11 @@
 digraph {
-    "F"->"G"
-    "G"
+    "G"->"F"
+    "F"
     "E"->"C"
     "D"->"C"
     "C"
-    "A"->"B"
-    "B"
+    "B"->"A"
+    "A"
 }
 
 == PC algo starting 

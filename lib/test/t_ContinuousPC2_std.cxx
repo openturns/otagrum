@@ -63,8 +63,8 @@ void tests(void)
       auto skel = learner.learnSkeleton();
       std::cout << learner.skeletonToDot(skel) << std::endl;
 
-      auto cpdag = learner.learnPDAG();
-      std::cout << cpdag.toDot() << std::endl;
+      auto pdag = learner.learnPDAG();
+      std::cout << pdag.toDot() << std::endl;
       for (const auto &e : skel.edges())
       {
         std::cout << e
@@ -84,11 +84,11 @@ void tests(void)
                 << "skeleton"
                 << "\n****\n"
                 << skel.toDot() << std::endl;
-      auto cpdag = learner.learnPDAG();
+      auto pdag = learner.learnPDAG();
       std::cout << "\n****\n"
-                << "CPDAG"
+                << "PDAG"
                 << "\n****\n"
-                << cpdag.toDot() << std::endl;
+                << pdag.toDot() << std::endl;
 
       auto njt = learner.learnJunctionTree();
       std::cout << "\n****\n"

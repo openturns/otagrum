@@ -27,6 +27,7 @@
 #include <agrum/base/core/priorityQueue.h>
 #include <agrum/base/graphs/DAG.h>
 #include <agrum/base/graphs/mixedGraph.h>
+#include <agrum/base/graphs/algorithms/MeekRules.h>
 
 #include "otagrum/ContinuousPC2.hxx"
 #include "otagrum/Utils.hxx"
@@ -296,7 +297,14 @@ NamedDAG ContinuousPC2::learnDAG()
   if (!pdag_done_)
     learnPDAG();
 
-  dag_ = NamedDAG(deriveDAG(pdag_), namesFromData());
+  // dag_ = NamedDAG(deriveDAG(pdag_), namesFromData());
+
+  // BECOMES
+
+  gum::MeekRules meekRules;
+  gum::DAG dag = meekRules.propagateToDAG(pdag_);
+  dag_ = NamedDAG(dag, namesFromData());
+
   dag_done_ = true;
   return dag_;
 }
@@ -327,12 +335,12 @@ gum::UndiGraph ContinuousPC2::learnSkeleton()
 // the ordering process uses the p-value as a priority.
 gum::MixedGraph ContinuousPC2::inferPDAG(const gum::UndiGraph &g) const
 {
-  gum::MixedGraph cpdag;
+  gum::MixedGraph pdag;
 
   gum::PriorityQueue<Triplet, double> queue;
   for (auto y : g.nodes())
   {
-    cpdag.addNodeWithId(y);
+    pdag.addNodeWithId(y);
 
     if (g.neighbours(y).size() > 1)
     {
@@ -363,17 +371,17 @@ gum::MixedGraph ContinuousPC2::inferPDAG(const gum::UndiGraph &g) const
 
   for (auto e : g.edges())
   {
-    cpdag.addEdge(e.first(), e.second());
+    pdag.addEdge(e.first(), e.second());
   }
   while (!queue.empty())
   {
     Triplet t = queue.pop();
-    if (!(cpdag.existsArc(t.y, t.x) || cpdag.existsArc(t.y, t.z)))
+    if (!(pdag.existsArc(t.y, t.x) || pdag.existsArc(t.y, t.z)))
     {
       // we can add the v-structure
       try
       {
-        cpdag.directedPath(t.y, t.x);
+        pdag.directedPath(t.y, t.x);
         continue;
       }
       catch (const gum::NotFound &)
@@ -381,20 +389,20 @@ gum::MixedGraph ContinuousPC2::inferPDAG(const gum::UndiGraph &g) const
       }
       try
       {
-        cpdag.directedPath(t.y, t.z);
+        pdag.directedPath(t.y, t.z);
         continue;
       }
       catch (const gum::NotFound &)
       {
       }
-      cpdag.eraseEdge(gum::Edge(t.x, t.y));
-      cpdag.eraseEdge(gum::Edge(t.z, t.y));
-      cpdag.addArc(t.x, t.y);
-      cpdag.addArc(t.z, t.y);
+      pdag.eraseEdge(gum::Edge(t.x, t.y));
+      pdag.eraseEdge(gum::Edge(t.z, t.y));
+      pdag.addArc(t.x, t.y);
+      pdag.addArc(t.z, t.y);
     }
   }
 
-  return cpdag;
+  return pdag;
 }
 
 gum::UndiGraph ContinuousPC2::deriveMoralGraph(const gum::MixedGraph &g) const
@@ -611,8 +619,8 @@ gum::DAG ContinuousPC2::deriveDAG(const gum::MixedGraph &p) const
       auto minBadPar = dag.size();
       for (const auto &edge : remainings)
       {
-        auto npf = dag.parents(edge.first()).size();
-        auto nps = dag.parents(edge.second()).size();
+        auto npf = dag.parents(edge.first()).size(); // number of parents of first
+        auto nps = dag.parents(edge.second()).size(); // number of parents of second
         if (npf == 0 &&
             nps == 0) // there cannot be better candidate, so we quit
         {
@@ -649,7 +657,7 @@ gum::DAG ContinuousPC2::deriveDAG(const gum::MixedGraph &p) const
             {
               candidate = gum::Arc(edge.second(), edge.first());
             }
-            else   // we add a parent to second
+            else // we add a parent to second
             {
               candidate = gum::Arc(edge.first(), edge.second());
             }

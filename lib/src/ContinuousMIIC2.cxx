@@ -20,6 +20,7 @@
  */
 
 #include <agrum/base/core/list.h>
+#include <agrum/base/graphs/algorithms/MeekRules.h>
 //#include <chrono>
 
 #include "otagrum/ContinuousMIIC2.hxx"
@@ -730,6 +731,7 @@ NamedDAG ContinuousMIIC2::learnDAG()
     learnPDAG();
   }
 
+  /*-------------------------------------------------------------------
   // Second, orientate remaining edges
   const gum::Sequence< gum::NodeId > order = pdag_.topologicalOrder();
   // first, propagate existing orientations
@@ -758,6 +760,12 @@ NamedDAG ContinuousMIIC2::learnDAG()
   {
     dag.addArc(arc.tail(), arc.head());
   }
+  -------------------------------------------------------------------*/
+
+  // BECOMES
+
+  gum::MeekRules meekRules;
+  gum::DAG dag = meekRules.propagateToDAG(pdag_);
 
   dag_ = NamedDAG(dag, namesFromData());
   dag_done_ = true;

@@ -61,11 +61,11 @@ void tests(void)
                 << "Skeleton"
                 << "\n****\n"
                 << skeleton.toDot() << std::endl;
-      auto cpdag = learner.learnPDAG();
+      auto pdag = learner.learnPDAG();
       std::cout << "\n****\n"
-                << "CPDAG"
+                << "PDAG"
                 << "\n****\n"
-                << cpdag.toDot() << std::endl;
+                << pdag.toDot() << std::endl;
 
       auto ndag = learner.learnDAG();
       std::cout << "\n****\n"
