@@ -24,6 +24,7 @@ public:
 
   gum::UndiGraph learnSkeleton();
   gum::MixedGraph learnPDAG();
+  gum::MixedGraph learnCPDAG();
   NamedDAG learnDAG();
 
   std::vector< gum::Arc > getLatentVariables() const;

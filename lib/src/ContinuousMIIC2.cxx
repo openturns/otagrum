@@ -719,6 +719,17 @@ gum::MixedGraph ContinuousMIIC2::learnPDAG()
   TRACE("===== ENDING PDAG LEARNING =====" << std::endl);
 }
 
+gum::MixedGraph ContinuousMIIC2::learnCPDAG()
+{
+  if (!pdag_done_)
+    learnPDAG();
+
+  gum::MeekRules meekRules;
+  gum::PDAG cpdag = meekRules.propagateToCPDAG(pdag_);
+  
+  return cpdag;
+}
+
 NamedDAG ContinuousMIIC2::learnDAG()
 {
   TRACE("\n===== STARTING DAG LEARNING =====" << std::endl);

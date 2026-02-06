@@ -48,6 +48,7 @@ public:
   gum::UndiGraph learnSkeleton();
   /// lazy computation of the PDAG
   gum::MixedGraph learnPDAG();
+  gum::MixedGraph learnCPDAG();
   /// lazy computation of the junction tree
   NamedJunctionTree learnJunctionTree();
   /// lazy computation of the DAG

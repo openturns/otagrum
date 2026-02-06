@@ -290,6 +290,17 @@ NamedJunctionTree ContinuousPC2::learnJunctionTree()
   return jt_;
 }
 
+gum::MixedGraph ContinuousPC2::learnCPDAG()
+{
+  if (!pdag_done_)
+    learnPDAG();
+
+  gum::MeekRules meekRules;
+  gum::PDAG cpdag = meekRules.propagateToCPDAG(pdag_);
+  
+  return cpdag;
+}
+
 NamedDAG ContinuousPC2::learnDAG()
 {
   if (dag_done_)
