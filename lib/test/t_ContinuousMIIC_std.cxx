@@ -61,11 +61,11 @@ void tests(void)
                 << "Skeleton"
                 << "\n****\n"
                 << skeleton.toDot() << std::endl;
-      auto cpdag = learner.learnPDAG();
+      auto pdag = learner.learnPDAG();
       std::cout << "\n****\n"
-                << "CPDAG"
+                << "PDAG"
                 << "\n****\n"
-                << cpdag.toDot() << std::endl;
+                << pdag.toDot() << std::endl;
 
       auto ndag = learner.learnDAG();
       std::cout << "\n****\n"
@@ -106,12 +106,101 @@ void testJulien()
   }
 }
 
+void testMathis()
+{
+  OT::RandomGenerator::SetSeed(0);
+
+  // Create the structure
+  gum::DAG dag;
+  std::map<std::string, gum::NodeId> nodes;
+  std::vector<std::string> names = {"A", "B", "C", "D", "E", "F", "G"};
+  for (const auto& name : names)
+  {
+    nodes[name] = dag.addNode();
+  }
+  dag.addArc(nodes["B"], nodes["D"]);
+  dag.addArc(nodes["B"], nodes["A"]);
+  dag.addArc(nodes["B"], nodes["C"]);
+  dag.addArc(nodes["A"], nodes["C"]);
+  dag.addArc(nodes["A"], nodes["E"]);
+  dag.addArc(nodes["F"], nodes["A"]);
+  dag.addArc(nodes["F"], nodes["G"]);
+  OTAGRUM::NamedDAG structure(dag, names);
+  
+  // Create the marginal distributions
+  OT::Collection<OT::Distribution> m_list;
+  int nb_of_nodes = dag.sizeNodes();
+  std::cout << "Number of nodes: " << nb_of_nodes << std::endl;
+  for (OT::UnsignedInteger i = 0; i < nb_of_nodes; i++)
+  {
+    m_list.add(OT::Uniform(0.0, 1.0));
+  }
+  
+  // Create the local conditional copulas
+  OT::Collection<OT::Distribution> lcc_list;
+  // #PA=2, #PB=0, #PC=2, #PD=1, #PE=1, #PF=0, #PG=1
+  std::vector<OT::UnsignedInteger> parent_counts = {2, 0, 2, 1, 1, 0, 1};
+  for (OT::UnsignedInteger i = 0; i < nb_of_nodes; i++)
+  {
+    OT::UnsignedInteger dim_lcc = parent_counts[i] + 1;
+    OT::CorrelationMatrix R(dim_lcc);
+    for (OT::UnsignedInteger j = 0; j < dim_lcc; j++)
+      for (OT::UnsignedInteger k = 0; k < j; k++)
+        R(j, k) = 0.6;
+    
+    lcc_list.add(OT::Normal(OT::Point(dim_lcc, 0.0), OT::Point(dim_lcc, 1.0), R).getCopula());
+  }
+  
+  // Create the CBN
+  OTAGRUM::ContinuousBayesianNetwork cbn(structure, m_list, lcc_list);
+  
+  // Sample from the CBN
+  OT::Sample sample = cbn.getSample(5000);
+  
+  std::cout << "Sample size : " << sample.getSize() << std::endl
+            << "Sample dimension : " << sample.getDimension() << std::endl
+            << "Description : " << sample.getDescription() << std::endl;
+  
+  try
+  {
+      std::cout << "\n\n";
+      OTAGRUM::ContinuousMIIC learner(sample);
+      learner.setAlpha(0.01);
+      std::cout << "go" << std::endl;
+
+      auto skel = learner.learnSkeleton();
+      std::cout << "\n****\n"
+                << "skeleton"
+                << "\n****\n"
+                << skel.toDot() << std::endl;
+
+      auto pdag = learner.learnPDAG();
+      std::cout << "\n****\n"
+                << "PDAG"
+                << "\n****\n"
+                << pdag.toDot() << std::endl;
+
+      auto ndag = learner.learnDAG();
+      std::cout << "\n****\n"
+                << "Named DAG"
+                << "\n****\n"
+                << ndag.__str__() << std::endl;
+      std::cout << ndag.toDot() << std::endl;
+  }
+  catch (gum::Exception &e)
+  {
+    GUM_SHOWERROR(e);
+  }
+}
+
 int main(void)
 {
 //   OT::Log::Show(OT::Log::ALL);
   tests();
 
   testJulien();
+
+  testMathis();
 
   return EXIT_SUCCESS;
 }

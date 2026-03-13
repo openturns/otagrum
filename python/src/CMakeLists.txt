@@ -50,9 +50,7 @@ endmacro ()
 
 ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
                       ContinuousPC.i ContinuousPC_doc.i
-                      ContinuousPC2.i ContinuousPC2_doc.i
                       ContinuousMIIC.i ContinuousMIIC_doc.i
-                      ContinuousMIIC2.i ContinuousMIIC2_doc.i
                       TabuList.i TabuList_doc.i
                       ContinuousTTest.i ContinuousTTest_doc.i
                       CorrectedMutualInformation.i CorrectedMutualInformation_doc.i

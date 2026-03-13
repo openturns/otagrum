@@ -30,10 +30,8 @@
 %include JunctionTreeBernsteinCopulaFactory.i
 %include ContinuousTTest.i
 %include ContinuousPC.i
-%include ContinuousPC2.i
 %include CorrectedMutualInformation.i
 %include ContinuousMIIC.i
-%include ContinuousMIIC2.i
 %include TabuList.i
 %include ContinuousBayesianNetwork.i
 %include ContinuousBayesianNetworkFactory.i
