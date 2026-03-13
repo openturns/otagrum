@@ -36,6 +36,7 @@ extensions = ['sphinx.ext.autodoc']
 extensions.append('sphinx.ext.autodoc')
 
 autodoc_default_options = {'members': None, 'inherited-members': None, 'exclude-members': 'thisown'}
+autodoc_use_legacy_class_based = True
 
 extensions.append('sphinx.ext.autosummary')
 autosummary_generate = True
@@ -52,7 +53,7 @@ todo_include_todos = True
 extensions.append('sphinx.ext.coverage')
 
 extensions.append('sphinx.ext.intersphinx')
-intersphinx_mapping = {'openturns': ('http://openturns.github.io/openturns/latest', (None, 'openturns-objects.inv')),
+intersphinx_mapping = {'openturns': ('https://openturns.github.io/openturns/latest', (None, 'openturns-objects.inv')),
                        'pyagrum': ('https://pyagrum.readthedocs.io/en/latest', (None, 'pyagrum-objects.inv'))}
 
 extensions.append('sphinx.ext.imgmath')
