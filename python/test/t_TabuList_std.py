@@ -3,7 +3,6 @@
 import os
 import openturns as ot
 import otagrum
-import sys
 
 
 def generateDataForSpecificInstance(size):
@@ -21,12 +20,21 @@ def testSpecificInstance():
     data = generateDataForSpecificInstance(size)
     learner = otagrum.TabuList(data)
 
-    # skel = learner.learnSkeleton()
-    # print(skel.toDot())
+    ndag = learner.learnDAG()
+    idA = ndag.getDescription().find("A")
+    idB = ndag.getDescription().find("B")
+    idC = ndag.getDescription().find("C")
+    idD = ndag.getDescription().find("D")
+    idE = ndag.getDescription().find("E")
+    idG = ndag.getDescription().find("G")
 
-    dag = learner.learnDAG()
-    print(dag.toDot())
-    sys.stdout.flush()
+    dag = ndag.getDAG()
+    assert dag.existsArc(idA, idB)
+    assert dag.existsArc(idC, idD)
+    # depends on map order ?
+    assert dag.existsArc(idD, idE) or dag.existsArc(idE, idD)
+    assert len(dag.children(idB)) == 0
+    assert len(dag.children(idG)) == 0
 
 
 def testAsiaDirichlet():
