@@ -35,8 +35,8 @@ TorqueAngleCopula = ot.NormalCopula(ot.CorrelationMatrix(2, [1.0, rho, rho, 1.0]
 copula = ot.BlockIndependentCopula([TorqueAngleCopula, ot.IndependentCopula(1)])
 
 # Joint distribution if needed
-TorqueAngle = ot.ComposedDistribution([Torque, Angle], TorqueAngleCopula)
-fullDistribution = ot.ComposedDistribution([Torque, Angle, Joint], copula)
+TorqueAngle = ot.JointDistribution([Torque, Angle], TorqueAngleCopula)
+fullDistribution = ot.JointDistribution([Torque, Angle, Joint], copula)
 
 # Leakage angle (rd)
 angleMax = 5.0
@@ -299,7 +299,7 @@ AngleKnowingTorque = discretizeFromJoint(TorqueAngle, [torque_ticks, angle_ticks
 
 LeakageKnowingAngleAndJoint = discretizeBernoulliFromConditionalProbability(
     P_LeakageKnowingAngleAndJoint,
-    ot.ComposedDistribution([Angle, Joint]),
+    ot.JointDistribution([Angle, Joint]),
     [angle_ticks, joint_ticks],
     False,
     nodes,
@@ -307,7 +307,7 @@ LeakageKnowingAngleAndJoint = discretizeBernoulliFromConditionalProbability(
 
 VibrationKnowingTorqueAndJoint = discretizeFromConditionalDensity(
     f_VibrationKnowingTorqueAndJoint,
-    ot.ComposedDistribution([Torque, Joint]),
+    ot.JointDistribution([Torque, Joint]),
     [torque_ticks, joint_ticks, vibration_ticks],
     False,
     nodes,
