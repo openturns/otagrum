@@ -69,7 +69,6 @@ private:
   gum::DAG dag_;
 
   OT::Description map_;
-  OT::Description nodes_; // no need
   OT::Collection<OT::Indices> parents_;
   OT::Collection<OT::Indices> children_;
   OT::Indices topo_order_;
