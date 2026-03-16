@@ -129,7 +129,7 @@ void testMathis()
   
   // Create the marginal distributions
   OT::Collection<OT::Distribution> m_list;
-  int nb_of_nodes = dag.sizeNodes();
+  OT::UnsignedInteger nb_of_nodes = dag.sizeNodes();
   std::cout << "Number of nodes: " << nb_of_nodes << std::endl;
   for (OT::UnsignedInteger i = 0; i < nb_of_nodes; i++)
   {
