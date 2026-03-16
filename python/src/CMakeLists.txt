@@ -61,6 +61,7 @@ ot_add_python_module (${PACKAGE_NAME} ${PACKAGE_NAME}_module.i otagrum_agrum.i
                       JunctionTreeBernsteinCopulaFactory.i JunctionTreeBernsteinCopulaFactory_doc.i
                       ContinuousBayesianNetwork.i ContinuousBayesianNetwork_doc.i
                       ContinuousBayesianNetworkFactory.i ContinuousBayesianNetworkFactory_doc.i
+                      DistributionBayesianNetwork.i DistributionBayesianNetwork_doc.i
                      )
 
 

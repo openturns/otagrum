@@ -35,3 +35,4 @@
 %include TabuList.i
 %include ContinuousBayesianNetwork.i
 %include ContinuousBayesianNetworkFactory.i
+%include DistributionBayesianNetwork.i
