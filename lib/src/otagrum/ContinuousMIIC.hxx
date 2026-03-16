@@ -12,28 +12,10 @@
 #include "otagrum/CorrectedMutualInformation.hxx"
 #include "otagrum/IndicesManip.hxx"
 
+#include "otagrum/Greater.hxx"
+
 namespace OTAGRUM
 {
-#ifndef SWIG
-class GreaterPairOn2nd
-{
-public:
-  bool operator()(
-    const std::pair <
-    std::tuple< OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::Indices >*,
-    double > & e1,
-    const std::pair <
-    std::tuple< OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::Indices >*,
-    double > & e2) const;
-};
-#endif
-
 class OTAGRUM_API ContinuousMIIC : public OT::Object
 {
 public:

@@ -20,9 +20,11 @@
  */
 
 #include <agrum/base/core/list.h>
+#include <agrum/base/graphs/algorithms/MeekRules.h>
 //#include <chrono>
 
 #include "otagrum/ContinuousMIIC.hxx"
+#include "otagrum/Greater.hxx"
 
 #define TRACE(x)                                                               \
   {                                                                            \
@@ -62,73 +64,6 @@ ContinuousMIIC::ContinuousMIIC(const OT::Sample &data)
     {
       skeleton_.addEdge(i, j);
     }
-  }
-}
-
-bool GreaterPairOn2nd::operator()(
-  const std::pair <
-  std::tuple< OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::Indices >*,
-  double > & e1,
-  const std::pair <
-  std::tuple< OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::Indices >*,
-  double > & e2) const
-{
-  return e1.second > e2.second;
-}
-
-class GreaterTupleOnLast
-{
-public:
-  bool operator()(
-    const std::tuple< std::tuple< OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::UnsignedInteger >*,
-    double, double, double >& e1,
-    const std::tuple< std::tuple< OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::UnsignedInteger >*,
-    double, double, double >& e2) const;
-};
-
-bool GreaterTupleOnLast::operator()(
-  const std::tuple< std::tuple< OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::UnsignedInteger >*,
-  double, double, double >& e1,
-  const std::tuple< std::tuple< OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::UnsignedInteger >*,
-  double, double, double >& e2) const
-{
-  double p1XZ = std::get< 2 >(e1);
-  double p1YZ = std::get< 3 >(e1);
-  double p2XZ = std::get< 2 >(e2);
-  double p2YZ = std::get< 3 >(e2);
-  double I1 = std::get< 1 >(e1);
-  double I2 = std::get< 1 >(e2);
-  // First, we look at the sign of information.
-  // Then, the probility values
-  // and finally the abs value of information.
-  if ( (I1 < 0 && I2 < 0) || (I1 >= 0 && I2 >= 0) )
-  {
-    if (std::max(p1XZ, p1YZ) == std::max(p2XZ, p2YZ))
-    {
-      return std::abs(I1) > std::abs(I2);
-    }
-    else
-    {
-      return std::max(p1XZ, p1YZ) > std::max(p2XZ, p2YZ);
-    }
-  }
-  else
-  {
-    return I1 < I2;
   }
 }
 
@@ -796,34 +731,9 @@ NamedDAG ContinuousMIIC::learnDAG()
     learnPDAG();
   }
 
-  // Second, orientate remaining edges
-  const gum::Sequence< gum::NodeId > order = pdag_.topologicalOrder();
-  // first, propagate existing orientations
-  for (gum::NodeId x : order)
-  {
-    if (!pdag_.parents(x).empty())
-    {
-      propagatesHead(pdag_, x);
-    }
-  }
-  // then decide the orientation by the topological order and propagate them
-  for (gum::NodeId x : order)
-  {
-    if (!pdag_.neighbours(x).empty())
-    {
-      propagatesHead(pdag_, x);
-    }
-  }
-
-  gum::DAG dag;
-  for (auto node : pdag_)
-  {
-    dag.addNodeWithId(node);
-  }
-  for (const gum::Arc& arc : pdag_.arcs())
-  {
-    dag.addArc(arc.tail(), arc.head());
-  }
+  // meek rules integration
+  gum::MeekRules meekRules;
+  gum::DAG dag = meekRules.propagateToDAG(pdag_);
 
   dag_ = NamedDAG(dag, namesFromData());
   dag_done_ = true;

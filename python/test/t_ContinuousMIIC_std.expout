@@ -1,7 +1,6 @@
 digraph {
+    "F"->"G"
     "G"->"B"
-    "G"->"F"
-    "F"
     "E"->"C"
     "D"->"C"
     "C"
@@ -562,39 +561,18 @@ node [shape = ellipse];
 
 
 ===== STARTING DAG LEARNING =====
-	Node: 4
-		Neighbours: {}
-	Node: 5
-		Neighbours: {}
-	Node: 3
-		Neighbours: {}
-	Node: 7
-		Neighbours: {6}
-		1. Removing edge (6,7)
-		1. Adding arc (7,6)
-	Node: 6
-		Neighbours: {2}
-		1. Removing edge (2,6)
-		1. Adding arc (6,2)
-	Node: 2
-		Neighbours: {}
-	Node: 1
-		Neighbours: {0}
-		1. Removing edge (0,1)
-		1. Adding arc (1,0)
-	Node: 0
-		Neighbours: {}
 digraph {
-    "lung"->"smoke"
-    "lung"->"either"
-    "smoke"->"bronc"
     "bronc"->"dysp"
+    "bronc"->"smoke"
+    "smoke"->"lung"
+    "lung"->"either"
+    "asia"->"tub"
     "tub"->"either"
-    "tub"->"asia"
-    "asia"
     "either"->"dysp"
     "either"->"xray"
     "xray"
     "dysp"
 }
 
+pdag: {0,1,2,3} , {3->1,0->1} , {2--3,0--2,1--2}
+cpdag: {0,1,2,3} , {0->1,2->1,3->1} , {2--3,0--2}
