@@ -41,7 +41,7 @@ Examples
 "Convert an 1-d probability table to a distribution.
 
 Converts an univariate aGrUM probability table to an OpenTURNS distribution,
-either :py:class:`openturns.Histogram` or :py:class:`openturns.UserDefined`.
+either :py:class:`openturns.Histogram` or :py:class:`openturns.FiniteDiscreteDistribution`.
 
 Parameters
 ----------
@@ -61,7 +61,7 @@ Examples
 >>> pot = gum.Tensor().add(light)
 >>> pot[:]= [0.25, 0.75]
 >>> str(otagrum.Utils.FromMarginal(pot))
-'UserDefined({x = [0], p = 0.25}, {x = [1], p = 0.75})'"
+'FiniteDiscreteDistribution({x = [0], p = 0.25}, {x = [1], p = 0.75})'"
 
 // ---------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ Examples
 "Convert an n-d probability table to a distribution.
 
 Converts a multivariate aGrUM probability table to an OpenTURNS distribution,
-using :py:class:`openturns.MixedHistogramUserDefined`
+using :py:class:`openturns.MixedHistogramFiniteDiscreteDistribution`
 
 Parameters
 ----------

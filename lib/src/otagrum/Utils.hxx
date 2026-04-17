@@ -27,7 +27,6 @@
 #include <openturns/PersistentObject.hxx>
 #include <openturns/Point.hxx>
 #include <openturns/StorageManager.hxx>
-#include <openturns/UserDefined.hxx>
 
 #include <agrum/base/multidim/tensor.h>
 #include <agrum/base/variables/discretizedVariable.h>

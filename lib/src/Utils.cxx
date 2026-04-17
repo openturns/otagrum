@@ -27,8 +27,8 @@
 #include <openturns/Os.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ResourceMap.hxx>
-#include <openturns/UserDefined.hxx>
-#include <openturns/MixedHistogramUserDefined.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
+#include <openturns/MixedHistogramFiniteDiscreteDistribution.hxx>
 
 #include <agrum/BN/io/BIF/BIFReader.h>
 #include <agrum/BN/io/BIF/BIFWriter.h>
@@ -130,7 +130,7 @@ OT::Distribution Utils::FromTensor(const gum::Tensor<double> &pot)
     OT::Point p;
     if (var.varType() == gum::VarType::DISCRETIZED)
     {
-      kind.add(OT::MixedHistogramUserDefined::CONTINUOUS);
+      kind.add(OT::MixedHistogramFiniteDiscreteDistribution::CONTINUOUS);
 
       for (const auto tick :
            dynamic_cast<const gum::DiscretizedVariable<double> &>(var)
@@ -141,7 +141,7 @@ OT::Distribution Utils::FromTensor(const gum::Tensor<double> &pot)
     }
     else
     {
-      kind.add(OT::MixedHistogramUserDefined::DISCRETE);
+      kind.add(OT::MixedHistogramFiniteDiscreteDistribution::DISCRETE);
       for (unsigned long v = 0; v < var.domainSize(); v++)
       {
         p.add(v);
@@ -158,7 +158,7 @@ OT::Distribution Utils::FromTensor(const gum::Tensor<double> &pot)
     probabilityTable.add(pot.get(I));
   }
 
-  OT::MixedHistogramUserDefined distribution(ticksCollection, kind,
+  OT::MixedHistogramFiniteDiscreteDistribution distribution(ticksCollection, kind,
       probabilityTable);
   distribution.setDescription(description);
   return distribution;
@@ -205,19 +205,19 @@ OT::Distribution Utils::FromMarginal(const gum::Tensor<double> &pot)
     }
     case gum::VarType::RANGE:
     {
-      // we use the range to create a meaningful UserDefined distribution
+      // we use the range to create a meaningful FiniteDiscreteDistribution distribution
       auto vv = static_cast<const gum::RangeVariable &>(v);
 
       OT::Sample val(vv.domainSize(), 1);
       for (auto i = vv.minVal(); i <= vv.maxVal(); i++)
         val[i - vv.minVal()][0] = i;
-      res = OT::UserDefined(val, probas);
+      res = OT::FiniteDiscreteDistribution(val, probas);
       break;
     }
     case gum::VarType::LABELIZED:
     {
       // if at least one label can not be parser as double,
-      // we can just use the index to create a UserDefined distribution
+      // we can just use the index to create a FiniteDiscreteDistribution distribution
       OT::Sample val(v.domainSize(), 1);
       bool ok = true;
       OT::Scalar value;
@@ -238,7 +238,7 @@ OT::Distribution Utils::FromMarginal(const gum::Tensor<double> &pot)
         for (unsigned long i = 0; i < v.domainSize(); i++)
           val[i][0] = i;
 
-      res = OT::UserDefined(val, probas);
+      res = OT::FiniteDiscreteDistribution(val, probas);
       break;
     }
     default:

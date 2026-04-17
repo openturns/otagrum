@@ -21,8 +21,8 @@
 
 #include <openturns/OTprivate.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
-#include <openturns/UserDefined.hxx>
-#include <openturns/UserDefinedFactory.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
+#include <openturns/FiniteDiscreteDistributionFactory.hxx>
 #include <openturns/HistogramFactory.hxx>
 #include <openturns/IndependentCopula.hxx>
 #include <openturns/BernsteinCopulaFactory.hxx>
@@ -128,7 +128,7 @@ ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork(
     else
     {
       const Sample marginalSample(sample.getMarginal(globalIndex));
-      UserDefined discreteMarginal(UserDefinedFactory().buildAsUserDefined(marginalSample));
+      FiniteDiscreteDistribution discreteMarginal(FiniteDiscreteDistributionFactory().buildAsFiniteDiscreteDistribution(marginalSample));
       // If the support is large enough use a continuous factory
       if (discreteMarginal.getSupport().getSize() > ResourceMap::GetAsUnsignedInteger("ContinuousBayesianNetworkFactory-MaximumDiscreteSupport"))
       {

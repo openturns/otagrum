@@ -4,7 +4,6 @@
 import openturns as ot
 import otagrum
 import pyagrum as gum
-import sys
 
 
 def test_basic():
@@ -70,12 +69,10 @@ def test_fromTensor():
     y = gum.LabelizedVariable("y", "y", ["chaud", "tiede", "froid"])
     print(x)
     print(y)
-    sys.stdout.flush()
 
     p = gum.Tensor().add(x).add(y)
     p.fillWith([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]).normalize()
     print(p)
-    sys.stdout.flush()
 
     distrib = otagrum.Utils.FromTensor(p)
     print(distrib)
