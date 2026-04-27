@@ -5,7 +5,7 @@ option (USE_SPHINX                   "Use sphinx for documentation"             
 option (BUILD_SHARED_LIBS            "Build shared libraries"                                                ON)
 
 # By default, build in Release mode. Must appear before project() command
-set( CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
+set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
 
 project(otagrum)
 
@@ -14,11 +14,11 @@ string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 # set module dir to find custom scripts
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+find_package (OpenTURNS 1.27 CONFIG REQUIRED)
+message (STATUS "Found OpenTURNS: ${OpenTURNS_DIR} (found version \"${OpenTURNS_VERSION}\")")
+
 find_package (aGrUM 2 CONFIG REQUIRED)
 message(STATUS "Found aGrUM: ${AGRUM_ROOTDIR} (found version \"${AGRUM_VERSION_STRING}\")")
-
-find_package(OpenTURNS 1.23 CONFIG REQUIRED)
-message(STATUS "Found OpenTURNS: ${OPENTURNS_ROOT_DIR} (found version \"${OPENTURNS_VERSION_STRING}\")")
 
 set(OTAGRUM_DEFINITIONS ${OPENTURNS_DEFINITIONS})
 if (NOT BUILD_SHARED_LIBS)
@@ -41,10 +41,10 @@ if (BUILD_PYTHON)
 
   option (USE_PYTHON_SABI "Use Python stable ABI" OFF)
   if (USE_PYTHON_SABI AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.26)
-    find_package (Python 3.8 COMPONENTS Interpreter Development.SABIModule)
+    find_package (Python 3.6 COMPONENTS Interpreter Development.SABIModule)
     add_library (Python::Module ALIAS Python::SABIModule)
   else ()
-    find_package (Python 3.8 COMPONENTS Interpreter Development.Module)
+    find_package (Python 3.6 COMPONENTS Interpreter Development.Module)
   endif ()
 
   if (Python_FOUND)
@@ -54,12 +54,13 @@ if (BUILD_PYTHON)
     if (USE_SPHINX)
       find_program (SPHINX_EXECUTABLE NAMES sphinx-build DOC "Sphinx Documentation Builder (sphinx-doc.org)")
       find_python_module (numpydoc)
+      find_python_module (sphinx_gallery)
       find_python_module (sphinx_copybutton)
-      if (SPHINX_EXECUTABLE AND NUMPYDOC_FOUND AND SPHINX_COPYBUTTON_FOUND AND MATPLOTLIB_FOUND)
-        find_python_module (sphinx 1.1)
+      if (SPHINX_EXECUTABLE AND NUMPYDOC_FOUND AND SPHINX_GALLERY_FOUND AND SPHINX_COPYBUTTON_FOUND AND MATPLOTLIB_FOUND)
+        find_python_module (sphinx)
       endif ()
       if (NOT SPHINX_FOUND)
-        message (STATUS "Disabling documentation (need sphinx/pandoc/numpydoc/matplotlib)")
+        message (STATUS "Disabling documentation (need sphinx/pandoc/numpydoc/sphinx-gallery/matplotlib)")
       endif ()
     endif ()
 
@@ -122,7 +123,7 @@ endmacro ( ot_add_current_dir_to_include_dirs )
 
 set(CPACK_PACKAGE_NAME ${PACKAGE_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
-set(CPACK_PACKAGE_VERSION_MINOR 13)
+set(CPACK_PACKAGE_VERSION_MINOR 14)
 set(CPACK_PACKAGE_VERSION_PATCH)
 set(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
 set(CPACK_BINARY_STGZ OFF CACHE BOOL "STGZ")
