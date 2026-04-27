@@ -2,7 +2,7 @@
 %global python_sitearch %{_libdir}/python%(python3 -c "import sysconfig; print(sysconfig.get_python_version())")/site-packages
 
 Name:           otagrum
-Version:        0.13
+Version:        0.14
 Release:        0%{?dist}
 Summary:        OpenTURNS module
 Group:          System Environment/Libraries
