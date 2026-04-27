@@ -9,12 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Install
       run: |
         sudo apt-get install python3-pip
         pip3 install flake8
     - name: Run linter 
-      run: |
-        flake8 python/ --max-line-length 100
+      run: ./utils/lint.sh
 
