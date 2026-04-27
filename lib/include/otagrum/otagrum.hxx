@@ -30,7 +30,6 @@
 #include "otagrum/CorrectedMutualInformation.hxx"
 #include "otagrum/ContinuousMIIC.hxx"
 #include "otagrum/TabuList.hxx"
-#include "otagrum/OTAgrumResourceMap.hxx"
 #include "otagrum/JunctionTreeBernsteinCopula.hxx"
 #include "otagrum/JunctionTreeBernsteinCopulaFactory.hxx"
 #include "otagrum/ContinuousBayesianNetwork.hxx"

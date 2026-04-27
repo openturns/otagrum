@@ -24,7 +24,6 @@
 
 #include <openturns/OT.hxx>
 #include "otagrum/ContinuousBayesianNetwork.hxx"
-#include "otagrum/OTAgrumResourceMap.hxx"
 
 namespace OTAGRUM
 {

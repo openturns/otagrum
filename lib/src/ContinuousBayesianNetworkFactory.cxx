@@ -168,4 +168,25 @@ ContinuousBayesianNetworkFactory::buildAsContinuousBayesianNetwork() const
   return ContinuousBayesianNetwork();
 }
 
+struct ContinuousBayesianNetworkFactory_init
+{
+  ContinuousBayesianNetworkFactory_init()
+  {
+    // JunctionTreeBernsteinCopulaFactory
+    ResourceMap::AddAsScalar("JunctionTreeBernsteinCopulaFactory-DefaultAlpha", 0.1);
+    ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultBinNumber", 5);
+    ResourceMap::AddAsUnsignedInteger("JunctionTreeBernsteinCopulaFactory-DefaultMaximumConditioningSetSize", 5);
+
+    // ContinuousBayesianNetworkFactory
+    ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-WorkInCopulaSpace", true);
+    ResourceMap::AddAsBool("ContinuousBayesianNetworkFactory-UseBetaCopula", true);
+    ResourceMap::AddAsScalar("ContinuousBayesianNetworkFactory-DefaultAlpha", 0.1);
+    ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-DefaultMaximumConditioningSetSize", 5);
+    ResourceMap::AddAsUnsignedInteger("ContinuousBayesianNetworkFactory-MaximumDiscreteSupport", 10);
+  }
+};
+
+static ContinuousBayesianNetworkFactory_init __ContinuousBayesianNetworkFactory_initializer;
+
+
 } // namespace OTAGRUM

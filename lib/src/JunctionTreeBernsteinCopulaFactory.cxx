@@ -22,7 +22,6 @@
 #include <openturns/OTprivate.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 
-#include "otagrum/OTAgrumResourceMap.hxx"
 #include "otagrum/ContinuousPC.hxx"
 #include "otagrum/JunctionTreeBernsteinCopulaFactory.hxx"
 

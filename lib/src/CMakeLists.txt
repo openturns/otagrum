@@ -17,7 +17,6 @@ ot_add_source_file ( Greater.cxx )
 ot_add_source_file ( TabuList.cxx )
 ot_add_source_file ( JunctionTreeBernsteinCopula.cxx )
 ot_add_source_file ( JunctionTreeBernsteinCopulaFactory.cxx )
-ot_add_source_file ( OTAgrumResourceMap.cxx )
 
 ot_install_header_file ( Utils.hxx )
 ot_install_header_file ( NamedDAG.hxx )
@@ -34,7 +33,6 @@ ot_install_header_file ( Greater.hxx )
 ot_install_header_file ( TabuList.hxx )
 ot_install_header_file ( JunctionTreeBernsteinCopula.hxx )
 ot_install_header_file ( JunctionTreeBernsteinCopulaFactory.hxx )
-ot_install_header_file ( OTAgrumResourceMap.hxx )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 
