@@ -21,8 +21,18 @@
 
 #include <openturns/OTprivate.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
+
+#if OPENTURNS_VERSION >= 102700
 #include <openturns/FiniteDiscreteDistribution.hxx>
 #include <openturns/FiniteDiscreteDistributionFactory.hxx>
+#else
+#include <openturns/UserDefined.hxx>
+#include <openturns/UserDefinedFactory.hxx>
+#define FiniteDiscreteDistribution UserDefined
+#define FiniteDiscreteDistributionFactory UserDefinedFactory
+#define buildAsFiniteDiscreteDistribution buildAsUserDefined
+#endif
+
 #include <openturns/HistogramFactory.hxx>
 #include <openturns/IndependentCopula.hxx>
 #include <openturns/BernsteinCopulaFactory.hxx>

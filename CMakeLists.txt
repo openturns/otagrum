@@ -14,7 +14,7 @@ string (TOLOWER ${CMAKE_PROJECT_NAME} PACKAGE_NAME)
 # set module dir to find custom scripts
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-find_package (OpenTURNS 1.27 CONFIG REQUIRED)
+find_package (OpenTURNS 1.23 CONFIG REQUIRED)
 message (STATUS "Found OpenTURNS: ${OpenTURNS_DIR} (found version \"${OpenTURNS_VERSION}\")")
 
 find_package (aGrUM 2 CONFIG REQUIRED)
