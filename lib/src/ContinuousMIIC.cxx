@@ -244,6 +244,12 @@ void ContinuousMIIC::iteration()
     //times.push_back(diff.count());
     //TRACE("\tElapsed time for this iteration: " << diff.count() << " s" << std::endl);
   }
+  // clean up remaining heap-allocated tuples in rank_
+  while (!rank_.empty())
+  {
+    auto remaining = rank_.pop();
+    delete remaining.first;
+  }
   TRACE("===== ENDING ITERATION =====" << std::endl);
   TRACE("Summary:" << std::endl);
   //auto end_iteration = std::chrono::steady_clock::now();
@@ -715,8 +721,11 @@ gum::MixedGraph ContinuousMIIC::learnPDAG()
   }
 
   pdag_done_ = true;
-  return pdag_;
+  // clean up remaining heap-allocated tuples
+  for (auto &entry : proba_triples)
+    delete std::get<0>(entry);
   TRACE("===== ENDING PDAG LEARNING =====" << std::endl);
+  return pdag_;
 }
 
 NamedDAG ContinuousMIIC::learnDAG()
@@ -738,8 +747,8 @@ NamedDAG ContinuousMIIC::learnDAG()
   dag_ = NamedDAG(dag, namesFromData());
   dag_done_ = true;
 
-  return dag_;
   TRACE("===== ENDING DAG LEARNING =====" << std::endl);
+  return dag_;
 }
 
 gum::NodeId ContinuousMIIC::idFromName(const std::string& name) const
@@ -1067,13 +1076,16 @@ void ContinuousMIIC::findBestContributor(const OT::UnsignedInteger X,
       OT::UnsignedInteger,
       OT::Indices >*, double > final_pair;
 
-  auto tup = new std::tuple< OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::Indices > {X, Y, maxZ, U};
-  final_pair.first = tup;
-  final_pair.second = maxP;
-  rank_.insert(final_pair);
+  if (maxP > -1.0)
+  {
+    auto tup = new std::tuple< OT::UnsignedInteger,
+    OT::UnsignedInteger,
+    OT::UnsignedInteger,
+    OT::Indices > {X, Y, maxZ, U};
+    final_pair.first = tup;
+    final_pair.second = maxP;
+    rank_.insert(final_pair);
+  }
 }
 
 } // namespace OTAGRUM

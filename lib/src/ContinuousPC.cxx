@@ -765,7 +765,7 @@ double ContinuousPC::getTTest(gum::NodeId x, gum::NodeId y) const
 OT::Indices ContinuousPC::getSepset(gum::NodeId x, gum::NodeId y) const
 {
   gum::Edge e(x, y);
-  if (pvalues_.exists(e))
+  if (sepset_.exists(e))
   {
     return sepset_[e];
   }

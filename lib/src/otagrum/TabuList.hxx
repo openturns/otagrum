@@ -44,17 +44,17 @@ public:
 private:
   //void tabu_list_();
   std::vector< std::string > namesFromData() const;
-  double computeDeltaScore(gum::DAG dag, gum::learning::GraphChange change);
-  double computeDeltaScoreAddition(gum::DAG dag,
-                                   OT::UnsignedInteger node1,
-                                   OT::UnsignedInteger node2);
-  double computeDeltaScoreDeletion(gum::DAG dag,
-                                   OT::UnsignedInteger node1,
-                                   OT::UnsignedInteger node2);
-  double computeDeltaScoreReversal(gum::DAG dag,
-                                   OT::UnsignedInteger node1,
-                                   OT::UnsignedInteger node2);
-  double computeScore(gum::DAG dag);
+  double computeDeltaScore(const gum::DAG &dag, gum::learning::GraphChange change);
+  double computeDeltaScoreAddition(const gum::DAG &dag,
+                                    OT::UnsignedInteger node1,
+                                    OT::UnsignedInteger node2);
+  double computeDeltaScoreDeletion(const gum::DAG &dag,
+                                    OT::UnsignedInteger node1,
+                                    OT::UnsignedInteger node2);
+  double computeDeltaScoreReversal(const gum::DAG &dag,
+                                    OT::UnsignedInteger node1,
+                                    OT::UnsignedInteger node2);
+  double computeScore(const gum::DAG &dag);
   void addElementTabuList(gum::learning::GraphChange change);
 
   gum::DAG randomDAG(OT::UnsignedInteger size,
@@ -65,7 +65,7 @@ private:
   gum::learning::GraphChange
   choseRandomChange(const std::vector< gum::learning::GraphChange > &changes);
 
-  std::pair< gum::learning::GraphChange, double > findBestChange(gum::DAG dag);
+  std::pair< gum::learning::GraphChange, double > findBestChange(const gum::DAG &dag);
   void updateBest(const gum::DAG &dag, const double score);
   double tabuListAlgo(gum::DAG &dag);
 

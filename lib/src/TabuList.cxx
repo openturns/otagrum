@@ -296,7 +296,7 @@ gum::learning::GraphChange TabuList::choseRandomChange(
   return changes[OT::RandomGenerator::IntegerGenerate(changes.size())];
 }
 
-double TabuList::computeDeltaScore(gum::DAG dag, gum::learning::GraphChange change)
+double TabuList::computeDeltaScore(const gum::DAG &dag, gum::learning::GraphChange change)
 {
   //std::cout << "ComputeDeltaScore" << std::endl;
   switch(change.type())
@@ -321,7 +321,7 @@ double TabuList::computeDeltaScore(gum::DAG dag, gum::learning::GraphChange chan
   }
 }
 
-double TabuList::computeDeltaScoreAddition(gum::DAG dag,
+double TabuList::computeDeltaScoreAddition(const gum::DAG &dag,
     OT::UnsignedInteger node1,
     OT::UnsignedInteger node2)
 {
@@ -339,7 +339,7 @@ double TabuList::computeDeltaScoreAddition(gum::DAG dag,
   return likelihood_part - penalty_part;
 }
 
-double TabuList::computeDeltaScoreDeletion(gum::DAG dag,
+double TabuList::computeDeltaScoreDeletion(const gum::DAG &dag,
     OT::UnsignedInteger node1,
     OT::UnsignedInteger node2)
 {
@@ -357,7 +357,7 @@ double TabuList::computeDeltaScoreDeletion(gum::DAG dag,
   return likelihood_part - penalty_part;
 }
 
-double TabuList::computeDeltaScoreReversal(gum::DAG dag,
+double TabuList::computeDeltaScoreReversal(const gum::DAG &dag,
     OT::UnsignedInteger node1,
     OT::UnsignedInteger node2)
 {
@@ -384,7 +384,7 @@ double TabuList::computeDeltaScoreReversal(gum::DAG dag,
   return likelihood_part;
 }
 
-double TabuList::computeScore(gum::DAG dag)
+double TabuList::computeScore(const gum::DAG &dag)
 {
   double score = 0.;
   gum::DAG temp_dag;
@@ -417,7 +417,7 @@ std::vector< std::string > TabuList::namesFromData() const
 }
 
 std::pair< gum::learning::GraphChange, double >
-TabuList::findBestChange(gum::DAG dag)
+TabuList::findBestChange(const gum::DAG &dag)
 {
   gum::PriorityQueue< gum::learning::GraphChange, double, std::greater<double> >
   change_queue;
@@ -474,6 +474,8 @@ TabuList::findBestChange(gum::DAG dag)
     }
   }
 
+  if (change_queue.empty())
+    return {gum::learning::GraphChange(gum::learning::ARC_ADDITION, 0, 0), 0.0};
   return {change_queue.top(), change_queue.topPriority()};
 }
 

@@ -127,7 +127,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
                                  const OT::Indices &X) const
 {
 
-  OT::UnsignedInteger k = 0;  // Bandwidth parameter
+  OT::UnsignedInteger k;
 
   OT::Point logFX, logFYX, logFZX, logFYZX;
   std::tie(logFX, logFYX, logFZX, logFYZX, k) = getLogPDFs(Y, Z, X);
@@ -319,7 +319,7 @@ double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y,
       H += std::pow(
              std::expm1(0.5 * logFYX[i] + logFZX[i] - logFYZX[i] - logFX[i]), 2.0);
   const auto T =
-    4 * H * N - pow(k, 0.5 * d) / std::pow(k, 0.5 * d + 1.0) / sigma;
+    4 * H * N * std::pow(1.0 / k, 0.5 * d + 1.0) / sigma;
   LOGINFO(OT::OSS() << "Y=" << Y << ", Z=" << Z << ", X=" << X << ", T=" << T
           << ", H=" << H);
   return T;

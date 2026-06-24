@@ -88,6 +88,8 @@ int StratifiedCache::size() const
 };
 int StratifiedCache::size(int level) const
 {
+  if (level < 0 || (unsigned long)level >= stratified_keys_.size())
+    return 0;
   return stratified_keys_[level].size();
 }
 
