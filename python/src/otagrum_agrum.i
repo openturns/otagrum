@@ -26,5 +26,10 @@ using namespace gum;
 %import (module="pyagrum") <agrum/base/graphs/diGraph.h>
 %import (module="pyagrum") <agrum/base/graphs/undiGraph.h>
 %import (module="pyagrum") <agrum/base/graphs/mixedGraph.h>
+%import (module="pyagrum") <agrum/base/graphs/DAG.h>
+%import (module="pyagrum") <agrum/base/graphs/cliqueGraph.h>
+%import (module="pyagrum") <agrum/BN/BayesNet.h>
+%import (module="pyagrum") <agrum/base/multidim/tensor.h>
+%import (module="pyagrum") <agrum/base/variables/discretizedVariable.h>
 
 
