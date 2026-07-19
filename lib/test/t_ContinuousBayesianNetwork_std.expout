@@ -25,3 +25,29 @@ cbn=ContinuousBayesianNetwork(dag=[A,B,C,D,E]
 , marginals=[Uniform(a = 0, b = 1),Uniform(a = 0, b = 1),Uniform(a = 0, b = 1),Uniform(a = 0, b = 1),Uniform(a = 0, b = 1)], copulas=[class=SklarCopula name=SklarCopula dimension=2 distribution=class=Student name=Student dimension=2 nu=5 mean=class=Point name=Unnamed dimension=2 values=[0,0] sigma=class=Point name=Unnamed dimension=2 values=[1,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.25,0.25,1],class=SklarCopula name=SklarCopula dimension=2 distribution=class=Student name=Student dimension=2 nu=5 mean=class=Point name=Unnamed dimension=2 values=[0,0] sigma=class=Point name=Unnamed dimension=2 values=[1,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.25,0.25,1],class=SklarCopula name=SklarCopula dimension=4 distribution=class=Student name=Student dimension=4 nu=5 mean=class=Point name=Unnamed dimension=4 values=[0,0,0,0] sigma=class=Point name=Unnamed dimension=4 values=[1,1,1,1] correlationMatrix=class=CorrelationMatrix dimension=4 implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,0.125,0.125,0.125,0.125,1,0.125,0.125,0.125,0.125,1,0.125,0.125,0.125,0.125,1],class=SklarCopula name=SklarCopula dimension=2 distribution=class=Student name=Student dimension=2 nu=5 mean=class=Point name=Unnamed dimension=2 values=[0,0] sigma=class=Point name=Unnamed dimension=2 values=[1,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.25,0.25,1],IndependentCopula(dimension = 1)])
 cbn pdf=1.94939
 cbn realization=[0.870048,0.20085,0.0502041,0.182986,0.629877]
+i=0, d=2
+i=1, d=2
+i=2, d=4
+i=3, d=2
+i=4, d=1
+cbn=ContinuousBayesianNetwork(dag=[A,B,C,D,E]
+[E->A,E->C,A->B,A->C,B->C,C->D]
+, marginals=[Uniform(a = 0, b = 1),Uniform(a = 0, b = 1),Uniform(a = 0, b = 1),Uniform(a = 0, b = 1),Uniform(a = 0, b = 1)], copulas=[class=SklarCopula name=SklarCopula dimension=2 distribution=class=Student name=Student dimension=2 nu=5 mean=class=Point name=Unnamed dimension=2 values=[0,0] sigma=class=Point name=Unnamed dimension=2 values=[1,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.25,0.25,1],class=SklarCopula name=SklarCopula dimension=2 distribution=class=Student name=Student dimension=2 nu=5 mean=class=Point name=Unnamed dimension=2 values=[0,0] sigma=class=Point name=Unnamed dimension=2 values=[1,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.25,0.25,1],class=SklarCopula name=SklarCopula dimension=4 distribution=class=Student name=Student dimension=4 nu=5 mean=class=Point name=Unnamed dimension=4 values=[0,0,0,0] sigma=class=Point name=Unnamed dimension=4 values=[1,1,1,1] correlationMatrix=class=CorrelationMatrix dimension=4 implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,0.125,0.125,0.125,0.125,1,0.125,0.125,0.125,0.125,1,0.125,0.125,0.125,0.125,1],class=SklarCopula name=SklarCopula dimension=2 distribution=class=Student name=Student dimension=2 nu=5 mean=class=Point name=Unnamed dimension=2 values=[0,0] sigma=class=Point name=Unnamed dimension=2 values=[1,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.25,0.25,1],IndependentCopula(dimension = 1)])
+cbn pdf=1.94939
+cbn realization=[0.978384,0.737753,0.0631083,0.157428,0.969423]
+cbn sample=      [ A         B         C         D         E         ]
+  0 : [ 0.287837  0.232841  0.37447   0.233562  0.130553  ]
+  1 : [ 0.367548  0.0936685 0.912238  0.683041  0.2223    ]
+  2 : [ 0.485938  0.0795191 0.221468  0.154284  0.917082  ]
+...
+997 : [ 0.106182  0.404218  0.200329  0.100803  0.758916  ]
+998 : [ 0.162621  0.378201  0.24147   0.621667  0.424722  ]
+999 : [ 0.719559  0.957754  0.892912  0.0931253 0.89171   ]
+log-l=0.23175
+copula=NormalCopula(R = 5x5
+[[ 1         0.24003   0.247995  0.121183  0.252337  ]
+ [ 0.24003   1         0.130872  0.0576739 0.0327183 ]
+ [ 0.247995  0.130872  1         0.266502  0.131552  ]
+ [ 0.121183  0.0576739 0.266502  1         0.0523925 ]
+ [ 0.252337  0.0327183 0.131552  0.0523925 1         ]])
+log-l=0.11484

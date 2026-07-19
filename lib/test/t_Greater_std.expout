@@ -1,0 +1,22 @@
+
+== RankedTriple ==
+getX : OK
+getY : OK
+getZ : OK
+getU : OK
+copy sees the same X : OK
+
+== GreaterPairOn2nd ==
+high > low : OK
+low > high : OK
+high > high : OK
+
+== GreaterTupleOnLast ==
+differing max, e1 > e2 : OK
+differing max, e2 > e1 : OK
+opposite signs, e3 > e4 : OK
+opposite signs, e4 > e3 : OK
+equal max, positive I, e5 > e6 : OK
+equal max, positive I, e6 > e5 : OK
+equal max, negative I, e7 > e8 : OK
+equal max, negative I, e8 > e7 : OK

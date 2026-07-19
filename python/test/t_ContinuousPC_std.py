@@ -2,6 +2,7 @@
 
 import os
 import openturns as ot
+import openturns.testing as ott
 import otagrum
 import sys
 
@@ -46,5 +47,11 @@ def testAsiaDirichlet():
     print(dag.toDot())
 
 
+def testEmptySampleRaises():
+    with ott.assert_raises(TypeError):
+        otagrum.ContinuousPC(ot.Sample())
+
+
 testSpecificInstance()
 testAsiaDirichlet()
+testEmptySampleRaises()
