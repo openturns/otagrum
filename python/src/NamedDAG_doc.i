@@ -38,6 +38,21 @@ names : list
 
 // ----------------------------------------------------------------------------
 
+%feature("docstring") OTAGRUM::NamedDAG::idFromName
+"Id accessor.
+
+Parameters
+----------
+name : str
+    Node name
+
+Returns
+-------
+id : int
+    Id of the node"
+
+// ----------------------------------------------------------------------------
+
 %feature("docstring") OTAGRUM::NamedDAG::getParents
 "The parents of a node.
 
@@ -66,17 +81,6 @@ Returns
 -------
 children : :py:class:`openturns.Indices`
     Indices of children nodes
-"
-
-// ----------------------------------------------------------------------------
-
-%feature("docstring") OTAGRUM::NamedDAG::getNodes
-"Nodes accessor.
-
-Returns
--------
-nodes : :py:class:`openturns.Indices`
-    List of nodes
 "
 
 // ----------------------------------------------------------------------------
