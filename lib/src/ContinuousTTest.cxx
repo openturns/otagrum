@@ -25,11 +25,13 @@
 #include <agrum/base/core/timer.h>
 #include <openturns/DistFunc.hxx>
 #include <openturns/EmpiricalBernsteinCopula.hxx>
+#include <openturns/Exception.hxx>
 #include <openturns/Log.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 
 #include "otagrum/ContinuousTTest.hxx"
+#include "otagrum/Utils.hxx"
 
 #define TRACE_CONTINUOUS_TTEST(x)                                         \
   {                                                                       \
@@ -44,6 +46,8 @@ ContinuousTTest::ContinuousTTest(const OT::Sample &data, const double alpha)
   : OT::Object(),
     verbose_(false)
 {
+  if (data.getSize() == 0)
+    throw OT::InvalidArgumentException(HERE) << "Error: expected a non-empty sample.";
   setAlpha(alpha);
   data_ = (data.rank() + 0.5) / data.getSize();  // Switching data to rank space
 }
@@ -51,7 +55,7 @@ ContinuousTTest::ContinuousTTest(const OT::Sample &data, const double alpha)
 OT::UnsignedInteger ContinuousTTest::GetK(const OT::UnsignedInteger size,
     const OT::UnsignedInteger dimension)
 {
-  return OT::UnsignedInteger(1.0 + std::pow(size, 2.0 / (4.0 + dimension)));
+  return Utils::GetK(size, dimension);
 }
 
 std::string ContinuousTTest::GetKey(const OT::Indices &l,

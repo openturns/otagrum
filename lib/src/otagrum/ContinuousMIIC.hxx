@@ -1,6 +1,8 @@
 #ifndef OTAGRUM_CONTINUOUSMIIC_HXX
 #define OTAGRUM_CONTINUOUSMIIC_HXX
 
+#include <memory>
+
 #include <agrum/base/graphs/undiGraph.h>
 #include <agrum/base/graphs/mixedGraph.h>
 #include <agrum/base/core/heap.h>
@@ -80,6 +82,10 @@ private:
   gum::NodeId idFromName(const std::string& name) const;
   std::vector< std::string > namesFromData() const;
 
+  // Records the arc (a,b) as a latent couple found by v-structure discovery
+  // in learnPDAG(), unless it (or its reverse) is already recorded.
+  void recordLatentCoupleIfNeeded(gum::NodeId a, gum::NodeId b);
+
   int maxLog_ = 100;
   bool verbose_ = false;
 
@@ -93,12 +99,7 @@ private:
   std::vector< gum::Arc > latent_couples_;
   gum::ArcProperty< double > arc_probas_;
   gum::EdgeProperty< OT::Indices > sepset_;
-  gum::Heap <
-  std::pair< std::tuple< OT::UnsignedInteger,
-      OT::UnsignedInteger,
-      OT::UnsignedInteger,
-      OT::Indices >*, double >,
-      GreaterPairOn2nd > rank_;
+  gum::Heap< std::pair< RankedTriple, double >, GreaterPairOn2nd > rank_;
 
   gum::UndiGraph skeleton_;
   gum::MixedGraph pdag_;

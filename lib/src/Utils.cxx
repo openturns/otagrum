@@ -36,6 +36,7 @@
 #define FiniteDiscreteDistribution UserDefined
 #define MixedHistogramFiniteDiscreteDistribution MixedHistogramUserDefined
 #endif
+#include <agrum/base/graphs/algorithms/MeekRules.h>
 #include <agrum/BN/io/BIF/BIFReader.h>
 #include <agrum/BN/io/BIF/BIFWriter.h>
 
@@ -265,6 +266,46 @@ OT::Indices Utils::FromNodeSet(const gum::NodeSet &clique)
     indices.add(nod);
 
   return indices;
+}
+
+
+std::vector<std::string> Utils::NamesFromDescription(const OT::Description &description)
+{
+  std::vector<std::string> names;
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); ++i)
+  {
+    names.push_back(description.at(i));
+  }
+  return names;
+}
+
+
+gum::NodeId Utils::IdFromName(const OT::Description &description, const std::string &name)
+{
+  for (OT::UnsignedInteger i = 0; i < description.getSize(); ++i)
+  {
+    if (name == description.at(i))
+    {
+      return gum::NodeId(i);
+    }
+  }
+
+  throw OT::InvalidArgumentException(HERE)
+      << "Error: name '" << name << "' is not a node name.";
+}
+
+
+NamedDAG Utils::DeriveDAG(const gum::MixedGraph &pdag, const std::vector<std::string> &names)
+{
+  gum::MeekRules meekRules;
+  gum::DAG dag = meekRules.propagateToDAG(pdag);
+  return NamedDAG(dag, names);
+}
+
+
+OT::UnsignedInteger Utils::GetK(const OT::UnsignedInteger size, const OT::UnsignedInteger dimension)
+{
+  return OT::UnsignedInteger(1.0 + std::pow(size, 2.0 / (4.0 + dimension)));
 }
 
 

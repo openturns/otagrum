@@ -25,6 +25,7 @@
 
 #include "otagrum/ContinuousMIIC.hxx"
 #include "otagrum/Greater.hxx"
+#include "otagrum/Utils.hxx"
 
 #define TRACE(x)                                                               \
   {                                                                            \
@@ -199,11 +200,7 @@ void ContinuousMIIC::iteration()
   //auto start_iteration = std::chrono::steady_clock::now();
   TRACE("\n===== STARTING ITERATION =====" << std::endl);
   // if no triples to further examine pass
-  std::pair< std::tuple< OT::UnsignedInteger,
-      OT::UnsignedInteger,
-      OT::UnsignedInteger,
-      OT::Indices >*,
-      double > best;
+  std::pair< RankedTriple, double > best;
 
   //std::vector< double > times;
   unsigned int n_iterations = 0;
@@ -213,10 +210,10 @@ void ContinuousMIIC::iteration()
     //auto start = std::chrono::steady_clock::now();
     best = rank_.pop();
 
-    const OT::UnsignedInteger X = std::get< 0 >(*(best.first));
-    const OT::UnsignedInteger Y = std::get< 1 >(*(best.first));
-    const OT::UnsignedInteger Z = std::get< 2 >(*(best.first));
-    OT::Indices U = std::move(std::get< 3 >(*(best.first)));
+    const OT::UnsignedInteger X = best.first.getX();
+    const OT::UnsignedInteger Y = best.first.getY();
+    const OT::UnsignedInteger Z = best.first.getZ();
+    OT::Indices U = std::move(best.first.getU());
     double proba = best.second;
 
     TRACE("\n\t((" << X << ", " << Y << ", " << Z << ", " << U << "), "
@@ -238,17 +235,15 @@ void ContinuousMIIC::iteration()
       findBestContributor(X, Y, U);
     }
 
-    delete best.first;
     //auto end = std::chrono::steady_clock::now();
     //std::chrono::duration<double> diff = end - start;
     //times.push_back(diff.count());
     //TRACE("\tElapsed time for this iteration: " << diff.count() << " s" << std::endl);
   }
-  // clean up remaining heap-allocated tuples in rank_
+  // drain rank_ (owned tuples are freed by unique_ptr as each entry is popped)
   while (!rank_.empty())
   {
-    auto remaining = rank_.pop();
-    delete remaining.first;
+    rank_.pop();
   }
   TRACE("===== ENDING ITERATION =====" << std::endl);
   TRACE("Summary:" << std::endl);
@@ -343,6 +338,19 @@ void ContinuousMIIC::propagatesHead(gum::MixedGraph& graph, gum::NodeId node)
   }
 }
 
+void ContinuousMIIC::recordLatentCoupleIfNeeded(gum::NodeId a, gum::NodeId b)
+{
+  if (pdag_.existsArc(a, b)
+      && std::find(latent_couples_.begin(), latent_couples_.end(), gum::Arc(a, b))
+      == latent_couples_.end()
+      && std::find(latent_couples_.begin(), latent_couples_.end(), gum::Arc(b, a))
+      == latent_couples_.end())
+  {
+    TRACE("\t\tAdding latent couple (" << a << "," << b << ")" << std::endl);
+    latent_couples_.push_back(gum::Arc(a, b));
+  }
+}
+
 gum::MixedGraph ContinuousMIIC::UGtoMG(const gum::UndiGraph& graph) const
 {
   // Should be added in aGrUM as a constructor for MixedGraph alongside
@@ -434,20 +442,7 @@ gum::MixedGraph ContinuousMIIC::learnPDAG()
           TRACE("\t\t1.a Removing edge (" << X << "," << Z << ")" << std::endl);
           TRACE("\t\t1.a Adding arc (" << X << "," << Z << ")" << std::endl);
           marks[ {X, Z}] = '>';
-          if (pdag_.existsArc(Z, X)
-              && std::find(
-                latent_couples_.begin(),
-                latent_couples_.end(),
-                gum::Arc(Z, X)) == latent_couples_.end()
-              && std::find(
-                latent_couples_.begin(),
-                latent_couples_.end(),
-                gum::Arc(X, Z)) == latent_couples_.end())
-          {
-            TRACE("\t\tAdding latent couple (" << Z << "," << X << ")"
-                  << std::endl);
-            latent_couples_.push_back(gum::Arc(Z, X));
-          }
+          recordLatentCoupleIfNeeded(Z, X);
           if (!arc_probas_.exists(gum::Arc(X, Z)))
             arc_probas_.insert(gum::Arc(X, Z), std::get< 2 >(best));
         }
@@ -473,18 +468,7 @@ gum::MixedGraph ContinuousMIIC::learnPDAG()
           TRACE("\t\t1.c Adding arc (" << Y << "," << Z << ")"
                 << std::endl);
           marks[ {Y, Z}] = '>';
-          if (pdag_.existsArc(Z, Y)
-              && std::find(
-                latent_couples_.begin(),
-                latent_couples_.end(),
-                gum::Arc(Z, Y)) == latent_couples_.end()
-              && std::find(
-                latent_couples_.begin(),
-                latent_couples_.end(),
-                gum::Arc(Y, Z)) == latent_couples_.end())
-          {
-            latent_couples_.push_back(gum::Arc(Z, Y));
-          }
+          recordLatentCoupleIfNeeded(Z, Y);
           auto arc = gum::Arc(Y, Z);
           if (!arc_probas_.exists(arc))
             arc_probas_.insert(arc, std::get< 3 >(best));
@@ -512,18 +496,7 @@ gum::MixedGraph ContinuousMIIC::learnPDAG()
           TRACE("\t\t2.a Removing edge (" << Y << "," << Z << ")" << std::endl);
           TRACE("\t\t2.a Adding arc (" << Y << "," << Z << ")" << std::endl);
           marks[ {Y, Z}] = '>';
-          if (pdag_.existsArc(Z, Y)
-              && std::find(
-                latent_couples_.begin(),
-                latent_couples_.end(),
-                gum::Arc(Z, Y)) == latent_couples_.end()
-              && std::find(
-                latent_couples_.begin(),
-                latent_couples_.end(),
-                gum::Arc(Y, Z)) == latent_couples_.end())
-          {
-            latent_couples_.push_back(gum::Arc(Z, Y));
-          }
+          recordLatentCoupleIfNeeded(Z, Y);
           auto arc = gum::Arc(Y, Z);
           if (!arc_probas_.exists(arc))
             arc_probas_.insert(arc, std::get< 3 >(best));
@@ -553,18 +526,7 @@ gum::MixedGraph ContinuousMIIC::learnPDAG()
           TRACE("\t\t3.a Adding arc (" << X << "," << Z << ")"
                 << std::endl);
           marks[ {X, Z}] = '>';
-          if (pdag_.existsArc(Z, X)
-              && std::find(
-                latent_couples_.begin(),
-                latent_couples_.end(),
-                gum::Arc(Z, X)) == latent_couples_.end()
-              && std::find(
-                latent_couples_.begin(),
-                latent_couples_.end(),
-                gum::Arc(X, Z)) == latent_couples_.end())
-          {
-            latent_couples_.push_back(gum::Arc(Z, X));
-          }
+          recordLatentCoupleIfNeeded(Z, X);
           auto arc = gum::Arc(X, Z);
           if (!arc_probas_.exists(arc))
             arc_probas_.insert(arc, std::get< 2 >(best));
@@ -740,11 +702,7 @@ NamedDAG ContinuousMIIC::learnDAG()
     learnPDAG();
   }
 
-  // meek rules integration
-  gum::MeekRules meekRules;
-  gum::DAG dag = meekRules.propagateToDAG(pdag_);
-
-  dag_ = NamedDAG(dag, namesFromData());
+  dag_ = Utils::DeriveDAG(pdag_, namesFromData());
   dag_done_ = true;
 
   TRACE("===== ENDING DAG LEARNING =====" << std::endl);
@@ -753,28 +711,12 @@ NamedDAG ContinuousMIIC::learnDAG()
 
 gum::NodeId ContinuousMIIC::idFromName(const std::string& name) const
 {
-  const auto &description = info_.getDataDescription();
-  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
-  {
-    if (name == description.at(i))
-    {
-      return gum::NodeId(i);
-    }
-  }
-
-  throw OT::InvalidArgumentException(HERE) << "Error: name '" << name
-      << "' is not a node name.";
+  return Utils::IdFromName(info_.getDataDescription(), name);
 }
 
 std::vector< std::string > ContinuousMIIC::namesFromData() const
 {
-  std::vector< std::string > names;
-  const auto &description = info_.getDataDescription();
-  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
-  {
-    names.push_back(description.at(i));
-  }
-  return names;
+  return Utils::NamesFromDescription(info_.getDataDescription());
 }
 
 
@@ -1071,20 +1013,13 @@ void ContinuousMIIC::findBestContributor(const OT::UnsignedInteger X,
   }
   TRACE("\tBest contributor: (" << maxZ << ", " << maxP << ")" << std::endl);
 
-  std::pair< std::tuple< OT::UnsignedInteger,
-      OT::UnsignedInteger,
-      OT::UnsignedInteger,
-      OT::Indices >*, double > final_pair;
+  std::pair< RankedTriple, double > final_pair;
 
   if (maxP > -1.0)
   {
-    auto tup = new std::tuple< OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::UnsignedInteger,
-    OT::Indices > {X, Y, maxZ, U};
-    final_pair.first = tup;
+    final_pair.first = RankedTriple(X, Y, maxZ, U);
     final_pair.second = maxP;
-    rank_.insert(final_pair);
+    rank_.insert(std::move(final_pair));
   }
 }
 

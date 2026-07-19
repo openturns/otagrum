@@ -11,6 +11,11 @@
 #include "otagrum/CorrectedMutualInformation.hxx"
 #include "otagrum/IndicesManip.hxx"
 
+namespace gum
+{
+class DAGCycleDetector;
+}
+
 namespace OTAGRUM
 {
 
@@ -64,6 +69,14 @@ private:
   findLegalChanges(const gum::DAG &dag, OT::UnsignedInteger max_parents);
   gum::learning::GraphChange
   choseRandomChange(const std::vector< gum::learning::GraphChange > &changes);
+
+  // Legal changes (reversal/deletion/addition) between node1 and node2,
+  // shared by findLegalChanges() and findBestChange().
+  std::vector< gum::learning::GraphChange >
+  legalChangesForPair(const gum::DAG &dag,
+                      const gum::DAGCycleDetector &dag_cycle_detector,
+                      gum::NodeId node1, gum::NodeId node2,
+                      OT::UnsignedInteger max_parents) const;
 
   std::pair< gum::learning::GraphChange, double > findBestChange(const gum::DAG &dag);
   void updateBest(const gum::DAG &dag, const double score);

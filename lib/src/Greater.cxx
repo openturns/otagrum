@@ -4,18 +4,8 @@ namespace OTAGRUM
 {
 
 bool GreaterPairOn2nd::operator()(
-  const std::pair <
-  std::tuple< OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::Indices >*,
-  double > & e1,
-  const std::pair <
-  std::tuple< OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::UnsignedInteger,
-  OT::Indices >*,
-  double > & e2) const
+  const std::pair< RankedTriple, double > & e1,
+  const std::pair< RankedTriple, double > & e2) const
 {
   return e1.second > e2.second;
 }
