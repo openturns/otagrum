@@ -47,6 +47,7 @@ public:
 
   OT::UnsignedInteger getSize() const;
   OT::Description getDescription() const;
+  gum::NodeId idFromName(const OT::String &name) const;
 
   OT::Indices getParents(const OT::UnsignedInteger nod) const;
   OT::Indices getChildren(const OT::UnsignedInteger nod) const;
@@ -68,7 +69,6 @@ private:
 
   gum::DAG dag_;
 
-  OT::Description map_;
   OT::Collection<OT::Indices> parents_;
   OT::Collection<OT::Indices> children_;
   OT::Indices topo_order_;

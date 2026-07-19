@@ -6,7 +6,6 @@
 #include <openturns/Sample.hxx>
 #include <openturns/NormalCopula.hxx>
 
-#include "otagrum/NamedDAG.hxx"
 #include "otagrum/IndicesManip.hxx"
 
 namespace OTAGRUM

@@ -150,35 +150,39 @@ double TabuList::tabuListAlgo(gum::DAG &dag)
       score += best_change.second;
       switch(best_change.first.type())
       {
-        case gum::learning::ARC_ADDITION:
+        case gum::learning::GraphChangeType::ARC_ADDITION:
           dag.addArc(best_change.first.node1(),
                      best_change.first.node2());
           addElementTabuList(
-            gum::learning::GraphChange(gum::learning::ARC_DELETION,
+            gum::learning::ArcDeletion(
                                        best_change.first.node1(),
                                        best_change.first.node2()));
           break;
-        case gum::learning::ARC_DELETION:
+        case gum::learning::GraphChangeType::ARC_DELETION:
           dag.eraseArc(gum::Arc(best_change.first.node1(),
                                 best_change.first.node2()));
           addElementTabuList(
-            gum::learning::GraphChange(gum::learning::ARC_ADDITION,
+            gum::learning::ArcAddition(
                                        best_change.first.node1(),
                                        best_change.first.node2()));
           break;
-        case gum::learning::ARC_REVERSAL:
+        case gum::learning::GraphChangeType::ARC_REVERSAL:
           dag.eraseArc(gum::Arc(best_change.first.node1(),
                                 best_change.first.node2()));
           dag.addArc(best_change.first.node2(),
                      best_change.first.node1());
           addElementTabuList(
-            gum::learning::GraphChange(gum::learning::ARC_REVERSAL,
+            gum::learning::ArcReversal(
                                        best_change.first.node2(),
                                        best_change.first.node1()));
           break;
-        case gum::learning::EDGE_ADDITION:
+        case gum::learning::GraphChangeType::EDGE_ADDITION:
           break;
-        case gum::learning::EDGE_DELETION:
+        case gum::learning::GraphChangeType::EDGE_DELETION:
+          break;
+        case gum::learning::GraphChangeType::ARC_TRIANGLE_DELETION1:
+          break;
+        case gum::learning::GraphChangeType::ARC_TRIANGLE_DELETION2:
           break;
           //default:
           //trhow error
@@ -218,19 +222,23 @@ gum::DAG TabuList::randomDAG(OT::UnsignedInteger size,
       auto change = choseRandomChange(legal_changes);
       switch(change.type())
       {
-        case gum::learning::ARC_ADDITION:
+        case gum::learning::GraphChangeType::ARC_ADDITION:
           dag.addArc(change.node1(), change.node2());
           break;
-        case gum::learning::ARC_DELETION:
+        case gum::learning::GraphChangeType::ARC_DELETION:
           dag.eraseArc(gum::Arc(change.node1(), change.node2()));
           break;
-        case gum::learning::ARC_REVERSAL:
+        case gum::learning::GraphChangeType::ARC_REVERSAL:
           dag.eraseArc(gum::Arc(change.node1(), change.node2()));
           dag.addArc(change.node2(), change.node1());
           break;
-        case gum::learning::EDGE_ADDITION:
+        case gum::learning::GraphChangeType::EDGE_ADDITION:
           break;
-        case gum::learning::EDGE_DELETION:
+        case gum::learning::GraphChangeType::EDGE_DELETION:
+          break;
+        case gum::learning::GraphChangeType::ARC_TRIANGLE_DELETION1:
+          break;
+        case gum::learning::GraphChangeType::ARC_TRIANGLE_DELETION2:
           break;
           //default:
       }
@@ -260,16 +268,10 @@ std::vector< gum::learning::GraphChange > TabuList::findLegalChanges(
           if(!dag_cycle_detector.hasCycleFromReversal(node1, node2)
               && dag.parents(node1).size() < max_parents)
           {
-            auto reversal = gum::learning::GraphChange(
-                              gum::learning::ARC_REVERSAL,
-                              node1,
-                              node2);
+            auto reversal = gum::learning::ArcReversal(node1, node2);
             changes.push_back(reversal);
           }
-          auto deletion = gum::learning::GraphChange(
-                            gum::learning::ARC_DELETION,
-                            node1,
-                            node2);
+          auto deletion = gum::learning::ArcDeletion(node1, node2);
           changes.push_back(deletion);
         }
         else
@@ -277,10 +279,7 @@ std::vector< gum::learning::GraphChange > TabuList::findLegalChanges(
           if(!dag_cycle_detector.hasCycleFromAddition(node1, node2)
               && dag.parents(node2).size() < max_parents)
           {
-            auto addition = gum::learning::GraphChange(
-                              gum::learning::ARC_ADDITION,
-                              node1,
-                              node2);
+            auto addition = gum::learning::ArcAddition(node1, node2);
             changes.push_back(addition);
           }
         }
@@ -301,19 +300,19 @@ double TabuList::computeDeltaScore(const gum::DAG &dag, gum::learning::GraphChan
   //std::cout << "ComputeDeltaScore" << std::endl;
   switch(change.type())
   {
-    case gum::learning::ARC_ADDITION:
+    case gum::learning::GraphChangeType::ARC_ADDITION:
       return computeDeltaScoreAddition(dag, change.node1(), change.node2());
       break;
-    case gum::learning::ARC_DELETION:
+    case gum::learning::GraphChangeType::ARC_DELETION:
       return computeDeltaScoreDeletion(dag, change.node1(), change.node2());
       break;
-    case gum::learning::ARC_REVERSAL:
+    case gum::learning::GraphChangeType::ARC_REVERSAL:
       return computeDeltaScoreReversal(dag, change.node1(), change.node2());
       break;
-    case gum::learning::EDGE_DELETION:
+    case gum::learning::GraphChangeType::EDGE_DELETION:
       return 0.0;
       break;
-    case gum::learning::EDGE_ADDITION:
+    case gum::learning::GraphChangeType::EDGE_ADDITION:
       return 0.0;
       break;
     default:
@@ -434,20 +433,14 @@ TabuList::findBestChange(const gum::DAG &dag)
           if(!dag_cycle_detector.hasCycleFromReversal(node1, node2)
               && dag.parents(node1).size() < max_parents_)
           {
-            auto reversal = gum::learning::GraphChange(
-                              gum::learning::ARC_REVERSAL,
-                              node1,
-                              node2);
+            auto reversal = gum::learning::ArcReversal(node1, node2);
             if(!tabu_list_.exists(reversal))
             {
               change_queue.insert(reversal,
                                   computeDeltaScore(dag, reversal));
             }
           }
-          auto deletion = gum::learning::GraphChange(
-                            gum::learning::ARC_DELETION,
-                            node1,
-                            node2);
+          auto deletion = gum::learning::ArcDeletion(node1, node2);
           if(!tabu_list_.exists(deletion))
           {
             change_queue.insert(deletion,
@@ -459,10 +452,7 @@ TabuList::findBestChange(const gum::DAG &dag)
           if(!dag_cycle_detector.hasCycleFromAddition(node1, node2)
               && dag.parents(node2).size() < max_parents_)
           {
-            auto addition = gum::learning::GraphChange(
-                              gum::learning::ARC_ADDITION,
-                              node1,
-                              node2);
+            auto addition = gum::learning::ArcAddition(node1, node2);
             if(!tabu_list_.exists(addition))
             {
               change_queue.insert(addition,
@@ -475,7 +465,7 @@ TabuList::findBestChange(const gum::DAG &dag)
   }
 
   if (change_queue.empty())
-    return {gum::learning::GraphChange(gum::learning::ARC_ADDITION, 0, 0), 0.0};
+    return {gum::learning::ArcAddition( 0, 0), 0.0};
   return {change_queue.top(), change_queue.topPriority()};
 }
 
