@@ -1,9 +1,11 @@
 #include <cmath>
 
 #include <openturns/EmpiricalBernsteinCopula.hxx>
+#include <openturns/Exception.hxx>
 #include <openturns/NormalCopulaFactory.hxx>
 
 #include "otagrum/CorrectedMutualInformation.hxx"
+#include "otagrum/Utils.hxx"
 
 namespace OTAGRUM
 {
@@ -11,6 +13,8 @@ namespace OTAGRUM
 CorrectedMutualInformation::CorrectedMutualInformation(const OT::Sample &data)
   : OT::Object()
 {
+  if (data.getSize() == 0)
+    throw OT::InvalidArgumentException(HERE) << "Error: expected a non-empty sample.";
   data_ = (data.rank() + 1) / (data.getSize() + 2); // Switching data to rank space
 }
 
@@ -152,7 +156,7 @@ double CorrectedMutualInformation::computeCrossEntropy(const OT::Indices &variab
 OT::UnsignedInteger CorrectedMutualInformation::GetK(const OT::UnsignedInteger size,
     const OT::UnsignedInteger dimension)
 {
-  return OT::UnsignedInteger(1.0 + std::pow(size, 2.0 / (4.0 + dimension)));
+  return Utils::GetK(size, dimension);
 }
 
 double CorrectedMutualInformation::compute2PtInformation(const OT::UnsignedInteger X,

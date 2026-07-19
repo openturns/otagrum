@@ -22,9 +22,11 @@
 #include <agrum/base/graphs/algorithms/DAGCycleDetector.h>
 #include <agrum/base/core/priorityQueue.h>
 
+#include <openturns/Exception.hxx>
 #include <openturns/RandomGenerator.hxx>
 
 #include "otagrum/TabuList.hxx"
+#include "otagrum/Utils.hxx"
 
 #define TRACE(x)                                                               \
   {                                                                            \
@@ -47,6 +49,8 @@ TabuList::TabuList(const OT::Sample &data,
   , restarts_(restarts)
   , tabu_list_size_(tabu_list_size)
 {
+  if (restarts_ == 0)
+    throw OT::InvalidArgumentException(HERE) << "Error: restarts must be >= 1, got 0.";
   info_.setKMode(CorrectedMutualInformation::KModeTypes::NoCorr);
   info_.setCMode(CorrectedMutualInformation::CModeTypes::Gaussian);
   best_score_ = computeScore(best_dag_); // Has to be done after KMode and CMode are set
@@ -63,6 +67,8 @@ TabuList::TabuList(const OT::Sample &data,
   , restarts_(restarts)
   , tabu_list_size_(tabu_list_size)
 {
+  if (restarts_ == 0)
+    throw OT::InvalidArgumentException(HERE) << "Error: restarts must be >= 1, got 0.";
   info_.setKMode(CorrectedMutualInformation::KModeTypes::NoCorr);
   info_.setCMode(CorrectedMutualInformation::CModeTypes::Gaussian);
   // Creating an empty dag (no arcs)
@@ -248,10 +254,34 @@ gum::DAG TabuList::randomDAG(OT::UnsignedInteger size,
 }
 
 
+std::vector< gum::learning::GraphChange > TabuList::legalChangesForPair(
+  const gum::DAG &dag, const gum::DAGCycleDetector &dag_cycle_detector,
+  gum::NodeId node1, gum::NodeId node2, OT::UnsignedInteger max_parents) const
+{
+  std::vector< gum::learning::GraphChange > changes;
+  if(dag.existsArc(node1, node2))
+  {
+    if(!dag_cycle_detector.hasCycleFromReversal(node1, node2)
+        && dag.parents(node1).size() < max_parents)
+    {
+      changes.push_back(gum::learning::ArcReversal(node1, node2));
+    }
+    changes.push_back(gum::learning::ArcDeletion(node1, node2));
+  }
+  else
+  {
+    if(!dag_cycle_detector.hasCycleFromAddition(node1, node2)
+        && dag.parents(node2).size() < max_parents)
+    {
+      changes.push_back(gum::learning::ArcAddition(node1, node2));
+    }
+  }
+  return changes;
+}
+
 std::vector< gum::learning::GraphChange > TabuList::findLegalChanges(
   const gum::DAG &dag, OT::UnsignedInteger max_parents)
 {
-
   std::vector< gum::learning::GraphChange > changes;
 
   gum::DAGCycleDetector dag_cycle_detector;
@@ -263,26 +293,8 @@ std::vector< gum::learning::GraphChange > TabuList::findLegalChanges(
     {
       if(node1 != node2)
       {
-        if(dag.existsArc(node1, node2))
-        {
-          if(!dag_cycle_detector.hasCycleFromReversal(node1, node2)
-              && dag.parents(node1).size() < max_parents)
-          {
-            auto reversal = gum::learning::ArcReversal(node1, node2);
-            changes.push_back(reversal);
-          }
-          auto deletion = gum::learning::ArcDeletion(node1, node2);
-          changes.push_back(deletion);
-        }
-        else
-        {
-          if(!dag_cycle_detector.hasCycleFromAddition(node1, node2)
-              && dag.parents(node2).size() < max_parents)
-          {
-            auto addition = gum::learning::ArcAddition(node1, node2);
-            changes.push_back(addition);
-          }
-        }
+        auto pair_changes = legalChangesForPair(dag, dag_cycle_detector, node1, node2, max_parents);
+        changes.insert(changes.end(), pair_changes.begin(), pair_changes.end());
       }
     }
   }
@@ -406,13 +418,7 @@ double TabuList::getBestScore() const
 
 std::vector< std::string > TabuList::namesFromData() const
 {
-  std::vector< std::string > names;
-  const auto &description = info_.getDataDescription();
-  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
-  {
-    names.push_back(description.at(i));
-  }
-  return names;
+  return Utils::NamesFromDescription(info_.getDataDescription());
 }
 
 std::pair< gum::learning::GraphChange, double >
@@ -428,36 +434,11 @@ TabuList::findBestChange(const gum::DAG &dag)
     {
       if(node1 != node2)
       {
-        if(dag.existsArc(node1, node2))
+        for(const auto &change : legalChangesForPair(dag, dag_cycle_detector, node1, node2, max_parents_))
         {
-          if(!dag_cycle_detector.hasCycleFromReversal(node1, node2)
-              && dag.parents(node1).size() < max_parents_)
+          if(!tabu_list_.exists(change))
           {
-            auto reversal = gum::learning::ArcReversal(node1, node2);
-            if(!tabu_list_.exists(reversal))
-            {
-              change_queue.insert(reversal,
-                                  computeDeltaScore(dag, reversal));
-            }
-          }
-          auto deletion = gum::learning::ArcDeletion(node1, node2);
-          if(!tabu_list_.exists(deletion))
-          {
-            change_queue.insert(deletion,
-                                computeDeltaScore(dag, deletion));
-          }
-        }
-        else
-        {
-          if(!dag_cycle_detector.hasCycleFromAddition(node1, node2)
-              && dag.parents(node2).size() < max_parents_)
-          {
-            auto addition = gum::learning::ArcAddition(node1, node2);
-            if(!tabu_list_.exists(addition))
-            {
-              change_queue.insert(addition,
-                                  computeDeltaScore(dag, addition));
-            }
+            change_queue.insert(change, computeDeltaScore(dag, change));
           }
         }
       }
