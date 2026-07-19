@@ -1,4 +1,4 @@
-// SWIG file NamedJunctionTree.i
+// SWIG file NamedDAG.i
 
 %{
 #include "otagrum/NamedDAG.hxx"

@@ -149,6 +149,8 @@ Sample JunctionTreeBernsteinCopula::getCopulaSample() const
 void JunctionTreeBernsteinCopula::setBinNumber(const UnsignedInteger binNumber)
 {
   binNumber_ = binNumber;
+  update();
+  computeRange();
 }
 
 UnsignedInteger JunctionTreeBernsteinCopula::getBinNumber() const

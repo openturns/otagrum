@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <vector>
 
+#include <openturns/Exception.hxx>
+
 #include "otagrum/NamedJunctionTree.hxx"
 #include "otagrum/Utils.hxx"
 
@@ -293,7 +295,8 @@ OT::Indices NamedJunctionTree::getOrderMaxFirst() const
     }
 
     // root is OK
-    assert(max != -1);
+    if (max == -1)
+      throw OT::InternalException(HERE) << "Error: no unmarked leaf found in a non-empty junction tree.";
 
     gum::NodeSet tbv; // nodes to be visited
     tbv.insert(root);
