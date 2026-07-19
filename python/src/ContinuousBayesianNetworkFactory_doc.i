@@ -39,7 +39,7 @@ Notes
     - *'ContinuousBayesianNetworkFactory-MaximumDiscreteSupport'* to set the
       maximum number of different values to consider a marginal distribution as
       being discrete. Default value is *10*.
-    - *'ContinuousBayesianNetworkFactory-UseBetaFactory'* to indicate if the
+    - *'ContinuousBayesianNetworkFactory-UseBetaCopula'* to indicate if the
       estimated copula should be a Beta copula if a:class:`openturns.BernsteinCopulaFactory` is provided. Default value is *True*.
 
 Examples
