@@ -2,6 +2,7 @@
 
 import os
 import openturns as ot
+import openturns.testing as ott
 import otagrum
 import sys
 
@@ -101,6 +102,12 @@ def testMathis():
     print("cpdag:", learned_cpdag)
 
 
+def testEmptySampleRaises():
+    with ott.assert_raises(TypeError):
+        otagrum.ContinuousMIIC(ot.Sample())
+
+
 testSpecificInstance()
 testAsiaDirichlet()
 testMathis()
+testEmptySampleRaises()

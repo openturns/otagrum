@@ -1,0 +1,5 @@
+size : OK
+dimension : OK
+alpha round-trip : OK
+setAlpha : OK
+correlated pair has higher mutual information : OK

@@ -120,6 +120,7 @@ void genereData()
 int main(void)
 {
   testConstructor();
+  genereData();
 
   return 0;
 }
