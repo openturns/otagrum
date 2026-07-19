@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import openturns as ot
 import otagrum
 import pyagrum as gum
 
