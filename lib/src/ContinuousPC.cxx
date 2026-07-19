@@ -268,13 +268,7 @@ gum::UndiGraph ContinuousPC::inferSkeleton()
 
 std::vector<std::string> ContinuousPC::namesFromData(void) const
 {
-  std::vector<std::string> names;
-  const auto &description = tester_.getDataDescription();
-  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
-  {
-    names.push_back(description.at(i));
-  }
-  return names;
+  return Utils::NamesFromDescription(tester_.getDataDescription());
 }
 
 NamedJunctionTree ContinuousPC::learnJunctionTree()
@@ -297,10 +291,7 @@ NamedDAG ContinuousPC::learnDAG()
   if (!pdag_done_)
     learnPDAG();
 
-  // meek rules integration
-  gum::MeekRules meekRules;
-  gum::DAG dag = meekRules.propagateToDAG(pdag_);
-  dag_ = NamedDAG(dag, namesFromData());
+  dag_ = Utils::DeriveDAG(pdag_, namesFromData());
 
   dag_done_ = true;
   return dag_;
@@ -831,17 +822,7 @@ ContinuousPC::getSepsetNames(const std::string &x, const std::string &y) const
 
 gum::NodeId ContinuousPC::idFromName(const std::string &n) const
 {
-  const auto &description = tester_.getDataDescription();
-  for (OT::UnsignedInteger i = 0; i < description.getSize(); i++)
-  {
-    if (n == description.at(i))
-    {
-      return gum::NodeId(i);
-    }
-  }
-
-  throw OT::InvalidArgumentException(HERE)
-      << "Error: name '" << n << "' is not a node name.";
+  return Utils::IdFromName(tester_.getDataDescription(), n);
 }
 
 std::vector<std::string> ContinuousPC::getTrace() const

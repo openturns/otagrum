@@ -22,15 +22,19 @@
 #ifndef OTAGRUM_UTILS_HXX
 #define OTAGRUM_UTILS_HXX
 
+#include <openturns/Description.hxx>
 #include <openturns/Distribution.hxx>
 #include <openturns/DistributionImplementation.hxx>
 #include <openturns/PersistentObject.hxx>
 #include <openturns/Point.hxx>
 #include <openturns/StorageManager.hxx>
 
+#include <agrum/base/graphs/graphElements.h>
+#include <agrum/base/graphs/mixedGraph.h>
 #include <agrum/base/multidim/tensor.h>
 #include <agrum/base/variables/discretizedVariable.h>
 
+#include "otagrum/NamedDAG.hxx"
 #include "otagrum/otagrumprivate.hxx"
 
 namespace OTAGRUM
@@ -53,6 +57,34 @@ public:
   static OT::Distribution FromTensor(const gum::Tensor<double> &pot);
 
   static OT::Indices FromNodeSet(const gum::NodeSet &clique);
+
+  /* Names of the variables of an OT::Description, as a std::vector<std::string> */
+  static std::vector<std::string> NamesFromDescription(const OT::Description &description);
+
+  /* Node id (index in description) of a variable name, or an
+   * OT::InvalidArgumentException if the name is not found */
+  static gum::NodeId IdFromName(const OT::Description &description, const std::string &name);
+
+#ifndef SWIG
+  /* Apply Meek's rules to a partially directed graph learnt by a structure
+   * learning algorithm (ContinuousPC, ContinuousMIIC) and wrap the resulting
+   * DAG with the variable names.
+   *
+   * Hidden from SWIG: Utils.i does not %import NamedDAG.i, so SWIG only sees
+   * a forward declaration of NamedDAG here and emits wrapper code that
+   * references the bare (unqualified) "NamedDAG" instead of
+   * "OTAGRUM::NamedDAG", which fails to compile. This method is a pure
+   * C++-side implementation-sharing helper (not meant to be part of the
+   * public Python API), so it is simplest to exclude it from the bindings
+   * rather than add a cross-module %import for it. */
+  static NamedDAG DeriveDAG(const gum::MixedGraph &pdag, const std::vector<std::string> &names);
+#endif
+
+  /* Number of bins used by the empirical Bernstein copula estimators
+   * (ContinuousTTest, CorrectedMutualInformation), as a function of the
+   * sample size and the dimension of the tested variable set */
+  static OT::UnsignedInteger GetK(const OT::UnsignedInteger size,
+                                   const OT::UnsignedInteger dimension);
 
   // Underflow of exponential is common practice in numerical routines,
   // so handle it here.
