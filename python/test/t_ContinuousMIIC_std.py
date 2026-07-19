@@ -101,6 +101,15 @@ def testMathis():
     print("cpdag:", learned_cpdag)
 
 
+def testEmptySampleRaises():
+    try:
+        otagrum.ContinuousMIIC(ot.Sample())
+        print("empty sample raises : fail (no exception)")
+    except Exception:
+        print("empty sample raises : OK")
+
+
 testSpecificInstance()
 testAsiaDirichlet()
 testMathis()
+testEmptySampleRaises()

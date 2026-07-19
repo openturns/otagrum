@@ -81,6 +81,6 @@ def test_fromTensor():
     print(distrib.getMarginal(1))
 
 
-# test_basic()
-# test_fromMarginal()
+test_basic()
+test_fromMarginal()
 test_fromTensor()

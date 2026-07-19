@@ -47,5 +47,15 @@ def testAsiaDirichlet():
     print(dag.toDot())
 
 
+def testZeroRestartsRaises():
+    data = generateDataForSpecificInstance(100)
+    try:
+        otagrum.TabuList(data, restarts=0)
+        print("restarts=0 raises : fail (no exception)")
+    except Exception:
+        print("restarts=0 raises : OK")
+
+
 testSpecificInstance()
 testAsiaDirichlet()
+testZeroRestartsRaises()

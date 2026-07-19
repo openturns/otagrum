@@ -46,5 +46,14 @@ def testAsiaDirichlet():
     print(dag.toDot())
 
 
+def testEmptySampleRaises():
+    try:
+        otagrum.ContinuousPC(ot.Sample())
+        print("empty sample raises : fail (no exception)")
+    except Exception:
+        print("empty sample raises : OK")
+
+
 testSpecificInstance()
 testAsiaDirichlet()
+testEmptySampleRaises()

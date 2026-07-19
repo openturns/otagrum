@@ -1,0 +1,7 @@
+learnt copula dimension : OK
+entropy is finite : OK
+build() dimension matches : OK
+
+Empty sample should raise : OK
+
+Default build() dimension : OK

@@ -1,0 +1,9 @@
+size : OK
+idFromName round-trips through description : OK
+E has no parent : OK
+A has parent E : OK
+B has parents A, C and E : OK
+D has no children : OK
+topological order has every node once : OK
+topological order respects E before A : OK
+non contiguous ids raises : OK
