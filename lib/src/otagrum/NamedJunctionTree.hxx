@@ -65,6 +65,13 @@ public:
 
 private:
   gum::JunctionTree jt_;
+
+  // Mapping NodeId -> Name. WARNING: these are NOT the NodeIds of the
+  // gum::JunctionTree jt_ (which are CLIQUE ids) but the NodeIds of the
+  // VARIABLES (disjoint id space, different cardinality). This is why
+  // this mapping cannot be delegated to jt_.setName()/nameFromId()
+  // (aGrUM's native NodeGraphPart mechanism) without a separate name
+  // registry over the variable id space.
   OT::Description map_;
 
   void checkConsistency() const;

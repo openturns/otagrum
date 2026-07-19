@@ -39,21 +39,23 @@ static const Factory<NamedDAG> Factory_NamedDAG;
 
 NamedDAG::NamedDAG() {};
 NamedDAG::NamedDAG(const gum::BayesNet<double> &bn)
-  : dag_(bn.dag()), map_(bn.size())
+  : dag_(bn.dag())
 {
   build_OTrepr_();
-  std::transform(bn.nodes().begin(), bn.nodes().end(), map_.begin(),
-                 [&bn](const gum::NodeId nod) -> std::string
-  {
-    return bn.variable(nod).name();
-  });
+  for (const auto nod : bn.nodes())
+    dag_.setName(nod, bn.variable(nod).name());
 }
 
 NamedDAG::NamedDAG(const gum::DAG &dag, const std::vector<std::string> &names)
-  : dag_(dag), map_(dag.size())
+  : dag_(dag)
 {
   build_OTrepr_();
-  std::copy(names.begin(), names.end(), map_.begin());
+  if (names.size() != dag_.size())
+    throw InvalidArgumentException(HERE)
+        << "names size (" << names.size() << ") does not match dag size ("
+        << dag_.size() << ").";
+  for (gum::NodeId id = 0; id < dag_.size(); ++id)
+    dag_.setName(id, names[id]);
 }
 
 void NamedDAG::build_OTrepr_()
@@ -84,12 +86,24 @@ PersistentObject *NamedDAG::clone() const
 
 UnsignedInteger NamedDAG::getSize() const
 {
-  return map_.getSize();
+  return dag_.size();
 }
 
 Description NamedDAG::getDescription() const
 {
-  return map_;
+  Description desc(dag_.size());
+  for (gum::NodeId id = 0; id < dag_.size(); ++id)
+    desc[id] = dag_.nameFromId(id);
+  return desc;
+}
+
+gum::NodeId NamedDAG::idFromName(const String &name) const
+{
+  const auto id = dag_.idFromName(name);
+  if (!id)
+    throw InvalidArgumentException(HERE)
+        << "Error: name '" << name << "' is not a node name.";
+  return *id;
 }
 
 Indices NamedDAG::getParents(const UnsignedInteger nod) const
@@ -117,12 +131,12 @@ String NamedDAG::__str__(const String &pref) const
   std::stringstream ss;
   ss << pref << "[";
   bool first = true;
-  for (const auto &item : map_)
+  for (gum::NodeId id = 0; id < dag_.size(); ++id)
   {
     if (!first)
       ss << ",";
     first = false;
-    ss << item;
+    ss << dag_.nameFromId(id);
   }
   ss << "]\n" << pref;
 
@@ -135,7 +149,7 @@ String NamedDAG::__str__(const String &pref) const
       if (!first)
         ss << ",";
       first = false;
-      ss << map_[nod] << "->" << map_[chi];
+      ss << dag_.nameFromId(nod) << "->" << dag_.nameFromId(chi);
     }
   }
   ss << "]\n";
@@ -152,12 +166,12 @@ String NamedDAG::toDot() const
     const Indices children(getChildren(nod));
     if (children.getSize() == 0)
     {
-      ss << "    \"" << map_[nod] << "\"\n";
+      ss << "    \"" << dag_.nameFromId(nod) << "\"\n";
     }
     else
       for (const auto &chi : children)
       {
-        ss << "    \"" << map_[nod] << "\"->\"" << map_[chi] << "\"\n";
+        ss << "    \"" << dag_.nameFromId(nod) << "\"->\"" << dag_.nameFromId(chi) << "\"\n";
       }
   }
   ss << "}\n";
@@ -168,7 +182,7 @@ String NamedDAG::toDot() const
 void NamedDAG::save(Advocate &adv) const
 {
   PersistentObject::save(adv);
-  adv.saveAttribute("map_", map_);
+  adv.saveAttribute("map_", getDescription());
   PersistentCollection<Indices> parentsByNodes;
   parentsByNodes = parents_;
   adv.saveAttribute("parentsByNodes_", parentsByNodes);
@@ -178,12 +192,13 @@ void NamedDAG::save(Advocate &adv) const
 void NamedDAG::load(Advocate &adv)
 {
   PersistentObject::load(adv);
-  adv.loadAttribute("map_", map_);
+  Description names;
+  adv.loadAttribute("map_", names);
   PersistentCollection<Indices> parentsByNodes;
   adv.loadAttribute("parentsByNodes_", parentsByNodes);
 
   dag_.clear();
-  UnsignedInteger graphsize = map_.getSize();
+  UnsignedInteger graphsize = names.getSize();
   for (gum::NodeId nod = 0; nod < graphsize; ++nod)
   {
     dag_.addNodeWithId(nod);
@@ -194,6 +209,8 @@ void NamedDAG::load(Advocate &adv)
     for (const auto &par : parents)
       dag_.addArc(par, nod);
   }
+  for (gum::NodeId nod = 0; nod < graphsize; ++nod)
+    dag_.setName(nod, names[nod]);
   build_OTrepr_();
 }
 
