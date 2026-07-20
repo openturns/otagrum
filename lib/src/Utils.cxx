@@ -27,15 +27,8 @@
 #include <openturns/Os.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/ResourceMap.hxx>
-#if OPENTURNS_VERSION >= 102700
 #include <openturns/FiniteDiscreteDistribution.hxx>
 #include <openturns/MixedHistogramFiniteDiscreteDistribution.hxx>
-#else
-#include <openturns/UserDefined.hxx>
-#include <openturns/MixedHistogramUserDefined.hxx>
-#define FiniteDiscreteDistribution UserDefined
-#define MixedHistogramFiniteDiscreteDistribution MixedHistogramUserDefined
-#endif
 #include <agrum/base/graphs/algorithms/MeekRules.h>
 #include <agrum/BN/io/BIF/BIFReader.h>
 #include <agrum/BN/io/BIF/BIFWriter.h>
