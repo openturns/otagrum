@@ -40,6 +40,14 @@
 #include <agrum/BN/io/BIF/BIFReader.h>
 #include <agrum/BN/io/BIF/BIFWriter.h>
 
+// On mingw, the agrum headers above pull in <windows.h>, which #defines
+// GetClassName to GetClassNameA/W. In unity builds this leaks into other
+// translation units merged after this one, breaking OT's CLASSNAMEINIT
+// macro (e.g. in NamedDAG.cxx) whose declaration/definition then mismatch.
+#ifdef GetClassName
+#undef GetClassName
+#endif
+
 #include <agrum/base/core/exceptions.h>
 
 #include <agrum/base/multidim/instantiation.h>
