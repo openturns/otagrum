@@ -152,7 +152,7 @@ void ContinuousMIIC::addMandatoryArc(OT::UnsignedInteger head, OT::UnsignedInteg
 
 void ContinuousMIIC::initiation()
 {
-  unsigned int cutted_edges = 0;
+  unsigned int cut_edges = 0;
   //auto start_initiation = std::chrono::steady_clock::now();
   TRACE("\n===== STARTING INITIATION =====" << std::endl);
   OT::UnsignedInteger  X, Y;
@@ -171,7 +171,7 @@ void ContinuousMIIC::initiation()
     if (IXY <= 0)     //< K
     {
       skeleton_.eraseEdge(edge);
-      cutted_edges++;
+      cut_edges++;
       TRACE("\tCutting edge " << edge << std::endl);
       sepset_.insert(edge, OT::Indices());
     }
@@ -191,12 +191,12 @@ void ContinuousMIIC::initiation()
   TRACE("Summary:" << std::endl);
   //TRACE("\tElapsed time for initiation: " << diff_initiation.count()
   //<< " s" << std::endl);
-  TRACE("\tNumber of cutted edges: " << cutted_edges << std::endl << std::endl);
+  TRACE("\tNumber of cut edges: " << cut_edges << std::endl << std::endl);
 }
 
 void ContinuousMIIC::iteration()
 {
-  unsigned int cutted_edges = 0;
+  unsigned int cut_edges = 0;
   //auto start_iteration = std::chrono::steady_clock::now();
   TRACE("\n===== STARTING ITERATION =====" << std::endl);
   // if no triples to further examine pass
@@ -225,7 +225,7 @@ void ContinuousMIIC::iteration()
     if (IXY_U < 0)
     {
       skeleton_.eraseEdge(gum::Edge(X, Y));
-      cutted_edges++;
+      cut_edges++;
       TRACE("\t\tCutting edge " << gum::Edge(X, Y) << " with " << U
             << " as conditional set" << std::endl);
       sepset_.insert(gum::Edge(X, Y), std::move(U));
@@ -252,7 +252,7 @@ void ContinuousMIIC::iteration()
   TRACE("\tNumber of iterations: " << n_iterations << std::endl);
   //TRACE("\tElapsed time for iteration: " << diff_iteration.count()
   //<< " s" << std::endl);
-  TRACE("\tNumber of cutted edges: " << cutted_edges << std::endl << std::endl);
+  TRACE("\tNumber of cut edges: " << cut_edges << std::endl << std::endl);
 }
 
 void ContinuousMIIC::propagatesHead(gum::MixedGraph& graph, gum::NodeId node)

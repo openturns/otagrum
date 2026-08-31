@@ -8,7 +8,7 @@ data : 2-d sequence of float
 
 Notes
 -----
-MIIC algorithm is a hybrid method between contrained and score based methods.
+MIIC algorithm is a hybrid method between constrained and score based methods.
 It allows one to learn the structure of a bayesian network and consists in three steps :
 skeleton learning, V-structure searching and constraint propagation. These steps
 rely on an information theoretic score."

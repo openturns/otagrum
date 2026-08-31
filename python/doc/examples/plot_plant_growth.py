@@ -192,7 +192,7 @@ heightWhenBrightAndDry = ot.Triangular(0.0, 15.0, 30.0)
 heightWhenBrightAndWet = ot.Normal(90.0, 10.0)
 
 # %%
-# We have to enter some OT distributions whithin aGrUM conditional probability tables
+# We have to enter some OT distributions within aGrUM conditional probability tables
 # We show the antecedents of height with the order in which they were declared
 # The new class Utils from otagrum is able to marry OT distributions and Agrum
 # conditional probability tables

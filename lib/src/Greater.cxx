@@ -27,7 +27,7 @@ bool GreaterTupleOnLast::operator()(
   double I1 = std::get< 1 >(e1);
   double I2 = std::get< 1 >(e2);
   // First, we look at the sign of information.
-  // Then, the probility values
+  // Then, the probability values
   // and finally the abs value of information.
   if ( (I1 < 0 && I2 < 0) || (I1 >= 0 && I2 >= 0) )
   {

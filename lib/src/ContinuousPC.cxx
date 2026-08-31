@@ -113,7 +113,7 @@ ContinuousPC::ContinuousPC(const OT::Sample &data,
  * Search for the best separator between y and z in g, of size n, among
  * neighbours.
  *
- * @param g : the graph giving the neigbours
+ * @param g : the graph giving the neighbours
  * @param y : the node y
  * @param z : and the node z to separate
  * @param neighbours : the nodes X which separate
@@ -660,7 +660,7 @@ gum::DAG ContinuousPC::deriveDAG(const gum::MixedGraph &p) const
       {
       }
       remainings.erase(gum::Edge(candidate.tail(), candidate.head()));
-      //@todo : A warning if !found (if we add a bad condidate)
+      //@todo : A warning if !found (if we add a bad candidate)
     } // if (! found)
   }
 

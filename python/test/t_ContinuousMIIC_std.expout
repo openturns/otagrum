@@ -506,14 +506,14 @@ Edge: 2--4
 	Cutting edge 2--4
 ===== ENDING INITIATION =====
 Summary:
-	Number of cutted edges: 20
+	Number of cut edges: 20
 
 
 ===== STARTING ITERATION =====
 ===== ENDING ITERATION =====
 Summary:
 	Number of iterations: 0
-	Number of cutted edges: 0
+	Number of cut edges: 0
 
 	Looking for unshielded triples
 		(7, 1, 4, -0.0100961, 1, 1)

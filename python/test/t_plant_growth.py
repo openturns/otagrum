@@ -64,7 +64,7 @@ print("moisture Antecedents= ", bn.cpt(indexMoisture).names)
 bn.cpt(indexMoisture)[{"Light": "Dim"}] = [0.2, 0.8]
 bn.cpt(indexMoisture)[{"Light": "Bright"}] = [0.6, 0.4]
 
-# We have to enter some OT distributions whithin aGrUM conditional probability tables
+# We have to enter some OT distributions within aGrUM conditional probability tables
 # We show the antecedents of height with the order in which they were declared
 # The new class Utils from otagrum is able to marry OT distributions and Agrum
 # conditional probability tables
