@@ -16,7 +16,7 @@ ctest --output-on-failure --timeout 100 ${MAKEFLAGS}
 
 # coverage
 lcov --capture --directory lib/src/ --output-file coverage.info --include "*.cxx" -j 4
-genhtml --output-directory coverage coverage.info
+genhtml --ignore-errors inconsistent --output-directory coverage coverage.info
 cp -v coverage.info coverage
 
 UID_GID=$1

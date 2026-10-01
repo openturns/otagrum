@@ -17,8 +17,8 @@ from openturns.viewer import View
 from matplotlib import pylab as plt
 import sys
 
-from pyagrum.lib.explain import showInformation
-from pyagrum.lib.notebook import showInference
+from pyagrum.explain import showInformation
+from pyagrum.lib.image import exportInference
 
 gum.config["notebook", "histogram_discretized_visualisation"] = "bar"
 
@@ -342,15 +342,18 @@ showInformation(bn)
 
 
 # %%
-showInference(bn, size="20")
+plt.imshow(exportInference(bn, size="20"))
+plt.axis("off")
 
 
 # %%
-showInference(bn, evs={"L": True}, size="20")
+plt.imshow(exportInference(bn, evs={"L": True}, size="20"))
+plt.axis("off")
 
 
 # %%
-showInference(bn, evs={"L": False, "A": "0.2"}, size="20")
+plt.imshow(exportInference(bn, evs={"L": False, "A": "0.2"}, size="20"))
+plt.axis("off")
 
 # %%
 ie = gum.LazyPropagation(bn)
