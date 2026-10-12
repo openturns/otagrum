@@ -75,6 +75,7 @@ ot_pyinstallcheck_test (JunctionTreeBernsteinCopula_std)
 ot_pyinstallcheck_test (JunctionTreeBernsteinCopulaFactory_std)
 ot_pyinstallcheck_test (plant_growth)
 ot_pyinstallcheck_test (ContinuousBayesianNetwork_std)
+ot_pyinstallcheck_test (DistributionBayesianNetwork_std IGNOREOUT)
 ot_pyinstallcheck_test (ContinuousBayesianNetworkFactory_std)
 ot_pyinstallcheck_test (OTAgrumResourceMap_std IGNOREOUT)
 
