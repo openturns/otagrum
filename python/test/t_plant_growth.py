@@ -2,6 +2,7 @@
 
 
 import openturns as ot
+import openturns.testing as ott
 import otagrum
 import pyagrum as gum
 
@@ -59,15 +60,10 @@ bn.cpt(indexLight)[:] = [0.25, 0.75]
 
 
 # moisture conditional probability table
-# We show the antecedents of moisture with the order in which they were declared
-print("moisture Antecedents= ", bn.cpt(indexMoisture).names)
 bn.cpt(indexMoisture)[{"Light": "Dim"}] = [0.2, 0.8]
 bn.cpt(indexMoisture)[{"Light": "Bright"}] = [0.6, 0.4]
 
 # We have to enter some OT distributions within aGrUM conditional probability tables
-# We show the antecedents of height with the order in which they were declared
-# The new class Utils from otagrum is able to marry OT distributions and Agrum
-# conditional probability tables
 bn.cpt(indexHeight)[{"Light": "Dim", "Moisture": "Dry"}] = otagrum.Utils.Discretize(
     heightWhenDimAndDry, height
 )[:]
@@ -84,8 +80,7 @@ bn.cpt(indexHeight)[{"Light": "Bright", "Moisture": "Wet"}] = otagrum.Utils.Disc
 # Variability of the plant growth on my balcony
 ie = gum.LazyPropagation(bn)
 h_dist = otagrum.Utils.FromMarginal(ie.posterior("Height"))
-print("Probability (height > 40cm) = {:.6g}".format(1.0 - h_dist.computeCDF(40.0)))
-h_dist.drawPDF()
+ott.assert_almost_equal(1.0 - h_dist.computeCDF(40.0), 0.328571, 1e-6, 1e-6)
 
 
 # Variability of the plant growth in my cellar
@@ -93,12 +88,7 @@ ie = gum.LazyPropagation(bn)
 ie.setEvidence({"Light": "Dim"})
 h_dist_dim = otagrum.Utils.FromMarginal(ie.posterior("Height"))
 h_dist_dim.setDescription(["Height|Light=Dim"])
-print(
-    "Probability (height > 40cm)|Light=Dim = {:.6g}".format(
-        1.0 - h_dist_dim.computeCDF(40.0)
-    )
-)
-h_dist_dim.drawPDF()
+ott.assert_almost_equal(1.0 - h_dist_dim.computeCDF(40.0), 0.114286, 1e-6, 1e-6)
 
 
 # Variability of the plant growth when the atmosphere is very wet
@@ -106,18 +96,13 @@ ie = gum.LazyPropagation(bn)
 ie.setEvidence({"Moisture": "Wet"})
 h_dist_wet = otagrum.Utils.FromMarginal(ie.posterior("Height"))
 h_dist_wet.setDescription(["Height|Moisture=Wet"])
-print(
-    "Probability (height > 40cm)|Moisture=Wet = {:.6g}".format(
-        1.0 - h_dist_wet.computeCDF(40.0)
-    )
-)
-h_dist_wet.drawPDF()
+ott.assert_almost_equal(1.0 - h_dist_wet.computeCDF(40.0), 0.657143, 1e-6, 1e-6)
 
 
 # Get the distribution of the variable "Light"
 l_dist_wet = otagrum.Utils.FromTensor(ie.posterior("Light"))
-print(l_dist_wet)
-l_dist_wet.drawPDF()
+ott.assert_almost_equal(l_dist_wet.computePDF([0.0]), 0.4)
+ott.assert_almost_equal(l_dist_wet.computePDF([1.0]), 0.6)
 
 
 # Get the joint distribution [H, M]
@@ -126,5 +111,5 @@ targets = set(["Height", "Moisture"])
 ie.addJointTarget(targets)
 ie.makeInference()
 h_m_dist = otagrum.Utils.FromTensor(ie.jointPosterior(targets))
-print(h_m_dist.getDescription())
-print(h_m_dist.getMarginal(0))
+assert sorted(h_m_dist.getDescription()) == sorted(["Moisture", "Height"])
+assert h_m_dist.getMarginal(0).getDimension() == 1
