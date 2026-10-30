@@ -4,7 +4,6 @@ import os
 import openturns as ot
 import openturns.testing as ott
 import otagrum
-import sys
 
 
 def generateDataForSpecificInstance(size):
@@ -18,18 +17,33 @@ def generateDataForSpecificInstance(size):
 
 
 def testSpecificInstance():
+    ot.RandomGenerator.SetSeed(0)
     size = 1000
     data = generateDataForSpecificInstance(size)
     alpha = 0.1
     binNumber = 3
     learner = otagrum.ContinuousPC(data, binNumber, alpha)
 
-    # skel = learner.learnSkeleton()
-    # print(skel.toDot())
+    skeleton = learner.learnSkeleton()
+    assert skeleton.size() == 7
+    skeleton_edges = {tuple(sorted(e)) for e in skeleton.edges()}
+    for edge in [(0, 1), (2, 3), (2, 4), (5, 6)]:
+        assert edge in skeleton_edges
+    for u, v in skeleton_edges:
+        assert learner.getPValue(u, v) < alpha
+        assert learner.getTTest(u, v) > 0.0
+    assert len(learner.getTrace()) > 0
+
+    junction_tree = learner.learnJunctionTree()
+    assert junction_tree.getSize() == 7
 
     dag = learner.learnDAG()
-    print(dag.toDot())
-    sys.stdout.flush()
+    assert dag.getSize() == 7
+    assert list(dag.getDescription()) == list("ABCDEFG")
+    # blocks [A,B], [C,D,E] and [F,G] should be recovered (up to orientation)
+    dagImpl = dag.getDAG()
+    for u, v in [(0, 1), (2, 3), (2, 4), (5, 6)]:
+        assert dagImpl.existsArc(u, v) or dagImpl.existsArc(v, u)
 
 
 def testAsiaDirichlet():
@@ -39,12 +53,13 @@ def testAsiaDirichlet():
     alpha = 0.1
     binNumber = 3
     learner = otagrum.ContinuousPC(data, binNumber, alpha)
-    learner.setVerbosity(True)
     pdag = learner.learnPDAG()
-    # print(pdag)
-    print(learner.PDAGtoDot(pdag))
+    assert pdag.size() == 8
     dag = learner.learnDAG()
-    print(dag.toDot())
+    assert dag.getSize() == 8
+    assert sorted(list(dag.getDescription())) == sorted(
+        ["asia", "tub", "smoke", "lung", "bronc", "either", "xray", "dysp"]
+    )
 
 
 def testEmptySampleRaises():

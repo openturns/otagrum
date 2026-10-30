@@ -203,12 +203,15 @@ OT::Distribution Utils::FromMarginal(const gum::Tensor<double> &pot)
       auto vv = static_cast<const gum::DiscretizedVariable<double> &>(v);
 
       OT::Point ws(collectionSize);
+      OT::Point heights(collectionSize);
       for (inst.setFirst(); !inst.end(); ++inst)
       {
         auto i = inst.val(0);
         ws[i] = (vv.tick(i + 1) - vv.tick(i));
       }
-      res = OT::Histogram(vv.tick(0), ws, probas);
+      for (OT::UnsignedInteger i = 0; i < collectionSize; ++i)
+        heights[i] = probas[i] / ws[i];
+      res = OT::Histogram(vv.tick(0), ws, heights);
       break;
     }
     case gum::VarType::RANGE:

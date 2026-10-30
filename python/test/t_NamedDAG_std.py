@@ -10,7 +10,7 @@ def testConstructorFromBayesNet():
     bn = gum.BayesNet.fastPrototype(proto)
     ndag = otagrum.NamedDAG(bn)
 
-    print("size : " + ("OK" if ndag.getSize() == 5 else "fail"))
+    assert ndag.getSize() == 5
 
     description = ndag.getDescription()
     idA = ndag.idFromName("A")
@@ -19,29 +19,17 @@ def testConstructorFromBayesNet():
     idD = ndag.idFromName("D")
     idE = ndag.idFromName("E")
 
-    print(
-        "idFromName round-trips through description : "
-        + ("OK" if description[idA] == "A" else "fail")
-    )
+    assert description[idA] == "A"
 
-    print("E has no parent : " + ("OK" if ndag.getParents(idE).getSize() == 0 else "fail"))
-    print(
-        "A has parent E : "
-        + ("OK" if idE in list(ndag.getParents(idA)) else "fail")
-    )
-    print(
-        "B has parents A, C and E : "
-        + ("OK" if sorted(list(ndag.getParents(idB))) == sorted([idA, idC, idE]) else "fail")
-    )
-    print("D has no children : " + ("OK" if ndag.getChildren(idD).getSize() == 0 else "fail"))
+    assert ndag.getParents(idE).getSize() == 0
+    assert idE in list(ndag.getParents(idA))
+    assert sorted(list(ndag.getParents(idB))) == sorted([idA, idC, idE])
+    assert ndag.getChildren(idD).getSize() == 0
 
     order = list(ndag.getTopologicalOrder())
-    print("topological order has every node once : " + ("OK" if sorted(order) == list(range(5)) else "fail"))
+    assert sorted(order) == list(range(5))
     # A parent must appear before its children in the topological order.
-    print(
-        "topological order respects E before A : "
-        + ("OK" if order.index(idE) < order.index(idA) else "fail")
-    )
+    assert order.index(idE) < order.index(idA)
 
 
 def testConstructorWithNonContiguousIdsRaises():
@@ -51,5 +39,48 @@ def testConstructorWithNonContiguousIdsRaises():
         otagrum.NamedDAG(bn)
 
 
+def testToDot():
+    bn = gum.BayesNet.fastPrototype("A->C->B->D;E->A->B<-E")
+    ndag = otagrum.NamedDAG(bn)
+    dot = ndag.toDot()
+    assert isinstance(dot, str)
+    for name in ["A", "B", "C", "D", "E"]:
+        assert name in dot
+
+
+def testSerialization():
+    import openturns as ot
+    import os
+    from tempfile import mkdtemp
+    import shutil
+
+    work_dir = mkdtemp()
+    try:
+        bn = gum.BayesNet.fastPrototype("A->C->B->D;E->A->B<-E")
+        ndag = otagrum.NamedDAG(bn)
+        ndag.setName("ndagFromTest")
+        path = os.path.join(work_dir, "ndag.xml")
+        study = ot.Study(path)
+        study.add("ndag", ndag)
+        study.save()
+
+        study2 = ot.Study(path)
+        study2.load()
+        check = otagrum.NamedDAG()
+        study2.fillObject("ndag", check)
+
+        assert check.getName() == "ndagFromTest"
+        assert check.getSize() == ndag.getSize()
+        assert list(check.getDescription()) == list(ndag.getDescription())
+        assert list(check.getTopologicalOrder()) == list(ndag.getTopologicalOrder())
+        for nod in range(ndag.getSize()):
+            assert sorted(list(check.getParents(nod))) == sorted(list(ndag.getParents(nod)))
+            assert sorted(list(check.getChildren(nod))) == sorted(list(ndag.getChildren(nod)))
+    finally:
+        shutil.rmtree(work_dir)
+
+
 testConstructorFromBayesNet()
 testConstructorWithNonContiguousIdsRaises()
+testToDot()
+testSerialization()

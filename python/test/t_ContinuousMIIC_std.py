@@ -4,7 +4,6 @@ import os
 import openturns as ot
 import openturns.testing as ott
 import otagrum
-import sys
 
 
 def generateDataForSpecificInstance(size):
@@ -18,16 +17,20 @@ def generateDataForSpecificInstance(size):
 
 
 def testSpecificInstance():
+    ot.RandomGenerator.SetSeed(0)
     size = 1000
     data = generateDataForSpecificInstance(size)
     learner = otagrum.ContinuousMIIC(data)
 
-    # skel = learner.learnSkeleton()
-    # print(skel.toDot())
+    skeleton = learner.learnSkeleton()
+    assert skeleton.size() == 7
+    skeleton_edges = {tuple(sorted(e)) for e in skeleton.edges()}
+    for edge in [(0, 1), (2, 3), (2, 4), (5, 6)]:
+        assert edge in skeleton_edges
 
     dag = learner.learnDAG()
-    print(dag.toDot())
-    sys.stdout.flush()
+    assert dag.getSize() == 7
+    assert list(dag.getDescription()) == list("ABCDEFG")
 
 
 def testAsiaDirichlet():
@@ -35,14 +38,13 @@ def testAsiaDirichlet():
         os.path.join(os.path.dirname(__file__), "asia_dirichlet_5000.csv"), ","
     )
     learner = otagrum.ContinuousMIIC(data)
-    learner.setVerbosity(True)
     pdag = learner.learnPDAG()
-    # print(pdag)
-    print(pdag.toDot())
-    sys.stdout.flush()
+    assert pdag.size() == 8
     dag = learner.learnDAG()
-    print(dag.toDot())
-    sys.stdout.flush()
+    assert dag.getSize() == 8
+    assert sorted(list(dag.getDescription())) == sorted(
+        ["asia", "tub", "smoke", "lung", "bronc", "either", "xray", "dysp"]
+    )
 
 
 def testMathis():
@@ -75,31 +77,16 @@ def testMathis():
     ot.RandomGenerator.SetSeed(42)
     sample = cbn.getSample(100)
 
-    bn = gum.BayesNet()
-    for nid in dag.nodes():
-        bn.add(gum.LabelizedVariable(f"X{nid}", f"X{nid}", 2))
-    for nid in dag.nodes():
-        for cid in dag.children(nid):
-            bn.addArc(nid, cid)
-
     learner = otagrum.ContinuousMIIC(sample)
     learner.setAlpha(0.01)
-    learner.setVerbosity(False)
 
     learned_pdag = learner.learnPDAG()
-    print("pdag:", learned_pdag)
+    assert learned_pdag.size() == 4
 
     learned_named_dag = learner.learnDAG()
+    assert learned_named_dag.getSize() == 4
     learned_dag = learned_named_dag.getDAG()
-
-    bn2 = gum.BayesNet()
-    for nid in learned_dag.nodes():
-        bn2.add(gum.LabelizedVariable(f"X{nid}", f"X{nid}", 2))
-    for t, h in learned_dag.arcs():
-        bn2.addArc(t, h)
-
-    learned_cpdag = gum.EssentialGraph(bn2).pdag()
-    print("cpdag:", learned_cpdag)
+    assert learned_dag.sizeArcs() >= 2
 
 
 def testEmptySampleRaises():

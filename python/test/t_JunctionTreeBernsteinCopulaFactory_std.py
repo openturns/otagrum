@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import openturns as ot
+import openturns.testing as ott
 import otagrum
 
 
@@ -21,28 +22,28 @@ def testBuildFromSample():
     factory = otagrum.JunctionTreeBernsteinCopulaFactory(5, 0.1, 3)
     copula = factory.buildAsJunctionTreeBernsteinCopula(sample)
 
-    print("learnt copula dimension : " + ("OK" if copula.getDimension() == dim else "fail"))
+    assert copula.getDimension() == dim
+
+    import math
+
+    ot.RandomGenerator.SetSeed(33)
+    entropy = -copula.computeLogPDF(copula.getSample(500)).computeMean()[0]
+    assert math.isfinite(entropy)
 
     generic = factory.build(sample)
-    print(
-        "build() dimension matches : "
-        + ("OK" if generic.getDimension() == dim else "fail")
-    )
+    assert generic.getDimension() == dim
 
 
 def testEmptySampleRaises():
     factory = otagrum.JunctionTreeBernsteinCopulaFactory()
-    try:
+    with ott.assert_raises(Exception):
         factory.buildAsJunctionTreeBernsteinCopula(ot.Sample())
-        print("empty sample raises : fail (no exception)")
-    except Exception:
-        print("empty sample raises : OK")
 
 
 def testDefaultBuild():
     factory = otagrum.JunctionTreeBernsteinCopulaFactory()
     empty = factory.buildAsJunctionTreeBernsteinCopula()
-    print("default build dimension : " + ("OK" if empty.getDimension() == 1 else "fail"))
+    assert empty.getDimension() == 1
 
 
 testBuildFromSample()

@@ -1,5 +1,0 @@
-dimension : OK
-alpha round-trip : OK
-setAlpha : OK
-correlated pair detected as dependent : OK
-independent pair detected as independent : OK

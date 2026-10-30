@@ -18,10 +18,10 @@ def testBasic():
     data = generateData(1000)
     tester = otagrum.ContinuousTTest(data, 0.1)
 
-    print("dimension : " + ("OK" if tester.getDimension() == 3 else "fail"))
-    print("alpha round-trip : " + ("OK" if tester.getAlpha() == 0.1 else "fail"))
+    assert tester.getDimension() == 3
+    assert tester.getAlpha() == 0.1
     tester.setAlpha(0.05)
-    print("setAlpha : " + ("OK" if tester.getAlpha() == 0.05 else "fail"))
+    assert tester.getAlpha() == 0.05
 
     description = tester.getDataDescription()
     idA = description.find("A")
@@ -33,8 +33,8 @@ def testBasic():
     # D is independent from A: independence should not be rejected.
     _, _, indepAD = tester.isIndep(idA, idD, ot.Indices())
 
-    print("correlated pair detected as dependent : " + ("OK" if not indepAB else "fail"))
-    print("independent pair detected as independent : " + ("OK" if indepAD else "fail"))
+    assert not indepAB
+    assert indepAD
 
 
 def testEmptySampleRaises():
@@ -42,5 +42,32 @@ def testEmptySampleRaises():
         otagrum.ContinuousTTest(ot.Sample())
 
 
+def testConditionalIndependence():
+    ot.RandomGenerator.SetSeed(0)
+    R = ot.CorrelationMatrix(3)
+    R[0, 1] = 0.9
+    R[0, 2] = 0.25
+    block1 = ot.NormalCopula(R)
+    block1.setDescription(["A1", "A2", "A3"])
+    block2 = ot.FrankCopula(3.0)
+    block2.setDescription(["B1", "B2"])
+    block3 = ot.ClaytonCopula(2.0)
+    block3.setDescription(["C1", "C2"])
+    data = ot.BlockIndependentCopula([block1, block2, block3]).getSample(6000)
+
+    tester = otagrum.ContinuousTTest(data)
+    tester.setAlpha(0.1)
+
+    _, _, indep01 = tester.isIndep(0, 1, ot.Indices())
+    assert not indep01
+
+    _, _, indep04 = tester.isIndep(0, 4, ot.Indices())
+    assert indep04
+
+    _, _, indep04cond = tester.isIndep(0, 4, ot.Indices([2, 3]))
+    assert indep04cond
+
+
 testBasic()
+testConditionalIndependence()
 testEmptySampleRaises()

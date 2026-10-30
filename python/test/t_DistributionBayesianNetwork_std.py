@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import math
 import openturns as ot
 import openturns.testing as ott
 import otagrum
@@ -18,10 +19,16 @@ for i in range(ndag.getSize()):
             R[j, k] = 0.8
     joints.append(ot.Normal([0.0] * dim, [1.0] * dim, R))
 dbn = otagrum.DistributionBayesianNetwork(ndag, joints)
-print("dbn=", dbn)
-print("pdf=", dbn.computePDF([0.5] * dbn.getDimension()))
-print("realization=", dbn.getRealization())
-print("parameterDimension=", dbn.getParameterDimension())
+assert dbn.getDimension() == 3
+
+pdf = dbn.computePDF([0.5] * dbn.getDimension())
+assert math.isfinite(pdf)
+assert pdf > 0.0
+
+realization = dbn.getRealization()
+assert len(realization) == dbn.getDimension()
+
+assert dbn.getParameterDimension() > 0
 
 ot.Log.Show(ot.Log.TRACE)
 validator = ott.DistributionValidation(dbn)
@@ -39,4 +46,4 @@ validator.skipConfidenceInterval()  # slow
 validator.skipCorrelation()  # slow
 validator.skipDependenceMeasures()  # slow
 validator.run()
-print("validation ok")
+assert dbn.getDimension() == 3
