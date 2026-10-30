@@ -18,12 +18,12 @@ def testBasic():
     data = generateData(1000)
     info = otagrum.CorrectedMutualInformation(data)
 
-    print("size : " + ("OK" if info.getSize() == 1000 else "fail"))
-    print("dimension : " + ("OK" if info.getDimension() == 3 else "fail"))
+    assert info.getSize() == 1000
+    assert info.getDimension() == 3
 
-    print("alpha round-trip : " + ("OK" if info.getAlpha() == 0.01 else "fail"))
+    assert info.getAlpha() == 0.01
     info.setAlpha(0.05)
-    print("setAlpha : " + ("OK" if info.getAlpha() == 0.05 else "fail"))
+    assert info.getAlpha() == 0.05
 
     description = info.getDataDescription()
     idA = description.find("A")
@@ -33,10 +33,7 @@ def testBasic():
     miAB = info.compute2PtCorrectedInformation(idA, idB)
     miAD = info.compute2PtCorrectedInformation(idA, idD)
 
-    print(
-        "correlated pair has higher mutual information : "
-        + ("OK" if miAB > miAD else "fail")
-    )
+    assert miAB > miAD
 
 
 def testEmptySampleRaises():
@@ -44,5 +41,30 @@ def testEmptySampleRaises():
         otagrum.CorrectedMutualInformation(ot.Sample())
 
 
+def testThreePoint():
+    ot.RandomGenerator.SetSeed(0)
+    R = ot.CorrelationMatrix(3)
+    R[0, 1] = 0.9
+    R[0, 2] = 0.25
+    block1 = ot.NormalCopula(R)
+    block1.setDescription(["A1", "A2", "A3"])
+    block2 = ot.FrankCopula(3.0)
+    block2.setDescription(["B1", "B2"])
+    block3 = ot.ClaytonCopula(2.0)
+    block3.setDescription(["C1", "C2"])
+    data = ot.BlockIndependentCopula([block1, block2, block3]).getSample(6000)
+
+    info = otagrum.CorrectedMutualInformation(data)
+    info.setAlpha(0.01)
+
+    assert info.compute2PtCorrectedInformation(0, 1) > 0.0
+    assert info.compute2PtCorrectedInformation(0, 4) < 0.0
+    # variables 0, 1, 2 belong to the same correlated NormalCopula block
+    ott.assert_almost_equal(
+        info.compute3PtCorrectedInformation(0, 1, 2), -0.0592439, 1e-4, 1e-4
+    )
+
+
 testBasic()
+testThreePoint()
 testEmptySampleRaises()
