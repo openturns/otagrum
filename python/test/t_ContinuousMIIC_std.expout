@@ -546,18 +546,26 @@ Summary:
 		5.c Adding arc (4,3)
 	Triple: (7,3,4)
 ===== ENDING PDAG LEARNING =====
-digraph "no_name" {
-node [shape = ellipse];
-  0;  1;  2;  3;  4;  5;  6;  7;
-  0 -> 1 [dir=none];
-  1 -> 4;
-  2 -> 6 [dir=none];
-  2 -> 3;
+digraph {
+  graph [bgcolor="transparent", size="5", rankdir="TB", layout="dot"];
+  node [style="filled", fillcolor="#404040", fontcolor="white", color="#4A4A4A"];
+  edge [color="#4A4A4A"];
+  0;
+  1;
+  2;
+  3;
+  4;
+  5;
+  6;
+  7;
+  0 -> 1 [dir="none"];
+  6 -> 7 [dir="none"];
+  2 -> 6 [dir="none"];
   4 -> 3;
+  2 -> 3;
   4 -> 5;
-  6 -> 7 [dir=none];
   7 -> 4;
-
+  1 -> 4;
 }
 
 
