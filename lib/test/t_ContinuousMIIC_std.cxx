@@ -1,4 +1,10 @@
+#include <cstdlib>
 #include <iostream>
+#include <map>
+#include <set>
+#include <stdexcept>
+#include <string>
+#include <utility>
 
 #include <openturns/ClaytonCopulaFactory.hxx>
 #include <openturns/BlockIndependentCopula.hxx>
@@ -7,6 +13,47 @@
 #include <openturns/RandomGenerator.hxx>
 
 #include "otagrum/otagrum.hxx"
+
+namespace
+{
+using IdEdge = std::pair<OT::UnsignedInteger, OT::UnsignedInteger>;
+using NameEdge = std::pair<std::string, std::string>;
+using DirectedIdEdge = std::pair<OT::UnsignedInteger, OT::UnsignedInteger>;
+
+IdEdge orderedEdge(OT::UnsignedInteger a, OT::UnsignedInteger b)
+{
+  return (b < a) ? IdEdge(b, a) : IdEdge(a, b);
+}
+
+NameEdge orderedEdge(const std::string &a, const std::string &b)
+{
+  return (b < a) ? NameEdge(b, a) : NameEdge(a, b);
+}
+
+void check(bool ok, const std::string &msg)
+{
+  if (!ok)
+    throw std::runtime_error("check failed: " + msg);
+}
+
+std::set<IdEdge> skeletonEdges(const gum::UndiGraph &skeleton)
+{
+  std::set<IdEdge> edges;
+  for (const auto &edge : skeleton.edges())
+    edges.insert(orderedEdge(edge.first(), edge.second()));
+  return edges;
+}
+
+std::set<NameEdge> namedSkeleton(const OTAGRUM::NamedDAG &ndag)
+{
+  std::set<NameEdge> edges;
+  const OT::Description desc = ndag.getDescription();
+  const gum::DAG dag = ndag.getDAG();
+  for (const auto &arc : dag.arcs())
+    edges.insert(orderedEdge(desc[arc.tail()], desc[arc.head()]));
+  return edges;
+}
+} // namespace
 
 OT::Description DescrFromStringVect(const std::vector<std::string> &v)
 {
@@ -44,66 +91,31 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size)
 
 void tests(void)
 {
-  try
-  {
-    OT::RandomGenerator::SetSeed(0);
-    OT::Sample sample = getTrucBizarre(4000);
-    std::cout << "Sample size: " << sample.getSize() << std::endl
-              << "Sample dimension:" << sample.getDimension() << std::endl
-              << "Sample " << std::endl << sample << std::endl;
-    {
-      std::cout << "\n\n";
-      OTAGRUM::ContinuousMIIC learner(sample);
-      learner.setAlpha(0.01);
-      std::cout << "go" << std::endl;
-      auto skeleton = learner.learnSkeleton();
-      std::cout << "\n****\n"
-                << "Skeleton"
-                << "\n****\n"
-                << skeleton.toDot() << std::endl;
-      auto pdag = learner.learnPDAG();
-      std::cout << "\n****\n"
-                << "PDAG"
-                << "\n****\n"
-                << pdag.toDot() << std::endl;
-
-      auto ndag = learner.learnDAG();
-      std::cout << "\n****\n"
-                << "Named DAG"
-                << "\n****\n"
-                << ndag.__str__() << std::endl;
-      std::cout << ndag.toDot() << std::endl;
-    }
-  }
-  catch (OT::Exception &e)
-  {
-    std::cout << e.__repr__() << std::endl;
-  }
-  catch (gum::Exception &e)
-  {
-    GUM_SHOWERROR(e);
-  }
-};
+  OT::RandomGenerator::SetSeed(0);
+  OT::Sample sample = getTrucBizarre(4000);
+  check(sample.getSize() == 4000, "sample size");
+  check(sample.getDimension() == 7, "sample dimension");
+  OTAGRUM::ContinuousMIIC learner(sample);
+  learner.setAlpha(0.01);
+  const std::set<IdEdge> expected = {{0, 1}, {2, 3}, {4, 5}, {4, 6}, {5, 6}};
+  check(skeletonEdges(learner.learnSkeleton()) == expected, "skeleton");
+  const std::set<NameEdge> expectedDag = {{"A1", "A2"}, {"B1", "B2"}, {"X0", "X1"}, {"X0", "X2"}, {"X1", "X2"}};
+  check(namedSkeleton(learner.learnDAG()) == expectedDag, "dag");
+}
 
 void testJulien()
 {
   const auto data = OT::Sample::ImportFromCSVFile("correlated_sample.csv");
-  //const auto n_nodes = data.getDimension();
-  const auto desc = data.getDescription();
-  std::cout << desc << std::endl;
-
-  try
-  {
-    auto learner = OTAGRUM::ContinuousMIIC(data);
-    auto pdag = learner.learnPDAG();
-    std::cout << "PDAG: " << pdag << std::endl;
-    auto ndag = learner.learnDAG();
-    std::cout << "DAG: " << ndag << std::endl;
-  }
-  catch (gum::Exception &e)
-  {
-    GUM_SHOWERROR(e);
-  }
+  OTAGRUM::ContinuousMIIC learner(data);
+  const gum::MixedGraph pdag = learner.learnPDAG();
+  const std::set<DirectedIdEdge> expectedArcs = {{3, 11}, {7, 11}, {0, 9}, {6, 9}, {1, 7}, {3, 8}, {12, 10}, {11, 12}, {0, 11}, {5, 9}, {2, 7}, {10, 8}, {2, 12}, {10, 4}};
+  std::set<DirectedIdEdge> pdagArcs;
+  for (const auto &arc : pdag.arcs())
+    pdagArcs.insert({arc.tail(), arc.head()});
+  check(pdagArcs == expectedArcs, "pdag arcs");
+  check(pdag.edges().size() == 0, "pdag edges");
+  const std::set<NameEdge> expectedDag = {{"x4", "y22"}, {"x4", "y12"}, {"x3", "y11"}, {"x3", "y31"}, {"x2", "y11"}, {"y11", "y22"}, {"x1", "y22"}, {"x1", "y13"}, {"y22", "y31"}, {"y21", "y31"}, {"y12", "y21"}, {"x5", "y21"}, {"x7", "y13"}, {"x6", "y13"}};
+  check(namedSkeleton(learner.learnDAG()) == expectedDag, "dag");
 }
 
 void testMathis()
@@ -126,16 +138,16 @@ void testMathis()
   dag.addArc(nodes["F"], nodes["A"]);
   dag.addArc(nodes["F"], nodes["G"]);
   OTAGRUM::NamedDAG structure(dag, names);
-  
+
   // Create the marginal distributions
   OT::Collection<OT::Distribution> m_list;
   OT::UnsignedInteger nb_of_nodes = dag.sizeNodes();
-  std::cout << "Number of nodes: " << nb_of_nodes << std::endl;
+  check(nb_of_nodes == 7, "node number");
   for (OT::UnsignedInteger i = 0; i < nb_of_nodes; i++)
   {
     m_list.add(OT::Uniform(0.0, 1.0));
   }
-  
+
   // Create the local conditional copulas
   OT::Collection<OT::Distribution> lcc_list;
   // #PA=2, #PB=0, #PC=2, #PD=1, #PE=1, #PF=0, #PG=1
@@ -147,60 +159,46 @@ void testMathis()
     for (OT::UnsignedInteger j = 0; j < dim_lcc; j++)
       for (OT::UnsignedInteger k = 0; k < j; k++)
         R(j, k) = 0.6;
-    
+
     lcc_list.add(OT::Normal(OT::Point(dim_lcc, 0.0), OT::Point(dim_lcc, 1.0), R).getCopula());
   }
-  
+
   // Create the CBN
   OTAGRUM::ContinuousBayesianNetwork cbn(structure, m_list, lcc_list);
-  
+
   // Sample from the CBN
   OT::Sample sample = cbn.getSample(5000);
-  
-  std::cout << "Sample size : " << sample.getSize() << std::endl
-            << "Sample dimension : " << sample.getDimension() << std::endl
-            << "Description : " << sample.getDescription() << std::endl;
-  
-  try
-  {
-      std::cout << "\n\n";
-      OTAGRUM::ContinuousMIIC learner(sample);
-      learner.setAlpha(0.01);
-      std::cout << "go" << std::endl;
+  check(sample.getSize() == 5000, "sample size");
+  check(sample.getDimension() == 7, "sample dimension");
 
-      auto skel = learner.learnSkeleton();
-      std::cout << "\n****\n"
-                << "skeleton"
-                << "\n****\n"
-                << skel.toDot() << std::endl;
-
-      auto pdag = learner.learnPDAG();
-      std::cout << "\n****\n"
-                << "PDAG"
-                << "\n****\n"
-                << pdag.toDot() << std::endl;
-
-      auto ndag = learner.learnDAG();
-      std::cout << "\n****\n"
-                << "Named DAG"
-                << "\n****\n"
-                << ndag.__str__() << std::endl;
-      std::cout << ndag.toDot() << std::endl;
-  }
-  catch (gum::Exception &e)
-  {
-    GUM_SHOWERROR(e);
-  }
+  OTAGRUM::ContinuousMIIC learner(sample);
+  learner.setAlpha(0.01);
+  const std::set<IdEdge> expectedSkel = {{0, 1}, {0, 2}, {0, 4}, {0, 5}, {1, 2}, {1, 3}, {5, 6}};
+  check(skeletonEdges(learner.learnSkeleton()) == expectedSkel, "skeleton");
+  const auto ndag = learner.learnDAG();
+  check(ndag.getSize() == 7, "dag size");
+  const std::set<NameEdge> expectedDag = {{"A", "B"}, {"A", "C"}, {"A", "E"}, {"A", "F"}, {"B", "C"}, {"B", "D"}, {"F", "G"}};
+  check(namedSkeleton(ndag) == expectedDag, "dag");
 }
 
 int main(void)
 {
-//   OT::Log::Show(OT::Log::ALL);
-  tests();
-
-  testJulien();
-
-  testMathis();
-
+  try
+  {
+    tests();
+    testJulien();
+    testMathis();
+  }
+  catch (const std::exception &e)
+  {
+    std::cout << "FAIL: " << e.what() << std::endl;
+    return EXIT_FAILURE;
+  }
+  catch (...)
+  {
+    std::cout << "FAIL: unknown exception" << std::endl;
+    return EXIT_FAILURE;
+  }
+  std::cout << "All ContinuousMIIC checks passed" << std::endl;
   return EXIT_SUCCESS;
 }

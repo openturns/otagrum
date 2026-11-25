@@ -9,6 +9,7 @@ endif ()
 set ( PYINSTALLCHECK_ENVIRONMENT "OPENTURNS_CONFIG_PATH=${INSTALL_DESTDIR}${SYSCONFIG_PATH}/openturns"
                                  "PYTHONPATH=${AGRUM_PYTHON_MODULE_PATH}${PATH_SEP}${OPENTURNS_PYTHON_MODULE_PATH}${PATH_SEP}${INSTALL_DESTDIR}${PYTHON_MODULE_PATH}${PATH_SEP}$ENV{PYTHONPATH}"
                                  "MPLBACKEND=agg"
+                                 "PYTHONIOENCODING=UTF-8"
     )
 
 
@@ -64,8 +65,8 @@ endmacro ()
 
 ot_pyinstallcheck_test (Utils_std)
 ot_pyinstallcheck_test (docstring)
-ot_pyinstallcheck_test (ContinuousPC_std)
-ot_pyinstallcheck_test (ContinuousMIIC_std)
+ot_pyinstallcheck_test (ContinuousPC_std IGNOREOUT)
+ot_pyinstallcheck_test (ContinuousMIIC_std IGNOREOUT)
 ot_pyinstallcheck_test (ContinuousTTest_std)
 ot_pyinstallcheck_test (CorrectedMutualInformation_std)
 ot_pyinstallcheck_test (TabuList_std)

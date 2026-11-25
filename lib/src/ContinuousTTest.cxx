@@ -20,6 +20,7 @@
  */
 
 #include <cmath>
+#include <numbers>
 #include <tuple>
 
 #include <agrum/base/core/timer.h>
@@ -139,8 +140,8 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
   const auto d = X.getSize();     // Conditioning set dimension
   const auto N = data_.getSize(); // Size of data set
 
-  const auto C1 = std::pow(0.5, d + 2.0) * std::pow(M_PI, 0.5 * d + 1.0);
-  const auto sigma = M_SQRT2 * std::pow(M_PI / 4.0, 0.5 * d + 1.0);
+  const auto C1 = std::pow(0.5, d + 2.0) * std::pow(std::numbers::pi, 0.5 * d + 1.0);
+  const auto sigma = std::numbers::sqrt2 * std::pow(std::numbers::pi / 4.0, 0.5 * d + 1.0);
 
   double H = 0.0;
   double dH = 0.0;
@@ -149,7 +150,7 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
   double B2 = 0.0;
   double B3 = 0.0;
 
-  const double facteurpi = 1.0 / std::pow(4 * M_PI, 0.5 * d + 0.5);
+  const double facteurpi = 1.0 / std::pow(4 * std::numbers::pi, 0.5 * d + 0.5);
 
   const double small = OT::SpecFunc::Precision;
   const double smallLog = std::log(OT::SpecFunc::Precision);
@@ -279,8 +280,8 @@ double ContinuousTTest::getTTest(const OT::UnsignedInteger Y,
   // mean
   H /= N;
 
-  const double term12 = -std::pow(0.5, d) * std::pow(M_PI, 0.5 * d + 0.5);
-  const double fact3 = std::pow(0.5, d - 1.0) / std::pow(M_PI, 0.5 * d);
+  const double term12 = -std::pow(0.5, d) * std::pow(std::numbers::pi, 0.5 * d + 0.5);
+  const double fact3 = std::pow(0.5, d - 1.0) / std::pow(std::numbers::pi, 0.5 * d);
 
   B1 = term12 + B1 / N;
   B2 = term12 + B2 / N;
@@ -308,7 +309,7 @@ double ContinuousTTest::getTTestWithoutCorrections(OT::UnsignedInteger Y,
   const auto d = X.getSize();
   const auto N = data_.getSize();
 
-  const auto sigma = M_SQRT2 * std::pow(M_PI / 4, 0.5 * d + 1.0);
+  const auto sigma = std::numbers::sqrt2 * std::pow(std::numbers::pi / 4, 0.5 * d + 1.0);
 
   double H = 0.0;
 

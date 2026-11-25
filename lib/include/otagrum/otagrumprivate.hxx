@@ -36,6 +36,42 @@
 #define OTAGRUM_LOCAL
 #endif /* !OTAGRUM_STATIC */
 
+#ifdef __cplusplus
+#ifndef SWIG
+// Workaround for ambiguity between OpenTURNS and aGrUM operator<< for std::pair
+// aGrUM defines std::operator<<(ostream, pair) in namespace std
+// (agrum/base/core/utils_misc_tpl.h) while OpenTURNS defines
+// OT::operator<<(ostream, pair) in namespace OT (openturns/OSS.hxx).
+// When both headers are visible (always the case in otagrum TUs combining
+// both libraries), OT::Cache::__repr__ (openturns/Cache.hxx, which does
+// oss << std::make_pair(key, value) since OpenTURNS 1.28) becomes ambiguous
+// (C2593 on MSVC). A non-template overload in namespace OT is preferred over
+// both function templates and resolves the ambiguity. It must be visible in
+// every TU including both libraries, hence it lives here (included by all
+// otagrum headers).
+#include <ostream>
+#include <utility>
+#include <openturns/OTtypes.hxx>
+#include <openturns/PersistentCollection.hxx>
+#include <openturns/Point.hxx>
+#include <openturns/Sample.hxx>
+namespace OT
+{
+inline std::ostream & operator<<(std::ostream & os, const std::pair<PersistentCollection<Scalar>, PersistentCollection<Scalar>> & p)
+{
+  return os << "(" << p.first << "," << p.second << ")";
+}
+inline std::ostream & operator<<(std::ostream & os, const std::pair<Point, Point> & p)
+{
+  return os << "(" << p.first << "," << p.second << ")";
+}
+inline std::ostream & operator<<(std::ostream & os, const std::pair<Sample, Sample> & p)
+{
+  return os << "(" << p.first << "," << p.second << ")";
+}
+}
+#endif // SWIG
+#endif // __cplusplus
 
 #endif // OTAGRUM_PRIVATE_HXX
 

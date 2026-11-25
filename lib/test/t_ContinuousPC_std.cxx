@@ -1,4 +1,12 @@
+#include <cmath>
+#include <cstdlib>
 #include <iostream>
+#include <map>
+#include <set>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <utility>
 
 #include <openturns/ClaytonCopulaFactory.hxx>
 #include <openturns/BlockIndependentCopula.hxx>
@@ -7,6 +15,56 @@
 #include <openturns/RandomGenerator.hxx>
 
 #include "otagrum/otagrum.hxx"
+
+namespace
+{
+using IdEdge = std::pair<OT::UnsignedInteger, OT::UnsignedInteger>;
+using NameEdge = std::pair<std::string, std::string>;
+
+IdEdge orderedEdge(OT::UnsignedInteger a, OT::UnsignedInteger b)
+{
+  return (b < a) ? IdEdge(b, a) : IdEdge(a, b);
+}
+
+NameEdge orderedEdge(const std::string &a, const std::string &b)
+{
+  return (b < a) ? NameEdge(b, a) : NameEdge(a, b);
+}
+
+void check(bool ok, const std::string &msg)
+{
+  if (!ok)
+    throw std::runtime_error("check failed: " + msg);
+}
+
+void checkClose(double value, double expected, double rtol, const std::string &msg)
+{
+  if (!(std::abs(value - expected) <= rtol * (1.0 + std::abs(expected))))
+  {
+    std::ostringstream oss;
+    oss << "checkClose failed: " << msg << " (got " << value << ", expected " << expected << ")";
+    throw std::runtime_error(oss.str());
+  }
+}
+
+std::set<IdEdge> skeletonEdges(const gum::UndiGraph &skeleton)
+{
+  std::set<IdEdge> edges;
+  for (const auto &edge : skeleton.edges())
+    edges.insert(orderedEdge(edge.first(), edge.second()));
+  return edges;
+}
+
+std::set<NameEdge> namedSkeleton(const OTAGRUM::NamedDAG &ndag)
+{
+  std::set<NameEdge> edges;
+  const OT::Description desc = ndag.getDescription();
+  const gum::DAG dag = ndag.getDAG();
+  for (const auto &arc : dag.arcs())
+    edges.insert(orderedEdge(desc[arc.tail()], desc[arc.head()]));
+  return edges;
+}
+} // namespace
 
 OT::Description DescrFromStringVect(const std::vector<std::string> &v)
 {
@@ -17,13 +75,7 @@ OT::Description DescrFromStringVect(const std::vector<std::string> &v)
   }
   return res;
 }
-/*
-0--1 : p-value=0
-2--3 : p-value=0.750422
-1--4 : p-value=0.933081
-2--4 : p-value=6.18139e-35
-3--4 : p-value=3.61185e-182
-*/
+
 OT::Sample getTrucBizarre(OT::UnsignedInteger size)
 {
   OT::Collection<OT::Distribution> copulas;
@@ -50,91 +102,48 @@ OT::Sample getTrucBizarre(OT::UnsignedInteger size)
 
 void tests(void)
 {
-  try
+  OT::RandomGenerator::SetSeed(0);
+  OT::Sample sample = getTrucBizarre(5000);
+  check(sample.getSize() == 5000, "sample size");
+  check(sample.getDimension() == 7, "sample dimension");
   {
-    OT::RandomGenerator::SetSeed(0);
-    OT::Sample sample = getTrucBizarre(5000);
-    std::cout << "Sample size : " << sample.getSize() << std::endl
-              << "Sample dimension :" << sample.getDimension() << std::endl
-              << "Sample " << sample << std::endl;
-    {
-      OTAGRUM::ContinuousPC learner(sample, 3, 0.1);
-      std::cout << "go" << std::endl;
-      auto skel = learner.learnSkeleton();
-      std::cout << learner.skeletonToDot(skel) << std::endl;
-
-      auto pdag = learner.learnPDAG();
-      std::cout << pdag.toDot() << std::endl;
-      for (const auto &e : skel.edges())
-      {
-        std::cout << e
-                  << " : p-value=" << learner.getPValue(e.first(), e.second())
-                  << "   ttest=" << learner.getTTest(e.first(), e.second())
-                  << std::endl;
-      }
-      for (const auto &s : learner.getTrace())
-        std::cout << s << std::endl;
-    }
-    {
-      std::cout << "\n\n";
-      OTAGRUM::ContinuousPC learner(sample, 5, 0.8);
-      std::cout << "go" << std::endl;
-      auto skel = learner.learnSkeleton();
-      std::cout << "\n****\n"
-                << "skeleton"
-                << "\n****\n"
-                << skel.toDot() << std::endl;
-      auto pdag = learner.learnPDAG();
-      std::cout << "\n****\n"
-                << "PDAG"
-                << "\n****\n"
-                << pdag.toDot() << std::endl;
-
-      auto njt = learner.learnJunctionTree();
-      std::cout << "\n****\n"
-                << "Named Junction tree"
-                << "\n****\n"
-                << njt.__str__() << std::endl;
-      auto ndag = learner.learnDAG();
-      std::cout << "\n****\n"
-                << "Named DAG"
-                << "\n****\n"
-                << ndag.__str__() << std::endl;
-      std::cout << ndag.toDot() << std::endl;
-
-      for (const auto &s : learner.getTrace())
-        std::cout << s << std::endl;
-    }
+    OTAGRUM::ContinuousPC learner(sample, 3, 0.1);
+    const std::set<IdEdge> expected = {{0, 1}, {2, 3}, {4, 5}, {4, 6}, {5, 6}};
+    check(skeletonEdges(learner.learnSkeleton()) == expected, "skeleton");
+    checkClose(learner.getTTest("A1", "A2"), 67.3106, 1e-4, "ttest A1-A2");
+    check(learner.getPValue("A1", "A2") == 0.0, "pvalue A1-A2");
+    checkClose(learner.getTTest("B1", "B2"), 121.91, 1e-4, "ttest B1-B2");
+    check(learner.getPValue("B1", "B2") == 0.0, "pvalue B1-B2");
+    checkClose(learner.getTTest("X0", "X1"), 61.0624, 1e-4, "ttest X0-X1");
+    checkClose(learner.getPValue("X0", "X1"), 1.02025e-20, 1e-4, "pvalue X0-X1");
+    checkClose(learner.getTTest("X0", "X2"), 64.8518, 1e-4, "ttest X0-X2");
+    checkClose(learner.getPValue("X0", "X2"), 1.56447e-22, 1e-4, "pvalue X0-X2");
+    checkClose(learner.getTTest("X1", "X2"), 58.0097, 1e-4, "ttest X1-X2");
+    checkClose(learner.getPValue("X1", "X2"), 5.28577e-16, 1e-4, "pvalue X1-X2");
   }
-  catch (OT::Exception &e)
   {
-    std::cout << e.__repr__() << std::endl;
+    OTAGRUM::ContinuousPC learner(sample, 5, 0.8);
+    const std::set<IdEdge> expected = {{0, 1}, {2, 3}, {4, 5}, {4, 6}, {5, 6}};
+    check(skeletonEdges(learner.learnSkeleton()) == expected, "skeleton");
+    const std::set<NameEdge> expectedDag = {{"A1", "A2"}, {"B1", "B2"}, {"X0", "X1"}, {"X0", "X2"}, {"X1", "X2"}};
+    check(namedSkeleton(learner.learnDAG()) == expectedDag, "dag");
+    check(learner.learnJunctionTree().getSize() == 7, "junction tree size");
   }
-  catch (gum::Exception &e)
-  {
-    GUM_SHOWERROR(e);
-  }
-};
+}
 
 void testJulien()
 {
   const auto data = OT::Sample::ImportFromCSVFile("correlated_sample.csv");
-  //const auto n_nodes = data.getDimension();
-  const auto desc = data.getDescription();
-  std::cout << desc << std::endl;
-
-  try
-  {
-    auto learner = OTAGRUM::ContinuousPC(data, 3, 0.1);
-    auto pdag = learner.learnPDAG();
-    std::cout << "pdag:" << pdag << std::endl;
-    auto dag = learner.learnDAG();
-    std::cout << "dag:" << dag << std::endl;
-  }
-  catch (gum::Exception &e)
-  {
-    GUM_SHOWERROR(e);
-  }
+  OTAGRUM::ContinuousPC learner(data, 3, 0.1);
+  const gum::MixedGraph pdag = learner.learnPDAG();
+  check(pdag.arcs().size() == 0, "pdag arcs");
+  std::set<IdEdge> pdagEdges;
+  for (const auto &edge : pdag.edges())
+    pdagEdges.insert(orderedEdge(edge.first(), edge.second()));
+  const std::set<IdEdge> expectedEdges = {{6, 9}, {7, 11}, {5, 9}, {0, 9}, {2, 7}, {8, 10}, {11, 12}};
+  check(pdagEdges == expectedEdges, "pdag skeleton");
+  const std::set<NameEdge> expectedDag = {{"x1", "y13"}, {"x3", "y11"}, {"x6", "y13"}, {"x7", "y13"}, {"y11", "y22"}, {"y12", "y21"}, {"y22", "y31"}};
+  check(namedSkeleton(learner.learnDAG()) == expectedDag, "dag");
 }
 
 void testMathis()
@@ -157,16 +166,16 @@ void testMathis()
   dag.addArc(nodes["F"], nodes["A"]);
   dag.addArc(nodes["F"], nodes["G"]);
   OTAGRUM::NamedDAG structure(dag, names);
-  
+
   // Create the marginal distributions
   OT::Collection<OT::Distribution> m_list;
   OT::UnsignedInteger nb_of_nodes = dag.sizeNodes();
-  std::cout << "Number of nodes: " << nb_of_nodes << std::endl;
+  check(nb_of_nodes == 7, "node number");
   for (OT::UnsignedInteger i = 0; i < nb_of_nodes; i++)
   {
     m_list.add(OT::Uniform(0.0, 1.0));
   }
-  
+
   // Create the local conditional copulas
   OT::Collection<OT::Distribution> lcc_list;
   // #PA=2, #PB=0, #PC=2, #PD=1, #PE=1, #PF=0, #PG=1
@@ -178,59 +187,45 @@ void testMathis()
     for (OT::UnsignedInteger j = 0; j < dim_lcc; j++)
       for (OT::UnsignedInteger k = 0; k < j; k++)
         R(j, k) = 0.6;
-    
+
     lcc_list.add(OT::Normal(OT::Point(dim_lcc, 0.0), OT::Point(dim_lcc, 1.0), R).getCopula());
   }
-  
+
   // Create the CBN
   OTAGRUM::ContinuousBayesianNetwork cbn(structure, m_list, lcc_list);
-  
+
   // Sample from the CBN
   OT::Sample sample = cbn.getSample(5000);
-  
-  std::cout << "Sample size : " << sample.getSize() << std::endl
-            << "Sample dimension : " << sample.getDimension() << std::endl
-            << "Description : " << sample.getDescription() << std::endl;
-  
-  try
-  {
-      std::cout << "\n\n";
-      OTAGRUM::ContinuousPC learner(sample, 5, 0.8);
-      std::cout << "go" << std::endl;
+  check(sample.getSize() == 5000, "sample size");
+  check(sample.getDimension() == 7, "sample dimension");
 
-      auto skel = learner.learnSkeleton();
-      std::cout << "\n****\n"
-                << "skeleton"
-                << "\n****\n"
-                << skel.toDot() << std::endl;
-
-      auto pdag = learner.learnPDAG();
-      std::cout << "\n****\n"
-                << "PDAG"
-                << "\n****\n"
-                << pdag.toDot() << std::endl;
-
-      auto ndag = learner.learnDAG();
-      std::cout << "\n****\n"
-                << "Named DAG"
-                << "\n****\n"
-                << ndag.__str__() << std::endl;
-      std::cout << ndag.toDot() << std::endl;
-  }
-  catch (gum::Exception &e)
-  {
-    GUM_SHOWERROR(e);
-  }
+  OTAGRUM::ContinuousPC learner(sample, 5, 0.8);
+  const std::set<IdEdge> expectedSkel = {{0, 1}, {0, 2}, {0, 4}, {0, 5}, {1, 2}, {1, 3}, {5, 6}};
+  check(skeletonEdges(learner.learnSkeleton()) == expectedSkel, "skeleton");
+  const auto ndag = learner.learnDAG();
+  check(ndag.getSize() == 7, "dag size");
+  const std::set<NameEdge> expectedDag = {{"A", "B"}, {"A", "C"}, {"A", "E"}, {"A", "F"}, {"B", "C"}, {"B", "D"}, {"F", "G"}};
+  check(namedSkeleton(ndag) == expectedDag, "dag");
 }
 
 int main(void)
 {
-//   OT::Log::Show(OT::Log::ALL);
-  tests();
-
-  testJulien();
-
-  testMathis();
-
+  try
+  {
+    tests();
+    testJulien();
+    testMathis();
+  }
+  catch (const std::exception &e)
+  {
+    std::cout << "FAIL: " << e.what() << std::endl;
+    return EXIT_FAILURE;
+  }
+  catch (...)
+  {
+    std::cout << "FAIL: unknown exception" << std::endl;
+    return EXIT_FAILURE;
+  }
+  std::cout << "All ContinuousPC checks passed" << std::endl;
   return EXIT_SUCCESS;
 }

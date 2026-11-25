@@ -55,6 +55,15 @@ set_target_properties ( otagrum PROPERTIES SOVERSION ${LIB_SOVERSION} )
 
 target_link_libraries (otagrum ${OPENTURNS_LIBRARY})
 target_link_libraries (otagrum agrumBN)
+if (TARGET agrumBASE)
+  get_target_property (_agrum_base_type agrumBASE TYPE)
+  if (_agrum_base_type STREQUAL "SHARED_LIBRARY")
+    # aGrUM DLLs (conda-forge Windows): headers declare dllimport only with
+    # AGRUM_BUILD_SHARED_LIBS, else LNK2019 (plain refs vs __imp_ import lib)
+    target_compile_definitions (otagrum PUBLIC AGRUM_BUILD_SHARED_LIBS)
+  endif ()
+  unset (_agrum_base_type)
+endif ()
 
 # Add targets to the build-tree export set
 export (TARGETS otagrum FILE ${PROJECT_BINARY_DIR}/otagrum-Targets.cmake)
