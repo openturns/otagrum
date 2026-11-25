@@ -13,23 +13,29 @@ import otagrum
 
 
 def showDot(dotstring):
+    # rendering is best-effort: it needs the graphviz 'dot' executable
+    # which may be missing or broken (e.g. on Windows CI runners)
     try:
-        # fails outside notebook
-        import pyagrum.lib.notebook as gnb
+        try:
+            # fails outside notebook
+            import pyagrum.lib.notebook as gnb
 
-        gnb.showDot(dotstring)
-    except ImportError:
-        import pydot
-        from io import BytesIO
+            gnb.showDot(dotstring)
+        except ImportError:
+            # fallback rendering outside notebooks
+            import pydot
+            from io import BytesIO
 
-        graph = pydot.graph_from_dot_data(dotstring)[0]
-        with BytesIO() as f:
-            f.write(graph.create_png())
-            f.seek(0)
-            img = plt.imread(f)
-        fig = plt.imshow(img)
-        fig.axes.axis("off")
-        plt.show()
+            graph = pydot.graph_from_dot_data(dotstring)[0]
+            with BytesIO() as f:
+                f.write(graph.create_png())
+                f.seek(0)
+                img = plt.imread(f)
+            fig = plt.imshow(img)
+            fig.axes.axis("off")
+            plt.show()
+    except (ImportError, OSError):
+        print("Graphviz rendering skipped")
 
 
 # %%
