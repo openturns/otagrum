@@ -55,7 +55,7 @@ from matplotlib import pylab as plt
 def showTensor(pot):
     try:
         # fails outside notebook
-        import pyAgrum.lib.notebook as gnb
+        import pyagrum.lib.notebook as gnb
 
         gnb.showTensor(pot)
     except ImportError:

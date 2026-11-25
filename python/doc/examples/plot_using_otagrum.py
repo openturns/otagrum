@@ -15,7 +15,7 @@ import otagrum
 def showDot(dotstring):
     try:
         # fails outside notebook
-        import pyAgrum.lib.notebook as gnb
+        import pyagrum.lib.notebook as gnb
 
         gnb.showDot(dotstring)
     except ImportError:
