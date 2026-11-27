@@ -29,10 +29,6 @@ macro (ot_check_test TESTNAME)
 endmacro ()
 
 
-if (NOT CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR)
-  file (COPY ${CMAKE_CURRENT_SOURCE_DIR}/correlated_sample.csv DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-endif ()
-
 ot_check_test ( IndicesManip_std IGNOREOUT )
 ot_check_test ( StratifiedCache_std IGNOREOUT )
 ot_check_test ( Greater_std IGNOREOUT )
