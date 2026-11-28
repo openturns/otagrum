@@ -35,6 +35,24 @@ jobs:
       - name: Build
         run: ./utils/build_locally.sh mingw
 
+  macos:
+    runs-on: macos-latest
+    env:
+      MAKEFLAGS: -j3
+    steps:
+    - uses: actions/checkout@v7
+    - run: |
+        brew update
+        brew install openturns agrum
+    - run: |
+        cmake \
+        -DCMAKE_INSTALL_PREFIX=~/.local \
+        -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror" \
+        -DBUILD_PYTHON=OFF .
+        make install
+        make tests
+        ctest ${MAKEFLAGS} --output-on-failure --timeout 100 --schedule-random
+
   windows:
     runs-on: windows-latest
     steps:
